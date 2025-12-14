@@ -35,6 +35,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 在实现具体业务时，某些热点组件会经常修改，为了便于沟通，这里说明清楚其简称，便于你快速找到对应组件。
 
+- `选择器系列页面` ： `src\pages-sub\selector\*.vue` ，一个 glob 匹配语法，指代一系列 vue 组件。
+
 #### 维修工单流程模块
 
 - `维修工单流程模块系列页面` ： `src\pages-sub\repair\*.vue` ，一个 glob 匹配语法，指代一系列 vue 组件。

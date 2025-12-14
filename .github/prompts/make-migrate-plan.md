@@ -753,9 +753,24 @@
 
 ### 053 <!-- TODO: 等待编写完整 --> 制作独立的，美观的，专用的加载等待组件
 
-调研 uniapp 生态内，更加美观的，精彩的加载等待动效库。
+1. 请你阅读 `src\pages-sub\selector\select-floor.vue` 等 `选择器系列页面` 。注意里面的代码写法。
+2. 重点阅读 `<template #loading>` 这一块的逻辑。
+3. 我需要你将 `<template #loading>` 这一块的代码写法，单独抽取出来，制作成一个美观的，独立的子组件，实现代码复用。避免出现代码冗余的情况。
+4. 制作的新组件存放在 `src\components\common` 目录内。
+5. 为新组件编写**简单**的使用文档。
+   - 重点说明使用的具体案例都在 `src\pages\test-use` 目录内的代码案例内体现。
+6. 在 `src\pages\test-use` 目录内，新建测试用途的页面，用来访问不同派生出来的加载组件显示效果。
+   - 足够丰富详实。充当最完整的，最详实的说明文档职责。说明清楚该组件的全部使用细节。和传参说明。
+   - 补充详细的文本。
+7. 更新 `选择器系列页面`，使其使用全新的加载等待组件。
+8. 更新 `src\pages-sub\repair\order-list.vue` `维修工单池` 页面，在相同的 `z-paging` 组件的 `<template #loading>` 插槽内，使用你刚刚制作的加载等待组件。
+9. 在 `.claude\skills\z-paging-integration.md` 内，重点补全关于 `z-paging` 组件对 `<template #loading>` 加载等待插槽的使用细则，使用案例，和注意事项。务必制定以下的规范：
+
+- 以后使用 `z-paging` 组件时，必须使用 `<template #loading>` 加载等待插槽。
+- 在 `z-paging` 组件的 `#loading` 插槽内，必须使用你创建的这款新加载等待组件。**不允许**使用别的加载等待组件。
 
 ---
 
-1. src\pages-sub\selector\select-floor.vue
-2. `<template #loading>`
+调研 uniapp 生态内，更加美观的，精彩的加载等待动效库。
+
+经过调研检查，没有合适的库。不如自己改写算了。
