@@ -789,3 +789,17 @@
    - `选择器系列页面`
    - `src\pages-sub\repair\order-list.vue`
    - `src\pages\test-use\z-paging-loading.vue`
+
+### 054 <!-- TODO: --> 为本项目单独抽象一个完整的 `<wd-form>` 表单编写范例，抽象公共的 skills 文件
+
+1. 全面阅读 `src\pages-sub\repair\add-order.vue` 的代码写法，重点学习清楚里面是怎么组织一个常见的 uniapp 表单的。
+2. 这个表单很美观，代码组织很好，我希望你编写补全 `.claude\skills\use-wd-form.md` 这款技能文件，希望本项目在实现类似于表单的 vue 组件时，都能够主动使用这款 `use-wd-form` 技能文件，按照该技能文件的约束，编写完整的，符合规格的，统一风格和写法的表单性质组件。
+3. 我希望 `use-wd-form` 使用 `<wd-form>` 表单编写表单页这款技能文件，能够从 add-order 表单页内，学习到以下方面的代码组织方式：
+   - 用 `wd-form` 组件来制作整个表单。
+   - 组件必须要使用： `<wd-form ref="formRef" :model="model" :rules="formRules"> ...具体代码  </wd-form>` 的形式来定义。
+   - `wd-form` 组件必须提供 `ref="formRef"` 组件引用、`:model="model"` 双向绑定代码、`:rules="formRules"` 表单校验规则。
+   - 代码块组织必须使用 `wd-cell-group` 和 `wd-cell` 组件。不管这个表单复杂度如何，都要使用 `wd-cell-group` 和 `wd-cell` 组件来包裹具体的表单项。用这两个布局组件来组织清楚具体的代码写法。
+   - wd-cell-group 组件必须使用 border 属性，增强美观度。
+4. `use-wd-form` 技能文件必须提供以下的组件文档链接，便于 AI 模型在使用该技能文件时，能够主动的获取组件写法文档：
+   - `wd-form` 组件文档： https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/form.md
+   - `wd-cell-group` 和 `wd-cell` 组件文档： https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/cell.md
