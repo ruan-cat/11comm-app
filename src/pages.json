@@ -96,7 +96,17 @@
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
+		},
+		// #ifdef H5
+		{
+			"path": "pages/test-use/z-paging-loading",
+			"type": "page",
+			"name": "test-z-paging-loading",
+			"style": {
+				"navigationBarTitleText": "z-paging-loading 组件测试"
+			}
 		}
+		// #endif
 	],
 	"subPackages": [
 		{
@@ -192,7 +202,11 @@
 				},
 				{
 					"path": "repair/end-order",
-					"type": "page"
+					"type": "page",
+					"style": {
+						"navigationBarTitleText": "结束工单",
+						"enablePullDownRefresh": false
+					}
 				},
 				{
 					"path": "repair/finish",
