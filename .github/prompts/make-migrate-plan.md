@@ -774,3 +774,18 @@
 调研 uniapp 生态内，更加美观的，精彩的加载等待动效库。
 
 经过调研检查，没有合适的库。不如自己改写算了。
+
+#### 01 重构代码，并处理故障
+
+1. 调整 `src\components\common` 目录的文件存储格式。
+   - index.vue 作为核心组件
+   - types.ts 作为对外导出的类型
+   - index.md 作为文档名称
+   - `z-paging-loading` 是文件夹名称
+   - 及时更新 `src\components\common\z-paging-loading\index.md` 文档，说明清楚文件存储结构
+2. 处理 `z-paging-loading` 组件的类型故障，注意阅读 `wd-loading` 组件的文档。
+   - https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/loading.md
+3. 确保以下文件，能够手动 import 导入 `z-paging-loading` 组件。
+   - `选择器系列页面`
+   - `src\pages-sub\repair\order-list.vue`
+   - `src\pages\test-use\z-paging-loading.vue`

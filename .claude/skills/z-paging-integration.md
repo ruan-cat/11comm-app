@@ -431,3 +431,164 @@ onMounted(() => {
 - [ ] `@query` 未使用 `await/try/catch`，未调用 `reload/refresh`
 - [ ] `onMounted` 首屏 `reload()`
 - [ ] `refresher-enabled/loading-more-enabled/show-scrollbar` 等常用 props 已配置
+- [ ] 已使用 `<template #loading>` 插槽
+- [ ] 已在 `#loading` 插槽中使用 `z-paging-loading` 组件
+
+## 13. loading 加载状态插槽规范
+
+### 13.1 强制规范
+
+在项目中使用 z-paging 组件时，**必须**遵守以下规范：
+
+1. **必须使用 `<template #loading>` 插槽**
+   - 所有使用 z-paging 的页面都必须提供 loading 插槽
+   - 不提供 loading 插槽会导致加载状态无提示，用户体验差
+
+2. **必须使用 `z-paging-loading` 组件**
+   - 在 `#loading` 插槽内，必须使用 `z-paging-loading` 组件
+   - 不允许使用其他加载组件（如 `wd-loading`、自定义加载组件等）
+   - 保持项目加载样式的统一性
+
+### 13.2 基础用法
+
+```vue
+<template>
+	<z-paging ref="pagingRef" v-model="dataList" @query="handleQuery">
+		<!-- 加载状态 - 必须提供 -->
+		<template #loading>
+			<z-paging-loading primary-text="正在加载数据..." />
+		</template>
+
+		<!-- 列表内容 -->
+		<view v-for="item in dataList" :key="item.id">
+			{{ item.title }}
+		</view>
+
+		<!-- 空状态 - 建议提供 -->
+		<template #empty>
+			<wd-status-tip image="search" tip="暂无数据" />
+		</template>
+	</z-paging>
+</template>
+```
+
+### 13.3 常用配置场景
+
+#### 13.3.1 楼栋列表加载
+
+```vue
+<template #loading>
+	<z-paging-loading
+		icon="building"
+		icon-class="i-carbon-building text-blue-400 animate-pulse"
+		primary-text="正在加载楼栋列表..."
+		secondary-text="请稍候片刻"
+	/>
+</template>
+```
+
+#### 13.3.2 单元列表加载
+
+```vue
+<template #loading>
+	<z-paging-loading
+		icon="grid"
+		icon-class="i-carbon-grid text-green-400 animate-pulse"
+		primary-text="正在加载单元列表..."
+		secondary-text="请稍候片刻"
+	/>
+</template>
+```
+
+#### 13.3.3 房屋列表加载
+
+```vue
+<template #loading>
+	<z-paging-loading
+		icon="home"
+		icon-class="i-carbon-home text-purple-400 animate-pulse"
+		primary-text="正在加载房屋列表..."
+		secondary-text="请稍候片刻"
+	/>
+</template>
+```
+
+#### 13.3.4 工单列表加载
+
+```vue
+<template #loading>
+	<z-paging-loading
+		icon="document"
+		icon-class="i-carbon-document text-orange-400 animate-pulse"
+		primary-text="正在加载工单列表..."
+		secondary-text="请稍候片刻"
+	/>
+</template>
+```
+
+#### 13.3.5 动态文案（支持搜索状态）
+
+```vue
+<template #loading>
+	<z-paging-loading
+		icon="building"
+		icon-class="i-carbon-building text-blue-400 animate-pulse"
+		:primary-text="searchValue ? '正在搜索数据...' : '正在加载数据...'"
+		secondary-text="请稍候片刻"
+	/>
+</template>
+```
+
+### 13.4 组件属性说明
+
+|    参数名     |             类型              |                 默认值                  |      说明      |
+| :-----------: | :---------------------------: | :-------------------------------------: | :------------: |
+|     icon      |            string             |                'loading'                |    图标名称    |
+|   iconClass   |            string             | 'i-carbon-circle-dash text-blue-400...' | 图标自定义类名 |
+|   iconSize    |            string             |                 '20px'                  |    图标大小    |
+|  loadingSize  |            string             |                 '32px'                  |   加载器大小   |
+|  loadingType  | 'ring'\|'spinner'\|'circular' |                 'ring'                  |   加载器类型   |
+|  primaryText  |            string             |            '正在加载数据...'            |    主要文案    |
+| secondaryText |            string             |              '请稍候片刻'               |    次要文案    |
+
+### 13.5 使用注意事项
+
+1. **图标选择建议**
+   - 建议使用 Carbon 图标库的图标（`i-carbon-*`）保持视觉统一
+   - 根据业务场景选择合适的图标（楼栋用 building，房屋用 home，工单用 document 等）
+
+2. **颜色主题建议**
+   - 蓝色系（`text-blue-400`）：适用于楼栋、通用数据
+   - 绿色系（`text-green-400`）：适用于单元、树形结构数据
+   - 紫色系（`text-purple-400`）：适用于房屋、详情数据
+   - 橙色系（`text-orange-400`）：适用于工单、警告类数据
+   - 青色系（`text-cyan-400`）：适用于用户、人员类数据
+
+3. **文案编写建议**
+   - 主文案应简洁明了，说明正在加载的内容类型
+   - 支持动态文案，根据搜索状态显示不同提示
+   - 副文案可使用通用提示（如"请稍候片刻"）
+
+4. **动画效果**
+   - 组件已内置 `animate-pulse` 动画，无需额外配置
+   - 加载器会自动旋转，图标会有脉冲效果
+
+### 13.6 完整示例参考
+
+详细的使用示例和各种配置效果，请查看：
+
+- **组件文档**: `src/components/common/z-paging-loading.md`
+- **测试页面**: `src/pages/test-use/z-paging-loading.vue`
+- **选择器页面**: `src/pages-sub/selector/*.vue`
+- **维修工单页面**: `src/pages-sub/repair/order-list.vue`
+
+### 13.7 代码审查检查点
+
+在代码审查时，针对 loading 插槽应检查以下事项：
+
+- [ ] 是否使用了 `<template #loading>` 插槽？
+- [ ] 插槽中是否使用了 `z-paging-loading` 组件？
+- [ ] 是否使用了其他非规范的加载组件？（如 `wd-loading`、自定义组件等）
+- [ ] 主文案是否清晰说明了加载内容？
+- [ ] 图标和颜色是否符合业务场景？
+- [ ] 是否需要动态文案支持搜索状态？

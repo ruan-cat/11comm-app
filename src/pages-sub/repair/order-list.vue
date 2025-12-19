@@ -15,6 +15,7 @@ import type { RepairOrder } from '@/types/repair'
 import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
 import { getRepairOrderList, getRepairStates, robRepairOrder } from '@/api/repair'
+import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { REPAIR_STATUSES } from '@/constants/repair'
 import { TypedRouter } from '@/router'
 import { getCurrentCommunity, getUserInfo } from '@/utils/user'
@@ -375,9 +376,12 @@ function getStatusTagType(statusCd?: string): TagType {
 
       <!-- 加载状态 -->
       <template #loading>
-        <view class="loading-wrap">
-          <wd-loading />
-        </view>
+        <ZPagingLoading
+          icon="document"
+          icon-class="i-carbon-document text-orange-400 animate-pulse"
+          primary-text="正在加载工单列表..."
+          secondary-text="请稍候片刻"
+        />
       </template>
     </z-paging>
   </view>

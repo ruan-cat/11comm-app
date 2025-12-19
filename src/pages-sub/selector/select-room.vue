@@ -19,6 +19,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { onMounted, ref, watch } from 'vue'
 import { getRoomList } from '@/api/room'
+import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { useSelectorStore } from '@/stores/useSelectorStore'
 
@@ -413,32 +414,12 @@ onMounted(() => {
       >
         <!-- 加载状态提示 -->
         <template #loading>
-          <view class="flex items-center justify-center p-6">
-            <view class="flex flex-col items-center">
-              <!-- 增强的加载动画 -->
-              <view class="relative mb-3">
-                <wd-loading type="ring" size="32px" />
-                <!-- 装饰性旋转元素 -->
-                <view class="absolute inset-0 flex items-center justify-center">
-                  <wd-icon
-                    name="home"
-                    custom-class="i-carbon-home text-purple-400 animate-pulse"
-                    size="20px"
-                  />
-                </view>
-              </view>
-
-              <!-- 动态加载文案 -->
-              <text class="animate-pulse text-sm text-gray-600 font-medium">
-                {{ searchValue ? '正在搜索房屋...' : '正在加载房屋列表...' }}
-              </text>
-
-              <!-- 加载提示 -->
-              <text class="mt-1 text-xs text-gray-400">
-                请稍候片刻
-              </text>
-            </view>
-          </view>
+          <ZPagingLoading
+            icon="home"
+            icon-class="i-carbon-home text-purple-400 animate-pulse"
+            :primary-text="searchValue ? '正在搜索房屋...' : '正在加载房屋列表...'"
+            secondary-text="请稍候片刻"
+          />
         </template>
 
         <!-- 列表内容 -->
