@@ -12,6 +12,7 @@
 
 <script setup lang="ts">
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
+import type { ColumnItem } from 'wot-design-uni/components/wd-picker-view/types'
 import type { UploadBeforeUpload, UploadFile } from 'wot-design-uni/components/wd-upload/types'
 import type { CreateRepairReq, RepairObjType } from '@/types/repair'
 import { onLoad, onShow, onUnload } from '@dcloudio/uni-app'
@@ -19,7 +20,6 @@ import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
 import { computed, reactive, ref } from 'vue'
 import { createRepairOrder, getRepairSettings } from '@/api/repair'
-import { useGlobalLoading } from '@/hooks/useGlobalLoading'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 import { useSelectorStore } from '@/stores/useSelectorStore'
@@ -32,6 +32,21 @@ definePage({
   },
 })
 
+// ==================== 常量定义 ====================
+
+/** 表单标签统一宽度 */
+const LABEL_WIDTH = '80px'
+
+/** 位置类型选项 */
+const REPAIR_SCOPES: ColumnItem[] = [
+  { value: '001' as RepairObjType, label: '小区' },
+  { value: '002' as RepairObjType, label: '楼栋' },
+  { value: '003' as RepairObjType, label: '单元' },
+  { value: '004' as RepairObjType, label: '房屋' },
+]
+
+// ==================== 依赖注入 ====================
+
 /** 小区信息 */
 const communityInfo = getCurrentCommunity()
 
@@ -41,14 +56,18 @@ const selectorStore = useSelectorStore()
 /** 全局 Toast */
 const toast = useGlobalToast()
 
-/** 全局 Loading */
-const loading = useGlobalLoading()
+// ==================== 表单状态 ====================
 
 /** 表单引用 */
 const formRef = ref()
 
-/** 表单标签统一宽度 */
-const LABEL_WIDTH = '80px'
+/** 报修类型列表 */
+const repairTypes = ref<Array<{
+  repairType: string
+  repairTypeName: string
+  payFeeFlag: 'T' | 'F'
+  priceScope?: string
+}>>([])
 
 /** 表单数据模型 */
 const model = reactive({
@@ -86,27 +105,13 @@ const model = reactive({
   photos: [] as UploadFile[],
 })
 
-/** 位置类型选项 */
-const repairScopes = [
-  { id: '001' as RepairObjType, name: '小区' },
-  { id: '002' as RepairObjType, name: '楼栋' },
-  { id: '003' as RepairObjType, name: '单元' },
-  { id: '004' as RepairObjType, name: '房屋' },
-]
+// ==================== 计算属性 ====================
 
 /** 报修对象类型 */
 const repairObjType = computed(() => model.scopeId as RepairObjType)
 
 /** 是否公共区域 */
 const publicArea = computed(() => repairObjType.value === '004' ? 'F' : 'T')
-
-/** 报修类型列表 */
-const repairTypes = ref<Array<{
-  repairType: string
-  repairTypeName: string
-  payFeeFlag: 'T' | 'F'
-  priceScope?: string
-}>>([])
 
 /** 选中的报修类型详情 */
 const selectedRepairType = computed(() =>
@@ -120,6 +125,8 @@ const priceScope = computed(() => {
   }
   return ''
 })
+
+// ==================== 表单校验规则 ====================
 
 /** 表单校验规则 */
 const formRules: FormRules = {
@@ -153,8 +160,17 @@ const formRules: FormRules = {
   ],
 }
 
-/** 加载报修类型 */
-const { send: loadRepairTypes } = useRequest(
+// ==================== 数据加载 ====================
+
+/**
+ * 加载报修类型
+ * 🔴 强制规范：必须设置 immediate: false
+ */
+const {
+  send: loadRepairTypes,
+  onSuccess: onLoadTypesSuccess,
+  onError: onLoadTypesError,
+} = useRequest(
   () =>
     getRepairSettings({
       communityId: communityInfo.communityId,
@@ -164,25 +180,35 @@ const { send: loadRepairTypes } = useRequest(
     }),
   { immediate: false },
 )
-  .onSuccess((result) => {
-    repairTypes.value = result.data
-    if (result.data.length > 0) {
-      model.repairType = result.data[0].repairType
-    }
-  })
-  .onError((error) => {
-    console.error('加载报修类型失败:', error)
-    toast.error('加载报修类型失败')
-  })
 
-/** 页面加载 */
-onLoad(() => {
-  loadRepairTypes()
+/**
+ * 加载报修类型成功回调
+ * @description 设置报修类型列表，并默认选择第一个
+ */
+onLoadTypesSuccess((result) => {
+  repairTypes.value = result.data
+  if (result.data.length > 0) {
+    model.repairType = result.data[0].repairType
+  }
 })
 
-/** 页面显示（从楼栋/单元/房屋选择页返回） */
-onShow(() => {
-  // 优先从 store 读取选择的楼栋/单元/房屋（新方式）
+/**
+ * 加载报修类型失败回调
+ * @description 错误提示已由全局拦截器自动处理，这里只需记录日志
+ */
+onLoadTypesError((error) => {
+  console.error('加载报修类型失败:', error)
+  // 全局拦截器已自动显示错误提示，无需重复处理
+})
+
+// ==================== 位置选择相关 ====================
+
+/**
+ * 从 Store 或 LocalStorage 读取选择的位置信息
+ * @description 优先从 Store 读取，兼容 LocalStorage 旧方式
+ */
+function loadSelectedLocationFromStorage() {
+  // 读取楼栋信息
   if (selectorStore.selectedFloor) {
     model.floorNum = `${selectorStore.selectedFloor.floorNum}栋`
     model.floorId = selectorStore.selectedFloor.floorId
@@ -195,6 +221,7 @@ onShow(() => {
     }
   }
 
+  // 读取单元信息
   if (selectorStore.selectedUnit) {
     model.unitNum = `${selectorStore.selectedUnit.unitNum}单元`
     model.unitId = selectorStore.selectedUnit.unitId
@@ -207,6 +234,7 @@ onShow(() => {
     }
   }
 
+  // 读取房屋信息
   if (selectorStore.selectedRoom) {
     model.roomNum = `${selectorStore.selectedRoom.roomNum}室`
     model.roomId = selectorStore.selectedRoom.roomId
@@ -218,28 +246,12 @@ onShow(() => {
       model.roomId = selectRoom.roomId
     }
   }
-})
-
-/** 页面卸载 */
-onUnload(() => {
-  uni.removeStorageSync('_selectFloor')
-  uni.removeStorageSync('_selectUnit')
-  uni.removeStorageSync('_selectRoom')
-  selectorStore.clearSelection()
-})
-
-/** 位置类型改变 */
-function handleScopeChange({ value }: { value: string }) {
-  model.scopeId = value
-  loadRepairTypes()
-  clearLocationInfo()
-  uni.removeStorageSync('_selectFloor')
-  uni.removeStorageSync('_selectUnit')
-  uni.removeStorageSync('_selectRoom')
-  selectorStore.clearSelection()
 }
 
-/** 清空位置信息 */
+/**
+ * 清空位置信息（表单数据）
+ * @description 清空楼栋、单元、房屋的 ID 和名称
+ */
 function clearLocationInfo() {
   model.floorNum = ''
   model.floorId = ''
@@ -249,26 +261,63 @@ function clearLocationInfo() {
   model.roomId = ''
 }
 
-/** 选择楼栋 */
+/**
+ * 清空位置缓存（Store 和 LocalStorage）
+ * @param {'all' | 'unit-room' | 'room'} scope - 清空范围
+ */
+function clearLocationCache(scope: 'all' | 'unit-room' | 'room' = 'all') {
+  if (scope === 'all') {
+    // 清空所有位置信息
+    uni.removeStorageSync('_selectFloor')
+    uni.removeStorageSync('_selectUnit')
+    uni.removeStorageSync('_selectRoom')
+    selectorStore.clearSelection()
+  }
+  else if (scope === 'unit-room') {
+    // 清空单元和房屋信息
+    uni.removeStorageSync('_selectUnit')
+    uni.removeStorageSync('_selectRoom')
+    selectorStore.clearUnit()
+    selectorStore.clearRoom()
+  }
+  else if (scope === 'room') {
+    // 仅清空房屋信息
+    uni.removeStorageSync('_selectRoom')
+    selectorStore.clearRoom()
+  }
+}
+
+/**
+ * 位置类型改变事件处理
+ * @param event - Picker 确认事件对象
+ */
+function handleScopeChange({ value }: { value: string }) {
+  model.scopeId = value
+  loadRepairTypes()
+  clearLocationInfo()
+  clearLocationCache('all')
+}
+
+/**
+ * 选择楼栋
+ * @description 清空所有位置信息后跳转到楼栋选择页
+ */
 function handleChooseFloor() {
-  uni.removeStorageSync('_selectFloor')
-  uni.removeStorageSync('_selectUnit')
-  uni.removeStorageSync('_selectRoom')
-  selectorStore.clearSelection()
+  clearLocationCache('all')
   clearLocationInfo()
   TypedRouter.toSelectFloor()
 }
 
-/** 选择单元 */
+/**
+ * 选择单元
+ * @description 检查楼栋是否已选择，清空单元和房屋信息后跳转
+ */
 function handleChooseUnit() {
   if (!model.floorId) {
     toast.warning('请先选择楼栋')
     return
   }
-  uni.removeStorageSync('_selectUnit')
-  uni.removeStorageSync('_selectRoom')
-  selectorStore.clearUnit()
-  selectorStore.clearRoom()
+  clearLocationCache('unit-room')
   model.unitNum = ''
   model.unitId = ''
   model.roomNum = ''
@@ -276,20 +325,27 @@ function handleChooseUnit() {
   TypedRouter.toSelectUnit(model.floorId)
 }
 
-/** 选择房屋 */
+/**
+ * 选择房屋
+ * @description 检查单元是否已选择，清空房屋信息后跳转
+ */
 function handleChooseRoom() {
   if (!model.unitId) {
     toast.warning('请先选择单元')
     return
   }
-  uni.removeStorageSync('_selectRoom')
-  selectorStore.clearRoom()
+  clearLocationCache('room')
   model.roomNum = ''
   model.roomId = ''
   TypedRouter.toSelectRoom(model.floorId, model.unitId)
 }
 
-/** 图片上传前处理 */
+// ==================== 文件上传相关 ====================
+
+/**
+ * 图片上传前校验
+ * @description 检查文件大小，限制最大 10MB
+ */
 const handleBeforeUpload: UploadBeforeUpload = ({ files, resolve }) => {
   const file = files[0]
   const maxSize = 10 * 1024 * 1024
@@ -302,19 +358,28 @@ const handleBeforeUpload: UploadBeforeUpload = ({ files, resolve }) => {
   resolve(true)
 }
 
-/** 图片上传成功 */
+/**
+ * 图片上传成功回调
+ * @param response - 上传响应数据
+ */
 function handleUploadSuccess(response: any) {
   console.log('图片上传成功:', response)
 }
 
-/** 图片上传失败 */
+/**
+ * 图片上传失败回调
+ * @param error - 错误信息
+ */
 function handleUploadFail(error: any) {
   toast.error('图片上传失败')
   console.error('图片上传失败:', error)
 }
 
+// ==================== 表单校验与提交 ====================
+
 /**
  * 位置信息校验
+ * @description 根据位置类型校验对应的位置字段是否已填写
  * @returns 返回错误信息，如果验证通过则返回空字符串
  */
 function validateLocation(): string {
@@ -330,66 +395,98 @@ function validateLocation(): string {
   return ''
 }
 
-/** 提交维修工单 */
-const { send: submitRepairOrder, onSuccess: onSubmitSuccess, onError: onSubmitError } = useRequest(
-  (data: CreateRepairReq) => createRepairOrder(data),
-  { immediate: false },
-)
+/**
+ * 构建报修对象信息
+ * @description 根据位置类型返回对应的报修对象 ID 和名称
+ * @returns 报修对象信息
+ */
+function buildRepairObjInfo(): { repairObjId: string, repairObjName: string } {
+  let repairObjId = ''
+  let repairObjName = ''
 
+  if (repairObjType.value === '001') {
+    // 小区级别
+    repairObjId = communityInfo.communityId
+    repairObjName = communityInfo.communityName
+  }
+  else if (repairObjType.value === '002') {
+    // 楼栋级别
+    repairObjId = model.floorId
+    repairObjName = model.floorNum
+  }
+  else if (repairObjType.value === '003') {
+    // 单元级别
+    repairObjId = model.unitId
+    repairObjName = model.floorNum + model.unitNum
+  }
+  else {
+    // 房屋级别
+    repairObjId = model.roomId
+    repairObjName = model.floorNum + model.unitNum + model.roomNum
+  }
+
+  return { repairObjId, repairObjName }
+}
+
+/**
+ * 提交维修工单请求
+ * 🔴 强制规范：必须设置 immediate: false
+ */
+const {
+  loading: submitting,
+  send: submitRepairOrder,
+  onSuccess: onSubmitSuccess,
+  onError: onSubmitError,
+} = useRequest((data: CreateRepairReq) => createRepairOrder(data), {
+  immediate: false,
+})
+
+/**
+ * 提交成功回调
+ * @description 显示成功提示并延迟跳转到工单列表页
+ */
 onSubmitSuccess(() => {
-  loading.close()
   toast.success('提交成功')
   setTimeout(() => {
     TypedRouter.toRepairList()
   }, 1500)
 })
 
+/**
+ * 提交失败回调
+ * @description 错误提示已由全局拦截器自动处理，这里只需记录日志
+ */
 onSubmitError((error) => {
-  loading.close()
-  toast.error(error.error || '提交失败')
+  console.error('提交维修工单失败:', error)
+  // 全局拦截器已自动显示错误提示，无需重复处理
 })
 
-/** 提交表单 */
-async function handleSubmit() {
-  // 位置信息校验（表单组件不支持动态校验）
+/**
+ * 提交表单
+ * @description 执行位置校验和表单校验，校验通过后提交维修工单
+ * 🔴 强制规范：不使用 await，直接调用 send 函数
+ */
+function handleSubmit() {
+  // 1. 位置信息校验（表单组件不支持动态校验）
   const locationError = validateLocation()
   if (locationError) {
     toast.warning(locationError)
     return
   }
 
-  // 表单校验
+  // 2. 表单校验
   formRef.value
     .validate()
-    .then(async ({ valid, errors }: { valid: boolean, errors: any[] }) => {
+    .then(({ valid, errors }: { valid: boolean, errors: any[] }) => {
       if (!valid) {
         console.error('表单校验失败:', errors)
         return
       }
 
-      loading.loading('提交中...')
+      // 3. 构建报修对象信息
+      const { repairObjId, repairObjName } = buildRepairObjInfo()
 
-      // 构建报修对象信息
-      let repairObjId = ''
-      let repairObjName = ''
-
-      if (repairObjType.value === '001') {
-        repairObjId = communityInfo.communityId
-        repairObjName = communityInfo.communityName
-      }
-      else if (repairObjType.value === '002') {
-        repairObjId = model.floorId
-        repairObjName = model.floorNum
-      }
-      else if (repairObjType.value === '003') {
-        repairObjId = model.unitId
-        repairObjName = model.floorNum + model.unitNum
-      }
-      else {
-        repairObjId = model.roomId
-        repairObjName = model.floorNum + model.unitNum + model.roomNum
-      }
-
+      // 4. 构建请求参数
       const requestData: CreateRepairReq = {
         title: model.title,
         repairName: model.repairName,
@@ -407,16 +504,35 @@ async function handleSubmit() {
         photos: model.photos?.map(item => item.url).filter(Boolean),
       }
 
-      await submitRepairOrder(requestData)
+      // 5. 提交请求
+      // 🔴 强制规范：不使用 await，直接调用 send 函数
+      submitRepairOrder(requestData)
     })
     .catch((error: any) => {
       console.error('表单校验异常:', error)
     })
 }
+
+// ==================== 生命周期钩子 ====================
+
+/** 页面加载 */
+onLoad(() => {
+  loadRepairTypes()
+})
+
+/** 页面显示（从楼栋/单元/房屋选择页返回） */
+onShow(() => {
+  loadSelectedLocationFromStorage()
+})
+
+/** 页面卸载 */
+onUnload(() => {
+  clearLocationCache('all')
+})
 </script>
 
 <template>
-  <view class="add-order-page">
+  <view class="min-h-screen bg-gray-100">
     <wd-form ref="formRef" :model="model" :rules="formRules">
       <!-- 房屋信息 -->
       <view class="section-title">
@@ -428,9 +544,7 @@ async function handleSubmit() {
           v-model="model.scopeId"
           label="位置"
           :label-width="LABEL_WIDTH"
-          :columns="repairScopes"
-          label-key="name"
-          value-key="id"
+          :columns="REPAIR_SCOPES"
           @confirm="handleScopeChange"
         />
 
@@ -600,6 +714,8 @@ async function handleSubmit() {
           block
           type="success"
           size="large"
+          :loading="submitting"
+          :disabled="submitting"
           @click="handleSubmit"
         >
           提交
@@ -610,11 +726,14 @@ async function handleSubmit() {
 </template>
 
 <style lang="scss" scoped>
-.add-order-page {
-  min-height: 100vh;
-  background-color: #f5f5f5;
-}
+/**
+ * 样式迁移说明：
+ * - .add-order-page: 已迁移到模板为原子类 `min-h-screen bg-gray-100`
+ * - .section-title: 包含 rgba() 复杂透明度，符合保留条件
+ * - :deep(.cell-value-left): wot-design-uni 组件必需样式，符合保留条件
+ */
 
+/** 小节标题样式 - 包含 rgba() 复杂透明度，必须保留 */
 .section-title {
   margin: 0;
   font-weight: 400;
@@ -623,7 +742,7 @@ async function handleSubmit() {
   padding: 20px 15px 10px;
 }
 
-/** wd-cell 值靠左对齐 */
+/** wd-cell 值靠左对齐 - wot-design-uni 组件必需样式，必须保留 */
 :deep(.cell-value-left) {
   flex: 1;
   text-align: left !important;
