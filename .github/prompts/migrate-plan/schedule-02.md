@@ -272,7 +272,21 @@ src\pages-sub\repair\handle.vue
 4. 重点修改文本的响应式效果。避免出现文字一个大一个小的情况。
 5. 重点避免页面出现明显的滚动条。这是移动端页面，不应该出现任何形式的滚动条。
 
-## 030 <!-- TODO: --> 样式写法一律使用 unocss 来完成
+## 030 <!-- TODO: --> 优化 `添加维修记录` 表单页的代码写法
+
+针对 `src\pages-sub\repair\add-order.vue` `添加维修记录` 表单页。
+
+1. 先阅读该文件所对应的旧代码。明确清楚代码写法。
+2. 根据 `.claude\skills\use-wd-form.md` 技能文件，优化 `添加维修记录` 表单页的代码写法。
+3. 在优化的时候，请你陆续的对 `添加维修记录` 表单页，依次使用这五个子代理，完成代码写法的迁移修改。确保满足下面这 5 个子代理的编写要求。
+   - `api-migration`： api 迁移子代理。位于 `.claude\agents` 目录内。
+   - `code-migration`： 代码写法迁移子代理。位于 `.claude\agents` 目录内。
+   - `component-migration`： 组件迁移子代理。位于 `.claude\agents` 目录内。
+   - `route-migration`： 路由迁移子代理。位于 `.claude\agents` 目录内。
+   - `style-migration`： 样式迁移子代理。位于 `.claude\agents` 目录内。
+4. 在改造时，务必要遵循 `api-error-handling` 和 `use-wd-form` 这两个技能文件的要求来修改。
+
+## 031 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
 2. 针对 `维修工单流程模块系列页面` 的 vue 组件，存在额外使用 scss 的情况。请你用 `style-migration` 来改造代码，使其满足子代理的要求。
