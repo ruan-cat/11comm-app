@@ -790,7 +790,7 @@
    - `src\pages-sub\repair\order-list.vue`
    - `src\pages\test-use\z-paging-loading.vue`
 
-### 054 <!-- TODO: --> 为本项目单独抽象一个完整的 `<wd-form>` 表单编写范例，抽象公共的 skills 文件
+### 054 为本项目单独抽象一个完整的 `<wd-form>` 表单编写范例，抽象公共的 skills 文件
 
 1. 全面阅读 `src\pages-sub\repair\add-order.vue` 的代码写法，重点学习清楚里面是怎么组织一个常见的 uniapp 表单的。
 2. 这个表单很美观，代码组织很好，我希望你编写补全 `.claude\skills\use-wd-form.md` 这款技能文件，希望本项目在实现类似于表单的 vue 组件时，都能够主动使用这款 `use-wd-form` 技能文件，按照该技能文件的约束，编写完整的，符合规格的，统一风格和写法的表单性质组件。
