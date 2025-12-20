@@ -131,7 +131,7 @@ export function finishRepair(data: {
 }
 
 /** 13. 结束订单 */
-export function endRepair(data: { repairId: string, communityId: string }) {
+export function endRepair(data: { repairId: string, communityId: string, context: string }) {
   return http.Post<{ success: boolean }>('/app/ownerRepair.repairEnd', data)
 }
 

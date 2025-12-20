@@ -11,10 +11,12 @@
 -->
 
 <script setup lang="ts">
+import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { endRepair } from '@/api/repair'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 definePage({
   style: {
@@ -23,99 +25,168 @@ definePage({
   },
 })
 
+// ==================== 常量定义 ====================
+
+/** 表单标签统一宽度 */
+const LABEL_WIDTH = '80px'
+
+// ==================== 依赖注入 ====================
+
+const toast = useGlobalToast()
+
+// ==================== 表单状态 ====================
+
+/** 表单引用 */
+const formRef = ref()
+
 /** 页面参数 */
 const repairId = ref('')
 const communityId = ref('')
 
-/** 结束原因 */
-const content = ref('')
+/** 表单数据模型 */
+const model = reactive({
+  /** 结束原因 */
+  context: '',
+})
 
-/** 结束工单请求 */
-const { send: submitEndRepair, onSuccess: onEndSuccess, onError: onEndError } = useRequest(
-  (params: { repairId: string, communityId: string }) => endRepair(params),
+// ==================== 表单校验规则 ====================
+
+/** 表单校验规则 */
+const formRules: FormRules = {
+  context: [
+    { required: true, message: '请填写结束原因' },
+  ],
+}
+
+// ==================== 数据提交 ====================
+
+/**
+ * 结束工单请求管理
+ * 🔴 强制规范：必须设置 immediate: false
+ */
+const {
+  loading: submitting,
+  send: submitEndRepair,
+  onSuccess: onEndSuccess,
+  onError: onEndError,
+} = useRequest(
+  (params: { repairId: string, communityId: string, context: string }) => endRepair(params),
   { immediate: false },
 )
 
+/**
+ * 结束成功回调
+ * @description 显示成功提示并返回上一页
+ */
 onEndSuccess(() => {
-  uni.hideLoading()
-  uni.showToast({
-    title: '工单已结束',
-    icon: 'success',
-  })
+  console.log('工单结束成功')
+  toast.success({ msg: '工单已结束', duration: 1500 })
 
   setTimeout(() => {
     uni.navigateBack()
   }, 1500)
 })
 
+/**
+ * 结束失败回调
+ * @description 错误提示已在 Alova 响应拦截器中自动处理，这里只需记录日志
+ */
 onEndError((error) => {
-  uni.hideLoading()
-  uni.showToast({
-    title: error.error || '结束失败',
-    icon: 'none',
-  })
+  console.error('结束工单失败:', error)
+  // 不需要重复显示错误提示
 })
+
+// ==================== 表单校验与提交 ====================
+
+/**
+ * 提交表单
+ * @description 执行表单校验，校验通过后提交结束工单请求
+ * 🔴 强制规范：不使用 await，直接调用 send 函数
+ */
+function handleSubmit() {
+  // 表单校验
+  formRef.value
+    .validate()
+    .then(({ valid, errors }: { valid: boolean, errors: any[] }) => {
+      if (!valid) {
+        console.error('表单校验失败:', errors)
+        return
+      }
+
+      // 提交请求
+      // 🔴 强制规范：不使用 await，直接调用 send 函数
+      submitEndRepair({
+        repairId: repairId.value,
+        communityId: communityId.value,
+        context: model.context.trim(),
+      })
+    })
+    .catch((error: any) => {
+      console.error('表单校验异常:', error)
+    })
+}
+
+// ==================== 生命周期钩子 ====================
 
 /** 页面加载 */
 onLoad((options) => {
   repairId.value = (options?.repairId as string) || ''
   communityId.value = (options?.communityId as string) || ''
 })
-
-/** 结束工单 */
-async function handleEndRepair() {
-  if (!content.value.trim()) {
-    uni.showToast({
-      title: '请输入结束原因',
-      icon: 'none',
-    })
-    return
-  }
-
-  uni.showLoading({ title: '处理中...' })
-
-  await submitEndRepair({
-    repairId: repairId.value,
-    communityId: communityId.value,
-  })
-}
 </script>
 
 <template>
-  <view class="end-repair-page">
-    <!-- 结束原因 -->
-    <view class="bg-white p-3">
-      <view class="mb-2 text-sm font-bold">
+  <view class="min-h-screen bg-gray-100 pt-3">
+    <wd-form ref="formRef" :model="model" :rules="formRules">
+      <!-- 结束原因 -->
+      <view class="section-title m-0 px-15px pb-10px pt-20px text-14px font-normal">
         结束原因
       </view>
-      <wd-textarea
-        v-model="content"
-        placeholder="请输入结束原因，比如缺材料"
-        :maxlength="500"
-        show-word-limit
-        :rows="6"
-      />
-    </view>
+      <wd-cell-group border>
+        <wd-textarea
+          v-model="model.context"
+          label="结束原因"
+          :label-width="LABEL_WIDTH"
+          prop="context"
+          placeholder="请输入结束原因，比如缺材料"
+          :maxlength="500"
+          show-word-limit
+          :rows="6"
+          :disabled="submitting"
+          :rules="formRules.context"
+        />
+      </wd-cell-group>
 
-    <!-- 结束按钮 -->
-    <view class="mt-6 px-3">
-      <wd-button
-        block
-        type="primary"
-        size="large"
-        :disabled="!content.trim()"
-        @click="handleEndRepair"
-      >
-        结束工单
-      </wd-button>
-    </view>
+      <!-- 提交按钮 -->
+      <view class="mt-6 px-3 pb-6">
+        <wd-button
+          block
+          type="primary"
+          size="large"
+          :loading="submitting"
+          :disabled="submitting"
+          @click="handleSubmit"
+        >
+          {{ submitting ? '处理中...' : '结束工单' }}
+        </wd-button>
+      </view>
+    </wd-form>
   </view>
 </template>
 
 <style lang="scss" scoped>
-.end-repair-page {
-  min-height: 100vh;
-  background-color: #f5f5f5;
-  padding-top: 12px;
+/**
+ * 样式迁移说明：
+ * - .end-repair-page: 已迁移到模板为原子类 `min-h-screen bg-gray-100 pt-3`
+ * - .section-title: 仅保留 rgba() 复杂透明度，其他样式已拆解为原子类
+ *   - margin: 0 → m-0
+ *   - font-weight: 400 → font-normal
+ *   - font-size: 14px → text-14px
+ *   - padding: 20px 15px 10px → px-15px pt-20px pb-10px
+ */
+
+/** 小节标题样式 - 仅保留 rgba() 复杂透明度 */
+.section-title {
+  color: rgba(69, 90, 100, 0.6);
 }
 </style>
