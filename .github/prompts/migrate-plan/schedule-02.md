@@ -277,7 +277,7 @@ src\pages-sub\repair\handle.vue
 针对 `src\pages-sub\repair\add-order.vue` `添加维修记录` 表单页。
 
 1. 先阅读该文件所对应的旧代码。明确清楚代码写法。
-2. 根据 `.claude\skills\use-wd-form.md` 技能文件，优化 `添加维修记录` 表单页的代码写法。
+2. 根据 `.claude\skills\use-wd-form\SKILL.md` 技能文件，优化 `添加维修记录` 表单页的代码写法。
 3. 在优化的时候，请你陆续的对 `添加维修记录` 表单页，依次使用这五个子代理，完成代码写法的迁移修改。确保满足下面这 5 个子代理的编写要求。
    - `api-migration`： api 迁移子代理。位于 `.claude\agents` 目录内。
    - `code-migration`： 代码写法迁移子代理。位于 `.claude\agents` 目录内。
@@ -291,7 +291,7 @@ src\pages-sub\repair\handle.vue
 针对 `src\pages-sub\repair\end-order.vue` `结束维修工单` 表单页。
 
 1. 先阅读该文件所对应的旧代码 `gitee-example/pages/repairOrder/repairEnd.vue` 。明确清楚代码写法。
-2. 根据 `.claude\skills\use-wd-form.md` 技能文件，优化 `结束维修工单` 表单页的代码写法。
+2. 根据 `.claude\skills\use-wd-form\SKILL.md` 技能文件，优化 `结束维修工单` 表单页的代码写法。
 3. 在优化的时候，请你陆续的对 `结束维修工单` 表单页，依次使用这五个子代理，完成代码写法的迁移修改。确保满足下面这 5 个子代理的编写要求。
    - `api-migration`： api 迁移子代理。位于 `.claude\agents` 目录内。
    - `code-migration`： 代码写法迁移子代理。位于 `.claude\agents` 目录内。
