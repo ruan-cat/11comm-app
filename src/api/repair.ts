@@ -34,7 +34,7 @@ export function getRepairFinishList(params: RepairListParams) {
 
 /** 4. 获取维修工单详情 */
 export function getRepairDetail(params: { repairId: string, storeId?: string, communityId?: string }) {
-  return http.Get<{ ownerRepair: RepairOrder }>('/app/ownerRepair.queryOwnerRepair', {
+  return http.Get<{ ownerRepair?: RepairOrder }>('/app/ownerRepair.queryOwnerRepair', {
     params,
   })
 }
@@ -220,7 +220,7 @@ export function getRepairStaffList(params: RepairListParams) {
 /** 24. 查询工单流转记录 */
 export function getRepairStaffRecords(params: { repairId: string, communityId?: string }) {
   return http.Get<{
-    staffRecords: Array<{
+    staffRecords?: Array<{
       ruId?: string
       repairId: string
       staffId: string
