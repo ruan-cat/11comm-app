@@ -180,42 +180,42 @@ function getStatusColor(statusCd: string): string {
       <!-- 基本信息 -->
       <view class="mb-3 bg-white">
         <wd-cell-group border>
-          <wd-cell title="报修ID" :value="repairDetail.repairId" title-class="text-base" value-class="text-base">
+          <wd-cell title="报修ID" :value="repairDetail.repairId" title-class="text-36rpx" value-class="text-36rpx">
             <template #icon>
               <wd-icon name="" custom-class="i-carbon-edit text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
             </template>
           </wd-cell>
-          <wd-cell title="报修类型" :value="repairDetail.repairTypeName" title-class="text-base" value-class="text-base">
+          <wd-cell title="报修类型" :value="repairDetail.repairTypeName" title-class="text-36rpx" value-class="text-36rpx">
             <template #icon>
               <wd-icon name="" custom-class="i-carbon-ticket text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
             </template>
           </wd-cell>
-          <wd-cell title="报修人" :value="repairDetail.repairName" title-class="text-base" value-class="text-base">
+          <wd-cell title="报修人" :value="repairDetail.repairName" title-class="text-36rpx" value-class="text-36rpx">
             <template #icon>
               <wd-icon name="" custom-class="i-carbon-user-avatar text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
             </template>
           </wd-cell>
-          <wd-cell title="联系方式" :value="repairDetail.tel" title-class="text-base" value-class="text-base">
+          <wd-cell title="联系方式" :value="repairDetail.tel" title-class="text-36rpx" value-class="text-36rpx">
             <template #icon>
               <wd-icon name="" custom-class="i-carbon-phone text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
             </template>
           </wd-cell>
-          <wd-cell title="报修位置" :value="repairDetail.repairObjName" title-class="text-base" value-class="text-base">
+          <wd-cell title="报修位置" :value="repairDetail.repairObjName" title-class="text-36rpx" value-class="text-36rpx">
             <template #icon>
               <wd-icon name="" custom-class="i-carbon-location text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
             </template>
           </wd-cell>
-          <wd-cell title="预约时间" :value="repairDetail.appointmentTime" title-class="text-base" value-class="text-base">
+          <wd-cell title="预约时间" :value="repairDetail.appointmentTime" title-class="text-36rpx" value-class="text-36rpx">
             <template #icon>
               <wd-icon name="" custom-class="i-carbon-time text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
             </template>
           </wd-cell>
-          <wd-cell title="状态" :value="repairDetail.statusName" title-class="text-base" value-class="text-base">
+          <wd-cell title="状态" :value="repairDetail.statusName" title-class="text-36rpx" value-class="text-36rpx">
             <template #icon>
               <wd-icon name="" custom-class="i-carbon-checkmark-outline text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
             </template>
           </wd-cell>
-          <wd-cell title="报修内容" :value="repairDetail.context" title-class="text-base" value-class="text-base">
+          <wd-cell title="报修内容" :value="repairDetail.context" title-class="text-36rpx" value-class="text-36rpx">
             <template #icon>
               <wd-icon name="" custom-class="i-carbon-document text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
             </template>
@@ -230,7 +230,7 @@ function getStatusColor(statusCd: string): string {
           v-if="repairDetail.repairPhotos && repairDetail.repairPhotos.length > 0"
           class="mb-3 bg-white p-3"
         >
-          <view class="mb-2 flex items-center text-lg text-gray-700 font-bold">
+          <view class="image-section-title mb-2 flex items-center text-gray-700 font-bold">
             <wd-icon name="" custom-class="i-carbon-image text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
             <text>业主报修图片</text>
           </view>
@@ -253,7 +253,7 @@ function getStatusColor(statusCd: string): string {
           v-if="repairDetail.beforePhotos && repairDetail.beforePhotos.length > 0"
           class="mb-3 bg-white p-3"
         >
-          <view class="mb-2 flex items-center text-lg text-gray-700 font-bold">
+          <view class="image-section-title mb-2 flex items-center text-gray-700 font-bold">
             <wd-icon name="" custom-class="i-carbon-image text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
             <text>维修前图片</text>
           </view>
@@ -276,7 +276,7 @@ function getStatusColor(statusCd: string): string {
           v-if="repairDetail.afterPhotos && repairDetail.afterPhotos.length > 0"
           class="mb-3 bg-white p-3"
         >
-          <view class="mb-2 flex items-center text-lg text-gray-700 font-bold">
+          <view class="image-section-title mb-2 flex items-center text-gray-700 font-bold">
             <wd-icon name="" custom-class="i-carbon-image text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
             <text>维修后图片</text>
           </view>
@@ -297,7 +297,7 @@ function getStatusColor(statusCd: string): string {
 
       <!-- 工单流转时间轴 -->
       <view v-if="staffRecords.length > 0" class="bg-white p-3">
-        <view class="mb-3 text-base text-gray-700 font-bold">
+        <view class="timeline-title mb-3 text-gray-700 font-bold">
           工单流转记录
         </view>
 
@@ -317,14 +317,14 @@ function getStatusColor(statusCd: string): string {
             <!-- 时间轴内容 -->
             <view class="flex-1 pb-2">
               <!-- 标题 -->
-              <view class="mb-1 text-base font-medium">
+              <view class="timeline-record-title mb-1 font-medium">
                 <text>{{ record.startTime }} 到达 {{ record.staffName }} 工位 - {{ record.statusName }}</text>
               </view>
 
               <!-- 处理意见 - 待支付或已结束时显示 -->
               <view
                 v-if="record.endTime || record.statusCd === '10009' || record.statusCd === '10004'"
-                class="mb-1 text-base text-gray-600"
+                class="timeline-record-content mb-1 text-gray-600"
               >
                 <text>处理意见：{{ record.context || '暂无' }}</text>
                 <text v-if="record.payTypeName" class="ml-1 text-blue-500">
@@ -350,6 +350,47 @@ function getStatusColor(statusCd: string): string {
 .repair-detail-page {
   min-height: 100vh;
   background-color: #f5f5f5;
+}
+
+/** 强制设置 wd-cell 的文本大小 */
+:deep(.wd-cell__title) {
+  font-size: 28rpx !important;
+  line-height: 36rpx !important;
+}
+
+:deep(.wd-cell__value) {
+  font-size: 28rpx !important;
+  line-height: 36rpx !important;
+}
+
+/** 确保 wd-cell 的 icon 区域垂直居中 */
+:deep(.wd-cell__icon) {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/** 图片区域标题 */
+.image-section-title {
+  font-size: 28rpx !important;
+  line-height: 36rpx !important;
+}
+
+/** 时间轴标题 */
+.timeline-title {
+  font-size: 28rpx !important;
+  line-height: 36rpx !important;
+}
+
+/** 时间轴记录标题 */
+.timeline-record-title {
+  font-size: 28rpx !important;
+  line-height: 36rpx !important;
+}
+
+/** 时间轴记录内容 */
+.timeline-record-content {
+  font-size: 28rpx !important;
+  line-height: 36rpx !important;
 }
 
 /** 时间轴最后一项隐藏连接线 */

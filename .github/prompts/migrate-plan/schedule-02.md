@@ -338,6 +338,15 @@ src\pages-sub\repair\handle.vue
 1. 将图标对齐，不要有靠左上角偏移的情况。
 2. 文本整体性的放大一点，和下面的内容相匹配。
 
+### 03 处理文本在响应式情况下显示太小的情况
+
+如图，请阅读这些 url 图片：
+
+![2025-12-21-22-18-22](https://s2.loli.net/2025/12/21/F3eMGUSmanAcY7w.png)
+
+1. 在响应式场景下，文本应该和 icon 的大小相同。请处理。
+2. 启动本地服务器，然后用 谷歌浏览器 MCP 来访问 `http://localhost:9000/#/pages-sub/repair/order-detail?repairId=REP_001&storeId=STORE_001` 页面。自主检查。
+
 ## 033 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
