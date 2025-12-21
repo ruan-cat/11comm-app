@@ -315,7 +315,21 @@ src\pages-sub\repair\handle.vue
    - `route-migration`： 路由迁移子代理。位于 `.claude\agents` 目录内。
    - `style-migration`： 样式迁移子代理。位于 `.claude\agents` 目录内。
 
-## 032 <!-- TODO: --> 样式写法一律使用 unocss 来完成
+### 01 <!-- TODO: --> 优化图标的显示效果
+
+如图，请阅读这些 url 图片：
+
+![2025-12-21-20-40-47](https://s2.loli.net/2025/12/21/DrnOZAF4sq1a6hy.png)
+
+![2025-12-21-20-41-17](https://s2.loli.net/2025/12/21/G4McmCTXhYFxwH3.png)
+
+![2025-12-21-20-41-28](https://s2.loli.net/2025/12/21/KZgdJD6kbPEpMfL.png)
+
+在 `src\pages-sub\repair\order-detail.vue` 维修工单详情 内，这些 icon 标签的显示效果很差，和文本的大小不统一，且有错位的情况。请修改代码，确保 icon 显示效果整齐对齐。
+
+请使用谷歌浏览器 MCP 来访问 `http://localhost:9000/#/pages-sub/repair/order-detail?repairId=REP_001&storeId=STORE_001` 页面，自主检查这些 icon 对齐效果如何。
+
+## 033 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
 2. 针对 `维修工单流程模块系列页面` 的 vue 组件，存在额外使用 scss 的情况。请你用 `style-migration` 来改造代码，使其满足子代理的要求。
