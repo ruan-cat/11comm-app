@@ -354,7 +354,7 @@ src\pages-sub\repair\handle.vue
    - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
    - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
 
-## 034 <!-- TODO: --> 优化 `处理维修工单` 页
+## 034 <!-- TODO: 用高级模型执行一次 --> 优化 `处理维修工单` 页
 
 针对 `src\pages-sub\repair\handle.vue` 文件。
 
