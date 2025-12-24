@@ -354,7 +354,7 @@ src\pages-sub\repair\handle.vue
    - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
    - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
 
-## 034 <!-- TODO: 用高级模型执行一次 --> 优化 `处理维修工单` 页
+## 034 优化 `处理维修工单` 页
 
 针对 `src\pages-sub\repair\handle.vue` 文件。
 
@@ -371,7 +371,11 @@ src\pages-sub\repair\handle.vue
 4. 优化的时候，确保你已经充分阅读了全部的 `.claude\skills` 目录内的 claude code 技能文件。
 5. 这是一个`表单页面`，请你务必按照`表单的方式`来优化该页面。使用 `.claude\skills\use-wd-form` 来改造，改写该页面的代码组织形式。
 
-## 034 <!-- TODO: --> 样式写法一律使用 unocss 来完成
+### 01 处理 `处理维修工单` 页出现的类型故障
+
+1. `src\pages-sub\repair\handle.vue`
+
+## 035 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
 2. 针对 `维修工单流程模块系列页面` 的 vue 组件，存在额外使用 scss 的情况。请你用 `style-migration` 来改造代码，使其满足子代理的要求。
