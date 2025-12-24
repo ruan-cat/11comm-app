@@ -10,6 +10,8 @@
   旧代码：gitee-example/pages/repairDetail/repairDetail.vue
 -->
 
+<!-- 基本完成检查审核 -->
+
 <script setup lang="ts">
 import type { RepairOrder, RepairPhoto, RepairStaffRecord } from '@/types/repair'
 import { onLoad, onShow } from '@dcloudio/uni-app'

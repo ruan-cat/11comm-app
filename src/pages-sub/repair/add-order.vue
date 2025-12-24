@@ -10,6 +10,8 @@
   旧代码：gitee-example/pages/repairAdd/repairAdd.vue
 -->
 
+<!-- 基本完成检查审核 -->
+
 <script setup lang="ts">
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import type { ColumnItem } from 'wot-design-uni/components/wd-picker-view/types'

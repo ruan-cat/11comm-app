@@ -16,6 +16,8 @@
   旧代码：gitee-example/pages/selectFloor/selectFloor.vue
 -->
 
+<!-- 基本完成检查审核 -->
+
 <script setup lang="ts">
 import type { Floor } from '@/types/selector'
 import { onLoad } from '@dcloudio/uni-app'

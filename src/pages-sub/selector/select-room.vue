@@ -13,6 +13,8 @@
   旧代码：gitee-example/pages/selectRoom/selectRoom.vue
 -->
 
+<!-- 基本完成检查审核 -->
+
 <script setup lang="ts">
 import type { Room } from '@/types/selector'
 import { onLoad } from '@dcloudio/uni-app'

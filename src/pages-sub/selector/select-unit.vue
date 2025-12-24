@@ -11,6 +11,8 @@
   旧代码：gitee-example/pages/selectUnit/selectUnit.vue
 -->
 
+<!-- 基本完成检查审核 -->
+
 <script setup lang="ts">
 import type { Unit } from '@/types/selector'
 import { onLoad } from '@dcloudio/uni-app'
