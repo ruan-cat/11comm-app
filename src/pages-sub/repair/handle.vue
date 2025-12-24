@@ -16,8 +16,13 @@ import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { computed, ref } from 'vue'
 import { dispatchRepair, finishRepair, getRepairPayTypes, getRepairStaffs } from '@/api/repair'
+import { useGlobalLoading } from '@/hooks/useGlobalLoading'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 import { getCurrentCommunity, getUserInfo } from '@/utils/user'
+
+const toast = useGlobalToast()
+const loading = useGlobalLoading()
 
 definePage({
   style: {
@@ -104,7 +109,10 @@ const { send: loadPayTypes } = useRequest(() => getRepairPayTypes(), { immediate
     console.error('加载支付方式失败:', error)
   })
 
-/** 页面加载 */
+/**
+ * 页面加载
+ * @description 初始化页面参数，加载维修师傅和支付方式列表
+ */
 onLoad((options) => {
   action.value = (options?.action as DispatchAction) || 'DISPATCH'
   repairId.value = (options?.repairId as string) || ''
@@ -142,64 +150,97 @@ onLoad((options) => {
   loadPayTypes()
 })
 
-/** 师傅选择改变 */
+/**
+ * 师傅选择改变
+ * @param {object} params - 选择器参数
+ * @param {number} params.value - 选中的索引
+ */
 function handleStaffChange({ value }: { value: number }) {
   selectedStaffIndex.value = value
 }
 
-/** 是否用料改变 */
+/**
+ * 是否用料改变
+ * @param {object} params - 选择器参数
+ * @param {number} params.value - 选中的索引
+ */
 function handleFeeChange({ value }: { value: number }) {
   selectedFeeIndex.value = value
 }
 
-/** 支付方式改变 */
+/**
+ * 支付方式改变
+ * @param {object} params - 选择器参数
+ * @param {number} params.value - 选中的索引
+ */
 function handlePayTypeChange({ value }: { value: number }) {
   selectedPayTypeIndex.value = value
 }
 
-/** 打开选择商品页面 */
+/**
+ * 打开选择商品页面
+ * @description 跳转到商品选择页面，根据是否用料传递不同参数
+ */
 function handleSelectResource() {
   TypedRouter.toSelectResource(feeFlag.value)
 }
 
-/** 增加商品数量 */
+/**
+ * 增加商品数量
+ * @param {number} index - 商品索引
+ */
 function handleIncreaseQuantity(index: number) {
   resourceList.value[index].useNumber = (resourceList.value[index].useNumber || 0) + 1
   updateTotalAmount()
 }
 
-/** 减少商品数量 */
+/**
+ * 减少商品数量
+ * @param {number} index - 商品索引
+ * @description 当数量为1时提示不能再减少
+ */
 function handleDecreaseQuantity(index: number) {
   if ((resourceList.value[index].useNumber || 0) <= 1) {
-    uni.showToast({
-      title: '不能再减少啦',
-      icon: 'none',
-    })
+    toast.warning('不能再减少啦')
     return
   }
   resourceList.value[index].useNumber = (resourceList.value[index].useNumber || 1) - 1
   updateTotalAmount()
 }
 
-/** 更新价格 */
+/**
+ * 更新价格
+ * @param {number} index - 商品索引
+ * @param {string} price - 新价格
+ */
 function handlePriceChange(index: number, price: string) {
   resourceList.value[index].price = Number(price)
   updateTotalAmount()
 }
 
-/** 更新数量 */
+/**
+ * 更新数量
+ * @param {number} index - 商品索引
+ * @param {string} quantity - 新数量
+ */
 function handleQuantityChange(index: number, quantity: string) {
   resourceList.value[index].useNumber = Number(quantity)
   updateTotalAmount()
 }
 
-/** 移除商品 */
+/**
+ * 移除商品
+ * @param {number} index - 商品索引
+ */
 function handleRemoveResource(index: number) {
   resourceList.value.splice(index, 1)
   updateTotalAmount()
 }
 
-/** 更新总价 */
+/**
+ * 更新总价
+ * @description 计算所有商品数量*价格的累加值
+ */
 function updateTotalAmount() {
   totalAmount.value = resourceList.value.reduce((sum, item) => {
     const num = item.useNumber || 0
@@ -208,12 +249,18 @@ function updateTotalAmount() {
   }, 0)
 }
 
-/** 维修前图片上传 */
+/**
+ * 维修前图片上传
+ * @param {string[]} fileIds - 上传成功的文件ID数组
+ */
 function handleBeforePhotosChange(fileIds: string[]) {
   beforePhotos.value = fileIds
 }
 
-/** 维修后图片上传 */
+/**
+ * 维修后图片上传
+ * @param {string[]} fileIds - 上传成功的文件ID数组
+ */
 function handleAfterPhotosChange(fileIds: string[]) {
   afterPhotos.value = fileIds
 }
@@ -235,11 +282,8 @@ const { send: submitDispatch, onSuccess: onDispatchSuccess, onError: onDispatchE
 )
 
 onDispatchSuccess(() => {
-  uni.hideLoading()
-  uni.showToast({
-    title: '提交成功',
-    icon: 'success',
-  })
+  loading.close()
+  toast.success('提交成功')
 
   setTimeout(() => {
     if (action.value === 'DISPATCH') {
@@ -251,33 +295,28 @@ onDispatchSuccess(() => {
   }, 1500)
 })
 
-onDispatchError((error) => {
-  uni.hideLoading()
-  uni.showToast({
-    title: error.error || '提交失败',
-    icon: 'none',
-  })
+onDispatchError(() => {
+  loading.close()
+  toast.error('提交失败')
 })
 
+/**
+ * 提交派单/转单/退单
+ * @description 验证表单并提交处理请求
+ */
 async function handleSubmitDispatch() {
   // 验证
   if (selectedStaffIndex.value === 0) {
-    uni.showToast({
-      title: '请选择维修师傅',
-      icon: 'none',
-    })
+    toast.warning('请选择维修师傅')
     return
   }
 
   if (!content.value.trim()) {
-    uni.showToast({
-      title: '请填写处理意见',
-      icon: 'none',
-    })
+    toast.warning('请填写处理意见')
     return
   }
 
-  uni.showLoading({ title: '提交中...' })
+  loading.loading('提交中...')
 
   await submitDispatch({
     repairId: repairId.value,
@@ -314,60 +353,46 @@ const { send: submitFinish, onSuccess: onFinishSuccess, onError: onFinishError }
 )
 
 onFinishSuccess(() => {
-  uni.hideLoading()
-  uni.showToast({
-    title: '办结成功',
-    icon: 'success',
-  })
+  loading.close()
+  toast.success('办结成功')
 
   setTimeout(() => {
     TypedRouter.toRepairDispatch()
   }, 1500)
 })
 
-onFinishError((error) => {
-  uni.hideLoading()
-  uni.showToast({
-    title: error.error || '办结失败',
-    icon: 'none',
-  })
+onFinishError(() => {
+  loading.close()
+  toast.error('办结失败')
 })
 
+/**
+ * 提交办结
+ * @description 验证表单并提交办结请求
+ */
 async function handleSubmitFinish() {
   // 验证
   if (selectedFeeIndex.value === 0) {
-    uni.showToast({
-      title: repairObjType.value === '004' ? '请选择维修类型' : '请选择是否用料',
-      icon: 'none',
-    })
+    toast.warning(repairObjType.value === '004' ? '请选择维修类型' : '请选择是否用料')
     return
   }
 
   if ((feeFlag.value === '1001' || feeFlag.value === '1003') && resourceList.value.length === 0) {
-    uni.showToast({
-      title: '请选择商品',
-      icon: 'none',
-    })
+    toast.warning('请选择商品')
     return
   }
 
   if (feeFlag.value === '1001' && selectedPayTypeIndex.value === 0) {
-    uni.showToast({
-      title: '请选择支付方式',
-      icon: 'none',
-    })
+    toast.warning('请选择支付方式')
     return
   }
 
   if (!content.value.trim()) {
-    uni.showToast({
-      title: '请填写处理意见',
-      icon: 'none',
-    })
+    toast.warning('请填写处理意见')
     return
   }
 
-  uni.showLoading({ title: '处理中...' })
+  loading.loading('处理中...')
 
   await submitFinish({
     repairId: repairId.value,
@@ -387,7 +412,10 @@ async function handleSubmitFinish() {
   })
 }
 
-/** 提交处理 */
+/**
+ * 提交处理
+ * @description 根据操作类型调用对应的提交方法
+ */
 function handleSubmit() {
   if (action.value === 'FINISH') {
     handleSubmitFinish()
@@ -397,7 +425,10 @@ function handleSubmit() {
   }
 }
 
-/** 页面标题 */
+/**
+ * 页面标题
+ * @description 根据操作类型动态计算页面标题
+ */
 const pageTitle = computed(() => {
   switch (action.value) {
     case 'DISPATCH':
@@ -419,7 +450,16 @@ const pageTitle = computed(() => {
     <!-- 维修师傅选择 (派单/转单/退单) -->
     <view v-if="action !== 'FINISH'" class="bg-white">
       <wd-cell-group border>
-        <wd-cell title="维修师傅" center>
+        <wd-cell>
+          <template #icon>
+            <wd-icon
+              name=""
+              custom-class="i-carbon-user-admin text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center"
+            />
+          </template>
+          <template #title>
+            <text class="text-gray-700 font-medium">维修师傅</text>
+          </template>
           <template v-if="action === 'RETURN'" #value>
             <text class="text-gray-400">{{ preStaffName }}</text>
           </template>
@@ -440,6 +480,15 @@ const pageTitle = computed(() => {
 
     <!-- 是否用料/维修类型 (办结) -->
     <view v-else class="bg-white">
+      <!-- 分区标题：维修类型 -->
+      <view class="section-title mb-2 flex items-center text-gray-700 font-bold">
+        <wd-icon
+          name=""
+          custom-class="i-carbon-tool text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center"
+        />
+        <text>{{ repairObjType === '004' ? '维修类型' : '是否用料' }}</text>
+      </view>
+
       <wd-cell-group border>
         <wd-cell :title="repairObjType === '004' ? '维修类型' : '是否用料'" center>
           <template #value>
@@ -459,15 +508,28 @@ const pageTitle = computed(() => {
       <!-- 选择商品按钮 -->
       <view v-if="feeFlag === '1001' || feeFlag === '1003'" class="p-3">
         <wd-button block type="primary" @click="handleSelectResource">
+          <wd-icon
+            name=""
+            custom-class="i-carbon-add text-white mr-8rpx w-36rpx h-36rpx flex items-center justify-center"
+          />
           选择商品
         </wd-button>
       </view>
 
       <!-- 商品列表 -->
-      <view v-if="(feeFlag === '1001' || feeFlag === '1003') && resourceList.length > 0" class="bg-white p-3">
-        <view class="resource-table">
+      <view v-if="(feeFlag === '1001' || feeFlag === '1003') && resourceList.length > 0" class="p-3">
+        <!-- 分区标题：商品清单 -->
+        <view class="section-title mb-2 flex items-center text-gray-700 font-bold">
+          <wd-icon
+            name=""
+            custom-class="i-carbon-list text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center"
+          />
+          <text>商品清单</text>
+        </view>
+
+        <view class="resource-table rounded bg-white">
           <!-- 表头 -->
-          <view class="table-header flex items-center gap-2 pb-2 text-sm font-bold">
+          <view class="table-header flex items-center gap-2 bg-gray-50 p-3 text-sm font-bold">
             <view class="flex-1">
               商品
             </view>
@@ -488,7 +550,7 @@ const pageTitle = computed(() => {
             :key="index"
             class="table-row border-t border-gray-100 py-2"
           >
-            <view class="flex items-center gap-2">
+            <view class="flex items-center gap-2 px-3">
               <!-- 商品名称 -->
               <view class="flex-1 text-sm">
                 <text v-if="!item.isCustom">{{ item.resName }}({{ item.specName || '-' }})</text>
@@ -508,26 +570,38 @@ const pageTitle = computed(() => {
 
               <!-- 数量 -->
               <view class="w-24 flex items-center justify-center gap-1">
-                <text class="text-xl text-gray-600" @click="handleDecreaseQuantity(index)">-</text>
+                <wd-icon
+                  name=""
+                  custom-class="i-carbon-subtract text-gray-600 w-36rpx h-36rpx flex items-center justify-center"
+                  @click="handleDecreaseQuantity(index)"
+                />
                 <input
                   v-model="item.useNumber"
                   type="number"
                   class="h-8 w-12 border border-gray-200 rounded text-center text-sm"
                   @input="handleQuantityChange(index, $event.detail.value)"
                 >
-                <text class="text-xl text-gray-600" @click="handleIncreaseQuantity(index)">+</text>
+                <wd-icon
+                  name=""
+                  custom-class="i-carbon-add text-gray-600 w-36rpx h-36rpx flex items-center justify-center"
+                  @click="handleIncreaseQuantity(index)"
+                />
               </view>
 
               <!-- 操作 -->
               <view class="w-16 text-center">
-                <text class="text-sm text-red-500" @click="handleRemoveResource(index)">移除</text>
+                <wd-icon
+                  name=""
+                  custom-class="i-carbon-trash-can text-red-500 w-36rpx h-36rpx flex items-center justify-center"
+                  @click="handleRemoveResource(index)"
+                />
               </view>
             </view>
 
             <!-- 价格范围提示 -->
             <view
               v-if="feeFlag === '1001' && !item.isCustom && item.outHighPrice !== item.outLowPrice"
-              class="mt-1 text-xs text-gray-500"
+              class="mt-1 px-3 pb-2 text-xs text-gray-500"
             >
               价格范围({{ item.outLowPrice }} - {{ item.outHighPrice }})
             </view>
@@ -535,15 +609,27 @@ const pageTitle = computed(() => {
         </view>
 
         <!-- 总价 -->
-        <view v-if="feeFlag === '1001'" class="mt-3 border-t border-gray-200 pt-3">
-          <wd-cell title="总计" :value="`¥${totalAmount.toFixed(2)}`" />
+        <view v-if="feeFlag === '1001'" class="mt-3 rounded bg-white p-3">
+          <view class="flex items-center justify-between">
+            <text class="text-gray-700 font-medium">总计</text>
+            <text class="text-lg text-colorui-green font-bold">¥{{ totalAmount.toFixed(2) }}</text>
+          </view>
         </view>
       </view>
 
       <!-- 支付方式 -->
       <view v-if="feeFlag === '1001'" class="bg-white">
         <wd-cell-group border>
-          <wd-cell title="支付方式" center>
+          <wd-cell>
+            <template #icon>
+              <wd-icon
+                name=""
+                custom-class="i-carbon-wallet text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center"
+              />
+            </template>
+            <template #title>
+              <text class="text-gray-700 font-medium">支付方式</text>
+            </template>
             <template #value>
               <wd-picker
                 v-model="selectedPayTypeIndex"
@@ -562,8 +648,13 @@ const pageTitle = computed(() => {
 
     <!-- 处理意见 -->
     <view class="mt-3 bg-white p-3">
-      <view class="mb-2 text-sm font-bold">
-        处理意见
+      <!-- 分区标题：处理意见 -->
+      <view class="section-title mb-2 flex items-center text-gray-700 font-bold">
+        <wd-icon
+          name=""
+          custom-class="i-carbon-edit text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center"
+        />
+        <text>处理意见</text>
       </view>
       <wd-textarea
         v-model="content"
@@ -576,20 +667,29 @@ const pageTitle = computed(() => {
 
     <!-- 图片上传 (办结时) -->
     <view v-if="action === 'FINISH'" class="mt-3 space-y-3">
-      <!-- 这里暂时使用占位，实际应使用 vc-upload-async 组件 -->
-      <view class="bg-white p-3">
-        <view class="mb-2 text-sm font-bold">
-          维修前图片
-        </view>
+      <!-- 分区标题：维修前图片 -->
+      <view class="section-title mb-2 flex items-center text-gray-700 font-bold">
+        <wd-icon
+          name=""
+          custom-class="i-carbon-camera text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center"
+        />
+        <text>维修前图片</text>
+      </view>
+      <view class="rounded bg-white p-3">
         <view class="text-sm text-gray-500">
           <text>（图片上传功能待集成 vc-upload-async 组件）</text>
         </view>
       </view>
 
-      <view class="bg-white p-3">
-        <view class="mb-2 text-sm font-bold">
-          维修后图片
-        </view>
+      <!-- 分区标题：维修后图片 -->
+      <view class="section-title mb-2 flex items-center text-gray-700 font-bold">
+        <wd-icon
+          name=""
+          custom-class="i-carbon-image text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center"
+        />
+        <text>维修后图片</text>
+      </view>
+      <view class="rounded bg-white p-3">
         <view class="text-sm text-gray-500">
           <text>（图片上传功能待集成 vc-upload-async 组件）</text>
         </view>
@@ -609,12 +709,34 @@ const pageTitle = computed(() => {
 .repair-handle-page {
   min-height: 100vh;
   background-color: #f5f5f5;
-  padding-top: 12px;
 }
 
+/** 分区标题样式 */
+.section-title {
+  font-size: 28rpx !important;
+  line-height: 36rpx !important;
+}
+
+/** 强制设置 wd-cell 的文本大小 */
+:deep(.wd-cell__title),
+:deep(.wd-cell__value) {
+  font-size: 28rpx !important;
+  line-height: 36rpx !important;
+}
+
+/** 确保 wd-cell 的 icon 区域垂直居中 */
+:deep(.wd-cell__icon) {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/** 商品表格样式 */
 .resource-table {
+  border-radius: 16rpx;
+  overflow: hidden;
+
   .table-header {
-    border-bottom: 2px solid #e5e7eb;
+    border-bottom: 2rpx solid #e5e7eb;
   }
 
   .table-row {
@@ -622,5 +744,12 @@ const pageTitle = computed(() => {
       border-bottom: none;
     }
   }
+}
+
+/** 输入框统一样式 */
+input[type='number'],
+input[type='digit'] {
+  font-size: 28rpx !important;
+  line-height: 32rpx !important;
 }
 </style>
