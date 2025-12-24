@@ -411,7 +411,7 @@ src/
 
 ## 获取技术栈对应的上下文
 
-## 阅读 `wot-design-uni` 组件库的文档
+### 阅读 `wot-design-uni` 组件库的文档
 
 我们项目是移动端项目，高强度的使用了 `wot-design-uni` 组件库。你应该在编写 vue 组件时，主动地获取组件库的文档，及时使用正确的组件。
 
@@ -424,3 +424,8 @@ src/
 `wot-design-uni` 组件文档全都在以下 github 仓库目录内。
 
 - https://github.com/Moonofweisheng/wot-design-uni/tree/master/docs/component
+
+### claude code skill
+
+- 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
+- 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
