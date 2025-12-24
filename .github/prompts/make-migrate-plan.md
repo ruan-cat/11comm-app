@@ -803,3 +803,9 @@
 4. `use-wd-form` 技能文件必须提供以下的组件文档链接，便于 AI 模型在使用该技能文件时，能够主动的获取组件写法文档：
    - `wd-form` 组件文档： https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/form.md
    - `wd-cell-group` 和 `wd-cell` 组件文档： https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/cell.md
+
+### 055 优化迭代 `beautiful-component-design` 技能
+
+1. 阅读 `.claude\skills\beautiful-component-design` 目录下面的全部文件。
+2. 阅读 `.claude\agents` 文件夹下面的全部子代理文件，明确清楚各个子代理的要求。
+3. 按照各个子代理的要求，去改写，纠正 `beautiful-component-design` 技能中不合适的内容。在保留 `beautiful-component-design` 技能的核心内容的前提下，确保技能文档的写法满足各个子代理的写法要求。
