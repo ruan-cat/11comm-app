@@ -285,6 +285,17 @@ export default defineConfig({
 
     /** 自定义圆角规则 - rpx 单位支持 */
     [/^rounded-(\d+)rpx$/, ([, d]) => ({ 'border-radius': `${d}rpx` })],
+
+    /** 自定义边框规则 - rpx 单位支持 */
+    [/^border-(\d+)rpx$/, ([, d]) => ({ 'border-width': `${d}rpx` })],
+    [/^border-t-(\d+)rpx$/, ([, d]) => ({ 'border-top-width': `${d}rpx` })],
+    [/^border-b-(\d+)rpx$/, ([, d]) => ({ 'border-bottom-width': `${d}rpx` })],
+    [/^border-l-(\d+)rpx$/, ([, d]) => ({ 'border-left-width': `${d}rpx` })],
+    [/^border-r-(\d+)rpx$/, ([, d]) => ({ 'border-right-width': `${d}rpx` })],
+
+    /** 自定义过渡规则 - 简化语法 */
+    [/^transition-opacity-(\d+)$/, ([, d]) => ({ transition: `opacity ${d}ms` })],
+    [/^transition-all-(\d+)$/, ([, d]) => ({ transition: `all ${d}ms` })],
   ],
 
   /**

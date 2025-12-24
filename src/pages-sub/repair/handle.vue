@@ -12,19 +12,19 @@
 
 <script setup lang="ts">
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
+import type { UploadBeforeUpload, UploadFile } from 'wot-design-uni/components/wd-upload/types'
 import type { DispatchAction, MaintenanceType, PaymentType, RepairObjType, RepairResource } from '@/types/repair'
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad, onUnload } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { computed, reactive, ref } from 'vue'
 import { dispatchRepair, finishRepair, getRepairPayTypes, getRepairStaffs } from '@/api/repair'
-import { useGlobalLoading } from '@/hooks/useGlobalLoading'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 import { getCurrentCommunity, getUserInfo } from '@/utils/user'
 
 const toast = useGlobalToast()
-const loading = useGlobalLoading()
 
+/** 定义页面配置 */
 definePage({
   style: {
     navigationBarTitleText: '处理工单',
@@ -79,9 +79,9 @@ const model = reactive<PageParams & {
   /** 总计金额 */
   totalAmount: number
   /** 维修前图片 */
-  beforePhotos: string[]
+  beforePhotos: UploadFile[]
   /** 维修后图片 */
-  afterPhotos: string[]
+  afterPhotos: UploadFile[]
 }>({
   action: 'DISPATCH',
   repairId: '',
@@ -143,11 +143,13 @@ const staffOptions = ref<Array<{ staffId: string, staffName: string }>>([
   { staffId: '', staffName: '请选择员工' },
 ])
 
-/** 选中的维修师傅索引 */
-const selectedStaffIndex = ref(0)
-
-/** 选中的维修师傅 */
-const selectedStaff = computed(() => staffOptions.value[selectedStaffIndex.value])
+/** 选中的维修师傅（用于显示） */
+const selectedStaff = computed(() => {
+  if (!model.staffId) {
+    return { staffId: '', staffName: '请选择员工' }
+  }
+  return staffOptions.value.find(staff => staff.staffId === model.staffId) || { staffId: '', staffName: '请选择员工' }
+})
 
 /** 是否用料/维修类型选项 */
 const feeOptions = computed(() => {
@@ -171,9 +173,6 @@ const feeOptions = computed(() => {
 const payTypeOptions = ref<Array<{ statusCd: PaymentType | '', name: string }>>([
   { statusCd: '', name: '请选择' },
 ])
-
-/** 选中的支付方式索引 */
-const selectedPayTypeIndex = ref(0)
 
 // ==================== 表单校验规则 ====================
 
@@ -240,8 +239,12 @@ onLoadStaffsSuccess((result) => {
   ]
 })
 
+/**
+ * 加载维修师傅列表失败回调
+ */
 onLoadStaffsError((error) => {
   console.error('加载师傅列表失败:', error)
+  toast.error('加载维修师傅列表失败，请重试')
 })
 
 /**
@@ -267,8 +270,12 @@ onLoadPayTypesSuccess((result) => {
   ]
 })
 
+/**
+ * 加载支付方式列表失败回调
+ */
 onLoadPayTypesError((error) => {
   console.error('加载支付方式失败:', error)
+  toast.error('加载支付方式列表失败，请重试')
 })
 
 // ==================== 事件处理 ====================
@@ -276,37 +283,24 @@ onLoadPayTypesError((error) => {
 /**
  * 维修师傅选择改变
  */
-function handleStaffChange({ value }: { value: number }) {
-  selectedStaffIndex.value = value
-  if (value === 0) {
-    model.staffId = ''
-    model.staffName = ''
-  }
-  else {
-    const staff = staffOptions.value[value]
-    model.staffId = staff.staffId
-    model.staffName = staff.staffName
-  }
+function handleStaffChange({ value }: { value: string }) {
+  model.staffId = value
+  const staff = staffOptions.value.find(s => s.staffId === value)
+  model.staffName = staff?.staffName || ''
 }
 
 /**
  * 是否用料/维修类型选择改变
  */
-function handleFeeChange({ value }: { value: number }) {
-  model.feeFlag = feeOptions.value[value].id
+function handleFeeChange({ value }: { value: MaintenanceType | '' }) {
+  model.feeFlag = value
 }
 
 /**
  * 支付方式选择改变
  */
-function handlePayTypeChange({ value }: { value: number }) {
-  selectedPayTypeIndex.value = value
-  if (value === 0) {
-    model.payType = ''
-  }
-  else {
-    model.payType = payTypeOptions.value[value].statusCd
-  }
+function handlePayTypeChange({ value }: { value: PaymentType | '' }) {
+  model.payType = value
 }
 
 /**
@@ -340,16 +334,22 @@ function handleDecreaseQuantity(index: number) {
  * 价格改变
  */
 function handlePriceChange(index: number, price: string) {
-  model.resourceList[index].price = Number(price)
-  updateTotalAmount()
+  const numericPrice = Number(price)
+  if (!Number.isNaN(numericPrice) && numericPrice >= 0) {
+    model.resourceList[index].price = numericPrice
+    updateTotalAmount()
+  }
 }
 
 /**
  * 数量改变
  */
 function handleQuantityChange(index: number, quantity: string) {
-  model.resourceList[index].useNumber = Number(quantity)
-  updateTotalAmount()
+  const numericQuantity = Number(quantity)
+  if (!Number.isNaN(numericQuantity) && numericQuantity > 0) {
+    model.resourceList[index].useNumber = numericQuantity
+    updateTotalAmount()
+  }
 }
 
 /**
@@ -372,17 +372,49 @@ function updateTotalAmount() {
 }
 
 /**
- * 维修前图片上传
+ * 获取商品显示名称
+ * @param item 商品项
+ * @returns 格式化后的商品名称
  */
-function handleBeforePhotosChange(fileIds: string[]) {
-  model.beforePhotos = fileIds
+function getResourceDisplayName(item: RepairResource): string {
+  if (item.isCustom) {
+    return item.customGoodsName || '自定义商品'
+  }
+  const specName = item.specName || '-'
+  return `${item.resName}(${specName})`
+}
+
+// ==================== 图片上传相关 ====================
+
+/**
+ * 图片上传前校验
+ * @description 检查文件大小，限制最大 10MB
+ */
+const handleBeforeUpload: UploadBeforeUpload = ({ files, resolve }) => {
+  const file = files[0]
+  const maxSize = 10 * 1024 * 1024
+
+  if (file.size && file.size > maxSize) {
+    toast.warning('图片大小不能超过10MB')
+    resolve(false)
+    return
+  }
+  resolve(true)
 }
 
 /**
- * 维修后图片上传
+ * 图片上传成功回调
  */
-function handleAfterPhotosChange(fileIds: string[]) {
-  model.afterPhotos = fileIds
+function handleUploadSuccess(response: any) {
+  console.log('图片上传成功:', response)
+}
+
+/**
+ * 图片上传失败回调
+ */
+function handleUploadFail(error: any) {
+  toast.error('图片上传失败')
+  console.error('图片上传失败:', error)
 }
 
 // ==================== 提交处理 ====================
@@ -393,6 +425,7 @@ function handleAfterPhotosChange(fileIds: string[]) {
  */
 const {
   send: submitDispatch,
+  loading: isDispatchSubmitting,
   onSuccess: onDispatchSuccess,
   onError: onDispatchError,
 } = useRequest(
@@ -410,10 +443,20 @@ const {
   { immediate: false },
 )
 
+/**
+ * 派单/转单/退单成功回调
+ */
 onDispatchSuccess(() => {
-  loading.close()
-  toast.success('提交成功')
+  const actionTextMap: Record<DispatchAction, string> = {
+    DISPATCH: '派单',
+    TRANSFER: '转单',
+    RETURN: '退单',
+    FINISH: '办结',
+  }
+  const actionText = actionTextMap[model.action] || '操作'
+  toast.success(`${actionText}成功`)
 
+  // 延迟跳转，让用户看到成功提示
   setTimeout(() => {
     if (model.action === 'DISPATCH') {
       TypedRouter.toRepairList()
@@ -424,9 +467,19 @@ onDispatchSuccess(() => {
   }, 1500)
 })
 
-onDispatchError(() => {
-  loading.close()
-  toast.error('提交失败')
+/**
+ * 派单/转单/退单失败回调
+ */
+onDispatchError((error) => {
+  console.error('派单/转单/退单失败:', error)
+  const actionTextMap: Record<DispatchAction, string> = {
+    DISPATCH: '派单',
+    TRANSFER: '转单',
+    RETURN: '退单',
+    FINISH: '办结',
+  }
+  const actionText = actionTextMap[model.action] || '操作'
+  toast.error(`${actionText}失败，请重试`)
 })
 
 /**
@@ -435,6 +488,7 @@ onDispatchError(() => {
  */
 const {
   send: submitFinish,
+  loading: isFinishSubmitting,
   onSuccess: onFinishSuccess,
   onError: onFinishError,
 } = useRequest(
@@ -457,8 +511,15 @@ const {
   { immediate: false },
 )
 
+/** 当前操作是否正在提交 */
+const isSubmitting = computed(() => {
+  return model.action === 'FINISH' ? isFinishSubmitting.value : isDispatchSubmitting.value
+})
+
+/**
+ * 办结成功回调
+ */
 onFinishSuccess(() => {
-  loading.close()
   toast.success('办结成功')
 
   setTimeout(() => {
@@ -466,9 +527,12 @@ onFinishSuccess(() => {
   }, 1500)
 })
 
-onFinishError(() => {
-  loading.close()
-  toast.error('办结失败')
+/**
+ * 办结失败回调
+ */
+onFinishError((error) => {
+  console.error('办结失败:', error)
+  toast.error('办结失败，请重试')
 })
 
 /**
@@ -476,12 +540,15 @@ onFinishError(() => {
  * @returns 返回错误信息，如果验证通过则返回空字符串
  */
 function validateDispatch(): string {
-  if (selectedStaffIndex.value === 0) {
+  // 退单操作不需要选择维修师傅
+  if (model.action !== 'RETURN' && !model.staffId) {
     return '请选择维修师傅'
   }
+
   if (!model.context.trim()) {
     return '请填写处理意见'
   }
+
   return ''
 }
 
@@ -490,18 +557,26 @@ function validateDispatch(): string {
  * @returns 返回错误信息，如果验证通过则返回空字符串
  */
 function validateFinish(): string {
+  // 1. 检查是否用料/维修类型
   if (!model.feeFlag) {
     return model.repairObjType === '004' ? '请选择维修类型' : '请选择是否用料'
   }
+
+  // 2. 如果选择有偿服务或需要用料，必须选择商品
   if ((model.feeFlag === '1001' || model.feeFlag === '1003') && model.resourceList.length === 0) {
     return '请选择商品'
   }
-  if (model.feeFlag === '1001' && selectedPayTypeIndex.value === 0) {
+
+  // 3. 如果选择有偿服务，必须选择支付方式
+  if (model.feeFlag === '1001' && !model.payType) {
     return '请选择支付方式'
   }
+
+  // 4. 处理意见必填
   if (!model.context.trim()) {
     return '请填写处理意见'
   }
+
   return ''
 }
 
@@ -509,15 +584,19 @@ function validateFinish(): string {
  * 提交派单/转单/退单
  */
 function handleSubmitDispatch() {
-  // 校验
+  // 1. 表单校验
   const error = validateDispatch()
   if (error) {
     toast.warning(error)
     return
   }
 
-  loading.loading('提交中...')
+  // 2. 防止重复提交
+  if (isDispatchSubmitting.value) {
+    return
+  }
 
+  // 3. 提交请求
   submitDispatch({
     repairId: model.repairId,
     staffId: selectedStaff.value.staffId,
@@ -535,15 +614,19 @@ function handleSubmitDispatch() {
  * 提交办结
  */
 function handleSubmitFinish() {
-  // 校验
+  // 1. 表单校验
   const error = validateFinish()
   if (error) {
     toast.warning(error)
     return
   }
 
-  loading.loading('处理中...')
+  // 2. 防止重复提交
+  if (isFinishSubmitting.value) {
+    return
+  }
 
+  // 3. 提交请求
   submitFinish({
     repairId: model.repairId,
     feeFlag: model.feeFlag,
@@ -555,8 +638,8 @@ function handleSubmitFinish() {
     choosedGoodsList: model.resourceList,
     totalPrice: model.totalAmount,
     payType: model.payType,
-    beforeRepairPhotos: model.beforePhotos.map(photo => ({ photo })),
-    afterRepairPhotos: model.afterPhotos.map(photo => ({ photo })),
+    beforeRepairPhotos: model.beforePhotos.map(file => ({ photo: file.url || '' })),
+    afterRepairPhotos: model.afterPhotos.map(file => ({ photo: file.url || '' })),
     publicArea: model.publicArea,
     repairChannel: model.repairChannel,
   })
@@ -575,12 +658,29 @@ function handleSubmit() {
   }
 }
 
+// ==================== 页面间通信 ====================
+
+/**
+ * 监听商品选择页面返回的数据
+ */
+uni.$on('getResourceInfo', (data: string) => {
+  try {
+    const resourceData = JSON.parse(data)
+    model.resourceList.push(resourceData)
+    updateTotalAmount()
+  }
+  catch (error) {
+    console.error('解析商品数据失败:', error)
+  }
+})
+
 // ==================== 生命周期钩子 ====================
 
 /**
  * 页面加载
  */
 onLoad((options) => {
+  // 1. 解析页面参数
   model.action = (options?.action as DispatchAction) || 'DISPATCH'
   model.repairId = (options?.repairId as string) || ''
   model.repairType = (options?.repairType as string) || ''
@@ -590,13 +690,26 @@ onLoad((options) => {
   model.preStaffId = (options?.preStaffId as string) || ''
   model.preStaffName = (options?.preStaffName as string) || ''
 
-  // 加载维修师傅列表（派单/转单/退单时需要）
+  // 2. 参数验证
+  if (!model.repairId) {
+    toast.error('缺少必要参数：工单ID')
+    return
+  }
+
+  // 3. 加载维修师傅列表（派单/转单/退单时需要）
   if (showStaffSelector.value) {
     loadStaffs()
   }
 
-  // 加载支付方式
+  // 4. 加载支付方式列表
   loadPayTypes()
+})
+
+/**
+ * 页面卸载，移除事件监听
+ */
+onUnload(() => {
+  uni.$off('getResourceInfo')
 })
 </script>
 
@@ -605,29 +718,28 @@ onLoad((options) => {
     <wd-form ref="formRef" :model="model" :rules="formRules">
       <!-- 维修师傅选择 (派单/转单/退单) -->
       <view v-if="showStaffSelector" class="bg-white">
-        <view class="section-title">
+        <view class="m-0 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
           维修师傅
         </view>
         <wd-cell-group border>
           <!-- 退单时显示只读信息 -->
           <template v-if="model.action === 'RETURN'">
-            <wd-cell :title="model.preStaffName || '暂无'" />
+            <wd-cell title="退回至" :value="model.preStaffName || '暂无'" />
           </template>
           <!-- 派单/转单时显示选择器 -->
           <template v-else>
             <wd-picker
-              v-model="selectedStaffIndex"
+              v-model="model.staffId"
               :columns="staffOptions"
               label-key="staffName"
               value-key="staffId"
               @confirm="handleStaffChange"
             >
-              <wd-cell>
-                <template #title>
-                  <text class="text-gray-700 font-medium">维修师傅</text>
-                </template>
+              <wd-cell title="维修师傅" is-link>
                 <template #value>
-                  <text class="text-blue-500">{{ staffOptions[selectedStaffIndex]?.staffName || '请选择' }}</text>
+                  <text :class="model.staffId ? 'text-gray-900' : 'text-gray-400'">
+                    {{ selectedStaff.staffName }}
+                  </text>
                 </template>
               </wd-cell>
             </wd-picker>
@@ -637,7 +749,7 @@ onLoad((options) => {
 
       <!-- 是否用料/维修类型 (办结) -->
       <view v-else class="bg-white">
-        <view class="section-title">
+        <view class="m-0 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
           {{ model.repairObjType === '004' ? '维修类型' : '是否用料' }}
         </view>
         <wd-cell-group border>
@@ -648,9 +760,11 @@ onLoad((options) => {
             value-key="id"
             @confirm="handleFeeChange"
           >
-            <wd-cell :title="model.repairObjType === '004' ? '维修类型' : '是否用料'">
+            <wd-cell :title="model.repairObjType === '004' ? '维修类型' : '是否用料'" is-link>
               <template #value>
-                <text class="text-blue-500">{{ feeOptions.find(item => item.id === model.feeFlag)?.name || '请选择' }}</text>
+                <text :class="model.feeFlag ? 'text-gray-900' : 'text-gray-400'">
+                  {{ feeOptions.find(item => item.id === model.feeFlag)?.name || '请选择' }}
+                </text>
               </template>
             </wd-cell>
           </wd-picker>
@@ -666,13 +780,13 @@ onLoad((options) => {
 
         <!-- 商品列表 -->
         <view v-if="showResourceList" class="p-3">
-          <view class="section-title">
+          <view class="m-0 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
             商品清单
           </view>
 
-          <view class="resource-table rounded bg-white">
+          <view class="overflow-hidden bg-white rounded-16rpx">
             <!-- 表头 -->
-            <view class="table-header flex items-center gap-2 bg-gray-50 p-3 text-sm font-bold">
+            <view class="flex items-center gap-2 border-gray-200 bg-gray-50 p-3 text-sm font-bold border-b-2rpx">
               <view class="flex-1">
                 商品
               </view>
@@ -691,53 +805,47 @@ onLoad((options) => {
             <view
               v-for="(item, index) in model.resourceList"
               :key="index"
-              class="table-row border-t border-gray-100 py-2"
+              class="border-t border-gray-100 py-2 last:border-b-0"
             >
               <view class="flex items-center gap-2 px-3">
                 <!-- 商品名称 -->
                 <view class="flex-1 text-sm">
-                  <text v-if="!item.isCustom">{{ item.resName }}({{ item.specName || '-' }})</text>
-                  <text v-else>{{ item.customGoodsName }}</text>
+                  <text>{{ getResourceDisplayName(item) }}</text>
                 </view>
 
                 <!-- 价格 -->
                 <view v-if="model.feeFlag === '1001'" class="w-20">
-                  <input
+                  <wd-input
                     v-model="item.price"
                     type="digit"
-                    class="h-8 w-full border border-gray-200 rounded px-2 text-center text-sm"
+                    size="small"
+                    clearable
                     :disabled="!item.isCustom && item.outHighPrice === item.outLowPrice"
-                    @input="handlePriceChange(index, $event.detail.value)"
-                  >
+                    @change="handlePriceChange(index, item.price?.toString() || '0')"
+                  />
                 </view>
 
                 <!-- 数量 -->
                 <view class="w-24 flex items-center justify-center gap-1">
-                  <wd-icon
-                    name=""
-                    custom-class="i-carbon-subtract text-gray-600 w-36rpx h-36rpx flex items-center justify-center"
-                    @click="handleDecreaseQuantity(index)"
-                  />
-                  <input
+                  <view class="flex cursor-pointer items-center justify-center w-56rpx h-56rpx transition-opacity-200 active:opacity-60" @click="handleDecreaseQuantity(index)">
+                    <wd-icon name="" custom-class="i-carbon-subtract text-gray-600 w-32rpx h-32rpx" />
+                  </view>
+                  <wd-input
                     v-model="item.useNumber"
                     type="number"
-                    class="h-8 w-12 border border-gray-200 rounded text-center text-sm"
-                    @input="handleQuantityChange(index, $event.detail.value)"
-                  >
-                  <wd-icon
-                    name=""
-                    custom-class="i-carbon-add text-gray-600 w-36rpx h-36rpx flex items-center justify-center"
-                    @click="handleIncreaseQuantity(index)"
+                    size="small"
+                    @change="handleQuantityChange(index, item.useNumber?.toString() || '1')"
                   />
+                  <view class="flex cursor-pointer items-center justify-center w-56rpx h-56rpx transition-opacity-200 active:opacity-60" @click="handleIncreaseQuantity(index)">
+                    <wd-icon name="" custom-class="i-carbon-add text-gray-600 w-32rpx h-32rpx" />
+                  </view>
                 </view>
 
                 <!-- 操作 -->
                 <view class="w-16 text-center">
-                  <wd-icon
-                    name=""
-                    custom-class="i-carbon-trash-can text-red-500 w-36rpx h-36rpx flex items-center justify-center"
-                    @click="handleRemoveResource(index)"
-                  />
+                  <view class="inline-flex cursor-pointer items-center justify-center p-8rpx transition-opacity-200 active:opacity-60" @click="handleRemoveResource(index)">
+                    <wd-icon name="" custom-class="i-carbon-trash-can text-red-500 w-36rpx h-36rpx" />
+                  </view>
                 </view>
               </view>
 
@@ -762,23 +870,22 @@ onLoad((options) => {
 
         <!-- 支付方式 -->
         <view v-if="showPayType" class="bg-white">
-          <view class="section-title">
+          <view class="m-0 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
             支付方式
           </view>
           <wd-cell-group border>
             <wd-picker
-              v-model="selectedPayTypeIndex"
+              v-model="model.payType"
               :columns="payTypeOptions"
               label-key="name"
               value-key="statusCd"
               @confirm="handlePayTypeChange"
             >
-              <wd-cell>
-                <template #title>
-                  <text class="text-gray-700 font-medium">支付方式</text>
-                </template>
+              <wd-cell title="支付方式" is-link>
                 <template #value>
-                  <text class="text-blue-500">{{ payTypeOptions[selectedPayTypeIndex]?.name || '请选择' }}</text>
+                  <text :class="model.payType ? 'text-gray-900' : 'text-gray-400'">
+                    {{ payTypeOptions.find(item => item.statusCd === model.payType)?.name || '请选择' }}
+                  </text>
                 </template>
               </wd-cell>
             </wd-picker>
@@ -788,7 +895,7 @@ onLoad((options) => {
 
       <!-- 处理意见 -->
       <view class="mt-3 bg-white">
-        <view class="section-title">
+        <view class="m-0 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
           处理意见
         </view>
         <wd-cell-group border>
@@ -804,31 +911,48 @@ onLoad((options) => {
       </view>
 
       <!-- 图片上传 (办结时) -->
-      <view v-if="showImages" class="mt-3 space-y-3">
+      <view v-if="showImages" class="mt-3">
         <!-- 维修前图片 -->
-        <view class="section-title">
+        <view class="m-0 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
           维修前图片
         </view>
         <view class="rounded bg-white p-3">
-          <view class="text-sm text-gray-500">
-            <text>（图片上传功能待集成 vc-upload-async 组件）</text>
-          </view>
+          <wd-upload
+            v-model:file-list="model.beforePhotos"
+            :limit="9"
+            :max-size="10 * 1024 * 1024"
+            :before-upload="handleBeforeUpload"
+            @success="handleUploadSuccess"
+            @fail="handleUploadFail"
+          />
         </view>
 
         <!-- 维修后图片 -->
-        <view class="section-title">
+        <view class="m-0 mt-3 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
           维修后图片
         </view>
         <view class="rounded bg-white p-3">
-          <view class="text-sm text-gray-500">
-            <text>（图片上传功能待集成 vc-upload-async 组件）</text>
-          </view>
+          <wd-upload
+            v-model:file-list="model.afterPhotos"
+            :limit="9"
+            :max-size="10 * 1024 * 1024"
+            :before-upload="handleBeforeUpload"
+            @success="handleUploadSuccess"
+            @fail="handleUploadFail"
+          />
         </view>
       </view>
 
       <!-- 提交按钮 -->
       <view class="p-3">
-        <wd-button block type="success" size="large" @click="handleSubmit">
+        <wd-button
+          block
+          type="success"
+          size="large"
+          :loading="isSubmitting"
+          :disabled="isSubmitting"
+          @click="handleSubmit"
+        >
           {{ model.action === 'FINISH' ? '办结' : '提交' }}
         </wd-button>
       </view>
@@ -837,54 +961,30 @@ onLoad((options) => {
 </template>
 
 <style lang="scss" scoped>
-.min-h-screen {
-  min-height: 100vh;
+/**
+ * 商品输入框/步进器输入框样式
+ * 保留原因：深度选择器修改 wot-design-uni 组件内部样式
+ */
+:deep(.wd-input__inner) {
+  text-align: center;
+  font-size: 28rpx;
+  padding: 0;
 }
 
-.bg-gray-100 {
-  background-color: #f5f5f5;
-}
-
-/** 分区标题样式 */
-.section-title {
-  margin: 0;
-  font-weight: 400;
-  font-size: 14px;
-  color: rgba(69, 90, 100, 0.6);
-  padding: 20px 15px 10px;
-}
-
-/** 商品表格样式 */
-.resource-table {
-  border-radius: 16rpx;
-  overflow: hidden;
-
-  .table-header {
-    border-bottom: 2rpx solid #e5e7eb;
-  }
-
-  .table-row {
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-}
-
-/** 输入框统一样式 */
-input[type='number'],
-input[type='digit'] {
-  font-size: 28rpx !important;
-  line-height: 32rpx !important;
-}
-
-/** 强制设置 wd-cell 的文本大小 */
+/**
+ * wd-cell 组件文本大小强制覆盖
+ * 保留原因：需要 !important 覆盖组件库默认样式
+ */
 :deep(.wd-cell__title),
 :deep(.wd-cell__value) {
   font-size: 28rpx !important;
   line-height: 36rpx !important;
 }
 
-/** 确保 wd-cell 的 icon 区域垂直居中 */
+/**
+ * wd-cell 组件图标区域垂直居中
+ * 保留原因：修复组件库默认对齐问题
+ */
 :deep(.wd-cell__icon) {
   display: flex !important;
   align-items: center !important;
