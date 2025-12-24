@@ -369,6 +369,7 @@ src\pages-sub\repair\handle.vue
    - `route-migration`： 路由迁移子代理。位于 `.claude\agents` 目录内。
    - `style-migration`： 样式迁移子代理。位于 `.claude\agents` 目录内。
 4. 优化的时候，确保你已经充分阅读了全部的 `.claude\skills` 目录内的 claude code 技能文件。
+5. 这是一个`表单页面`，请你按照`表单的方式`来优化该页面。
 
 ## 034 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
