@@ -354,6 +354,22 @@ src\pages-sub\repair\handle.vue
    - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
    - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
 
+## 034 <!-- TODO: --> 优化 `处理维修工单` 页
+
+针对 `src\pages-sub\repair\handle.vue` 文件。
+
+1. 先阅读该文件所对应的旧代码 `gitee-example/pages/repairHandle/repairHandle.vue` 。明确清楚代码写法。
+2. 大量的使用 `wot-design-uni` 组件库，优化内部的代码写法。
+   - https://github.com/Moonofweisheng/wot-design-uni/tree/master/docs/component
+   - https://wot-ui.cn/guide/quick-use.html
+3. 在优化的时候，请你陆续的对该页面，依次使用这五个子代理，完成代码写法的迁移修改。确保满足下面这 5 个子代理的编写要求。
+   - `api-migration`： api 迁移子代理。位于 `.claude\agents` 目录内。
+   - `code-migration`： 代码写法迁移子代理。位于 `.claude\agents` 目录内。
+   - `component-migration`： 组件迁移子代理。位于 `.claude\agents` 目录内。
+   - `route-migration`： 路由迁移子代理。位于 `.claude\agents` 目录内。
+   - `style-migration`： 样式迁移子代理。位于 `.claude\agents` 目录内。
+4. 优化的时候，确保你已经充分阅读了全部的 `.claude\skills` 目录内的 claude code 技能文件。
+
 ## 034 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
