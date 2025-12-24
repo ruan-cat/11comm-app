@@ -347,7 +347,7 @@ src\pages-sub\repair\handle.vue
 1. 在响应式场景下，文本应该和 icon 的大小相同。请处理。
 2. 启动本地服务器，然后用 谷歌浏览器 MCP 来访问 `http://localhost:9000/#/pages-sub/repair/order-detail?repairId=REP_001&storeId=STORE_001` 页面。自主检查。
 
-## 033 <!-- TODO: --> 编写完整的 skill 文件
+## 033 编写完整的 skill 文件
 
 1. 将 `src\pages-sub\repair\order-detail.vue` 关于 icon，文本，对齐，响应式的修改，全部整理成 skill。便于以后学习优化。编写到 `.claude\skills\beautiful-component-design` 目录内。
 2. 确保 skill 文件满足要求格式要求，阅读以下文档，编写合适的 skill 文档。
