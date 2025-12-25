@@ -415,15 +415,60 @@ src/
 
 我们项目是移动端项目，高强度的使用了 `wot-design-uni` 组件库。你应该在编写 vue 组件时，主动地获取组件库的文档，及时使用正确的组件。
 
-你可以直接在 github 仓库内，阅读 `wot-design-uni` 组件库的 markdown 格式文档。如果你在使用 `wot-design-uni` 组件时，不清楚如何使用，请有策略的，部分地阅读来自 github 的 markdown 文档。请你自主使用合适的工具查找文档：
+#### 1. 文档资源
+
+- **官方文档**: https://wot-ui.cn/guide/quick-use.html （推荐优先查看）
+- **GitHub 文档**: https://github.com/Moonofweisheng/wot-design-uni/tree/master/docs/component
+
+#### 2. 类型导入的正确方式
+
+⚠️ **重要**：本项目使用 pnpm 安装 wot-design-uni，而不是 uni_modules 插件方式。
+
+**正确的类型导入路径格式**：
+
+```typescript
+// ✅ 正确 - 本项目使用方式
+import type { FormRules } from 'wot-design-uni/components/wd-form/types'
+import type { UploadBeforeUpload, UploadFile } from 'wot-design-uni/components/wd-upload/types'
+
+// ❌ 错误 - GitHub 文档示例（仅适用于 uni_modules 安装方式）
+import type { FormRules } from '@/uni_modules/wot-design-uni/components/wd-form/types'
+```
+
+**路径转换规则**：
+
+如果从 GitHub 文档中看到的导入路径是：
+
+```typescript
+import type { XXX } from '@/uni_modules/wot-design-uni/components/wd-xxx/types'
+```
+
+在本项目中应该转换为：
+
+```typescript
+import type { XXX } from 'wot-design-uni/components/wd-xxx/types'
+```
+
+即：去掉 `@/uni_modules/` 前缀。
+
+#### 3. 常用组件的类型导入示例
+
+|      组件      |                     导入路径                     |              常用类型              |
+| :------------: | :----------------------------------------------: | :--------------------------------: |
+|    wd-form     |    `wot-design-uni/components/wd-form/types`     |    `FormRules`, `FormInstance`     |
+|   wd-upload    |   `wot-design-uni/components/wd-upload/types`    | `UploadBeforeUpload`, `UploadFile` |
+|   wd-picker    |   `wot-design-uni/components/wd-picker/types`    |           `PickerColumn`           |
+| wd-picker-view | `wot-design-uni/components/wd-picker-view/types` |            `ColumnItem`            |
+|  wd-textarea   |  `wot-design-uni/components/wd-textarea/types`   |          `TextareaProps`           |
+
+#### 4. 获取文档的方式
+
+你可以使用以下工具查找文档：
 
 1. 其他的 fetch 网站获取工具。
 2. markdown 的 MCP 工具。
-3. 用 `gitmcp__wot-design-uni__Moonofweisheng` mcp 查找。
 
-`wot-design-uni` 组件文档全都在以下 github 仓库目录内。
-
-- https://github.com/Moonofweisheng/wot-design-uni/tree/master/docs/component
+**注意**：从 GitHub 获取的文档中的类型导入路径需要按照上述规则进行转换。
 
 ### claude code skill
 
