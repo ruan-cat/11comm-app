@@ -734,18 +734,11 @@ onUnload(() => {
             <wd-picker
               v-model="model.staffId"
               :columns="staffOptions"
+              label="维修师傅"
               label-key="staffName"
               value-key="staffId"
               @confirm="handleStaffChange"
-            >
-              <wd-cell title="维修师傅" is-link>
-                <template #value>
-                  <text :class="model.staffId ? 'text-gray-900' : 'text-gray-400'">
-                    {{ selectedStaff.staffName }}
-                  </text>
-                </template>
-              </wd-cell>
-            </wd-picker>
+            />
           </template>
         </wd-cell-group>
       </view>
