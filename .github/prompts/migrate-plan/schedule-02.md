@@ -396,7 +396,7 @@ src\pages-sub\repair\handle.vue
 2. 请问是 `/app/ownerRepair.listRepairStaffs` 接口传参不合适而导致的返回数据不合适吗？
 3. 请解决上述问题，并出示一份报告给我。供我复盘。
 
-## 036 <!-- TODO: --> 处理 `处理维修工单` 页无法选择师傅后不显示内容的故障
+## 036 处理 `处理维修工单` 页无法选择师傅后不显示内容的故障
 
 针对 `src\pages-sub\repair\handle.vue` 页面，如下 url 图所示：
 
