@@ -106,15 +106,71 @@ color: pink
 | [text-alignment.md](text-alignment.md)       | 文本字号、行高、颜色、加粗、对齐方式      |
 | [responsive-design.md](responsive-design.md) | rpx 单位、图片网格、圆角、深度选择器      |
 
-## 6. 典型应用场景
+## 6. 选择器组件美观规范
+
+在表单中使用 `wd-picker` 选择器组件时，需要特别注意标签宽度和选中值显示的一致性。
+
+### 6.1. 问题场景
+
+当使用 `wd-picker` 的自定义插槽方式（嵌套 `wd-cell`）时，如果不设置 `:title-width`，选中值的显示位置会与其他表单项不一致，导致界面不美观。
+
+### 6.2. 正确做法
+
+```vue
+<template>
+	<wd-picker
+		v-model="model.staffId"
+		:columns="staffOptions"
+		label-key="staffName"
+		value-key="staffId"
+		@confirm="handleStaffChange"
+	>
+		<wd-cell title="维修师傅" :title-width="LABEL_WIDTH" is-link center custom-value-class="cell-value-left">
+			<text :class="model.staffId ? 'text-gray-900' : 'text-gray-400'">
+				{{ selectedStaff?.staffName || "请选择员工" }}
+			</text>
+		</wd-cell>
+	</wd-picker>
+</template>
+
+<style lang="scss" scoped>
+/** wd-cell 值靠左对齐 - 确保选择器选中值与其他表单项对齐 */
+:deep(.cell-value-left) {
+	flex: 1;
+	text-align: left !important;
+}
+</style>
+```
+
+### 6.3. 关键属性说明
+
+|         属性          |                 作用                 |    必要性    |
+| :-------------------: | :----------------------------------: | :----------: |
+| `:title-width="80px"` |      统一标签宽度，与其他项对齐      | **必须设置** |
+|       `center`        |           内容垂直居中对齐           | **必须设置** |
+| `custom-value-class`  | 自定义选中值样式类，配合样式穿透使用 | **必须设置** |
+|       `is-link`       |           显示右侧箭头图标           |   推荐设置   |
+
+### 6.4. 样式穿透要点
+
+```scss
+/** wd-cell 值靠左对齐 - wot-design-uni 组件必需样式 */
+:deep(.cell-value-left) {
+	flex: 1; /* 占据剩余空间 */
+	text-align: left !important; /* 左对齐，覆盖默认右对齐 */
+}
+```
+
+## 7. 典型应用场景
 
 - 维修工单详情页的信息展示
 - 报修记录的列表项设计
 - 状态展示的标签和图标组合
 - 图片墙和画廊展示
 - 时间轴和流程记录
+- **表单中选择器组件的统一对齐**
 
-## 7. 设计检查清单
+## 8. 设计检查清单
 
 - [ ] 图标和文本是否垂直居中对齐？
 - [ ] 文本大小是否在 24-32rpx 之间？
@@ -122,3 +178,5 @@ color: pink
 - [ ] 是否使用 `flex-shrink: 0` 防止图标变形？
 - [ ] 是否正确使用 `:deep()` 穿透组件样式？
 - [ ] 间距是否使用 8 的倍数？
+- [ ] **选择器组件是否设置了统一的 `:title-width` 或 `:label-width`？**
+- [ ] **选择器使用自定义插槽时是否添加了 `cell-value-left` 样式？**
