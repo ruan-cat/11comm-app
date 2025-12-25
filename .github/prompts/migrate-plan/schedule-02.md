@@ -396,11 +396,36 @@ src\pages-sub\repair\handle.vue
 2. 请问是 `/app/ownerRepair.listRepairStaffs` 接口传参不合适而导致的返回数据不合适吗？
 3. 请解决上述问题，并出示一份报告给我。供我复盘。
 
-## 036
+## 036 <!-- TODO: --> 处理 `处理维修工单` 页无法选择师傅后不显示内容的故障
+
+针对 `src\pages-sub\repair\handle.vue` 页面，如下 url 图所示：
 
 ![2025-12-26-00-18-06](https://s2.loli.net/2025/12/26/KbX4a8qezYdCicw.png)
 
-## 035 <!-- TODO: --> 样式写法一律使用 unocss 来完成
+选择完毕师傅后，无法在表单内看到师傅的信息。
+
+请你按照 `.claude\skills\use-wd-form` 技能的要求，修复无法看到师傅信息的 bug。
+
+### 01
+
+如以下 url 图片所示，在 `src\pages-sub\repair\add-order.vue` 内，下拉选择的效果是这样的。
+
+![2025-12-26-00-26-44](https://s2.loli.net/2025/12/26/cXFweng8KNuP3ro.png)
+
+内容很美观，也对齐。所以在现在的 `src\pages-sub\repair\handle.vue` 文件内，其选择用户后的效果是这样的：
+
+![2025-12-26-00-28-05](https://s2.loli.net/2025/12/26/DVwtuNeKbkAIOhY.png)
+
+`处理维修工单` 页面选择好用户后，效果很不美观。
+
+1. 请你模仿 `src\pages-sub\repair\add-order.vue` 的代码写法，确保在 `处理维修工单` 页面选择玩用户后，其显示效果也很美观。
+2. 请你总结经验，将使用相关组件的经验，写入到 `.claude\skills\use-wd-form\SKILL.md` claude code 技能文件内。
+3. 本次更改涉及到优化美化组件的使用，请你将编写经验，以 claude code 技能的方式，写入到 `.claude\skills\beautiful-component-design` 目录内。
+4. 你需要在技能文件内写入适当的使用经验文本，请你遵照 claude code skill 的编写文档，正确的编写 claude code 技能文件。
+   - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
+   - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
+
+## 037 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
 2. 针对 `维修工单流程模块系列页面` 的 vue 组件，存在额外使用 scss 的情况。请你用 `style-migration` 来改造代码，使其满足子代理的要求。
