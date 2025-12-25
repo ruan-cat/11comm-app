@@ -376,6 +376,26 @@ src\pages-sub\repair\handle.vue
 1. 处理 `src\pages-sub\repair\handle.vue` 出现的类型故障。请主动访问 https://github.com/Moonofweisheng/wot-design-uni/tree/master/docs/component 文档，来处理 `wot-design-uni` 组件的使用问题。
 2. 我注意到你在使用 `wot-design-uni` 组件库时，总是不能正确的访问文档。请你排查一下 CLAUDE.md 和 README.md 文档，出示一份报告，告诉我为什么你在使用 `wot-design-uni` 组件库时总是不能正确的使用组件库的配置？
 
+## 035 <!-- TODO: --> 处理 `处理维修工单` 页无法选择有效师傅的故障
+
+针对 `src\pages-sub\repair\handle.vue` 页面
+
+如下 url 图所示：
+
+![2025-12-25-23-53-27](https://s2.loli.net/2025/12/25/RgwCLXxajNH7q82.png)
+
+我在从 `维修工单池` 的`src\pages-sub\repair\order-list.vue`文件内，选择一个待派单的工单进入`处理维修工单`页面，访问 `http://localhost:9000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_022&repairType=1004&preStaffId=undefined&preStaffName=undefined&repairObjType=undefined` 地址，结果发现无法选择任何有效的师傅。
+
+在我会直接访问这个地址时，`http://localhost:9000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_001&repairType=%E6%B0%B4%E7%94%B5%E7%BB%B4%E4%BF%AE&repairObjType=001` ，如下图所示，我又可以选择有效的师傅了。
+
+![2025-12-25-23-55-33](https://s2.loli.net/2025/12/25/PWIOdDFlwJz8c1L.png)
+
+请帮我排查故障。告诉我为什么在不同的 url 参数下，我为什么不能稳定的选择合适的师傅？
+
+1. 请问是 `src\pages-sub\repair\order-list.vue` 传递给 `src\pages-sub\repair\handle.vue` 页面时，传递的路由参数不够么？
+2. 请问是 `/app/ownerRepair.listRepairStaffs` 接口传参不合适而导致的返回数据不合适吗？
+3. 请解决上述问题，并出示一份报告给我。供我复盘。
+
 ## 035 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
