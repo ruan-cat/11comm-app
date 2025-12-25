@@ -425,7 +425,7 @@ src\pages-sub\repair\handle.vue
    - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
    - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
 
-## 037 <!-- TODO: --> 对齐代码写法，优化 `维修待办单` 的代码
+## 037 对齐代码写法，优化 `维修待办单` 的代码
 
 1. 阅读 src\pages-sub\repair\dispatch.vue 维修待办单 页面。`维修待办单` 页面是需要被优化的页面，里面的很多写法和最终的效果展示，很不好看。
 2. 阅读 src\pages-sub\repair\order-list.vue 维修工单池 页面。`维修工单池` 页面是正常的，美观的，好看的页面。是需要学习的页面。
