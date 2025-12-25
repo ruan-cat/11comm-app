@@ -373,7 +373,8 @@ src\pages-sub\repair\handle.vue
 
 ### 01 处理 `处理维修工单` 页出现的类型故障
 
-1. `src\pages-sub\repair\handle.vue`
+1. 处理 `src\pages-sub\repair\handle.vue` 出现的类型故障。请主动访问 https://github.com/Moonofweisheng/wot-design-uni/tree/master/docs/component 文档，来处理 `wot-design-uni` 组件的使用问题。
+2. 我注意到你在使用 `wot-design-uni` 组件库时，总是不能正确的访问文档。请你排查一下 CLAUDE.md 和 README.md 文档，出示一份报告，告诉我为什么你在使用 `wot-design-uni` 组件库时总是不能正确的使用组件库的配置？
 
 ## 035 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
