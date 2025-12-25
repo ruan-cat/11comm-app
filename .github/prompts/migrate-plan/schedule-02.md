@@ -376,7 +376,7 @@ src\pages-sub\repair\handle.vue
 1. 处理 `src\pages-sub\repair\handle.vue` 出现的类型故障。请主动访问 https://github.com/Moonofweisheng/wot-design-uni/tree/master/docs/component 文档，来处理 `wot-design-uni` 组件的使用问题。
 2. 我注意到你在使用 `wot-design-uni` 组件库时，总是不能正确的访问文档。请你排查一下 CLAUDE.md 和 README.md 文档，出示一份报告，告诉我为什么你在使用 `wot-design-uni` 组件库时总是不能正确的使用组件库的配置？
 
-## 035 <!-- TODO: --> 处理 `处理维修工单` 页无法选择有效师傅的故障
+## 035 处理 `处理维修工单` 页无法选择有效师傅的故障
 
 针对 `src\pages-sub\repair\handle.vue` 页面
 
@@ -395,6 +395,10 @@ src\pages-sub\repair\handle.vue
 1. 请问是 `src\pages-sub\repair\order-list.vue` 传递给 `src\pages-sub\repair\handle.vue` 页面时，传递的路由参数不够么？
 2. 请问是 `/app/ownerRepair.listRepairStaffs` 接口传参不合适而导致的返回数据不合适吗？
 3. 请解决上述问题，并出示一份报告给我。供我复盘。
+
+## 036
+
+![2025-12-26-00-18-06](https://s2.loli.net/2025/12/26/KbX4a8qezYdCicw.png)
 
 ## 035 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 

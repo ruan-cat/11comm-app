@@ -941,9 +941,18 @@ export default defineUniAppMock([
       try {
         let staffs = [...mockRepairDatabase.staffs]
 
-        // 按维修类型筛选
+        /**
+         * 按维修类型筛选（支持代码和名称双重匹配）
+         * 修复：传入代码（如 '1004'）时，转换为名称（如 '电梯维修'）后匹配
+         */
         if (params.repairType) {
-          staffs = staffs.filter(staff => staff.repairTypes.includes(params.repairType))
+          const typeOption = REPAIR_TYPE_OPTIONS.find(item => item.value === params.repairType)
+          const repairTypeName = typeOption?.label || params.repairType
+
+          staffs = staffs.filter(staff =>
+            staff.repairTypes.includes(params.repairType)
+            || staff.repairTypes.includes(repairTypeName),
+          )
         }
 
         mockLog('listRepairStaffs', params, `→ ${staffs.length} items`)
@@ -968,8 +977,18 @@ export default defineUniAppMock([
       try {
         let staffs = [...mockRepairDatabase.staffs]
 
+        /**
+         * 按维修类型筛选（支持代码和名称双重匹配）
+         * 修复：传入代码（如 '1004'）时，转换为名称（如 '电梯维修'）后匹配
+         */
         if (params.repairType) {
-          staffs = staffs.filter(staff => staff.repairTypes.includes(params.repairType))
+          const typeOption = REPAIR_TYPE_OPTIONS.find(item => item.value === params.repairType)
+          const repairTypeName = typeOption?.label || params.repairType
+
+          staffs = staffs.filter(staff =>
+            staff.repairTypes.includes(params.repairType)
+            || staff.repairTypes.includes(repairTypeName),
+          )
         }
 
         const users = staffs.map(staff => ({
