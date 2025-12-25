@@ -163,6 +163,8 @@ async function handleSubmit() {
 
 ### 3.2. 选择器（wd-picker）
 
+#### 3.2.1. 标准用法（使用 label 属性）
+
 ```vue
 <template>
 	<wd-cell-group border>
@@ -179,6 +181,39 @@ async function handleSubmit() {
 	</wd-cell-group>
 </template>
 ```
+
+#### 3.2.2. 自定义插槽用法（动态标题或自定义显示）
+
+当需要动态标题或自定义选中值显示时，使用自定义插槽方式。**必须在嵌套的 `wd-cell` 上设置 `:title-width` 属性**以保持标签宽度一致：
+
+```vue
+<template>
+	<wd-cell-group border>
+		<wd-picker v-model="model.feeFlag" :columns="feeOptions" label-key="name" value-key="id" @confirm="handleFeeChange">
+			<wd-cell :title="dynamicTitle" :title-width="LABEL_WIDTH" is-link center custom-value-class="cell-value-left">
+				<text :class="model.feeFlag ? 'text-gray-900' : 'text-gray-400'">
+					{{ selectedLabel || "请选择" }}
+				</text>
+			</wd-cell>
+		</wd-picker>
+	</wd-cell-group>
+</template>
+
+<style lang="scss" scoped>
+/** wd-cell 值靠左对齐 - 确保选择器选中值与其他表单项对齐 */
+:deep(.cell-value-left) {
+	flex: 1;
+	text-align: left !important;
+}
+</style>
+```
+
+**关键要点**：
+
+1. `:title-width="LABEL_WIDTH"` - 与其他表单项保持一致的标签宽度
+2. `center` - 使内容垂直居中
+3. `custom-value-class="cell-value-left"` - 确保选中值左对齐
+4. 必须添加 `:deep(.cell-value-left)` 样式
 
 ### 3.3. 日期时间选择器（wd-datetime-picker）
 
