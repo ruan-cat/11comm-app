@@ -450,6 +450,7 @@ onDispatchSuccess(() => {
   const actionTextMap: Record<DispatchAction, string> = {
     DISPATCH: '派单',
     TRANSFER: '转单',
+    BACK: '回退',
     RETURN: '退单',
     FINISH: '办结',
   }
@@ -475,6 +476,7 @@ onDispatchError((error) => {
   const actionTextMap: Record<DispatchAction, string> = {
     DISPATCH: '派单',
     TRANSFER: '转单',
+    BACK: '回退',
     RETURN: '退单',
     FINISH: '办结',
   }
@@ -818,7 +820,6 @@ onUnload(() => {
                   <wd-input
                     v-model="item.price"
                     type="digit"
-                    size="small"
                     clearable
                     :disabled="!item.isCustom && item.outHighPrice === item.outLowPrice"
                     @change="handlePriceChange(index, item.price?.toString() || '0')"
@@ -833,7 +834,6 @@ onUnload(() => {
                   <wd-input
                     v-model="item.useNumber"
                     type="number"
-                    size="small"
                     @change="handleQuantityChange(index, item.useNumber?.toString() || '1')"
                   />
                   <view class="flex cursor-pointer items-center justify-center w-56rpx h-56rpx transition-opacity-200 active:opacity-60" @click="handleIncreaseQuantity(index)">
