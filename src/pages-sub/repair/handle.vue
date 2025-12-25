@@ -4,6 +4,7 @@
 
   访问地址: http://localhost:9000/#/pages-sub/repair/handle
   建议携带参数: ?action=DISPATCH&repairId=REP_001&repairType=水电维修
+  action 传参： DISPATCH-派单, TRANSFER-转单, BACK-回退, RETURN-退单, FINISH-办结
 
   完整示例: http://localhost:9000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_001&repairType=水电维修&repairObjType=001
 
