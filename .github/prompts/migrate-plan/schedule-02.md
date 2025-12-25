@@ -425,6 +425,15 @@ src\pages-sub\repair\handle.vue
    - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
    - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
 
+## 037 <!-- TODO: --> 对齐代码写法，优化 `维修待办单` 的代码
+
+1. 阅读 src\pages-sub\repair\dispatch.vue 维修待办单 页面。`维修待办单` 页面是需要被优化的页面，里面的很多写法和最终的效果展示，很不好看。
+2. 阅读 src\pages-sub\repair\order-list.vue 维修工单池 页面。`维修工单池` 页面是正常的，美观的，好看的页面。是需要学习的页面。
+3. 请你优化 `维修待办单` 列表页的写法，这两个页面的结构是很相似的，只需要保留原本的功能，做代码写法对比，并迁移好的代码写法，优化 `维修待办单` 代码即可。
+4. 请注意需要同时遵守多项编码规范。请你也提前阅读清楚这些代码规范，确保在迁移改写代码时，符合全部的编码规范：
+   - 全部的 `.claude\agents` 代码迁移与改写规范。
+   - 全部的 `.claude\skills` 技能规范。
+
 ## 037 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
