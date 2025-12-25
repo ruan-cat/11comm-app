@@ -735,6 +735,7 @@ onUnload(() => {
               v-model="model.staffId"
               :columns="staffOptions"
               label="维修师傅"
+              :label-width="LABEL_WIDTH"
               label-key="staffName"
               value-key="staffId"
               @confirm="handleStaffChange"
@@ -756,12 +757,16 @@ onUnload(() => {
             value-key="id"
             @confirm="handleFeeChange"
           >
-            <wd-cell :title="model.repairObjType === '004' ? '维修类型' : '是否用料'" is-link>
-              <template #value>
-                <text :class="model.feeFlag ? 'text-gray-900' : 'text-gray-400'">
-                  {{ feeOptions.find(item => item.id === model.feeFlag)?.name || '请选择' }}
-                </text>
-              </template>
+            <wd-cell
+              :title="model.repairObjType === '004' ? '维修类型' : '是否用料'"
+              :title-width="LABEL_WIDTH"
+              is-link
+              center
+              custom-value-class="cell-value-left"
+            >
+              <text :class="model.feeFlag ? 'text-gray-900' : 'text-gray-400'">
+                {{ feeOptions.find(item => item.id === model.feeFlag)?.name || '请选择' }}
+              </text>
             </wd-cell>
           </wd-picker>
         </wd-cell-group>
@@ -875,12 +880,16 @@ onUnload(() => {
               value-key="statusCd"
               @confirm="handlePayTypeChange"
             >
-              <wd-cell title="支付方式" is-link>
-                <template #value>
-                  <text :class="model.payType ? 'text-gray-900' : 'text-gray-400'">
-                    {{ payTypeOptions.find(item => item.statusCd === model.payType)?.name || '请选择' }}
-                  </text>
-                </template>
+              <wd-cell
+                title="支付方式"
+                :title-width="LABEL_WIDTH"
+                is-link
+                center
+                custom-value-class="cell-value-left"
+              >
+                <text :class="model.payType ? 'text-gray-900' : 'text-gray-400'">
+                  {{ payTypeOptions.find(item => item.statusCd === model.payType)?.name || '请选择' }}
+                </text>
               </wd-cell>
             </wd-picker>
           </wd-cell-group>
@@ -982,5 +991,14 @@ onUnload(() => {
 :deep(.wd-cell__icon) {
   display: flex !important;
   align-items: center !important;
+}
+
+/**
+ * wd-cell 值靠左对齐 - wot-design-uni 组件必需样式
+ * 保留原因：确保选择器选中值与其他表单项对齐
+ */
+:deep(.cell-value-left) {
+  flex: 1;
+  text-align: left !important;
 }
 </style>
