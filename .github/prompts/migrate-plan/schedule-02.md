@@ -482,6 +482,21 @@ src\pages-sub\repair\handle.vue
 6. 请阅读 `docs\reports\vue2-route-navigation-map.md` 的 `维修工单流程模块` 部分，结合本项目跳路由的工具，告诉我。 `选择维修物资` 页面的上一级页面是从哪里进入的？我该怎么确保能够充分的进入到该页面的每一种情况，便于我自主测试？
 7. 回答上述的全部问题，便于我学习了解。
 
+### 05 处理 `选择维修物资` 页面的接口故障
+
+1. 针对 `src\pages-sub\repair\select-resource.vue` `选择维修物资` 页面。
+2. 请你阅读以下 url 图片：
+
+![2025-12-27-23-36-09](https://s2.loli.net/2025/12/27/DMLrvcRlVjW9yFh.png)
+
+```log
+TypeError: result.data is not iterable
+```
+
+3. 我怀疑是你刚才更改的 `src\api\mock\repair.mock.ts` 文件写法有问题，检查该 mock 接口的写法。检查 `选择维修物资` 页面使用异步数据的写法。
+4. 请务必遵循 `.claude\agents\api-migration.md` 迁移规范的写法。
+5. 请你使用谷歌浏览器 MCP，访问地址 `http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001` 并自我测试。
+
 ## 037 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
