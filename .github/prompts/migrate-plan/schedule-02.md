@@ -497,6 +497,42 @@ TypeError: result.data is not iterable
 4. 请务必遵循 `.claude\agents\api-migration.md` 迁移规范的写法。
 5. 请你使用谷歌浏览器 MCP，访问地址 `http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001` 并自我测试。
 
+### 06 <!-- TODO: --> 处理选择商品类型后出现的故障
+
+1. 针对 `src\pages-sub\repair\select-resource.vue` `选择维修物资` 页面。
+2. 请你阅读以下 url 图片：
+
+![2025-12-27-23-58-30](https://s2.loli.net/2025/12/27/QDfSqIezoGr8Vu7.png)
+
+```log
+vue.runtime.esm.js:1443 TypeError: Cannot read properties of undefined (reading 'rstId')
+    at handleParentTypeChange (select-resource.vue:216:1)
+    at callWithErrorHandling (vue.runtime.esm.js:1381:19)
+    at callWithAsyncErrorHandling (vue.runtime.esm.js:1388:17)
+    at emit (vue.runtime.esm.js:1907:5)
+    at vue.runtime.esm.js:9132:45
+    at handleConfirm (wd-picker.vue:217:7)
+    at onConfirm (wd-picker.vue:202:9)
+    at callWithErrorHandling (vue.runtime.esm.js:1381:19)
+    at callWithAsyncErrorHandling (vue.runtime.esm.js:1388:17)
+    at HTMLElement.invoker (vue.runtime.esm.js:10209:5)
+logError	@	vue.runtime.esm.js:1443
+errorHandler	@	uni-h5.es.js:16148
+callWithErrorHandling	@	vue.runtime.esm.js:1381
+handleError	@	vue.runtime.esm.js:1421
+callWithErrorHandling	@	vue.runtime.esm.js:1383
+callWithAsyncErrorHandling	@	vue.runtime.esm.js:1388
+emit	@	vue.runtime.esm.js:1907
+(anonymous)	@	vue.runtime.esm.js:9132
+handleConfirm	@	wd-picker.vue:217
+onConfirm	@	wd-picker.vue:202
+callWithErrorHandling	@	vue.runtime.esm.js:1381
+callWithAsyncErrorHandling	@	vue.runtime.esm.js:1388
+invoker	@	vue.runtime.esm.js:10209
+```
+
+请处理该故障，确保选择完毕商品类型后，不会出现后续故障。
+
 ## 037 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
