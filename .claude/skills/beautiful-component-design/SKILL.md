@@ -106,31 +106,85 @@ color: pink
 | [text-alignment.md](text-alignment.md)       | 文本字号、行高、颜色、加粗、对齐方式      |
 | [responsive-design.md](responsive-design.md) | rpx 单位、图片网格、圆角、深度选择器      |
 
-## 6. 选择器组件美观规范
+## 6. 选择器组件美观规范（⚠️ 重要）
 
-在表单中使用 `wd-picker` 选择器组件时，需要特别注意标签宽度和选中值显示的一致性。
+在表单中使用 `wd-picker` 选择器组件时，需要特别注意**组件嵌套顺序**和标签宽度的一致性。
 
-### 6.1. 问题场景
+### 6.1. ⚠️ 严重错误：禁止的嵌套方式
 
-当使用 `wd-picker` 的自定义插槽方式（嵌套 `wd-cell`）时，如果不设置 `:title-width`，选中值的显示位置会与其他表单项不一致，导致界面不美观。
+**❌ 绝对禁止将 `wd-picker` 嵌套在 `wd-cell` 内部**，这会导致选择器无法点击！
 
-### 6.2. 正确做法
+```vue
+<!-- ❌ 严重错误！会导致选择器无法点击 -->
+<template>
+	<wd-cell-group border>
+		<wd-cell :title-width="LABEL_WIDTH" center>
+			<template #title>
+				<text>商品类型</text>
+			</template>
+			<template #value>
+				<!-- ❌ 错误：wd-picker 被 wd-cell 包裹，点击事件被阻挡 -->
+				<wd-picker v-model="selectedIndex" :columns="options" label-key="name" value-key="id">
+					<text class="text-blue-500">
+						{{ options[selectedIndex]?.name || "请选择" }}
+					</text>
+				</wd-picker>
+			</template>
+		</wd-cell>
+	</wd-cell-group>
+</template>
+```
+
+**问题原因**: `wd-cell` 包裹 `wd-picker` 会导致点击事件被阻挡，选择器弹窗无法正常打开。
+
+---
+
+### 6.2. ✅ 正确做法 1: 标准模式（推荐）
+
+**使用场景**: 绝大多数情况下使用此方式，简洁高效。
 
 ```vue
 <template>
-	<wd-picker
-		v-model="model.staffId"
-		:columns="staffOptions"
-		label-key="staffName"
-		value-key="staffId"
-		@confirm="handleStaffChange"
-	>
-		<wd-cell title="维修师傅" :title-width="LABEL_WIDTH" is-link center custom-value-class="cell-value-left">
-			<text :class="model.staffId ? 'text-gray-900' : 'text-gray-400'">
-				{{ selectedStaff?.staffName || "请选择员工" }}
-			</text>
-		</wd-cell>
-	</wd-picker>
+	<wd-cell-group border>
+		<!-- ✅ 正确：直接使用 wd-picker，通过 label 属性设置标题 -->
+		<wd-picker
+			v-model="model.category"
+			label="分类"
+			:label-width="LABEL_WIDTH"
+			:columns="categoryOptions"
+			label-key="name"
+			value-key="id"
+		/>
+	</wd-cell-group>
+</template>
+```
+
+---
+
+### 6.3. ✅ 正确做法 2: 自定义插槽模式
+
+**使用场景**: 仅在需要动态标题或复杂自定义显示时使用。
+
+**关键要点**: `wd-picker` **包裹** `wd-cell`，而不是反过来！
+
+```vue
+<template>
+	<wd-cell-group border>
+		<!-- ✅ 正确：wd-picker 包裹 wd-cell，用于自定义显示 -->
+		<wd-picker
+			v-model="model.staffId"
+			:columns="staffOptions"
+			label-key="staffName"
+			value-key="staffId"
+			@confirm="handleStaffChange"
+		>
+			<wd-cell title="维修师傅" :title-width="LABEL_WIDTH" is-link center custom-value-class="cell-value-left">
+				<text :class="model.staffId ? 'text-gray-900' : 'text-gray-400'">
+					{{ selectedStaff?.staffName || "请选择员工" }}
+				</text>
+			</wd-cell>
+		</wd-picker>
+	</wd-cell-group>
 </template>
 
 <style lang="scss" scoped>
@@ -142,7 +196,9 @@ color: pink
 </style>
 ```
 
-### 6.3. 关键属性说明
+---
+
+### 6.4. 关键属性说明（自定义插槽模式）
 
 |         属性          |                 作用                 |    必要性    |
 | :-------------------: | :----------------------------------: | :----------: |
@@ -151,7 +207,7 @@ color: pink
 | `custom-value-class`  | 自定义选中值样式类，配合样式穿透使用 | **必须设置** |
 |       `is-link`       |           显示右侧箭头图标           |   推荐设置   |
 
-### 6.4. 样式穿透要点
+### 6.5. 样式穿透要点
 
 ```scss
 /** wd-cell 值靠左对齐 - wot-design-uni 组件必需样式 */
@@ -160,6 +216,16 @@ color: pink
 	text-align: left !important; /* 左对齐，覆盖默认右对齐 */
 }
 ```
+
+### 6.6. 📝 选择器使用检查清单
+
+使用 `wd-picker` 组件时，请务必检查：
+
+- ✅ **组件嵌套顺序**: `wd-picker` 在外层，`wd-cell` 在内层（仅自定义插槽模式）
+- ✅ **优先使用标准模式**: 直接使用 `label` 属性，除非确实需要自定义显示
+- ✅ **label-width/title-width**: 与其他表单项保持一致的标签宽度
+- ✅ **点击测试**: 实现后务必测试选择器能否正常点击弹出
+- ❌ **严格禁止**: 将 `wd-picker` 放在 `wd-cell` 的 `#value` 插槽内
 
 ## 7. 典型应用场景
 
@@ -172,11 +238,20 @@ color: pink
 
 ## 8. 设计检查清单
 
+### 8.1. 通用美化检查
+
 - [ ] 图标和文本是否垂直居中对齐？
 - [ ] 文本大小是否在 24-32rpx 之间？
 - [ ] 行高是否与图标高度一致？
 - [ ] 是否使用 `flex-shrink: 0` 防止图标变形？
 - [ ] 是否正确使用 `:deep()` 穿透组件样式？
 - [ ] 间距是否使用 8 的倍数？
-- [ ] **选择器组件是否设置了统一的 `:title-width` 或 `:label-width`？**
-- [ ] **选择器使用自定义插槽时是否添加了 `cell-value-left` 样式？**
+
+### 8.2. 选择器组件专项检查（⚠️ 必须检查）
+
+- [ ] **组件嵌套顺序是否正确？**（`wd-picker` 在外层，`wd-cell` 在内层）
+- [ ] **是否优先使用标准模式？**（通过 `label` 属性设置标题）
+- [ ] **标签宽度是否统一？**（设置了统一的 `:title-width` 或 `:label-width`）
+- [ ] **自定义插槽模式是否添加了必需样式？**（`cell-value-left` 样式类和样式穿透）
+- [ ] **选择器能否正常点击弹出？**（实际测试点击功能）
+- [ ] **是否避免了禁止的嵌套方式？**（`wd-picker` 绝不能在 `wd-cell` 的 `#value` 插槽内）
