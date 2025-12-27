@@ -434,6 +434,13 @@ src\pages-sub\repair\handle.vue
    - 全部的 `.claude\agents` 代码迁移与改写规范。
    - 全部的 `.claude\skills` 技能规范。
 
+## 038 优化 `选择维修物资` 页面
+
+1. 阅读 `src\pages-sub\repair\select-resource.vue` `选择维修物资` 页面。
+2. 这个页面应该是一个**表单页**。请你按照 `.claude\skills\use-wd-form` 技能来优化改造。
+3. 阅读旧代码 `gitee-example/pages/repairHandle/selectResource.vue` ，明确清楚该页面和其他页面的交互传参形式。
+4. 按照 `.claude\agents` 全部子代理的要求，优化 `选择维修物资` 页面。
+
 ## 037 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
