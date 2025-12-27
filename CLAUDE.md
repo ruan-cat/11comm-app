@@ -224,6 +224,157 @@ export function successResponse<T>(data: T, message: string = "操作成功") {
 2. 不要去更改 `prettier.config.js` 文件，**不要自作主张**的给这个配置文件**增加单引号**。
 3. 报告输出地址： 你在生成 markdown 格式的报告时，请默认输出到 `docs\reports` 目录下面，这便于我阅读。
 
+## 代码搜索与检查策略
+
+### 1. 为什么需要严格的搜索策略？
+
+在进行代码规范检查、组件用法迁移等任务时，**单次搜索极易遗漏**，可能导致：
+
+- ❌ 特殊字符转义问题导致搜索失败（如 `<template #value>` 搜索不到结果）
+- ❌ 依赖单一搜索方式，没有交叉验证
+- ❌ 只检查部分文件，未系统性覆盖所有相关文件
+
+### 2. 多重搜索策略（必须执行）
+
+当需要在代码库中查找特定模式时，**必须使用至少 2 种以上的搜索方法**进行交叉验证：
+
+#### 方法 A：正则表达式搜索
+
+```bash
+# 示例：搜索 <template #value> 用法
+Grep: pattern="template.*#value" path="src/" glob="*.vue"
+```
+
+**适用场景**：查找包含特定关键词组合的代码模式
+
+#### 方法 B：宽泛关键词搜索 + 人工筛选
+
+```bash
+# 示例：搜索所有 wd-cell 用法，手动筛选错误用法
+Grep: pattern="wd-cell" path="src/pages-sub/repair" glob="*.vue" output_mode="content"
+```
+
+**适用场景**：当正则表达式难以精确匹配，需要人工判断时
+
+#### 方法 C：搜索相关标签/属性
+
+```bash
+# 示例：搜索所有 template 插槽用法
+Grep: pattern="<template #" path="src/" glob="*.vue"
+```
+
+**适用场景**：从更广的范围搜索，避免遗漏边缘情况
+
+### 3. 系统性检查方法（用于重要任务）
+
+对于关键的代码规范检查（如组件迁移、API 迁移），**禁止仅依赖搜索**，必须：
+
+#### 步骤 1：列出所有相关文件
+
+```bash
+# 使用 Glob 工具列出所有需要检查的文件
+Glob: pattern="**/*.vue" path="src/pages-sub/repair"
+```
+
+#### 步骤 2：逐文件阅读关键部分
+
+- 不要跳过任何一个相关文件
+- 重点检查 `<template>` 区域的组件用法
+- 检查 `<script>` 区域的类型导入和 API 调用
+
+#### 步骤 3：交叉验证
+
+- 用不同搜索方法确认结果一致性
+- 搜索结果为 0 时，**必须用另一种方法再次确认**
+
+### 4. 常见搜索场景示例
+
+#### 场景 1：检查 `wd-cell` 组件的错误用法
+
+```bash
+# 方法 A：搜索 #value 插槽（错误用法）
+Grep: pattern="template.*#value" path="src/" glob="*.vue"
+
+# 方法 B：搜索 #title 插槽（大多数情况下是错误的）
+Grep: pattern="template.*#title" path="src/" glob="*.vue"
+
+# 方法 C：搜索所有 wd-cell 用法，人工检查
+Grep: pattern="wd-cell" path="src/" output_mode="content" -n=true
+```
+
+#### 场景 2：检查 API 调用方式
+
+```bash
+# 方法 A：搜索旧的 API 调用方式
+Grep: pattern="Java110Context" path="src/"
+
+# 方法 B：搜索未迁移的 uni.request
+Grep: pattern="uni\.request" path="src/"
+
+# 方法 C：检查所有 api 文件是否使用新的 Alova 方式
+Glob: pattern="*.ts" path="src/api"
+# 然后逐个文件检查导入语句
+```
+
+#### 场景 3：检查样式迁移情况
+
+```bash
+# 方法 A：搜索旧的 ColorUI 类名
+Grep: pattern="cu-" path="src/" glob="*.vue"
+
+# 方法 B：搜索未迁移的内联样式
+Grep: pattern="style=" path="src/" glob="*.vue"
+
+# 方法 C：检查所有 scoped style 块
+Grep: pattern="<style.*scoped" path="src/"
+```
+
+### 5. 避免遗漏的检查清单
+
+当执行代码规范检查任务时，请务必完成以下清单：
+
+- [ ] **至少使用 2 种不同的搜索方法**进行交叉验证
+- [ ] **搜索结果为 0 时，必须用第二种方法再次确认**（避免搜索语法错误）
+- [ ] **对于关键任务，列出所有相关文件并逐个检查**（不依赖搜索）
+- [ ] **在修改后，立即搜索验证是否还有遗漏**
+- [ ] **记录搜索过程**，便于复查和调试
+
+### 6. 错误示例与改进
+
+#### ❌ 错误做法
+
+```bash
+# 单次搜索，搜索失败就认为"没问题"
+Grep: pattern="<template #value>"  # 可能因转义问题搜索不到
+# 结果：No matches found
+# 错误结论：没有错误用法 ❌
+```
+
+#### ✅ 正确做法
+
+```bash
+# 方法 1：正则表达式
+Grep: pattern="template.*#value"
+# 结果：找到 3 处
+
+# 方法 2：宽泛搜索 + 人工筛选
+Grep: pattern="<template #" output_mode="content"
+# 结果：找到 3 处（交叉验证一致）
+
+# 方法 3：列出所有文件逐个检查
+Glob: pattern="*.vue" path="src/pages-sub/repair"
+# 逐个文件阅读 <template> 区域
+```
+
+### 7. 搜索命令速查表
+
+|     任务      |             推荐搜索命令              |                备用搜索命令                 |
+| :-----------: | :-----------------------------------: | :-----------------------------------------: |
+| 查找插槽用法  |   `Grep: pattern="template.*#\w+"`    |        `Grep: pattern="<template #"`        |
+| 查找组件用法  |       `Grep: pattern="<wd-\w+"`       | `Grep: pattern="wd-" output_mode="content"` |
+| 查找 API 调用 | `Grep: pattern="import.*from.*@/api"` |        `Grep: pattern="useRequest"`         |
+| 查找样式类名  |       `Grep: pattern="class="`        |          `Grep: pattern="<style"`           |
+
 ## 项目概述
 
 这是基于 unibest 框架的智慧社区物业管理系统，使用 uniapp + Vue3 + TypeScript + Vite5 + UnoCSS 技术栈开发，支持 H5、小程序、APP 多平台。
