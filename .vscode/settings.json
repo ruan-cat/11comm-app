@@ -21,7 +21,8 @@
   },
 
   // Disable the default formatter, use eslint instead
-  "prettier.enable": false,
+  // 需要使用prettier来便捷的格式化
+  "prettier.enable": true,
   "editor.formatOnSave": false,
 
   // Auto fix
