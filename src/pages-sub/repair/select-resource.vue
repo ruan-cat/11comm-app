@@ -264,7 +264,7 @@ function handleResourceChange({ value }: { value: number }) {
 }
 
 /** 数量变化处理 */
-function handleQuantityChange(value: number) {
+function handleQuantityChange({ value }: { value: number }) {
   model.quantity = value
 }
 
@@ -486,7 +486,7 @@ function handleCancel() {
               <text>数量</text>
             </template>
             <template #value>
-              <wd-stepper
+              <wd-input-number
                 v-model="model.quantity"
                 :min="1"
                 :max="9999"
