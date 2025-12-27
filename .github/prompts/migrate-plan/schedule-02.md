@@ -441,6 +441,13 @@ src\pages-sub\repair\handle.vue
 3. 阅读旧代码 `gitee-example/pages/repairHandle/selectResource.vue` ，明确清楚该页面和其他页面的交互传参形式。
 4. 按照 `.claude\agents` 全部子代理的要求，优化 `选择维修物资` 页面。
 
+### 01 处理错误使用 `wd-stepper` 组件的故障
+
+1. 针对 `src\pages-sub\repair\select-resource.vue` 页面。
+2. 不存在 `wd-stepper` 组件，请替换，用`InputNumber`组件来代替。
+3. 阅读 `https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/input-number.md` 文档，使用 `wd-input-number` 组件代替。
+4. 注意遵循 claude code 技能，和子代理的要求。
+
 ## 037 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
