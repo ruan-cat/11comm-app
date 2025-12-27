@@ -404,6 +404,102 @@ color: blue
 </template>
 ```
 
+### 示例 3.1: wd-picker 选择器组件迁移（重要⚠️）
+
+#### ⚠️ 关键警告：避免错误的组件嵌套
+
+在迁移选择器组件时，**组件嵌套顺序至关重要**，错误的嵌套会导致选择器无法点击。
+
+**❌ 错误用法 - 将 `wd-picker` 嵌套在 `wd-cell` 内部**:
+
+```vue
+<!-- ❌ 严重错误！会导致选择器无法点击 -->
+<template>
+	<wd-cell-group border>
+		<wd-cell :title-width="LABEL_WIDTH" center>
+			<template #title>
+				<text>商品类型</text>
+			</template>
+			<template #value>
+				<!-- ❌ 错误：wd-picker 被 wd-cell 包裹，点击事件被阻挡 -->
+				<wd-picker v-model="selectedIndex" :columns="options" label-key="name" value-key="id">
+					<text class="text-blue-500">
+						{{ options[selectedIndex]?.name || "请选择" }}
+					</text>
+				</wd-picker>
+			</template>
+		</wd-cell>
+	</wd-cell-group>
+</template>
+```
+
+**问题原因**: `wd-cell` 包裹 `wd-picker` 会导致点击事件被阻挡，选择器弹窗无法正常打开。
+
+---
+
+#### ✅ 正确用法 1: 标准模式（推荐）
+
+**使用场景**: 绝大多数情况下使用此方式。
+
+```vue
+<template>
+	<wd-cell-group border>
+		<!-- ✅ 正确：直接使用 wd-picker，通过 label 属性设置标题 -->
+		<wd-picker
+			v-model="model.category"
+			label="分类"
+			:label-width="LABEL_WIDTH"
+			:columns="categoryOptions"
+			label-key="name"
+			value-key="id"
+		/>
+	</wd-cell-group>
+</template>
+```
+
+---
+
+#### ✅ 正确用法 2: 自定义插槽模式
+
+**使用场景**: 需要动态标题或自定义选中值显示时。
+
+**关键要点**: `wd-picker` **包裹** `wd-cell`，而不是反过来！
+
+```vue
+<template>
+	<wd-cell-group border>
+		<!-- ✅ 正确：wd-picker 包裹 wd-cell，用于自定义显示 -->
+		<wd-picker v-model="model.feeFlag" :columns="feeOptions" label-key="name" value-key="id" @confirm="handleFeeChange">
+			<wd-cell :title="dynamicTitle" :title-width="LABEL_WIDTH" is-link center custom-value-class="cell-value-left">
+				<text :class="model.feeFlag ? 'text-gray-900' : 'text-gray-400'">
+					{{ selectedLabel || "请选择" }}
+				</text>
+			</wd-cell>
+		</wd-picker>
+	</wd-cell-group>
+</template>
+
+<style lang="scss" scoped>
+/** wd-cell 值靠左对齐 - 确保选择器选中值与其他表单项对齐 */
+:deep(.cell-value-left) {
+	flex: 1;
+	text-align: left !important;
+}
+</style>
+```
+
+---
+
+#### 📝 迁移检查清单
+
+迁移 `wd-picker` 组件时，请务必检查以下几点：
+
+- ✅ **组件嵌套顺序**: `wd-picker` 在外层，`wd-cell` 在内层（如果使用自定义插槽）
+- ✅ **label 属性**: 标准模式下直接使用 `label` 属性设置标题
+- ✅ **title-width**: 自定义插槽模式下在 `wd-cell` 上设置 `:title-width`
+- ✅ **点击测试**: 迁移后务必测试选择器能否正常点击弹出
+- ❌ **禁止**: 将 `wd-picker` 放在 `wd-cell` 的 `#value` 插槽内
+
 ### 示例 4: 图片组件迁移
 
 **旧代码 (原生 image)**:

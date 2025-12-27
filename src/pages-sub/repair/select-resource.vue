@@ -333,24 +333,15 @@ function handleCancel() {
         商品类型
       </view>
       <wd-cell-group border>
-        <wd-cell :title-width="LABEL_WIDTH" center>
-          <template #title>
-            <text>商品类型</text>
-          </template>
-          <template #value>
-            <wd-picker
-              v-model="selectedParentTypeIndex"
-              :columns="parentTypeOptions"
-              label-key="name"
-              value-key="rstId"
-              @confirm="handleParentTypeChange"
-            >
-              <text class="text-blue-500">
-                {{ parentTypeOptions[selectedParentTypeIndex]?.name || '请选择' }}
-              </text>
-            </wd-picker>
-          </template>
-        </wd-cell>
+        <wd-picker
+          v-model="selectedParentTypeIndex"
+          label="商品类型"
+          :label-width="LABEL_WIDTH"
+          :columns="parentTypeOptions"
+          label-key="name"
+          value-key="rstId"
+          @confirm="handleParentTypeChange"
+        />
       </wd-cell-group>
 
       <!-- 自定义商品 -->
@@ -389,44 +380,27 @@ function handleCancel() {
         </view>
         <wd-cell-group border>
           <!-- 二级分类 -->
-          <wd-cell :title-width="LABEL_WIDTH" center>
-            <template #title>
-              <text>二级分类</text>
-            </template>
-            <template #value>
-              <wd-picker
-                v-model="selectedSonTypeIndex"
-                :columns="sonTypeOptions"
-                label-key="name"
-                value-key="rstId"
-                @confirm="handleSonTypeChange"
-              >
-                <text class="text-blue-500">
-                  {{ sonTypeOptions[selectedSonTypeIndex]?.name || '请选择' }}
-                </text>
-              </wd-picker>
-            </template>
-          </wd-cell>
+          <wd-picker
+            v-model="selectedSonTypeIndex"
+            label="二级分类"
+            :label-width="LABEL_WIDTH"
+            :columns="sonTypeOptions"
+            label-key="name"
+            value-key="rstId"
+            @confirm="handleSonTypeChange"
+          />
 
           <!-- 商品选择 -->
-          <wd-cell v-if="rstId" :title-width="LABEL_WIDTH" center>
-            <template #title>
-              <text>商品</text>
-            </template>
-            <template #value>
-              <wd-picker
-                v-model="selectedResourceIndex"
-                :columns="resourceOptions"
-                label-key="resName"
-                value-key="resId"
-                @confirm="handleResourceChange"
-              >
-                <text class="text-blue-500">
-                  {{ resourceOptions[selectedResourceIndex]?.resName || '请选择商品' }}
-                </text>
-              </wd-picker>
-            </template>
-          </wd-cell>
+          <wd-picker
+            v-if="rstId"
+            v-model="selectedResourceIndex"
+            label="商品"
+            :label-width="LABEL_WIDTH"
+            :columns="resourceOptions"
+            label-key="resName"
+            value-key="resId"
+            @confirm="handleResourceChange"
+          />
         </wd-cell-group>
 
         <!-- 商品详情 -->

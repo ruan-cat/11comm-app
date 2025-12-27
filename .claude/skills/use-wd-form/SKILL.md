@@ -163,7 +163,35 @@ async function handleSubmit() {
 
 ### 3.2. 选择器（wd-picker）
 
-#### 3.2.1. 标准用法（使用 label 属性）
+#### ⚠️ 重要警告：避免错误的嵌套方式
+
+**❌ 错误用法 - 将 `wd-picker` 嵌套在 `wd-cell` 的插槽内**：
+
+```vue
+<!-- ❌ 禁止这样写！会导致无法点击 -->
+<template>
+	<wd-cell-group border>
+		<wd-cell :title-width="LABEL_WIDTH" center>
+			<template #title>
+				<text>商品类型</text>
+			</template>
+			<template #value>
+				<wd-picker v-model="selectedIndex" :columns="options" label-key="name" value-key="id">
+					<text class="text-blue-500">
+						{{ options[selectedIndex]?.name || "请选择" }}
+					</text>
+				</wd-picker>
+			</template>
+		</wd-cell>
+	</wd-cell-group>
+</template>
+```
+
+**问题原因**：`wd-cell` 包裹 `wd-picker` 会导致点击事件被阻挡，选择器无法正常弹出。
+
+---
+
+#### 3.2.1. 标准用法（使用 label 属性）✅
 
 ```vue
 <template>
@@ -182,9 +210,13 @@ async function handleSubmit() {
 </template>
 ```
 
-#### 3.2.2. 自定义插槽用法（动态标题或自定义显示）
+**使用场景**：绝大多数情况下使用此方式，简洁明了。
 
-当需要动态标题或自定义选中值显示时，使用自定义插槽方式。**必须在嵌套的 `wd-cell` 上设置 `:title-width` 属性**以保持标签宽度一致：
+---
+
+#### 3.2.2. 自定义插槽用法（动态标题或自定义显示）✅
+
+当需要动态标题或自定义选中值显示时，使用自定义插槽方式。**注意：`wd-picker` 包裹 `wd-cell`，而不是反过来！**
 
 ```vue
 <template>
@@ -210,10 +242,13 @@ async function handleSubmit() {
 
 **关键要点**：
 
-1. `:title-width="LABEL_WIDTH"` - 与其他表单项保持一致的标签宽度
-2. `center` - 使内容垂直居中
-3. `custom-value-class="cell-value-left"` - 确保选中值左对齐
-4. 必须添加 `:deep(.cell-value-left)` 样式
+1. **组件嵌套顺序**：`wd-picker` 包裹 `wd-cell`（而不是反过来）
+2. `:title-width="LABEL_WIDTH"` - 与其他表单项保持一致的标签宽度
+3. `center` - 使内容垂直居中
+4. `custom-value-class="cell-value-left"` - 确保选中值左对齐
+5. 必须添加 `:deep(.cell-value-left)` 样式
+
+**使用场景**：仅在需要动态标题或复杂自定义显示时使用。
 
 ### 3.3. 日期时间选择器（wd-datetime-picker）
 
