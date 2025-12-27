@@ -1247,7 +1247,7 @@ export default defineUniAppMock([
         }
 
         mockLog('listResourceStoreTypes', params, `→ ${resourceStoreTypes.length} items`)
-        return successResponse({ resourceStoreTypes }, '查询成功')
+        return successResponse(resourceStoreTypes, '查询成功')
       }
       catch (error: any) {
         console.error('❌ Mock API Error: listResourceStoreTypes', error)
