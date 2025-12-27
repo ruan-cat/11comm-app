@@ -890,6 +890,51 @@
 
 #### 案例 2
 
+1. 错误写法
+
+```vue
+<template>
+	<wd-cell-group border>
+		<wd-cell :title-width="LABEL_WIDTH" center>
+			<template #title>
+				<text>二级分类</text>
+			</template>
+			<template #value>
+				<wd-picker
+					v-model="selectedSonTypeIndex"
+					:columns="sonTypeOptions"
+					label-key="name"
+					value-key="rstId"
+					@confirm="handleSonTypeChange"
+				>
+					<text class="text-blue-500">
+						{{ sonTypeOptions[selectedSonTypeIndex]?.name || "请选择" }}
+					</text>
+				</wd-picker>
+			</template>
+		</wd-cell>
+	</wd-cell-group>
+</template>
+```
+
+2. 正确写法
+
+```vue
+<template>
+	<wd-cell-group border>
+		<wd-picker
+			v-model="selectedSonTypeIndex"
+			:columns="sonTypeOptions"
+			label="二级分类"
+			:label-width="LABEL_WIDTH"
+			label-key="name"
+			value-key="rstId"
+			@confirm="handleSonTypeChange"
+		/>
+	</wd-cell-group>
+</template>
+```
+
 <!--
 ```vue
 <template>
