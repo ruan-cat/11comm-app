@@ -71,8 +71,8 @@ const isCustom = ref(false)
 
 /** 商品类型（一级分类） */
 const parentTypeOptions = ref<ResourceType[]>([{ rstId: '', name: '请选择商品类型' }])
-const selectedParentTypeIndex = ref(0)
-const parentRstId = computed(() => parentTypeOptions.value[selectedParentTypeIndex.value]?.rstId || '')
+const selectedParentTypeRstId = ref<string>('')
+const parentRstId = computed(() => parentTypeOptions.value[selectedParentTypeRstId.value]?.rstId || '')
 
 /** 商品子类型（二级分类） */
 const sonTypeOptions = ref<ResourceType[]>([{ rstId: '', name: '请选择商品类型' }])
@@ -214,8 +214,8 @@ onLoad((options) => {
 })
 
 /** 一级分类改变 */
-function handleParentTypeChange({ value }: { value: number }) {
-  selectedParentTypeIndex.value = value
+function handleParentTypeChange({ value }: { value: string }) {
+  selectedParentTypeRstId.value = value
 
   // 清空二级分类和商品
   sonTypeOptions.value = [{ rstId: '', name: '请选择商品类型' }]
@@ -225,7 +225,7 @@ function handleParentTypeChange({ value }: { value: number }) {
   model.price = 0
   priceDisabled.value = false
 
-  if (value === 0) {
+  if (value === '') {
     isCustom.value = false
     return
   }
@@ -352,8 +352,9 @@ function handleCancel() {
       </view>
       <wd-cell-group border>
         <wd-picker
-          v-model="selectedParentTypeIndex"
+          v-model="selectedParentTypeRstId"
           label="商品类型"
+          placeholder="请选择商品类型"
           :label-width="LABEL_WIDTH"
           :columns="parentTypeOptions"
           label-key="name"
@@ -510,5 +511,11 @@ function handleCancel() {
   font-size: 14px;
   color: rgba(69, 90, 100, 0.6);
   padding: 20px 15px 10px;
+}
+
+/** wd-cell 值靠左对齐 - wot-design-uni 组件必需样式，必须保留 */
+:deep(.cell-value-left) {
+  flex: 1;
+  text-align: left !important;
 }
 </style>
