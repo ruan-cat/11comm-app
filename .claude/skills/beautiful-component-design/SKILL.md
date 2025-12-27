@@ -110,12 +110,12 @@ color: pink
 
 在表单中使用 `wd-picker` 选择器组件时，需要特别注意**组件嵌套顺序**和标签宽度的一致性。
 
-### 6.1. ⚠️ 严重错误：禁止的嵌套方式
+### 6.1. ⚠️ 严重错误：禁止的嵌套方式和插槽使用
 
-**❌ 绝对禁止将 `wd-picker` 嵌套在 `wd-cell` 内部**，这会导致选择器无法点击！
+**❌ 绝对禁止使用不存在的 `#value` 插槽，会导致选择器无法显示和点击！**
 
 ```vue
-<!-- ❌ 严重错误！会导致选择器无法点击 -->
+<!-- ❌ 严重错误！使用了不存在的 #value 插槽，导致选择器无法显示和点击 -->
 <template>
 	<wd-cell-group border>
 		<wd-cell :title-width="LABEL_WIDTH" center>
@@ -123,7 +123,8 @@ color: pink
 				<text>商品类型</text>
 			</template>
 			<template #value>
-				<!-- ❌ 错误：wd-picker 被 wd-cell 包裹，点击事件被阻挡 -->
+				<!-- ❌ 错误1: wd-cell 组件没有 #value 插槽！#value 是 CellGroup 的插槽 -->
+				<!-- ❌ 错误2: wd-picker 被 wd-cell 包裹，点击事件被阻挡 -->
 				<wd-picker v-model="selectedIndex" :columns="options" label-key="name" value-key="id">
 					<text class="text-blue-500">
 						{{ options[selectedIndex]?.name || "请选择" }}
@@ -135,7 +136,10 @@ color: pink
 </template>
 ```
 
-**问题原因**: `wd-cell` 包裹 `wd-picker` 会导致点击事件被阻挡，选择器弹窗无法正常打开。
+**问题原因**:
+
+1. **`wd-cell` 组件没有 `#value` 插槽**！根据官方文档，`wd-cell` 组件支持的插槽只有：`title`、`default`（右侧内容）、`icon`、`label`。`#value` 插槽是 `wd-cell-group` 组件的插槽，不是 `wd-cell` 的插槽。
+2. 即使改用正确的插槽，`wd-cell` 包裹 `wd-picker` 也会导致点击事件被阻挡，选择器弹窗无法正常打开。
 
 ---
 
@@ -225,7 +229,8 @@ color: pink
 - ✅ **优先使用标准模式**: 直接使用 `label` 属性，除非确实需要自定义显示
 - ✅ **label-width/title-width**: 与其他表单项保持一致的标签宽度
 - ✅ **点击测试**: 实现后务必测试选择器能否正常点击弹出
-- ❌ **严格禁止**: 将 `wd-picker` 放在 `wd-cell` 的 `#value` 插槽内
+- ❌ **禁止使用 `#value` 插槽**: **`wd-cell` 组件没有 `#value` 插槽**！不要将 `wd-picker` 或任何内容放在 `wd-cell` 的 `#value` 插槽内
+- ❌ **禁止错误嵌套**: 将 `wd-picker` 放在 `wd-cell` 内部会导致点击事件被阻挡
 
 ## 7. 典型应用场景
 
@@ -254,4 +259,5 @@ color: pink
 - [ ] **标签宽度是否统一？**（设置了统一的 `:title-width` 或 `:label-width`）
 - [ ] **自定义插槽模式是否添加了必需样式？**（`cell-value-left` 样式类和样式穿透）
 - [ ] **选择器能否正常点击弹出？**（实际测试点击功能）
-- [ ] **是否避免了禁止的嵌套方式？**（`wd-picker` 绝不能在 `wd-cell` 的 `#value` 插槽内）
+- [ ] **是否避免了使用不存在的 `#value` 插槽？**（**`wd-cell` 组件没有 `#value` 插槽**，不要使用）
+- [ ] **是否避免了禁止的嵌套方式？**（`wd-picker` 绝不能在 `wd-cell` 内部）

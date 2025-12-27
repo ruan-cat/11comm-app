@@ -163,12 +163,12 @@ async function handleSubmit() {
 
 ### 3.2. 选择器（wd-picker）
 
-#### ⚠️ 重要警告：避免错误的嵌套方式
+#### ⚠️ 重要警告：避免错误的嵌套方式和插槽使用
 
-**❌ 错误用法 - 将 `wd-picker` 嵌套在 `wd-cell` 的插槽内**：
+**❌ 错误用法 - 使用了不存在的 `#value` 插槽**：
 
 ```vue
-<!-- ❌ 禁止这样写！会导致无法点击 -->
+<!-- ❌ 禁止这样写！使用了不存在的 #value 插槽，会导致无法显示和点击 -->
 <template>
 	<wd-cell-group border>
 		<wd-cell :title-width="LABEL_WIDTH" center>
@@ -176,6 +176,8 @@ async function handleSubmit() {
 				<text>商品类型</text>
 			</template>
 			<template #value>
+				<!-- ❌ 错误1: wd-cell 组件没有 #value 插槽！#value 是 CellGroup 的插槽 -->
+				<!-- ❌ 错误2: wd-picker 被 wd-cell 包裹，点击事件被阻挡 -->
 				<wd-picker v-model="selectedIndex" :columns="options" label-key="name" value-key="id">
 					<text class="text-blue-500">
 						{{ options[selectedIndex]?.name || "请选择" }}
@@ -187,7 +189,10 @@ async function handleSubmit() {
 </template>
 ```
 
-**问题原因**：`wd-cell` 包裹 `wd-picker` 会导致点击事件被阻挡，选择器无法正常弹出。
+**问题原因**：
+
+1. **`wd-cell` 组件没有 `#value` 插槽**！根据官方文档，`wd-cell` 组件支持的插槽只有：`title`、`default`（右侧内容）、`icon`、`label`。`#value` 插槽是 `wd-cell-group` 组件的插槽，不是 `wd-cell` 的插槽。
+2. 即使改用正确的插槽，`wd-cell` 包裹 `wd-picker` 也会导致点击事件被阻挡，选择器无法正常弹出。
 
 ---
 

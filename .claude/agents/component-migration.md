@@ -406,14 +406,14 @@ color: blue
 
 ### 示例 3.1: wd-picker 选择器组件迁移（重要⚠️）
 
-#### ⚠️ 关键警告：避免错误的组件嵌套
+#### ⚠️ 关键警告：避免错误的组件嵌套和插槽使用
 
-在迁移选择器组件时，**组件嵌套顺序至关重要**，错误的嵌套会导致选择器无法点击。
+在迁移选择器组件时，**组件嵌套顺序和插槽使用至关重要**，错误的使用会导致选择器无法点击或根本无法显示。
 
-**❌ 错误用法 - 将 `wd-picker` 嵌套在 `wd-cell` 内部**:
+**❌ 错误用法 - 使用了不存在的 `#value` 插槽**:
 
 ```vue
-<!-- ❌ 严重错误！会导致选择器无法点击 -->
+<!-- ❌ 严重错误！使用了不存在的 #value 插槽，导致选择器无法显示和点击 -->
 <template>
 	<wd-cell-group border>
 		<wd-cell :title-width="LABEL_WIDTH" center>
@@ -421,7 +421,8 @@ color: blue
 				<text>商品类型</text>
 			</template>
 			<template #value>
-				<!-- ❌ 错误：wd-picker 被 wd-cell 包裹，点击事件被阻挡 -->
+				<!-- ❌ 错误1: wd-cell 组件没有 #value 插槽！#value 是 CellGroup 的插槽 -->
+				<!-- ❌ 错误2: wd-picker 被 wd-cell 包裹，点击事件被阻挡 -->
 				<wd-picker v-model="selectedIndex" :columns="options" label-key="name" value-key="id">
 					<text class="text-blue-500">
 						{{ options[selectedIndex]?.name || "请选择" }}
@@ -433,7 +434,10 @@ color: blue
 </template>
 ```
 
-**问题原因**: `wd-cell` 包裹 `wd-picker` 会导致点击事件被阻挡，选择器弹窗无法正常打开。
+**问题原因**:
+
+1. **`wd-cell` 组件没有 `#value` 插槽**！根据官方文档，`wd-cell` 组件支持的插槽只有：`title`、`default`（右侧内容）、`icon`、`label`。`#value` 插槽是 `wd-cell-group` 组件的插槽，不是 `wd-cell` 的插槽。
+2. 即使改用正确的插槽，`wd-cell` 包裹 `wd-picker` 也会导致点击事件被阻挡，选择器弹窗无法正常打开。
 
 ---
 
@@ -498,7 +502,8 @@ color: blue
 - ✅ **label 属性**: 标准模式下直接使用 `label` 属性设置标题
 - ✅ **title-width**: 自定义插槽模式下在 `wd-cell` 上设置 `:title-width`
 - ✅ **点击测试**: 迁移后务必测试选择器能否正常点击弹出
-- ❌ **禁止**: 将 `wd-picker` 放在 `wd-cell` 的 `#value` 插槽内
+- ❌ **禁止使用 `#value` 插槽**: **`wd-cell` 组件没有 `#value` 插槽**！不要将 `wd-picker` 或任何内容放在 `wd-cell` 的 `#value` 插槽内，这是不存在的插槽
+- ❌ **禁止错误嵌套**: 将 `wd-picker` 放在 `wd-cell` 内部会导致点击事件被阻挡
 
 ### 示例 4: 图片组件迁移
 
