@@ -465,6 +465,23 @@ src\pages-sub\repair\handle.vue
 
 1. 请更新 `.claude\skills\beautiful-component-design` 内的写法，避免里面的写法导致组件使用的错误。
 
+### 04 处理下拉列表不能选择有意义内容的故障
+
+1. 针对 `src\pages-sub\repair\select-resource.vue` `选择维修物资` 页面。
+2. 请你阅读以下 url 图片：
+
+![2025-12-27-22-42-23](https://s2.loli.net/2025/12/27/DTbcGCpq4Vx2FBa.png)
+
+![2025-12-27-22-42-46](https://s2.loli.net/2025/12/27/5xMJZnBd67eIat8.png)
+
+如图，我在 `选择维修物资` 页面，无法选择有效的下拉列表。我希望能够选择到有效的下拉列表数据。
+
+3. 请问是当前页面的 `http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001` feeFlag 参数影响了下拉列表的数据选择么？
+4. 请问是该页面对应的下拉选择接口有问题么？是对应的 mock 接口返回的数据不够么？如果是，请为 mock 接口增加数据，便于我实现有意义的下拉选择功能。
+5. 请问页面 `pages-sub/repair/select-resource` 的 feeFlag 参数还可以填写那些值呢？这个值在 `选择维修物资` 页面内，是如何使用的？
+6. 请阅读 `docs\reports\vue2-route-navigation-map.md` 的 `维修工单流程模块` 部分，结合本项目跳路由的工具，告诉我。 `选择维修物资` 页面的上一级页面是从哪里进入的？我该怎么确保能够充分的进入到该页面的每一种情况，便于我自主测试？
+7. 回答上述的全部问题，便于我学习了解。
+
 ## 037 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
