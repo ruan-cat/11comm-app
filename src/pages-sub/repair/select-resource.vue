@@ -19,6 +19,15 @@
   旧代码：gitee-example/pages/repairHandle/selectResource.vue
 -->
 
+<!-- 自主测试时的覆盖场景
+1. ✅ **一级分类加载**：商品类型下拉应显示 4 个选项 + 自定义
+2. ✅ **二级分类联动**：选择一级分类后，二级分类应自动加载对应的子分类
+3. ✅ **商品列表加载**：选择二级分类后，商品列表应显示该分类下的所有商品
+4. ✅ **自定义商品模式**：选择"自定义"后，应切换到自定义商品输入表单
+5. ✅ **价格显示控制**：`feeFlag=1001` 时显示价格输入框，其他值时隐藏
+6. ✅ **表单验证**：各字段的校验规则（商品名、价格、数量）应正常工作
+-->
+
 <script setup lang="ts">
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import type { RepairResource } from '@/types/repair'
