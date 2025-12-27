@@ -809,3 +809,91 @@
 1. 阅读 `.claude\skills\beautiful-component-design` 目录下面的全部文件。
 2. 阅读 `.claude\agents` 文件夹下面的全部子代理文件，明确清楚各个子代理的要求。
 3. 按照各个子代理的要求，去改写，纠正 `beautiful-component-design` 技能中不合适的内容。在保留 `beautiful-component-design` 技能的核心内容的前提下，确保技能文档的写法满足各个子代理的写法要求。
+
+### 056 <!-- TODO: --> 更新各个文档对于 `wd-cell` 组件的使用细则
+
+1. 务必阅读文档 `https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/cell.md` ，掌握清楚 `wd-cell` 组件的使用方式。
+2. 请注意以下故障，使用了错误的，不存在的 `wd-cell` 组件 的 `#value` 插槽，而导致的一系列故障。
+3. 了解清楚以下故障后，请你及时更新以下这几个文档，避免再次出现错误使用 `wd-cell` 组件的错误。
+   - .claude\agents\component-migration.md 的 `示例 3.1: wd-picker 选择器组件迁移（重要⚠️）` 部分。更新错误日志，重点说明是因为使用了错误的 `#value` 插槽插槽才导致的表单组件无法使用的故障。
+   - .claude\skills\use-wd-form\SKILL.md 的 `3.2. 选择器（wd-picker）` 部分。重点说明是因为使用了错误的 `#value` 插槽插槽才导致的表单组件无法使用的故障。
+   - `.claude\skills\beautiful-component-design` 目录下的文档，在使用 `wd-cell` 组件美化优化
+
+#### 案例 1
+
+1. 错误使用不存在的 `<template #value>` 插槽。
+
+```vue
+<template>
+	<wd-cell-group border>
+		<wd-cell :title-width="LABEL_WIDTH" center>
+			<template #title>
+				<text>商品类型</text>
+			</template>
+			<template #value>
+				<wd-picker
+					v-model="selectedParentTypeIndex"
+					:columns="parentTypeOptions"
+					label-key="name"
+					value-key="rstId"
+					@confirm="handleParentTypeChange"
+				>
+					<text class="text-blue-500">
+						{{ parentTypeOptions[selectedParentTypeIndex]?.name || "请选择" }}
+					</text>
+				</wd-picker>
+			</template>
+		</wd-cell>
+	</wd-cell-group>
+</template>
+```
+
+2. 页面效果很差很丑的嵌套写法。
+
+```vue
+<template>
+	<wd-cell-group border>
+		<wd-cell :title-width="LABEL_WIDTH" is-link center>
+			<wd-picker
+				v-model="selectedParentTypeRstId"
+				label="商品类型"
+				:label-width="LABEL_WIDTH"
+				:columns="parentTypeOptions"
+				label-key="name"
+				value-key="rstId"
+				@confirm="handleParentTypeChange"
+			/>
+		</wd-cell>
+	</wd-cell-group>
+</template>
+```
+
+3. 正确做法如下：
+   - 直接不使用 `wd-cell` 组件，在`wd-cell`组件内写嵌套写法，会导致很不美观的情况。
+   - 在 `wd-cell-group` 组件内使用各种表单组件时，就直接使用组件即可。不需要额外多包装一个东西。
+
+```vue
+<template>
+	<wd-cell-group border>
+		<wd-picker
+			v-model="selectedParentTypeRstId"
+			label="商品类型"
+			:label-width="LABEL_WIDTH"
+			:columns="parentTypeOptions"
+			label-key="name"
+			value-key="rstId"
+			@confirm="handleParentTypeChange"
+		/>
+	</wd-cell-group>
+</template>
+```
+
+#### 案例 2
+
+<!--
+```vue
+<template>
+
+</template>
+```
+ -->
