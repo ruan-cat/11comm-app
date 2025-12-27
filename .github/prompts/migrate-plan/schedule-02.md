@@ -461,6 +461,10 @@ src\pages-sub\repair\handle.vue
    - `.claude\skills\use-wd-form\SKILL.md`
    - `.claude\agents\component-migration.md`
 
+### 03 检查并更新 `beautiful-component-design` 技能
+
+1. 请更新 `.claude\skills\beautiful-component-design` 内的写法，避免里面的写法导致组件使用的错误。
+
 ## 037 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
