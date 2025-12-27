@@ -443,18 +443,27 @@ function handleCancel() {
               :rules="formRules.price"
             />
 
-            <!-- 价格范围提示 -->
-            <view
-              v-if="feeFlag === '1001' && selectedResource.outLowPrice !== undefined"
-              class="px-4 py-2 text-sm text-gray-500"
+            <!-- 价格（固定价格） -->
+            <wd-cell
+              v-if="feeFlag === '1001' && selectedResource.outLowPrice !== undefined && selectedResource.outHighPrice === selectedResource.outLowPrice"
+              title="价格"
+              :title-width="LABEL_WIDTH"
+              center
             >
-              <text v-if="selectedResource.outHighPrice === selectedResource.outLowPrice">
-                价格: {{ selectedResource.outLowPrice }}
+              <text class="text-gray-400">{{ selectedResource.outLowPrice }}</text>
+            </wd-cell>
+
+            <!-- 价格范围（区间价格） -->
+            <wd-cell
+              v-if="feeFlag === '1001' && selectedResource.outLowPrice !== undefined && selectedResource.outHighPrice !== selectedResource.outLowPrice"
+              title="价格范围"
+              :title-width="LABEL_WIDTH"
+              center
+            >
+              <text class="text-gray-400">
+                {{ selectedResource.outLowPrice }} - {{ selectedResource.outHighPrice }}
               </text>
-              <text v-else>
-                价格范围: {{ selectedResource.outLowPrice }} - {{ selectedResource.outHighPrice }}
-              </text>
-            </view>
+            </wd-cell>
 
             <!-- 规格 -->
             <wd-cell title="规格" :title-width="LABEL_WIDTH" center>
