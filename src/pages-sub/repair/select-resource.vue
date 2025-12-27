@@ -32,6 +32,7 @@
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import type { RepairResource } from '@/types/repair'
 import { onLoad } from '@dcloudio/uni-app'
+import { isConditionsEvery } from '@ruan-cat/utils'
 import { useRequest } from 'alova/client'
 import { computed, reactive, ref } from 'vue'
 import { getRepairResources, getRepairResourceTypes } from '@/api/repair'
@@ -96,6 +97,24 @@ const model = reactive({
 
 /** 价格是否禁用 */
 const priceDisabled = ref(false)
+
+/** 是否显示固定价格 */
+const showFixedPrice = computed(() => {
+  return isConditionsEvery([
+    () => feeFlag.value === '1001',
+    () => selectedResource.value.outLowPrice !== undefined,
+    () => selectedResource.value.outHighPrice === selectedResource.value.outLowPrice,
+  ])
+})
+
+/** 是否显示价格范围 */
+const showPriceRange = computed(() => {
+  return isConditionsEvery([
+    () => feeFlag.value === '1001',
+    () => selectedResource.value.outLowPrice !== undefined,
+    () => selectedResource.value.outHighPrice !== selectedResource.value.outLowPrice,
+  ])
+})
 
 /** 表单校验规则 */
 const formRules: FormRules = {
@@ -445,7 +464,7 @@ function handleCancel() {
 
             <!-- 价格（固定价格） -->
             <wd-cell
-              v-if="feeFlag === '1001' && selectedResource.outLowPrice !== undefined && selectedResource.outHighPrice === selectedResource.outLowPrice"
+              v-if="showFixedPrice"
               title="价格"
               :title-width="LABEL_WIDTH"
               center
@@ -455,7 +474,7 @@ function handleCancel() {
 
             <!-- 价格范围（区间价格） -->
             <wd-cell
-              v-if="feeFlag === '1001' && selectedResource.outLowPrice !== undefined && selectedResource.outHighPrice !== selectedResource.outLowPrice"
+              v-if="showPriceRange"
               title="价格范围"
               :title-width="LABEL_WIDTH"
               center
