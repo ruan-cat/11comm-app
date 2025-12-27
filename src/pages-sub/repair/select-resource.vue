@@ -457,13 +457,8 @@ function handleCancel() {
             </view>
 
             <!-- 规格 -->
-            <wd-cell :title-width="LABEL_WIDTH" center>
-              <template #title>
-                <text>规格</text>
-              </template>
-              <template #value>
-                <text class="text-gray-400">{{ selectedResource.specName || '-' }}</text>
-              </template>
+            <wd-cell title="规格" :title-width="LABEL_WIDTH" center>
+              <text class="text-gray-400">{{ selectedResource.specName || '-' }}</text>
             </wd-cell>
           </wd-cell-group>
         </view>
@@ -475,19 +470,14 @@ function handleCancel() {
           购买数量
         </view>
         <wd-cell-group border>
-          <wd-cell :title-width="LABEL_WIDTH" center>
-            <template #title>
-              <text>数量</text>
-            </template>
-            <template #value>
-              <wd-input-number
-                v-model="model.quantity"
-                :min="1"
-                :max="9999"
-                :step="1"
-                @change="handleQuantityChange"
-              />
-            </template>
+          <wd-cell title="数量" :title-width="LABEL_WIDTH" center>
+            <wd-input-number
+              v-model="model.quantity"
+              :min="1"
+              :max="9999"
+              :step="1"
+              @change="handleQuantityChange"
+            />
           </wd-cell>
         </wd-cell-group>
       </view>

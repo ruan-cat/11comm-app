@@ -104,9 +104,7 @@ const selectionDetail = computed(() => {
     <wd-cell-group v-if="hasSelection" title="选择结果" style="margin-top: 20px">
       <wd-cell title="已选择" :value="selectionDetail" />
       <wd-cell title="操作" clickable @click="handleClearSelection">
-        <template #value>
-          <text class="text-red-500">清空选择</text>
-        </template>
+        <text class="text-red-500">清空选择</text>
       </wd-cell>
     </wd-cell-group>
 

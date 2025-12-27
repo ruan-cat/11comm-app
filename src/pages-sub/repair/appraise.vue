@@ -111,9 +111,7 @@ async function handleSubmit() {
     <view class="mb-3 bg-white">
       <wd-cell-group border>
         <wd-cell title="服务评分" center>
-          <template #value>
-            <wd-rate v-model="rating" />
-          </template>
+          <wd-rate v-model="rating" />
         </wd-cell>
       </wd-cell-group>
     </view>
