@@ -810,7 +810,7 @@
 2. 阅读 `.claude\agents` 文件夹下面的全部子代理文件，明确清楚各个子代理的要求。
 3. 按照各个子代理的要求，去改写，纠正 `beautiful-component-design` 技能中不合适的内容。在保留 `beautiful-component-design` 技能的核心内容的前提下，确保技能文档的写法满足各个子代理的写法要求。
 
-### 056 <!-- TODO: --> 更新各个文档对于 `wd-cell` 组件的使用细则
+### 056 更新各个文档对于 `wd-cell` 组件的使用细则
 
 1. 务必阅读文档 `https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/cell.md` ，掌握清楚 `wd-cell` 组件的使用方式。
 2. 请注意以下故障，使用了错误的，不存在的 `wd-cell` 组件 的 `#value` 插槽，而导致的一系列故障。
@@ -934,11 +934,3 @@
 	</wd-cell-group>
 </template>
 ```
-
-<!--
-```vue
-<template>
-
-</template>
-```
- -->
