@@ -497,7 +497,7 @@ TypeError: result.data is not iterable
 4. 请务必遵循 `.claude\agents\api-migration.md` 迁移规范的写法。
 5. 请你使用谷歌浏览器 MCP，访问地址 `http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001` 并自我测试。
 
-### 06 <!-- TODO: --> 处理选择商品类型后出现的故障
+### 06 处理选择商品类型后出现的故障
 
 1. 针对 `src\pages-sub\repair\select-resource.vue` `选择维修物资` 页面。
 2. 请你阅读以下 url 图片：
