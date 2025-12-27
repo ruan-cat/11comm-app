@@ -533,7 +533,15 @@ invoker	@	vue.runtime.esm.js:10209
 
 请处理该故障，确保选择完毕商品类型后，不会出现后续故障。
 
-## 037 <!-- TODO: --> 样式写法一律使用 unocss 来完成
+## 039 <!-- TODO: --> 迭代更新多个表单页对 `wd-cell` 组件的使用
+
+1. 请阅读以下文件，按照最新的技能文件要求，和 `component-migration` 子代理的要求，改写以下页面的组件使用用法。
+
+- /pages-sub/repair/add-order
+- /pages-sub/repair/handle
+- /pages-sub/repair/select-resource
+
+## 040 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
 2. 针对 `维修工单流程模块系列页面` 的 vue 组件，存在额外使用 scss 的情况。请你用 `style-migration` 来改造代码，使其满足子代理的要求。
