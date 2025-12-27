@@ -550,7 +550,27 @@ invoker	@	vue.runtime.esm.js:10209
 - /pages-sub/repair/handle
 - /pages-sub/repair/select-resource
 
-## 040 <!-- TODO: --> 样式写法一律使用 unocss 来完成
+## 040 <!-- TODO: --> 优化表单页的标题风格不统一，不美观的问题；制作专门的标题组件
+
+1. 阅读以下 url 图片地址，观察各个表单页的标题部分的显示效果：
+2. /pages-sub/repair/select-resource `商品类型`、`商品选择`、`购买数量`
+   > ![2025-12-28-04-05-23](https://s2.loli.net/2025/12/28/zmOlqU3Tw57cfr8.png)
+3. /pages-sub/repair/handle `维修师傅`、`处理意见`
+   > ![2025-12-28-04-06-01](https://s2.loli.net/2025/12/28/JbrsX1nYfDuZ8Ap.png)
+4. /pages-sub/repair/add-order `房屋信息`、`报修信息`、`报修内容`、`相关图片`
+   > ![2025-12-28-04-06-52](https://s2.loli.net/2025/12/28/1fekBOVEruhFWpH.png)
+5. 这几个标题的显示效果参差不齐，大家的表现效果都不统一。我希望你制作一个美观的通用组件。并实现上述这 3 个表单页面都能够使用美观的标题组件。
+   - 标题主题使用 https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/cell.md `wd-cell` 组件。重点发挥 `wd-cell` 组件的 `#title` 插槽，并充分的使用 unocss 实现美观的背景呼吸动效。
+   - 标题组件的背景色默认是淡灰色。和常见的白色背景的表单项，形成对比。
+   - 模仿 `src\components\common\z-paging-loading` 组件的组织方式，这款标题组件也使用相同的组织方式。在 `src\components\common` 目录下编写组件。
+   - 在 `src\pages\test-use` 目录内，也新建单独的组件演示页面，演示你新建的标题组件。
+6. 设计好美观的标题组件后，对上述的 3 个表单页面，应用该组件。
+7. 主动使用谷歌浏览器 MCP，逐项访问上述页面提供的`完整示例`url 地址，主动观察视觉效果，确保标题的视觉效果在你设计的组件的加持下，实现较好的美观度。
+8. 更新文档：
+   - `.claude\agents\component-migration.md` 在组件迁移文档内，在`旧项目`内，凡是遇到类似的标题组件写法，都是用你提供的标题组件实现。
+   - `.claude\skills\beautiful-component-design` 这款技能，请增加一个单独的文档来说明在实现美观的情况下，如何恰当的使用这款组件。请精简的表述即可。
+
+## 041 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
 2. 针对 `维修工单流程模块系列页面` 的 vue 组件，存在额外使用 scss 的情况。请你用 `style-migration` 来改造代码，使其满足子代理的要求。
