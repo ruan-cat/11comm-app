@@ -71,18 +71,18 @@ const isCustom = ref(false)
 
 /** 商品类型（一级分类） */
 const parentTypeOptions = ref<ResourceType[]>([{ rstId: '', name: '请选择商品类型' }])
-const selectedParentTypeRstId = ref<string>('')
-const parentRstId = computed(() => parentTypeOptions.value[selectedParentTypeRstId.value]?.rstId || '')
+const selectedParentTypeRstId = ref('')
+const selectedParentType = computed(() => parentTypeOptions.value.find(item => item.rstId === selectedParentTypeRstId.value))
 
 /** 商品子类型（二级分类） */
 const sonTypeOptions = ref<ResourceType[]>([{ rstId: '', name: '请选择商品类型' }])
-const selectedSonTypeIndex = ref(0)
-const rstId = computed(() => sonTypeOptions.value[selectedSonTypeIndex.value]?.rstId || '')
+const selectedSonTypeRstId = ref('')
+const selectedSonType = computed(() => sonTypeOptions.value.find(item => item.rstId === selectedSonTypeRstId.value))
 
 /** 商品列表 */
 const resourceOptions = ref<RepairResource[]>([])
-const selectedResourceIndex = ref(0)
-const selectedResource = computed(() => resourceOptions.value[selectedResourceIndex.value] || {})
+const selectedResourceId = ref('')
+const selectedResource = computed(() => resourceOptions.value.find(item => item.resId === selectedResourceId.value) || {})
 
 /** 表单数据模型 */
 const model = reactive({
@@ -176,7 +176,7 @@ const { send: loadSonTypes } = useRequest(
 )
   .onSuccess((result) => {
     sonTypeOptions.value = [{ rstId: '', name: '请选择商品类型' }, ...result.data]
-    selectedSonTypeIndex.value = 0
+    selectedSonTypeRstId.value = ''
   })
   .onError((error) => {
     console.error('加载商品子类型失败:', error)
@@ -193,7 +193,7 @@ const { send: loadResources } = useRequest(
   .onSuccess((result) => {
     if (result.data.resources && result.data.resources.length > 0) {
       resourceOptions.value = result.data.resources
-      selectedResourceIndex.value = 0
+      selectedResourceId.value = ''
     }
     else {
       uni.showToast({
@@ -201,7 +201,7 @@ const { send: loadResources } = useRequest(
         icon: 'none',
       })
       resourceOptions.value = []
-      selectedResourceIndex.value = 0
+      selectedResourceId.value = ''
     }
   })
   .onError((error) => {
@@ -219,9 +219,9 @@ function handleParentTypeChange({ value }: { value: string }) {
 
   // 清空二级分类和商品
   sonTypeOptions.value = [{ rstId: '', name: '请选择商品类型' }]
-  selectedSonTypeIndex.value = 0
+  selectedSonTypeRstId.value = ''
   resourceOptions.value = []
-  selectedResourceIndex.value = 0
+  selectedResourceId.value = ''
   model.price = 0
   priceDisabled.value = false
 
@@ -230,46 +230,47 @@ function handleParentTypeChange({ value }: { value: string }) {
     return
   }
 
-  const selected = parentTypeOptions.value[value]
-  if (selected.rstId === 'custom') {
+  if (value === 'custom') {
     // 选择自定义
     isCustom.value = true
   }
   else {
     // 选择标准类型，加载二级分类
     isCustom.value = false
-    loadSonTypes(selected.rstId)
+    loadSonTypes(value)
   }
 }
 
 /** 二级分类改变 */
-function handleSonTypeChange({ value }: { value: number }) {
-  selectedSonTypeIndex.value = value
+function handleSonTypeChange({ value }: { value: string }) {
+  selectedSonTypeRstId.value = value
 
   // 清空商品
   resourceOptions.value = []
-  selectedResourceIndex.value = 0
+  selectedResourceId.value = ''
   model.price = 0
   priceDisabled.value = false
 
-  if (value === 0)
+  if (value === '')
     return
 
-  const selected = sonTypeOptions.value[value]
-  loadResources(selected.rstId)
+  loadResources(value)
 }
 
 /** 商品选择改变 */
-function handleResourceChange({ value }: { value: number }) {
-  selectedResourceIndex.value = value
+function handleResourceChange({ value }: { value: string }) {
+  selectedResourceId.value = value
 
-  if (value === 0) {
+  if (value === '') {
     model.price = 0
     priceDisabled.value = false
     return
   }
 
-  const selected = resourceOptions.value[value]
+  const selected = resourceOptions.value.find(item => item.resId === value)
+  if (!selected)
+    return
+
   // 如果价格固定，自动填充价格
   if (selected.outLowPrice === selected.outHighPrice) {
     model.price = selected.outLowPrice || 0
@@ -290,11 +291,11 @@ function handleQuantityChange({ value }: { value: number }) {
 async function handleConfirm() {
   // 非自定义商品的额外校验
   if (!isCustom.value) {
-    if (!rstId.value) {
+    if (!selectedSonTypeRstId.value) {
       toast.warning('请选择商品类型')
       return
     }
-    if (!selectedResource.value.resId) {
+    if (!selectedResourceId.value) {
       toast.warning('请选择商品')
       return
     }
@@ -400,7 +401,7 @@ function handleCancel() {
         <wd-cell-group border>
           <!-- 二级分类 -->
           <wd-picker
-            v-model="selectedSonTypeIndex"
+            v-model="selectedSonTypeRstId"
             label="二级分类"
             :label-width="LABEL_WIDTH"
             :columns="sonTypeOptions"
@@ -411,8 +412,8 @@ function handleCancel() {
 
           <!-- 商品选择 -->
           <wd-picker
-            v-if="rstId"
-            v-model="selectedResourceIndex"
+            v-if="selectedSonTypeRstId"
+            v-model="selectedResourceId"
             label="商品"
             :label-width="LABEL_WIDTH"
             :columns="resourceOptions"
@@ -423,7 +424,7 @@ function handleCancel() {
         </wd-cell-group>
 
         <!-- 商品详情 -->
-        <view v-if="selectedResourceIndex !== 0" class="mt-3">
+        <view v-if="selectedResourceId" class="mt-3">
           <view class="section-title">
             商品详情
           </view>
