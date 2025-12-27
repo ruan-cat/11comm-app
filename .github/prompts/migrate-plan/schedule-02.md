@@ -448,6 +448,19 @@ src\pages-sub\repair\handle.vue
 3. 阅读 `https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/input-number.md` 文档，使用 `wd-input-number` 组件代替。
 4. 注意遵循 claude code 技能，和子代理的要求。
 
+### 02 处理表单项无法点击使用的故障
+
+1. 针对 `src\pages-sub\repair\select-resource.vue` `选择维修物资` 页面。
+2. 我无法点击选择里面的表单项内容。这是严重的故障。
+3. 请你阅读以下几个类似的表单页，看清楚其他页面是如何组织组件的。
+   - `src\pages-sub\repair\add-order.vue`
+   - `src\pages-sub\repair\handle.vue`
+4. 模仿学习其他页面是如何组织表单代码的，并修改 `选择维修物资` 页面。
+5. 用谷歌浏览器 MCP，访问 `http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001` 页面，自主测试几个表单项是否能正常选取。
+6. 修复完故障后，请你总结清楚组件使用的经验，更新以下文件，确保你以后再使用类似组件时，不会出现类似的错误。
+   - `.claude\skills\use-wd-form\SKILL.md`
+   - `.claude\agents\component-migration.md`
+
 ## 037 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
