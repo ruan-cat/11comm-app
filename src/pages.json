@@ -175,6 +175,62 @@
 				},
 				// #endif
 				{
+					"path": "complaint/appraise-reply",
+					"type": "page",
+					"style": {
+						"navigationBarTitleText": "回复评价",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "complaint/audit",
+					"type": "page",
+					"style": {
+						"navigationBarTitleText": "审核投诉单",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "complaint/detail",
+					"type": "page",
+					"style": {
+						"navigationBarTitleText": "投诉单详情",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "complaint/finish",
+					"type": "page",
+					"style": {
+						"navigationBarTitleText": "投诉已办单",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "complaint/handle",
+					"type": "page",
+					"style": {
+						"navigationBarTitleText": "投诉处理",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "complaint/list",
+					"type": "page",
+					"style": {
+						"navigationBarTitleText": "投诉受理单",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "complaint/order",
+					"type": "page",
+					"style": {
+						"navigationBarTitleText": "投诉录单",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
 					"path": "repair/add-order",
 					"type": "page",
 					"style": {

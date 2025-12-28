@@ -1,20 +1,23 @@
-import type { PriorityType } from '@/types/api'
+/**
+ * 投诉模块 Mock 接口
+ *
+ * 基于 Vue2 项目的实际 API 结构
+ * 旧代码：gitee-example/api/complaint/complaint.js
+ */
+
 import type {
   Complaint,
-  ComplaintListParams,
-  ComplaintStatus,
-  ComplaintType,
-  CreateComplaintReq,
+  ComplaintAppraise,
+  ComplaintEvent,
 } from '@/types/complaint'
 import dayjs from 'dayjs'
-import { COMPLAINT_STATUS_OPTIONS, COMPLAINT_TYPE_OPTIONS } from '../../constants/complaint'
+import { ComplaintAppraiseState, ComplaintEventType, ComplaintTypeCode } from '@/types/complaint'
 
 import {
   createPaginationResponse,
   defineUniAppMock,
   errorResponse,
   formatDateTime,
-  generateAddress,
   generateChineseName,
   generateId,
   generatePhoneNumber,
@@ -24,258 +27,269 @@ import {
   successResponse,
 } from './shared/utils'
 
+/** ==================== 数据生成器 ==================== */
+
 /**
- * 投诉模块 Mock 接口 - 完全自包含架构
- * 数据库对象 + 接口定义 + 数据生成器全部集成在此文件中
+ * 生成投诉内容
+ * @example generateComplaintContext('809001')
  */
-
-// ==================== 投诉数据生成器 ====================
-
-/** 生成投诉描述 */
-function generateComplaintDescription(type: ComplaintType): string {
-  const descriptions = {
-    噪音投诉: [
-      '楼上住户深夜装修噪音严重，影响正常休息',
-      '隔壁邻居经常播放音响声音过大',
-      '楼道内有人员大声喧哗，影响其他住户',
-      '地下车库机械设备噪音过大',
-      '小区广场音响设备音量过高',
+function generateComplaintContext(typeCd: string): string {
+  const complaints = {
+    [ComplaintTypeCode.COMPLAINT]: [
+      '楼上邻居深夜装修噪音严重，影响正常休息，请尽快处理',
+      '小区物业费收取不合理，且未提前通知业主',
+      '电梯频繁故障，存在安全隐患，急需维修',
+      '楼道垃圾未及时清理，异味严重，影响居住环境',
+      '小区保安人员服务态度恶劣，需要加强管理',
+      '停车位被外来车辆占用，物业不作为',
+      '公共区域照明设施损坏多日未修复',
+      '小区绿化带卫生差，杂草丛生，无人管理',
     ],
-    卫生问题: [
-      '楼道垃圾未及时清理，异味严重',
-      '电梯内有异味，卫生状况堪忧',
-      '小区绿化带有垃圾堆积',
-      '公共区域清洁不到位',
-      '垃圾分类管理混乱',
-    ],
-    设施损坏: [
-      '电梯频繁故障，影响正常出行',
-      '楼道照明设备损坏未维修',
-      '小区健身器材损坏存在安全隐患',
-      '停车场地面破损，车辆容易受损',
-      '消防设施损坏，存在安全风险',
-    ],
-    服务态度: [
-      '物业工作人员服务态度不佳',
-      '保安人员对业主态度冷漠',
-      '客服回复不及时，处理问题拖拉',
-      '维修人员上门服务态度有待改善',
-      '门卫值班人员工作不认真',
-    ],
-    收费问题: [
-      '物业费收取标准不明确',
-      '停车费收费过高且没有合理解释',
-      '水电费分摊不合理',
-      '额外收费项目未经业主同意',
-      '收费票据不规范',
-    ],
-    其他投诉: [
-      '小区安全管理存在漏洞',
-      '快递柜使用不便',
-      '访客登记制度不完善',
-      '业主活动组织不当',
-      '宠物管理规定执行不严',
+    [ComplaintTypeCode.SUGGESTION]: [
+      '建议增加小区监控摄像头数量，提升安全防护',
+      '希望优化小区停车管理制度，缓解停车难问题',
+      '建议定期举办社区活动，增进邻里关系',
+      '希望改善小区物业服务质量，提高业主满意度',
+      '建议增加快递柜数量，方便业主取件',
+      '希望加强小区巡逻频次，保障居民安全',
+      '建议改造小区健身器材，增加适合老年人的设施',
     ],
   }
-
-  const typeDescriptions = descriptions[type] || descriptions['其他投诉']
-  return typeDescriptions[Math.floor(Math.random() * typeDescriptions.length)]
+  const list = complaints[typeCd] || complaints[ComplaintTypeCode.COMPLAINT]
+  return list[Math.floor(Math.random() * list.length)]
 }
 
-/** 生成回复内容 */
-function generateResponseContent(type: ComplaintType): string {
-  const responses = {
-    噪音投诉: [
-      '感谢您的投诉，我们已经联系相关住户并进行了沟通，要求其注意作息时间，避免产生噪音。同时我们会加强巡查，如有再次发生类似情况，请及时联系我们。',
-      '针对您反映的噪音问题，我们已制定了《住户装修管理规定》，规范装修时间为工作日8:00-18:00，周末9:00-17:00。已对违规住户进行了教育和警告。',
-      '我们已安排工作人员与相关住户进行协调，并在楼道张贴温馨提示，倡导邻里和谐。后续会加强监管，确保类似问题不再发生。',
-    ],
-    卫生问题: [
-      '感谢您的反馈，我们已立即安排清洁人员对相关区域进行了深度清洁，并调整了清洁频次。后续我们会加强日常巡查，确保公共区域卫生达标。',
-      '针对您反映的卫生问题，我们已对保洁人员进行了培训，制定了更详细的清洁标准和检查制度。问题区域已完成整改。',
-      '我们已重新制定卫生管理制度，增加清洁频次，并建立定期检查机制。同时加强垃圾分类宣传，营造良好的社区环境。',
-    ],
-    设施损坏: [
-      '感谢您的及时反馈，我们已联系专业维修公司对损坏设施进行了修复，并已通过验收。为避免类似问题再次发生，我们会加强设施的日常维护和检查。',
-      '您反映的设施问题我们非常重视，已完成维修并进行了安全检测。同时我们建立了设施设备台账，实行定期巡检制度。',
-      '我们已安排专业技术人员对设施进行全面检查和维修，并建立了预防性维护计划，确保设施设备的正常运行。',
-    ],
-    服务态度: [
-      '非常感谢您的意见反馈，我们已对相关工作人员进行了谈话和培训，要求其改进服务态度。我们会持续加强员工服务意识培训，为业主提供更优质的服务。',
-      '您的投诉我们已经重视并处理，对涉事员工进行了严肃批评教育。我们将建立服务质量监督机制，定期进行服务满意度调查。',
-      '我们深表歉意，已对相关员工进行了重新培训和考核。今后将严格执行服务标准，为业主提供热情周到的服务。',
-    ],
-    收费问题: [
-      '关于您反映的收费问题，我们已重新核算并提供了详细的费用明细。如有疑问，欢迎您到物业服务中心查看相关收费依据和标准。',
-      '感谢您的监督，我们已对收费标准进行了公示，并建立了费用查询制度。如有任何收费疑问，可随时向我们咨询。',
-      '我们已完善收费管理制度，所有收费项目均已公示说明。同时提供多种查询渠道，确保收费透明合理。',
-    ],
-    其他投诉: [
-      '感谢您的宝贵建议，我们已对相关管理制度进行了完善，并将在今后的工作中持续改进，为业主提供更好的居住环境。',
-      '您的意见我们非常重视，已成立专项工作组进行整改。我们会定期收集业主意见，不断优化管理和服务水平。',
-      '我们已针对您反映的问题制定了改进措施，并将持续关注实施效果。欢迎您继续监督我们的工作。',
-    ],
-  }
-
-  const typeResponses = responses[type] || responses['其他投诉']
-  return typeResponses[Math.floor(Math.random() * typeResponses.length)]
+/**
+ * 生成处理意见
+ * @example generateHandleRemark()
+ */
+function generateHandleRemark(): string {
+  const remarks = [
+    '已安排相关人员处理，预计3个工作日内解决',
+    '问题已记录，将在24小时内给予回复',
+    '感谢您的反馈，我们会立即核实并处理',
+    '已联系相关部门，正在积极协调解决',
+    '此问题属于紧急情况，已加急处理',
+    '经核实，问题属实，我们会尽快整改',
+    '您反映的问题我们非常重视，已安排专人跟进',
+  ]
+  return remarks[Math.floor(Math.random() * remarks.length)]
 }
 
-/** 核心投诉数据生成器 */
-function createMockComplaint(id: string): Complaint {
-  const typeItem = COMPLAINT_TYPE_OPTIONS[Math.floor(Math.random() * COMPLAINT_TYPE_OPTIONS.length)]
-  const statusItem = COMPLAINT_STATUS_OPTIONS[Math.floor(Math.random() * COMPLAINT_STATUS_OPTIONS.length)]
-  const priority = (['HIGH', 'MEDIUM', 'LOW'] as PriorityType[])[Math.floor(Math.random() * 3)]
-  const createTime = generateTimeRange(-30, 0)
+/**
+ * 生成投诉评价
+ * @example generateAppraiseContext()
+ */
+function generateAppraiseContext(): string {
+  const appraises = [
+    '处理及时，态度很好，问题已经解决，非常满意',
+    '物业响应速度快，服务态度好，值得表扬',
+    '问题得到圆满解决，感谢物业的努力',
+    '处理效率高，工作人员认真负责',
+    '服务态度一般，但问题最终解决了',
+    '处理速度比较慢，希望能改进',
+  ]
+  return appraises[Math.floor(Math.random() * appraises.length)]
+}
+
+/**
+ * 生成回复内容
+ * @example generateReplyContext()
+ */
+function generateReplyContext(): string {
+  const replies = [
+    '非常感谢您的理解和支持，我们会继续努力改进服务',
+    '您的满意是我们最大的动力，感谢您的评价',
+    '感谢您的宝贵意见，我们会不断优化服务流程',
+    '非常抱歉给您带来不便，我们会加强管理',
+    '您的建议我们已收到，将在今后工作中改进',
+  ]
+  return replies[Math.floor(Math.random() * replies.length)]
+}
+
+/**
+ * 生成单条投诉记录
+ * @example createMockComplaint('001')
+ */
+function createMockComplaint(index: number): Complaint {
+  const typeCd = Math.random() > 0.3 ? ComplaintTypeCode.COMPLAINT : ComplaintTypeCode.SUGGESTION
+  const typeName = typeCd === ComplaintTypeCode.COMPLAINT ? '投诉' : '建议'
+  const complaintId = `COMP_${index.toString().padStart(3, '0')}`
+  const floorNum = `${Math.floor(Math.random() * 10 + 1)}`
+  const unitNum = `${Math.floor(Math.random() * 4 + 1)}`
+  const roomNum = `${Math.floor(Math.random() * 12 + 1)}0${Math.floor(Math.random() * 4 + 1)}`
 
   return {
-    complaintId: `COMP_${id}`,
-    title: `${typeItem.label} - ${generateChineseName()}的投诉`,
-    description: generateComplaintDescription(typeItem.value as ComplaintType),
-    complaintType: typeItem.value as ComplaintType,
-    ownerName: generateChineseName(),
-    ownerPhone: generatePhoneNumber(),
-    address: generateAddress(),
-    status: statusItem.value as ComplaintStatus,
-    priority,
-    createTime,
-    updateTime: statusItem.value === 'SUBMITTED' ? createTime : generateTimeRange(-15, 0),
-    assignedHandler: statusItem.value === 'SUBMITTED' ? undefined : `处理员${Math.floor(Math.random() * 5 + 1)}`,
-    images: Math.random() > 0.5 ? [`https://picsum.photos/400/300?random=${id}`] : [],
+    complaintId,
     communityId: 'COMM_001',
-    response:
-			statusItem.value === 'RESOLVED' || statusItem.value === 'CLOSED'
-			  ? {
-			      content: generateResponseContent(typeItem.value as ComplaintType),
-			      handlerName: `处理员${Math.floor(Math.random() * 5 + 1)}`,
-			      responseTime: generateTimeRange(-10, 0),
-			    }
-			  : undefined,
-    satisfaction:
-			statusItem.value === 'CLOSED' && Math.random() > 0.3
-			  ? {
-			      rating: Math.floor(Math.random() * 2) + 4, // 4-5星
-			      comment: ['服务很好，处理及时', '态度不错，问题解决了', '效率很高，感谢', '处理得当'][
-			        Math.floor(Math.random() * 4)
-			      ],
-			      evaluateTime: generateTimeRange(-5, 0),
-			    }
-			  : undefined,
+    storeId: 'STORE_001',
+    userId: `USER_${Math.floor(Math.random() * 20 + 1)}`,
+    typeCd,
+    typeName,
+    complaintName: generateChineseName(),
+    tel: generatePhoneNumber(),
+    roomId: `ROOM_${index}`,
+    roomName: `${floorNum}号楼${unitNum}单元${roomNum}室`,
+    floorNum,
+    unitNum,
+    roomNum,
+    context: generateComplaintContext(typeCd),
+    createTime: generateTimeRange(-30, 0),
+    taskId: `TASK_${complaintId}`,
+    photos: Math.random() > 0.6
+      ? [
+          {
+            photoId: `PHOTO_${index}_1`,
+            complaintId,
+            url: `https://picsum.photos/400/300?random=${index}1`,
+            photo: '',
+          },
+        ]
+      : [],
   }
 }
 
-// ==================== 投诉数据库对象 ====================
+/**
+ * 生成投诉事件记录
+ * @example createMockComplaintEvent('COMP_001', 1)
+ */
+function createMockComplaintEvent(complaintId: string, index: number): ComplaintEvent {
+  const eventTypes = [
+    ComplaintEventType.CREATE,
+    ComplaintEventType.HANDLE,
+    ComplaintEventType.APPRAISE,
+    ComplaintEventType.REPLY,
+  ]
+  const eventType = eventTypes[index % eventTypes.length]
+
+  const eventTypeNames: Record<string, string> = {
+    [ComplaintEventType.CREATE]: '创建',
+    [ComplaintEventType.HANDLE]: '处理',
+    [ComplaintEventType.APPRAISE]: '评价',
+    [ComplaintEventType.REPLY]: '回复',
+  }
+
+  let remark = ''
+  if (eventType === ComplaintEventType.HANDLE) {
+    remark = generateHandleRemark()
+  }
+  else if (eventType === ComplaintEventType.APPRAISE) {
+    remark = generateAppraiseContext()
+  }
+  else if (eventType === ComplaintEventType.REPLY) {
+    remark = generateReplyContext()
+  }
+
+  return {
+    eventId: `EVENT_${complaintId}_${index}`,
+    complaintId,
+    communityId: 'COMM_001',
+    eventType,
+    eventTypeName: eventTypeNames[eventType],
+    createUserId: `USER_${Math.floor(Math.random() * 20 + 1)}`,
+    createUserName: generateChineseName(),
+    createTime: generateTimeRange(-20 + index, -15 + index),
+    remark,
+  }
+}
+
+/**
+ * 生成投诉评价记录
+ * @example createMockComplaintAppraise('COMP_001', 1)
+ */
+function createMockComplaintAppraise(complaintId: string, index: number): ComplaintAppraise {
+  const state = Math.random() > 0.5 ? ComplaintAppraiseState.COMPLETED : ComplaintAppraiseState.WAITING
+  const stateName = state === ComplaintAppraiseState.COMPLETED ? '已回复' : '待回复'
+
+  return {
+    appraiseId: `APPR_${complaintId}_${index}`,
+    complaintId,
+    communityId: 'COMM_001',
+    context: generateAppraiseContext(),
+    score: Math.floor(Math.random() * 2) + 4, // 4-5 分
+    state,
+    stateName,
+    replyContext: state === ComplaintAppraiseState.COMPLETED ? generateReplyContext() : undefined,
+    createTime: generateTimeRange(-10, 0),
+    createUserName: generateChineseName(),
+  }
+}
+
+/** ==================== Mock 数据库 ==================== */
 
 const mockComplaintDatabase = {
-  /** 初始化数据 */
-  complaints: Array.from({ length: 40 }, (_, index) =>
-    createMockComplaint((index + 1).toString().padStart(3, '0'))) as Complaint[],
+  /** 投诉数据 */
+  complaints: Array.from({ length: 40 }, (_, index) => createMockComplaint(index + 1)),
 
-  /** 获取投诉详情 */
-  getComplaintById(complaintId: string): Complaint | undefined {
-    return this.complaints.find(complaint => complaint.complaintId === complaintId)
+  /** 投诉事件数据 */
+  events: [] as ComplaintEvent[],
+
+  /** 投诉评价数据 */
+  appraises: [] as ComplaintAppraise[],
+
+  /** 初始化事件和评价数据 */
+  init() {
+    this.complaints.slice(0, 15).forEach((complaint, index) => {
+      // 为每个投诉生成 2-4 个事件
+      const eventCount = Math.floor(Math.random() * 3) + 2
+      for (let i = 0; i < eventCount; i++) {
+        this.events.push(createMockComplaintEvent(complaint.complaintId, i))
+      }
+
+      // 30% 的投诉有评价
+      if (Math.random() > 0.7) {
+        this.appraises.push(createMockComplaintAppraise(complaint.complaintId, index))
+      }
+    })
   },
 
-  /** 获取投诉列表（支持筛选和分页） */
-  getComplaintList(
-    params: ComplaintListParams & {
-      status?: ComplaintStatus
-      complaintType?: ComplaintType
-      keyword?: string
-      startDate?: string
-      endDate?: string
-    },
-  ) {
-    let filtered = [...this.complaints]
-
-    // 状态筛选
-    if (params.status) {
-      filtered = filtered.filter(c => c.status === params.status)
-    }
-
-    // 投诉类型筛选
-    if (params.complaintType) {
-      filtered = filtered.filter(c => c.complaintType === params.complaintType)
-    }
-
-    // 关键词筛选
-    if (params.keyword) {
-      const keyword = params.keyword.toLowerCase()
-      filtered = filtered.filter(
-        c =>
-          c.title.toLowerCase().includes(keyword)
-          || c.description.toLowerCase().includes(keyword)
-          || c.ownerName.toLowerCase().includes(keyword)
-          || c.address?.toLowerCase().includes(keyword),
-      )
-    }
-
-    // 日期范围筛选
-    if (params.startDate) {
-      const start = dayjs(params.startDate)
-      filtered = filtered.filter(c => dayjs(c.createTime).valueOf() >= start.valueOf())
-    }
-    if (params.endDate) {
-      const end = dayjs(params.endDate)
-      filtered = filtered.filter(c => dayjs(c.createTime).valueOf() <= end.valueOf())
-    }
-
-    // 按创建时间倒序
-    filtered.sort((a, b) => dayjs(b.createTime).valueOf() - dayjs(a.createTime).valueOf())
-
-    return createPaginationResponse(filtered, params.page, params.row)
+  /** 根据ID获取投诉 */
+  getComplaintById(complaintId: string): Complaint | undefined {
+    return this.complaints.find(c => c.complaintId === complaintId)
   },
 
   /** 添加投诉 */
-  addComplaint(complaint: Complaint): Complaint {
+  addComplaint(complaint: Complaint) {
     this.complaints.unshift(complaint)
-    return complaint
+    // 自动创建一个创建事件
+    this.events.push({
+      eventId: `EVENT_${complaint.complaintId}_0`,
+      complaintId: complaint.complaintId,
+      communityId: complaint.communityId,
+      eventType: ComplaintEventType.CREATE,
+      eventTypeName: '创建',
+      createUserId: complaint.userId,
+      createUserName: complaint.complaintName,
+      createTime: complaint.createTime,
+      remark: complaint.context,
+    })
   },
 
-  /** 更新投诉状态 */
-  updateComplaintStatus(complaintId: string, status: ComplaintStatus, assignedHandler?: string): Complaint | null {
-    const complaint = this.getComplaintById(complaintId)
-    if (complaint) {
-      complaint.status = status
-      complaint.updateTime = formatDateTime()
-      if (assignedHandler) {
-        complaint.assignedHandler = assignedHandler
-      }
-      return complaint
-    }
-    return null
+  /** 添加投诉事件 */
+  addEvent(event: ComplaintEvent) {
+    this.events.push(event)
   },
 
-  /** 更新投诉信息 */
-  updateComplaint(complaintId: string, updateData: Partial<Complaint>): Complaint | null {
-    const complaint = this.getComplaintById(complaintId)
-    if (complaint) {
-      Object.assign(complaint, {
-        ...updateData,
-        updateTime: formatDateTime(),
-      })
-      return complaint
+  /** 添加投诉评价回复 */
+  replyAppraise(appraiseId: string, replyContext: string) {
+    const appraise = this.appraises.find(a => a.appraiseId === appraiseId)
+    if (appraise) {
+      appraise.state = ComplaintAppraiseState.COMPLETED
+      appraise.stateName = '已回复'
+      appraise.replyContext = replyContext
     }
-    return null
-  },
-
-  /** 删除投诉 */
-  deleteComplaint(complaintId: string): boolean {
-    const index = this.complaints.findIndex(c => c.complaintId === complaintId)
-    if (index !== -1) {
-      this.complaints.splice(index, 1)
-      return true
-    }
-    return false
   },
 }
 
-// ==================== Mock 接口定义 ====================
+// 初始化数据
+mockComplaintDatabase.init()
+
+/** ==================== Mock 接口定义 ==================== */
 
 export default defineUniAppMock([
-  /** 获取投诉列表 */
+  /** 1. 查询待办投诉列表 */
   {
-    url: '/app/complaint.listComplaints',
+    url: '/app/auditUser.listAuditComplaints',
     method: ['GET', 'POST'],
     delay: [300, 800],
     body: async ({ query, body }) => {
@@ -284,38 +298,210 @@ export default defineUniAppMock([
       const params = { ...query, ...body }
 
       try {
-        const result = mockComplaintDatabase.getComplaintList({
-          page: Number(params.page) || 1,
-          row: Number(params.row) || 10,
-          communityId: params.communityId,
-          status: params.status,
-          complaintType: params.complaintType,
-          keyword: params.keyword,
-          startDate: params.startDate,
-          endDate: params.endDate,
-        })
+        const page = Number(params.page) || 1
+        const row = Number(params.row) || 15
 
-        console.log('🚀 Mock API: listComplaints', params, '→', `${result.list.length} items`)
+        // 筛选出待办投诉（模拟有 taskId 的为待办）
+        const filtered = mockComplaintDatabase.complaints.filter(c => c.taskId)
+
+        // 按创建时间倒序
+        const sorted = filtered.sort((a, b) =>
+          dayjs(b.createTime).valueOf() - dayjs(a.createTime).valueOf(),
+        )
+
+        const result = createPaginationResponse(sorted, page, row)
+
+        console.log('🚀 Mock API: listAuditComplaints', params, '→', `${result.list.length} items`)
         return successResponse(
           {
-            complaints: result.list,
+            data: result.list,
             total: result.total,
             page: result.page,
-            row: result.pageSize,
+            records: result.pageSize,
           },
-          '获取投诉列表成功',
+          '获取待办投诉列表成功',
         )
       }
       catch (error: any) {
-        console.error('❌ Mock API Error: listComplaints', error)
-        return errorResponse(error.message || '获取投诉列表失败')
+        console.error('❌ Mock API Error: listAuditComplaints', error)
+        return errorResponse(error.message || '获取待办投诉列表失败')
       }
     },
   },
 
-  /** 获取投诉详情 */
+  /** 2. 查询已办投诉列表 / 用户投诉历史 */
   {
-    url: '/app/complaint.getComplaintDetail',
+    url: '/app/auditUser.listAuditHistoryComplaints',
+    method: ['GET', 'POST'],
+    delay: [300, 800],
+    body: async ({ query, body }) => {
+      await randomDelay(300, 800)
+
+      const params = { ...query, ...body }
+
+      try {
+        const page = Number(params.page) || 1
+        const row = Number(params.row) || 15
+
+        let filtered = mockComplaintDatabase.complaints
+
+        // 如果有 process 参数，筛选进行中的
+        if (params.process === 'START') {
+          filtered = filtered.filter(c => c.taskId)
+        }
+
+        // 按创建时间倒序
+        const sorted = filtered.sort((a, b) =>
+          dayjs(b.createTime).valueOf() - dayjs(a.createTime).valueOf(),
+        )
+
+        const result = createPaginationResponse(sorted, page, row)
+
+        // 格式化时间为 MM-DD 格式
+        const formattedList = result.list.map((item) => {
+          const date = dayjs(item.createTime)
+          return {
+            ...item,
+            createTime: `${date.month() + 1}-${date.date()}`,
+          }
+        })
+
+        console.log('🚀 Mock API: listAuditHistoryComplaints', params, '→', `${formattedList.length} items`)
+        return successResponse(
+          {
+            complaints: formattedList,
+            total: result.total,
+            page: result.page,
+            records: result.pageSize,
+          },
+          '获取投诉历史成功',
+        )
+      }
+      catch (error: any) {
+        console.error('❌ Mock API Error: listAuditHistoryComplaints', error)
+        return errorResponse(error.message || '获取投诉历史失败')
+      }
+    },
+  },
+
+  /** 3. 保存投诉 */
+  {
+    url: '/app/complaint',
+    method: 'POST',
+    delay: [600, 1200],
+    body: async ({ body }) => {
+      await randomDelay(600, 1200)
+
+      try {
+        // 数据验证
+        if (!body.typeCd?.trim()) {
+          return errorResponse('请选择投诉类型', ResultEnumMap.Error)
+        }
+        if (!body.complaintName?.trim()) {
+          return errorResponse('请填写投诉人', ResultEnumMap.Error)
+        }
+        if (!body.tel?.trim()) {
+          return errorResponse('请填写手机号', ResultEnumMap.Error)
+        }
+        if (!body.context?.trim()) {
+          return errorResponse('请填写投诉内容', ResultEnumMap.Error)
+        }
+        if (!body.roomId?.trim()) {
+          return errorResponse('请选择房屋信息', ResultEnumMap.Error)
+        }
+
+        const newComplaint: Complaint = {
+          complaintId: generateId('COMP'),
+          communityId: body.communityId || 'COMM_001',
+          storeId: body.storeId || 'STORE_001',
+          userId: body.userId || 'USER_001',
+          typeCd: body.typeCd,
+          typeName: body.typeCd === ComplaintTypeCode.COMPLAINT ? '投诉' : '建议',
+          complaintName: body.complaintName,
+          tel: body.tel,
+          roomId: body.roomId,
+          roomName: `房间-${body.roomId}`,
+          context: body.context,
+          createTime: formatDateTime(),
+          taskId: generateId('TASK'),
+          photos: (body.photos || []).map((p: any, index: number) => ({
+            photoId: generateId('PHOTO'),
+            complaintId: '',
+            photo: p.photo,
+            url: '',
+          })),
+        }
+
+        mockComplaintDatabase.addComplaint(newComplaint)
+
+        console.log('🚀 Mock API: saveComplaint', body, '→', newComplaint)
+        return successResponse(
+          {
+            complaint: newComplaint,
+          },
+          '投诉提交成功',
+        )
+      }
+      catch (error: any) {
+        console.error('❌ Mock API Error: saveComplaint', error)
+        return errorResponse(error.message || '投诉提交失败')
+      }
+    },
+  },
+
+  /** 4. 处理/审核投诉 */
+  {
+    url: '/app/complaint.auditComplaint',
+    method: 'POST',
+    delay: [400, 800],
+    body: async ({ body }) => {
+      await randomDelay(400, 800)
+
+      try {
+        if (!body.complaintId) {
+          return errorResponse('投诉ID不能为空', ResultEnumMap.Error)
+        }
+        if (!body.context && !body.remark) {
+          return errorResponse('请填写处理意见', ResultEnumMap.Error)
+        }
+
+        const complaint = mockComplaintDatabase.getComplaintById(body.complaintId)
+        if (!complaint) {
+          return errorResponse('投诉记录不存在', ResultEnumMap.NotFound)
+        }
+
+        // 添加处理事件
+        const handleEvent: ComplaintEvent = {
+          eventId: generateId('EVENT'),
+          complaintId: body.complaintId,
+          communityId: body.communityId || complaint.communityId,
+          eventType: ComplaintEventType.HANDLE,
+          eventTypeName: '处理',
+          createUserId: body.userId || 'USER_STAFF',
+          createUserName: '物业工作人员',
+          createTime: formatDateTime(),
+          remark: body.context || body.remark,
+        }
+        mockComplaintDatabase.addEvent(handleEvent)
+
+        console.log('🚀 Mock API: auditComplaint', body, '→', 'success')
+        return successResponse(
+          {
+            success: true,
+          },
+          '投诉处理成功',
+        )
+      }
+      catch (error: any) {
+        console.error('❌ Mock API Error: auditComplaint', error)
+        return errorResponse(error.message || '投诉处理失败')
+      }
+    },
+  },
+
+  /** 5. 查询投诉事件/流转记录 */
+  {
+    url: '/app/complaint.listComplaintEvent',
     method: ['GET', 'POST'],
     delay: [200, 500],
     body: async ({ query, body }) => {
@@ -328,337 +514,42 @@ export default defineUniAppMock([
           return errorResponse('投诉ID不能为空', ResultEnumMap.Error)
         }
 
-        const complaint = mockComplaintDatabase.getComplaintById(params.complaintId)
-        if (!complaint) {
-          return errorResponse('投诉记录不存在', ResultEnumMap.NotFound)
-        }
+        const page = Number(params.page) || 1
+        const row = Number(params.row) || 100
 
-        console.log('🚀 Mock API: getComplaintDetail', params, '→', complaint)
+        // 筛选该投诉的事件
+        const filtered = mockComplaintDatabase.events.filter(e => e.complaintId === params.complaintId)
+
+        // 按时间正序（最早的在前面）
+        const sorted = filtered.sort((a, b) =>
+          dayjs(a.createTime).valueOf() - dayjs(b.createTime).valueOf(),
+        )
+
+        const result = createPaginationResponse(sorted, page, row)
+
+        console.log('🚀 Mock API: listComplaintEvent', params, '→', `${result.list.length} items`)
         return successResponse(
           {
-            complaint,
+            data: result.list,
+            total: result.total,
           },
-          '获取投诉详情成功',
+          '获取投诉事件成功',
         )
       }
       catch (error: any) {
-        console.error('❌ Mock API Error: getComplaintDetail', error)
-        return errorResponse(error.message || '获取投诉详情失败')
+        console.error('❌ Mock API Error: listComplaintEvent', error)
+        return errorResponse(error.message || '获取投诉事件失败')
       }
     },
   },
 
-  /** 提交投诉 */
+  /** 6. 查询投诉评价列表 */
   {
-    url: '/app/complaint.submitComplaint',
-    method: 'POST',
-    delay: [600, 1200],
-    body: async ({ body }) => {
-      await randomDelay(600, 1200)
-
-      try {
-        const data = body as CreateComplaintReq
-
-        // 数据验证
-        if (!data.title?.trim()) {
-          return errorResponse('投诉标题不能为空', ResultEnumMap.Error)
-        }
-        if (!data.description?.trim()) {
-          return errorResponse('投诉描述不能为空', ResultEnumMap.Error)
-        }
-        if (!data.ownerName?.trim()) {
-          return errorResponse('投诉人姓名不能为空', ResultEnumMap.Error)
-        }
-        if (!data.ownerPhone?.trim()) {
-          return errorResponse('联系电话不能为空', ResultEnumMap.Error)
-        }
-
-        const newComplaint: Complaint = {
-          complaintId: generateId('COMP'),
-          title: data.title,
-          description: data.description,
-          complaintType: data.complaintType,
-          ownerName: data.ownerName,
-          ownerPhone: data.ownerPhone,
-          address: data.address,
-          status: 'SUBMITTED',
-          priority: data.priority || 'MEDIUM',
-          createTime: formatDateTime(),
-          updateTime: formatDateTime(),
-          images: data.images || [],
-          communityId: data.communityId || 'COMM_001',
-        }
-
-        mockComplaintDatabase.addComplaint(newComplaint)
-        console.log('🚀 Mock API: submitComplaint', data, '→', newComplaint)
-        return successResponse(
-          {
-            complaint: newComplaint,
-          },
-          '投诉提交成功，我们会尽快处理',
-        )
-      }
-      catch (error: any) {
-        console.error('❌ Mock API Error: submitComplaint', error)
-        return errorResponse(error.message || '投诉提交失败')
-      }
-    },
-  },
-
-  /** 处理投诉 */
-  {
-    url: '/app/complaint.handleComplaint',
-    method: 'POST',
-    delay: [400, 800],
-    body: async ({ body }) => {
-      await randomDelay(400, 800)
-
-      try {
-        if (!body.complaintId) {
-          return errorResponse('投诉ID不能为空', ResultEnumMap.Error)
-        }
-
-        const complaint = mockComplaintDatabase.getComplaintById(body.complaintId)
-        if (!complaint) {
-          return errorResponse('投诉记录不存在', ResultEnumMap.NotFound)
-        }
-
-        // 更新投诉状态和处理信息
-        complaint.status = 'PROCESSING'
-        complaint.assignedHandler = body.assignedHandler || '系统自动分配'
-        complaint.updateTime = formatDateTime()
-
-        console.log('🚀 Mock API: handleComplaint', body, '→', complaint)
-        return successResponse(
-          {
-            complaint,
-          },
-          '投诉已分配处理',
-        )
-      }
-      catch (error: any) {
-        console.error('❌ Mock API Error: handleComplaint', error)
-        return errorResponse(error.message || '投诉处理失败')
-      }
-    },
-  },
-
-  /** 回复投诉 */
-  {
-    url: '/app/complaint.replyComplaint',
-    method: 'POST',
-    delay: [500, 1000],
-    body: async ({ body }) => {
-      await randomDelay(500, 1000)
-
-      try {
-        if (!body.complaintId) {
-          return errorResponse('投诉ID不能为空', ResultEnumMap.Error)
-        }
-        if (!body.responseContent?.trim()) {
-          return errorResponse('回复内容不能为空', ResultEnumMap.Error)
-        }
-
-        const complaint = mockComplaintDatabase.getComplaintById(body.complaintId)
-        if (!complaint) {
-          return errorResponse('投诉记录不存在', ResultEnumMap.NotFound)
-        }
-
-        // 添加回复信息
-        complaint.response = {
-          content: body.responseContent,
-          handlerName: body.handlerName || complaint.assignedHandler || '处理员',
-          responseTime: formatDateTime(),
-        }
-        complaint.status = 'RESOLVED'
-        complaint.updateTime = formatDateTime()
-
-        console.log('🚀 Mock API: replyComplaint', body, '→', complaint)
-        return successResponse(
-          {
-            complaint,
-          },
-          '投诉回复成功',
-        )
-      }
-      catch (error: any) {
-        console.error('❌ Mock API Error: replyComplaint', error)
-        return errorResponse(error.message || '投诉回复失败')
-      }
-    },
-  },
-
-  /** 投诉满意度评价 */
-  {
-    url: '/app/complaint.evaluateComplaint',
-    method: 'POST',
-    delay: [300, 600],
-    body: async ({ body }) => {
-      await randomDelay(300, 600)
-
-      try {
-        if (!body.complaintId) {
-          return errorResponse('投诉ID不能为空', ResultEnumMap.Error)
-        }
-        if (!body.rating || body.rating < 1 || body.rating > 5) {
-          return errorResponse('评分必须在1-5之间', ResultEnumMap.Error)
-        }
-
-        const complaint = mockComplaintDatabase.getComplaintById(body.complaintId)
-        if (!complaint) {
-          return errorResponse('投诉记录不存在', ResultEnumMap.NotFound)
-        }
-
-        if (complaint.status !== 'RESOLVED') {
-          return errorResponse('只能对已解决的投诉进行评价', ResultEnumMap.Error)
-        }
-
-        // 添加满意度评价
-        complaint.satisfaction = {
-          rating: body.rating,
-          comment: body.comment || '',
-          evaluateTime: formatDateTime(),
-        }
-        complaint.status = 'CLOSED'
-        complaint.updateTime = formatDateTime()
-
-        console.log('🚀 Mock API: evaluateComplaint', body, '→', complaint)
-        return successResponse(
-          {
-            complaint,
-          },
-          '评价提交成功，感谢您的反馈',
-        )
-      }
-      catch (error: any) {
-        console.error('❌ Mock API Error: evaluateComplaint', error)
-        return errorResponse(error.message || '评价提交失败')
-      }
-    },
-  },
-
-  /** 获取投诉统计数据 */
-  {
-    url: '/app/complaint.getComplaintStatistics',
+    url: '/app/complaintAppraise.listComplaintAppraise',
     method: ['GET', 'POST'],
-    delay: [300, 600],
+    delay: [200, 500],
     body: async ({ query, body }) => {
-      await randomDelay(300, 600)
-
-      try {
-        const params = { ...query, ...body }
-        const allComplaints = mockComplaintDatabase.complaints
-
-        // 按状态统计
-        const statusStats = COMPLAINT_STATUSES.reduce(
-          (acc, status) => {
-            acc[status] = allComplaints.filter(c => c.status === status).length
-            return acc
-          },
-          {} as Record<ComplaintStatus, number>,
-        )
-
-        // 按类型统计
-        const typeStats = COMPLAINT_TYPES.reduce(
-          (acc, type) => {
-            acc[type] = allComplaints.filter(c => c.complaintType === type).length
-            return acc
-          },
-          {} as Record<ComplaintType, number>,
-        )
-
-        // 满意度统计
-        const evaluatedComplaints = allComplaints.filter(c => c.satisfaction)
-        const avgRating
-          = evaluatedComplaints.length > 0
-            ? (
-                evaluatedComplaints.reduce((sum, c) => sum + (c.satisfaction?.rating || 0), 0)
-                / evaluatedComplaints.length
-              ).toFixed(1)
-            : '0'
-
-        // 处理时效统计
-        const resolvedComplaints = allComplaints.filter(c => c.status === 'RESOLVED' || c.status === 'CLOSED')
-        const avgResponseTime = resolvedComplaints.length > 0 ? '1.5天' : '0天'
-
-        const statistics = {
-          total: allComplaints.length,
-          statusStats,
-          typeStats,
-          avgRating: `${avgRating}分`,
-          avgResponseTime,
-          satisfactionRate:
-						evaluatedComplaints.length > 0
-						  ? `${Math.round((evaluatedComplaints.filter(c => (c.satisfaction?.rating || 0) >= 4).length / evaluatedComplaints.length) * 100)}%`
-						  : '0%',
-          // 近 30/60 天趋势
-          // 使用 dayjs 统一格式与比较，避免原生 Date 差异
-          monthlyTrend: {
-            current: (() => {
-              const thirtyDaysAgo = dayjs().subtract(30, 'day').valueOf()
-              return allComplaints.filter(c => dayjs(c.createTime).valueOf() >= thirtyDaysAgo).length
-            })(),
-            previous: (() => {
-              const thirtyDaysAgo = dayjs().subtract(30, 'day').valueOf()
-              const sixtyDaysAgo = dayjs().subtract(60, 'day').valueOf()
-              return allComplaints.filter((c) => {
-                const createTime = dayjs(c.createTime).valueOf()
-                return createTime >= sixtyDaysAgo && createTime < thirtyDaysAgo
-              }).length
-            })(),
-          },
-        }
-
-        console.log('🚀 Mock API: getComplaintStatistics', params, '→', statistics)
-        return successResponse(statistics, '获取投诉统计数据成功')
-      }
-      catch (error: any) {
-        console.error('❌ Mock API Error: getComplaintStatistics', error)
-        return errorResponse(error.message || '获取投诉统计数据失败')
-      }
-    },
-  },
-
-  /** 更新投诉信息 */
-  {
-    url: '/app/complaint.updateComplaint',
-    method: 'POST',
-    delay: [400, 800],
-    body: async ({ body }) => {
-      await randomDelay(400, 800)
-
-      try {
-        if (!body.complaintId) {
-          return errorResponse('投诉ID不能为空', ResultEnumMap.Error)
-        }
-
-        const updatedComplaint = mockComplaintDatabase.updateComplaint(body.complaintId, body)
-        if (!updatedComplaint) {
-          return errorResponse('投诉记录不存在', ResultEnumMap.NotFound)
-        }
-
-        console.log('🚀 Mock API: updateComplaint', body, '→', updatedComplaint)
-        return successResponse(
-          {
-            complaint: updatedComplaint,
-          },
-          '更新投诉信息成功',
-        )
-      }
-      catch (error: any) {
-        console.error('❌ Mock API Error: updateComplaint', error)
-        return errorResponse(error.message || '更新投诉信息失败')
-      }
-    },
-  },
-
-  /** 删除投诉 */
-  {
-    url: '/app/complaint.deleteComplaint',
-    method: ['DELETE', 'POST'],
-    delay: [300, 600],
-    body: async ({ query, body }) => {
-      await randomDelay(300, 600)
+      await randomDelay(200, 500)
 
       const params = { ...query, ...body }
 
@@ -667,18 +558,59 @@ export default defineUniAppMock([
           return errorResponse('投诉ID不能为空', ResultEnumMap.Error)
         }
 
-        const success = mockComplaintDatabase.deleteComplaint(params.complaintId)
-        if (!success) {
-          return errorResponse('投诉记录不存在', ResultEnumMap.NotFound)
-        }
+        const page = Number(params.page) || 1
+        const row = Number(params.row) || 100
 
-        const result = { success: true }
-        console.log('🚀 Mock API: deleteComplaint', params, '→', result)
-        return successResponse(result, '删除投诉记录成功')
+        // 筛选该投诉的评价
+        const filtered = mockComplaintDatabase.appraises.filter(a => a.complaintId === params.complaintId)
+
+        const result = createPaginationResponse(filtered, page, row)
+
+        console.log('🚀 Mock API: listComplaintAppraise', params, '→', `${result.list.length} items`)
+        return successResponse(
+          {
+            data: result.list,
+            total: result.total,
+          },
+          '获取投诉评价成功',
+        )
       }
       catch (error: any) {
-        console.error('❌ Mock API Error: deleteComplaint', error)
-        return errorResponse(error.message || '删除投诉记录失败')
+        console.error('❌ Mock API Error: listComplaintAppraise', error)
+        return errorResponse(error.message || '获取投诉评价失败')
+      }
+    },
+  },
+
+  /** 7. 回复投诉评价 */
+  {
+    url: '/app/complaintAppraise.replyComplaintAppraise',
+    method: 'POST',
+    delay: [400, 800],
+    body: async ({ body }) => {
+      await randomDelay(400, 800)
+
+      try {
+        if (!body.appraiseId) {
+          return errorResponse('评价ID不能为空', ResultEnumMap.Error)
+        }
+        if (!body.replyContext?.trim()) {
+          return errorResponse('请填写回复内容', ResultEnumMap.Error)
+        }
+
+        mockComplaintDatabase.replyAppraise(body.appraiseId, body.replyContext)
+
+        console.log('🚀 Mock API: replyComplaintAppraise', body, '→', 'success')
+        return successResponse(
+          {
+            success: true,
+          },
+          '回复评价成功',
+        )
+      }
+      catch (error: any) {
+        console.error('❌ Mock API Error: replyComplaintAppraise', error)
+        return errorResponse(error.message || '回复评价失败')
       }
     },
   },
