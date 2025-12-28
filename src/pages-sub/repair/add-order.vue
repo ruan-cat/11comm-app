@@ -22,6 +22,7 @@ import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
 import { computed, reactive, ref } from 'vue'
 import { createRepairOrder, getRepairSettings } from '@/api/repair'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 import { useSelectorStore } from '@/stores/useSelectorStore'
@@ -537,10 +538,13 @@ onUnload(() => {
   <view class="min-h-screen bg-gray-100">
     <wd-form ref="formRef" :model="model" :rules="formRules">
       <!-- 房屋信息 -->
-      <view class="section-title">
-        房屋信息
-      </view>
       <wd-cell-group border>
+        <FormSectionTitle
+          title="房屋信息"
+          icon="home"
+          icon-class="i-carbon-home text-blue-500"
+          required
+        />
         <!-- 位置类型 -->
         <wd-picker
           v-model="model.scopeId"
@@ -597,10 +601,13 @@ onUnload(() => {
       </wd-cell-group>
 
       <!-- 报修信息 -->
-      <view class="section-title">
-        报修信息
-      </view>
-      <wd-cell-group border>
+      <wd-cell-group border class="mt-3">
+        <FormSectionTitle
+          title="报修信息"
+          icon="information"
+          icon-class="i-carbon-information text-green-500"
+          required
+        />
         <!-- 维修标题 -->
         <wd-input
           v-model="model.title"
@@ -679,10 +686,13 @@ onUnload(() => {
       </wd-cell-group>
 
       <!-- 报修内容 -->
-      <view class="section-title">
-        报修内容
-      </view>
-      <wd-cell-group border>
+      <wd-cell-group border class="mt-3">
+        <FormSectionTitle
+          title="报修内容"
+          icon="document"
+          icon-class="i-carbon-document text-purple-500"
+          required
+        />
         <wd-textarea
           v-model="model.context"
           label="报修内容"
@@ -696,10 +706,17 @@ onUnload(() => {
       </wd-cell-group>
 
       <!-- 相关图片 -->
-      <view class="section-title">
-        相关图片
+      <view class="mt-3">
+        <wd-cell-group border>
+          <FormSectionTitle
+            title="相关图片"
+            icon="image"
+            icon-class="i-carbon-image text-orange-500"
+            subtitle="最多上传9张"
+          />
+        </wd-cell-group>
       </view>
-      <view class="bg-white p-3">
+      <view class="mt-2 bg-white p-3">
         <wd-upload
           v-model:file-list="model.photos"
           :limit="9"
@@ -731,18 +748,9 @@ onUnload(() => {
 /**
  * 样式迁移说明：
  * - .add-order-page: 已迁移到模板为原子类 `min-h-screen bg-gray-100`
- * - .section-title: 包含 rgba() 复杂透明度，符合保留条件
+ * - .section-title: 已替换为 form-section-title 组件
  * - :deep(.cell-value-left): wot-design-uni 组件必需样式，符合保留条件
  */
-
-/** 小节标题样式 - 包含 rgba() 复杂透明度，必须保留 */
-.section-title {
-  margin: 0;
-  font-weight: 400;
-  font-size: 14px;
-  color: rgba(69, 90, 100, 0.6);
-  padding: 20px 15px 10px;
-}
 
 /** wd-cell 值靠左对齐 - wot-design-uni 组件必需样式，必须保留 */
 :deep(.cell-value-left) {

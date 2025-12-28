@@ -36,6 +36,7 @@ import { isConditionsEvery } from '@ruan-cat/utils'
 import { useRequest } from 'alova/client'
 import { computed, reactive, ref } from 'vue'
 import { getRepairResources, getRepairResourceTypes } from '@/api/repair'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -367,10 +368,12 @@ function handleCancel() {
   <view class="min-h-screen bg-#f5f5f5 pt-3">
     <wd-form ref="formRef" :model="model" :rules="formRules">
       <!-- 商品类型（一级分类） -->
-      <view class="section-title">
-        商品类型
-      </view>
       <wd-cell-group border>
+        <FormSectionTitle
+          title="商品类型"
+          icon="grid"
+          icon-class="i-carbon-grid text-blue-500"
+        />
         <wd-picker
           v-model="selectedParentTypeRstId"
           label="商品类型"
@@ -385,10 +388,13 @@ function handleCancel() {
 
       <!-- 自定义商品 -->
       <view v-if="isCustom" class="mt-3">
-        <view class="section-title">
-          商品信息
-        </view>
         <wd-cell-group border>
+          <FormSectionTitle
+            title="商品信息"
+            icon="information"
+            icon-class="i-carbon-information text-green-500"
+            required
+          />
           <wd-input
             v-model="model.customGoodsName"
             label="商品名"
@@ -414,10 +420,13 @@ function handleCancel() {
 
       <!-- 标准商品 -->
       <view v-else class="mt-3">
-        <view class="section-title">
-          商品选择
-        </view>
         <wd-cell-group border>
+          <FormSectionTitle
+            title="商品选择"
+            icon="shopping-cart"
+            icon-class="i-carbon-shopping-cart text-blue-500"
+            required
+          />
           <!-- 二级分类 -->
           <wd-picker
             v-model="selectedSonTypeRstId"
@@ -444,10 +453,12 @@ function handleCancel() {
 
         <!-- 商品详情 -->
         <view v-if="selectedResourceId" class="mt-3">
-          <view class="section-title">
-            商品详情
-          </view>
           <wd-cell-group border>
+            <FormSectionTitle
+              title="商品详情"
+              icon="catalog"
+              icon-class="i-carbon-catalog text-purple-500"
+            />
             <!-- 价格 -->
             <wd-input
               v-if="feeFlag === '1001'"
@@ -494,10 +505,13 @@ function handleCancel() {
 
       <!-- 数量 -->
       <view class="mt-3">
-        <view class="section-title">
-          购买数量
-        </view>
         <wd-cell-group border>
+          <FormSectionTitle
+            title="购买数量"
+            icon="number"
+            icon-class="i-carbon-number text-orange-500"
+            required
+          />
           <wd-cell title="数量" :title-width="LABEL_WIDTH" center>
             <wd-input-number
               v-model="model.quantity"
@@ -524,14 +538,6 @@ function handleCancel() {
 </template>
 
 <style lang="scss" scoped>
-.section-title {
-  margin: 0;
-  font-weight: 400;
-  font-size: 14px;
-  color: rgba(69, 90, 100, 0.6);
-  padding: 20px 15px 10px;
-}
-
 /** wd-cell 值靠左对齐 - wot-design-uni 组件必需样式，必须保留 */
 :deep(.cell-value-left) {
   flex: 1;

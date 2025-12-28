@@ -19,6 +19,7 @@ import { onLoad, onUnload } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { computed, reactive, ref } from 'vue'
 import { dispatchRepair, finishRepair, getRepairPayTypes, getRepairStaffs } from '@/api/repair'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 import { getCurrentCommunity, getUserInfo } from '@/utils/user'
@@ -721,10 +722,13 @@ onUnload(() => {
     <wd-form ref="formRef" :model="model" :rules="formRules">
       <!-- 维修师傅选择 (派单/转单/退单) -->
       <view v-if="showStaffSelector" class="bg-white">
-        <view class="m-0 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
-          维修师傅
-        </view>
         <wd-cell-group border>
+          <FormSectionTitle
+            title="维修师傅"
+            icon="user"
+            icon-class="i-carbon-user text-blue-500"
+            required
+          />
           <!-- 退单时显示只读信息 -->
           <template v-if="model.action === 'RETURN'">
             <wd-cell title="退回至" :value="model.preStaffName || '暂无'" />
@@ -746,10 +750,13 @@ onUnload(() => {
 
       <!-- 是否用料/维修类型 (办结) -->
       <view v-else class="bg-white">
-        <view class="m-0 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
-          {{ model.repairObjType === '004' ? '维修类型' : '是否用料' }}
-        </view>
         <wd-cell-group border>
+          <FormSectionTitle
+            :title="model.repairObjType === '004' ? '维修类型' : '是否用料'"
+            icon="settings"
+            icon-class="i-carbon-settings text-green-500"
+            required
+          />
           <wd-picker
             v-model="model.feeFlag"
             :columns="feeOptions"
@@ -781,11 +788,15 @@ onUnload(() => {
 
         <!-- 商品列表 -->
         <view v-if="showResourceList" class="p-3">
-          <view class="m-0 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
-            商品清单
-          </view>
+          <wd-cell-group border>
+            <FormSectionTitle
+              title="商品清单"
+              icon="list"
+              icon-class="i-carbon-list text-orange-500"
+            />
+          </wd-cell-group>
 
-          <view class="overflow-hidden bg-white rounded-16rpx">
+          <view class="mt-2 overflow-hidden bg-white rounded-16rpx">
             <!-- 表头 -->
             <view class="flex items-center gap-2 border-gray-200 bg-gray-50 p-3 text-sm font-bold border-b-2rpx">
               <view class="flex-1">
@@ -869,10 +880,13 @@ onUnload(() => {
 
         <!-- 支付方式 -->
         <view v-if="showPayType" class="bg-white">
-          <view class="m-0 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
-            支付方式
-          </view>
           <wd-cell-group border>
+            <FormSectionTitle
+              title="支付方式"
+              icon="currency"
+              icon-class="i-carbon-currency text-green-500"
+              required
+            />
             <wd-picker
               v-model="model.payType"
               :columns="payTypeOptions"
@@ -898,10 +912,13 @@ onUnload(() => {
 
       <!-- 处理意见 -->
       <view class="mt-3 bg-white">
-        <view class="m-0 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
-          处理意见
-        </view>
         <wd-cell-group border>
+          <FormSectionTitle
+            title="处理意见"
+            icon="document"
+            icon-class="i-carbon-document text-purple-500"
+            required
+          />
           <wd-textarea
             v-model="model.context"
             placeholder="请输入处理意见"
@@ -916,10 +933,15 @@ onUnload(() => {
       <!-- 图片上传 (办结时) -->
       <view v-if="showImages" class="mt-3">
         <!-- 维修前图片 -->
-        <view class="m-0 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
-          维修前图片
-        </view>
-        <view class="rounded bg-white p-3">
+        <wd-cell-group border>
+          <FormSectionTitle
+            title="维修前图片"
+            icon="image"
+            icon-class="i-carbon-image text-blue-500"
+            subtitle="最多上传9张"
+          />
+        </wd-cell-group>
+        <view class="mt-2 rounded bg-white p-3">
           <wd-upload
             v-model:file-list="model.beforePhotos"
             :limit="9"
@@ -931,10 +953,17 @@ onUnload(() => {
         </view>
 
         <!-- 维修后图片 -->
-        <view class="m-0 mt-3 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal">
-          维修后图片
+        <view class="mt-3">
+          <wd-cell-group border>
+            <FormSectionTitle
+              title="维修后图片"
+              icon="image"
+              icon-class="i-carbon-image text-purple-500"
+              subtitle="最多上传9张"
+            />
+          </wd-cell-group>
         </view>
-        <view class="rounded bg-white p-3">
+        <view class="mt-2 rounded bg-white p-3">
           <wd-upload
             v-model:file-list="model.afterPhotos"
             :limit="9"
