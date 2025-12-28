@@ -943,3 +943,14 @@
 
 2. 如图，`form-section-title` 组件的主标题和副标题之间，存在问题。主标题在较窄的显示屏下，被换行了。请你适当的更改 `src\components\common\form-section-title` 组件，确保主标题不要被换行。
 3. 只更改 `form-section-title` 组件。
+
+### 058 <!-- TODO: --> uniapp 是否有动态更改页面标题的方案？
+
+1. 阅读以下 url 图片地址：
+
+![2025-12-28-21-15-45](https://s2.loli.net/2025/12/28/SumUQ5AxefJtbpq.png)
+
+2. 请你帮我调研一下，在本项目内，是否已经有成熟的方案，实现 uniapp 的标题动态变化？
+3. 请你调研一下，在 https://github.com/uni-helper 系列工具链内，是否有优雅成熟的 uniapp 标题动态变化的方案？
+4. 请你帮我调用一下，在 uniapp 本体内，是否有原生的方案实现标题动态变化？
+5. 请你出示一份 markdown 格式的调研报告，供我阅读学习。
