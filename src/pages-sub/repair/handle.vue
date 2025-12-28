@@ -12,11 +12,19 @@
   旧代码：gitee-example/pages/repairHandle/repairHandle.vue
 -->
 
+<!--
+  动态标题测试路径
+  - 派单: http://localhost:9000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_001
+  - 转单: http://localhost:9000/#/pages-sub/repair/handle?action=TRANSFER&repairId=REP_001
+  - 退单: http://localhost:9000/#/pages-sub/repair/handle?action=RETURN&repairId=REP_001
+  - 办结: http://localhost:9000/#/pages-sub/repair/handle?action=FINISH&repairId=REP_001
+-->
+
 <script setup lang="ts">
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import type { UploadBeforeUpload, UploadFile } from 'wot-design-uni/components/wd-upload/types'
 import type { DispatchAction, MaintenanceType, PaymentType, RepairObjType, RepairResource } from '@/types/repair'
-import { onLoad, onUnload } from '@dcloudio/uni-app'
+import { onLoad, onReady, onUnload } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { computed, reactive, ref } from 'vue'
 import { dispatchRepair, finishRepair, getRepairPayTypes, getRepairStaffs } from '@/api/repair'
@@ -708,6 +716,13 @@ onLoad((options) => {
 
   // 4. 加载支付方式列表
   loadPayTypes()
+})
+
+/**
+ * 页面渲染完成，设置动态标题
+ */
+onReady(() => {
+  uni.setNavigationBarTitle({ title: pageTitle.value })
 })
 
 /**
