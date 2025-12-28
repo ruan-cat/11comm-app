@@ -99,6 +99,12 @@
 		},
 		// #ifdef H5
 		{
+			"path": "pages/test-use/form-section-title",
+			"type": "page"
+		},
+		// #endif
+		// #ifdef H5
+		{
 			"path": "pages/test-use/z-paging-loading",
 			"type": "page",
 			"name": "test-z-paging-loading",
