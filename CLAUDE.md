@@ -23,15 +23,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `vue2项目`： `gitee-example` 目录下的 uniapp 项目。
 - `旧项目`： 即 `vue2项目` 。
 - `Vue2 到 Vue3 uni-app 路由迁移映射表`： `.github\prompts\route-migration-map.yml` 文件。
-- `api-migration`： api 迁移子代理。位于 `.claude\agents` 目录内。
-- `code-migration`： 代码写法迁移子代理。位于 `.claude\agents` 目录内。
-- `component-migration`： 组件迁移子代理。位于 `.claude\agents` 目录内。
-- `route-migration`： 路由迁移子代理。位于 `.claude\agents` 目录内。
-- `style-migration`： 样式迁移子代理。位于 `.claude\agents` 目录内。
+- `api-migration`： api 迁移技能。即 `.claude\skills\api-migration\SKILL.md` 文件。
+- `code-migration`： 代码写法迁移技能。即 `.claude\skills\code-migration\SKILL.md` 文件。
+- `component-migration`： 组件迁移技能。即 `.claude\skills\component-migration\SKILL.md` 文件。
+- `route-migration`： 路由迁移技能。即 `.claude\skills\route-migration\SKILL.md` 文件。
+- `style-migration`： 样式迁移技能。即 `.claude\skills\style-migration\SKILL.md` 文件。
 
-- `api-error-handling`： 接口错误提示能力。即 `.claude\skills\api-error-handling\SKILL.md` 文件。
-- `z-paging-integration`： `z-paging 分页组件集成方案` 。 即 `.claude\skills\z-paging-integration\SKILL.md` 文件。
-- `use-wd-form`： `使用 wd-form 表单组件编写表单页的实施规范` 。 即 `.claude\skills\use-wd-form\SKILL.md` 文件。
+- `api-error-handling`： 接口错误提示能力技能。即 `.claude\skills\api-error-handling\SKILL.md` 文件。
+- `z-paging-integration`： `z-paging 分页组件集成方案` 技能。即 `.claude\skills\z-paging-integration\SKILL.md` 文件。
+- `use-wd-form`： `使用 wd-form 表单组件编写表单页的实施规范` 技能。即 `.claude\skills\use-wd-form\SKILL.md` 文件。
 
 ### 业务术语
 
