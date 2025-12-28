@@ -944,7 +944,7 @@
 2. 如图，`form-section-title` 组件的主标题和副标题之间，存在问题。主标题在较窄的显示屏下，被换行了。请你适当的更改 `src\components\common\form-section-title` 组件，确保主标题不要被换行。
 3. 只更改 `form-section-title` 组件。
 
-### 058 <!-- TODO: --> uniapp 是否有动态更改页面标题的方案？
+### 058 uniapp 是否有动态更改页面标题的方案？
 
 1. 阅读以下 url 图片地址：
 
