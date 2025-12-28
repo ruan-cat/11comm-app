@@ -550,7 +550,7 @@ invoker	@	vue.runtime.esm.js:10209
 - /pages-sub/repair/handle
 - /pages-sub/repair/select-resource
 
-## 040 <!-- TODO: --> 优化表单页的标题风格不统一，不美观的问题；制作专门的标题组件
+## 040 优化表单页的标题风格不统一，不美观的问题；制作专门的标题组件
 
 1. 阅读以下 url 图片地址，观察各个表单页的标题部分的显示效果：
 2. /pages-sub/repair/select-resource `商品类型`、`商品选择`、`购买数量`
