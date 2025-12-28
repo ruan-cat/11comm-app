@@ -929,3 +929,9 @@
 3. 请你调研一下，在 https://github.com/uni-helper 系列工具链内，是否有优雅成熟的 uniapp 标题动态变化的方案？
 4. 请你帮我调用一下，在 uniapp 本体内，是否有原生的方案实现标题动态变化？
 5. 请你出示一份 markdown 格式的调研报告，供我阅读学习。
+
+---
+
+报告地址，docs\reports\2025-12-28-uniapp-dynamic-page-title-research.md
+
+经过调研，使用原生的 `uni.setNavigationBarTitle` 和 `onReady` 来完成进入页面更改标题的功能。
