@@ -27,7 +27,7 @@ const props = withDefaults(defineProps<FormSectionTitleProps>(), {
       <view class="flex items-center gap-2">
         <!-- 左侧装饰条 -->
         <view
-          class="h-4 w-1 rounded-full"
+          class="h-4 w-1 flex-shrink-0 rounded-full"
           :class="animated ? 'animate-pulse bg-gradient-to-b from-blue-400 to-blue-600' : 'bg-blue-500'"
         />
 
@@ -37,12 +37,13 @@ const props = withDefaults(defineProps<FormSectionTitleProps>(), {
           :name="icon"
           :custom-class="iconClass || 'text-blue-500'"
           size="18px"
+          custom-style="flex-shrink: 0;"
         />
 
-        <!-- 标题文本 -->
-        <view class="flex items-center gap-1">
+        <!-- 主标题（不换行） -->
+        <view class="flex flex-shrink-0 items-center gap-1">
           <text
-            class="text-base font-semibold"
+            class="whitespace-nowrap text-base font-semibold"
             :class="animated ? 'text-gray-800' : 'text-gray-700'"
           >
             {{ title }}
@@ -51,8 +52,8 @@ const props = withDefaults(defineProps<FormSectionTitleProps>(), {
           <text v-if="required" class="text-base text-red-500">*</text>
         </view>
 
-        <!-- 副标题（可选） -->
-        <text v-if="subtitle" class="ml-1 text-xs text-gray-400">
+        <!-- 副标题（可选，同行显示） -->
+        <text v-if="subtitle" class="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-xs text-gray-400">
           {{ subtitle }}
         </text>
       </view>
