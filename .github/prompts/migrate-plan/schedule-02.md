@@ -570,6 +570,11 @@ invoker	@	vue.runtime.esm.js:10209
    - `.claude\agents\component-migration.md` 在组件迁移文档内，在`旧项目`内，凡是遇到类似的标题组件写法，都是用你提供的标题组件实现。
    - `.claude\skills\beautiful-component-design` 这款技能，请增加一个单独的文档来说明在实现美观的情况下，如何恰当的使用这款组件。请精简的表述即可。
 
+## 041 优化 `处理维修工单` 页面的动态标题切换功能
+
+1. 针对 `src\pages-sub\repair\handle.vue` `处理维修工单` 页面
+2. 使用 uni.setNavigationBarTitle 和 onReady 来完成进入本页面，根据路由参数，动态变化标题。
+
 ## 041 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
