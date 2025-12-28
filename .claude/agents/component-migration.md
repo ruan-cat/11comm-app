@@ -76,12 +76,78 @@ color: blue
 
 ### 表单组件映射
 
-|       旧组件/类名       |  使用场景  |          新组件          |        迁移说明         |
-| :---------------------: | :--------: | :----------------------: | :---------------------: |
-|     `cu-form-group`     | 表单项容器 |  `wd-cell` + `wd-input`  |  结合使用实现表单布局   |
-|        `.title`         |  表单标签  |  `wd-input label` 属性   |  使用 label 属性或插槽  |
-|         `input`         |   输入框   |        `wd-input`        |     完整的输入组件      |
-| `input type="password"` | 密码输入框 | `wd-input show-password` | 使用 show-password 属性 |
+|       旧组件/类名       |   使用场景   |          新组件           |           迁移说明           |
+| :---------------------: | :----------: | :-----------------------: | :--------------------------: |
+|     `cu-form-group`     |  表单项容器  |  `wd-cell` + `wd-input`   |     结合使用实现表单布局     |
+|        `.title`         |   表单标签   |   `wd-input label` 属性   |    使用 label 属性或插槽     |
+|         `input`         |    输入框    |        `wd-input`         |        完整的输入组件        |
+| `input type="password"` |  密码输入框  | `wd-input show-password`  |   使用 show-password 属性    |
+| `.section-title` 样式类 | 表单分区标题 | `form-section-title` 组件 | 使用统一的标题组件替代样式类 |
+| `<view class="title">`  |   区域标题   | `form-section-title` 组件 |    提供美观的标题显示效果    |
+
+#### 表单分区标题迁移
+
+在旧项目中，表单分区标题通常使用自定义样式类或普通 `view` 标签实现，样式不统一。在新项目中必须使用 `form-section-title` 组件来实现统一美观的标题效果。
+
+**旧代码（不统一的标题写法）**:
+
+```vue
+<template>
+	<!-- 方式1: 使用样式类 -->
+	<view class="section-title">房屋信息</view>
+	<wd-cell-group border>
+		<wd-input label="楼栋" />
+	</wd-cell-group>
+
+	<!-- 方式2: 使用普通view -->
+	<view class="m-0 px-15px pb-10px pt-20px text-14px text-gray-600/60 font-normal"> 报修信息 </view>
+	<wd-cell-group border>
+		<wd-input label="报修人" />
+	</wd-cell-group>
+</template>
+```
+
+**新代码（使用 form-section-title 组件）**:
+
+```vue
+<script setup lang="ts">
+import FormSectionTitle from "@/components/common/form-section-title/index.vue";
+</script>
+
+<template>
+	<!-- 基础用法 -->
+	<wd-cell-group border>
+		<FormSectionTitle title="房屋信息" />
+		<wd-input label="楼栋" />
+	</wd-cell-group>
+
+	<!-- 带图标和必填标记 -->
+	<wd-cell-group border class="mt-3">
+		<FormSectionTitle title="报修信息" icon="information" icon-class="i-carbon-information text-green-500" required />
+		<wd-input label="报修人" />
+	</wd-cell-group>
+
+	<!-- 带副标题 -->
+	<wd-cell-group border class="mt-3">
+		<FormSectionTitle
+			title="相关图片"
+			icon="image"
+			icon-class="i-carbon-image text-orange-500"
+			subtitle="最多上传9张"
+		/>
+	</wd-cell-group>
+</template>
+```
+
+**组件特性**:
+
+- **统一样式**: 淡灰色渐变背景，与白色表单项形成对比
+- **呼吸动效**: 柔和的背景动画，提升视觉美感
+- **图标支持**: 可选图标增强语义表达
+- **必填标记**: 支持显示必填红色星号
+- **副标题**: 支持显示额外的描述文本
+
+**详细文档**: 查看 `src/components/common/form-section-title/index.md` 获取完整使用指南。
 
 ### 弹窗组件映射
 
