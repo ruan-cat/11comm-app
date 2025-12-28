@@ -935,3 +935,14 @@
 报告地址，docs\reports\2025-12-28-uniapp-dynamic-page-title-research.md
 
 经过调研，使用原生的 `uni.setNavigationBarTitle` 和 `onReady` 来完成进入页面更改标题的功能。
+
+## 059 <!-- TODO: --> 迁移重构子代理文件为 claude code skill 技能文件
+
+1. **阅读 skill 技能写法**： 请你先阅读 claude code skill 的格式文档，和最佳实践。我需要你迁移的格式是项目级别的 skills 技能文件。
+   - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
+   - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
+2. **阅读全部被迁移的子代理文件**： 阅读全部的 `.claude\agents` 迁移子代理文件。这些文件就是被迁移的对象。
+3. **保留重要的知识资产**： 这些迁移规则非常详实，详细。他们都经历过多次迭代，是重要的知识资产。所以你在迁移成 skill 时，不能轻易地删减那么多关键知识。
+4. **说明清楚技能被触发的前提和条件**： 未来不再是用户主动调用子代理了，而是大模型`渐进式揭露`地的使用技能。所以你要认真学习，认真理解好子代理的触发前提，编写好完整的技能触发前提。确保以后完成迁移任务时，能够主动的，精确的使用这几款迁移技能。
+5. **技能名称和子代理名称保持相同**： 比如这款 `api-migration` 子代理，应该新建成 `api-migration` 技能。保留命名风格。
+6. **及时更新用语说明**： 及时更新 `CLAUDE.md` 对子代理的说明，改换成技能说明。以后没有子代理，而是技能文件。
