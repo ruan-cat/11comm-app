@@ -10,8 +10,10 @@
 <script setup lang="ts">
 import type { InspectionTask } from '@/types/inspection'
 import { onShow } from '@dcloudio/uni-app'
+import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
+import { getInspectionTaskList } from '@/api/inspection'
 import { TypedRouter } from '@/router'
 
 /** 补检任务列表 */
@@ -20,66 +22,33 @@ const tasks = ref<InspectionTask[]>([])
 /** 是否无数据 */
 const noData = ref(false)
 
-/** 是否加载中 */
-const loading = ref(false)
-
 /** 选择的补检日期 */
 const selectedDate = ref('')
 
 /**
  * 获取补检任务列表
  */
+const {
+  loading,
+  send: sendGetTasks,
+  onSuccess,
+} = useRequest((date: string) => getInspectionTaskList({
+  page: 1,
+  row: 20,
+  moreState: '20200405,20200406',
+  canReexamine: '2000',
+  planInsTime: date,
+}), {
+  immediate: false,
+})
+
+onSuccess((data) => {
+  tasks.value = data.data?.list || []
+  noData.value = tasks.value.length === 0
+})
+
 async function getReexamineTasks() {
-  loading.value = true
-  noData.value = false
-
-  try {
-    // TODO: 调用 Alova 接口获取数据
-    // const result = await getInspectionTaskListApi({
-    //   page: 1,
-    //   row: 20,
-    //   moreState: "20200405,20200406",
-    //   canReexamine: "2000",
-    //   planInsTime: selectedDate.value,
-    // })
-    // tasks.value = result.data || []
-
-    // 临时 Mock 数据
-    tasks.value = [
-      {
-        taskId: 'REEX_TASK_001',
-        inspectionPlanId: 'PLAN_003',
-        inspectionPlanName: '设备巡检（补检）',
-        planUserName: '张三',
-        planInsTime: '2025-12-28 10:00',
-        signTypeName: '移动定位',
-        stateName: '待补检',
-        state: '20200405',
-      },
-      {
-        taskId: 'REEX_TASK_002',
-        inspectionPlanId: 'PLAN_004',
-        inspectionPlanName: '环境巡检（补检）',
-        planUserName: '李四',
-        planInsTime: '2025-12-27 14:00',
-        signTypeName: '二维码扫描',
-        stateName: '待补检',
-        state: '20200406',
-      },
-    ]
-
-    noData.value = tasks.value.length === 0
-  }
-  catch (error) {
-    console.error('获取补检任务失败:', error)
-    uni.showToast({
-      title: '获取任务失败',
-      icon: 'none',
-    })
-  }
-  finally {
-    loading.value = false
-  }
+  await sendGetTasks(selectedDate.value)
 }
 
 /**

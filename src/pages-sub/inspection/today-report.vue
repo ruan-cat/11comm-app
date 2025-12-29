@@ -9,8 +9,10 @@
 
 <script setup lang="ts">
 import type { InspectionTodayReport } from '@/types/inspection'
+import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
+import { getInspectionTodayReport } from '@/api/inspection'
 import { TypedRouter } from '@/router'
 
 /** 巡检统计列表 */
@@ -19,61 +21,29 @@ const inspections = ref<InspectionTodayReport[]>([])
 /** 是否无数据 */
 const noData = ref(false)
 
-/** 是否加载中 */
-const loading = ref(false)
-
 /** 查询日期 */
 const queryDate = ref('')
 
 /**
  * 加载今日巡检统计
  */
+const {
+  loading,
+  send: sendLoadTodayReport,
+  onSuccess,
+} = useRequest((queryTime: string) => getInspectionTodayReport({
+  queryTime,
+}), {
+  immediate: false,
+})
+
+onSuccess((data) => {
+  inspections.value = data.data || []
+  noData.value = inspections.value.length === 0
+})
+
 async function loadTodayReport() {
-  loading.value = true
-  noData.value = false
-
-  try {
-    // TODO: 调用 Alova 接口获取数据
-    // const result = await getInspectionTodayReportApi({
-    //   communityId: getCurrentCommunity().communityId,
-    //   queryTime: queryDate.value,
-    // })
-    // inspections.value = result.data || []
-
-    // 临时 Mock 数据
-    inspections.value = [
-      {
-        staffId: 'STAFF_001',
-        staffName: '张三',
-        finishCount: 5,
-        waitCount: 2,
-      },
-      {
-        staffId: 'STAFF_002',
-        staffName: '李四',
-        finishCount: 3,
-        waitCount: 4,
-      },
-      {
-        staffId: 'STAFF_003',
-        staffName: '王五',
-        finishCount: 7,
-        waitCount: 0,
-      },
-    ]
-
-    noData.value = inspections.value.length === 0
-  }
-  catch (error) {
-    console.error('加载今日巡检统计失败:', error)
-    uni.showToast({
-      title: '加载失败',
-      icon: 'none',
-    })
-  }
-  finally {
-    loading.value = false
-  }
+  await sendLoadTodayReport(queryDate.value)
 }
 
 /**

@@ -26,8 +26,8 @@
 
 1. 按照 `.claude\skills\api-migration\类型定义规范.md` ，移动该类型文件到正确的位置。
 
-## <!-- TODO: --> 初始化业务类型、mock 接口、与 api
+## 005 <!-- TODO: --> 初始化业务类型、mock 接口、与 api
 
 1. 阅读 `.github\prompts\route-migration-map.yml` 的 `inspection_modules` 部分。
 2. 阅读全部的 `src\pages-sub\inspection` vue 组件代码，反向追踪旧代码。
-3. 按照 `api-migration` api 迁移技能，迁移 inspection 巡检业务的业务类型、mock 接口、和使用的 api 接口函数。
+3. 按照 `api-migration` api 迁移技能，完整地迁移 inspection 巡检业务的业务类型、mock 接口、和使用的 api 接口函数。

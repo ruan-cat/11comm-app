@@ -15,7 +15,10 @@ import type { FormInstance } from 'wot-design-uni/components/wd-form/types'
 import type { UploadFile } from 'wot-design-uni/components/wd-upload/types'
 import type { InspectionItemTitle } from '@/types/inspection'
 import { onLoad } from '@dcloudio/uni-app'
+import { useRequest } from 'alova/client'
 import { onMounted, reactive, ref } from 'vue'
+import { getInspectionItemTitles, submitInspection } from '@/api/inspection'
+import { router } from '@/router'
 
 /** 路由参数 */
 const taskDetailId = ref('')
@@ -70,9 +73,6 @@ const locationInfo = ref({
   address: '正在获取...',
 })
 
-/** 是否正在提交 */
-const submitting = ref(false)
-
 /** 表单校验规则 */
 const rules = {
   patrolType: [{ required: true, message: '请选择巡检情况' }],
@@ -112,69 +112,35 @@ function getCurrentLocation() {
 /**
  * 加载巡检项标题
  */
+const {
+  send: sendLoadTitles,
+  onSuccess: onLoadTitlesSuccess,
+} = useRequest(() => getInspectionItemTitles({
+  itemId: itemId.value,
+  page: 1,
+  row: 100,
+}), {
+  immediate: false,
+})
+
+onLoadTitlesSuccess((data) => {
+  titleList.value = data.data?.list || []
+
+  // 初始化 radio 字段
+  titleList.value.forEach((item) => {
+    if (item.titleType === '2002') {
+      // 多选：初始化为数组
+      item.radio = item.inspectionItemTitleValueDtos.map(() => ({
+        checked: false,
+        itemValue: '',
+        selected: '0',
+      }))
+    }
+  })
+})
+
 async function loadInspectionItemTitles() {
-  try {
-    // TODO: 调用 Alova 接口获取数据
-    // const result = await getInspectionItemTitleApi({
-    //   communityId: getCurrentCommunity().communityId,
-    //   itemId: itemId,
-    //   page: 1,
-    //   row: 100,
-    // })
-    // titleList.value = result.data || []
-
-    // 临时 Mock 数据：模拟动态表单项
-    titleList.value = [
-      {
-        titleId: 'TITLE_001',
-        itemTitle: '设施状态',
-        titleType: '1001', // 单选
-        radio: '',
-        inspectionItemTitleValueDtos: [
-          { itemValue: '完好' },
-          { itemValue: '损坏' },
-          { itemValue: '需维修' },
-        ],
-      },
-      {
-        titleId: 'TITLE_002',
-        itemTitle: '存在问题',
-        titleType: '2002', // 多选
-        radio: [],
-        inspectionItemTitleValueDtos: [
-          { itemValue: '设备异常' },
-          { itemValue: '卫生问题' },
-          { itemValue: '安全隐患' },
-        ],
-      },
-      {
-        titleId: 'TITLE_003',
-        itemTitle: '详细说明',
-        titleType: '3003', // 文本
-        radio: '',
-        inspectionItemTitleValueDtos: [],
-      },
-    ]
-
-    // 初始化 radio 字段
-    titleList.value.forEach((item) => {
-      if (item.titleType === '2002') {
-        // 多选：初始化为数组
-        item.radio = item.inspectionItemTitleValueDtos.map(() => ({
-          checked: false,
-          itemValue: '',
-          selected: '0',
-        }))
-      }
-    })
-  }
-  catch (error) {
-    console.error('加载巡检项标题失败:', error)
-    uni.showToast({
-      title: '加载失败',
-      icon: 'none',
-    })
-  }
+  await sendLoadTitles()
 }
 
 /**
@@ -258,7 +224,34 @@ function buildDescription(): string {
 /**
  * 提交巡检结果
  */
-async function submitInspection() {
+const {
+  loading: submitting,
+  send: sendSubmitInspection,
+  onSuccess: onSubmitSuccess,
+} = useRequest(submitData => submitInspection(submitData), {
+  immediate: false,
+})
+
+onSubmitSuccess(() => {
+  uni.showToast({
+    title: '提交成功',
+    icon: 'success',
+  })
+
+  // 返回上一页或跳转到巡检打卡页
+  setTimeout(() => {
+    if (fromPage.value === 'QrCode') {
+      // 从二维码扫描进入，跳转到巡检打卡页
+      router.replace({ name: 'inspection-task-list' })
+    }
+    else {
+      // 正常流程，返回上一页
+      router.back()
+    }
+  }, 1500)
+})
+
+async function handleSubmitInspection() {
   // 表单校验
   const valid = await formRef.value?.validate()
   if (!valid)
@@ -292,53 +285,18 @@ async function submitInspection() {
     return
   }
 
-  submitting.value = true
-
-  try {
-    // TODO: 调用 Alova 接口提交数据
-    // const result = await submitInspectionApi({
-    //   taskId: taskId,
-    //   taskDetailId: taskDetailId,
-    //   inspectionId: inspectionId,
-    //   inspectionName: inspectionName,
-    //   communityId: getCurrentCommunity().communityId,
-    //   patrolType: formData.patrolType,
-    //   description: description,
-    //   photos: formData.photos,
-    //   userId: getUserInfo().userId,
-    //   userName: getUserInfo().userName,
-    //   latitude: locationInfo.value.latitude,
-    //   longitude: locationInfo.value.longitude,
-    // })
-
-    // 临时模拟提交成功
-    uni.showToast({
-      title: '提交成功',
-      icon: 'success',
-    })
-
-    // 返回上一页或跳转到巡检打卡页
-    setTimeout(() => {
-      if (fromPage.value === 'QrCode') {
-        // 从二维码扫描进入，跳转到巡检打卡页
-        router.replace({ name: 'inspection-task-list' })
-      }
-      else {
-        // 正常流程，返回上一页
-        router.back()
-      }
-    }, 1500)
-  }
-  catch (error) {
-    console.error('提交巡检结果失败:', error)
-    uni.showToast({
-      title: '提交失败',
-      icon: 'none',
-    })
-  }
-  finally {
-    submitting.value = false
-  }
+  // 提交数据
+  await sendSubmitInspection({
+    taskId: taskId.value,
+    taskDetailId: taskDetailId.value,
+    inspectionId: inspectionId.value,
+    inspectionName: inspectionName.value,
+    patrolType: formData.patrolType,
+    description,
+    photos: formData.photos,
+    latitude: locationInfo.value.latitude,
+    longitude: locationInfo.value.longitude,
+  })
 }
 
 onMounted(() => {
@@ -456,7 +414,7 @@ onMounted(() => {
         size="large"
         block
         :loading="submitting"
-        @click="submitInspection"
+        @click="handleSubmitInspection"
       >
         提交
       </wd-button>

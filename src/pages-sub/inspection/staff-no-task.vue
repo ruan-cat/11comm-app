@@ -13,7 +13,9 @@
 <script setup lang="ts">
 import type { InspectionTaskDetail } from '@/types/inspection'
 import { onLoad } from '@dcloudio/uni-app'
+import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
+import { getInspectionTaskDetail } from '@/api/inspection'
 
 /** 路由参数 */
 const staffId = ref('')
@@ -33,76 +35,29 @@ const inspections = ref<InspectionTaskDetail[]>([])
 /** 是否无数据 */
 const noData = ref(false)
 
-/** 是否加载中 */
-const loading = ref(false)
-
 /**
  * 加载员工巡检详情
  */
+const {
+  loading,
+  send: sendLoadStaffInspectionDetail,
+  onSuccess,
+} = useRequest(() => getInspectionTaskDetail({
+  planUserId: staffId.value,
+  queryTime: queryTime.value,
+  page: 1,
+  row: 100,
+}), {
+  immediate: false,
+})
+
+onSuccess((data) => {
+  inspections.value = data.data?.list || []
+  noData.value = inspections.value.length === 0
+})
+
 async function loadStaffInspectionDetail() {
-  loading.value = true
-  noData.value = false
-
-  try {
-    // TODO: 调用 Alova 接口获取数据
-    // const result = await getInspectionTaskDetailApi({
-    //   communityId: getCurrentCommunity().communityId,
-    //   planUserId: staffId,
-    //   queryTime: queryTime,
-    //   page: 1,
-    //   row: 100,
-    // })
-    // inspections.value = result.data || []
-
-    // 临时 Mock 数据
-    inspections.value = [
-      {
-        taskDetailId: 'DETAIL_S_001',
-        taskId: 'TASK_S_001',
-        inspectionId: 'INSP_S_001',
-        inspectionName: '大门岗亭检查',
-        itemId: 'ITEM_S_001',
-        state: '20200407',
-        stateName: '已完成',
-        pointStartTime: '09:00',
-        pointEndTime: '09:30',
-      },
-      {
-        taskDetailId: 'DETAIL_S_002',
-        taskId: 'TASK_S_002',
-        inspectionId: 'INSP_S_002',
-        inspectionName: '消防通道检查',
-        itemId: 'ITEM_S_002',
-        state: '20200405',
-        stateName: '待巡检',
-        pointStartTime: '10:00',
-        pointEndTime: '10:30',
-      },
-      {
-        taskDetailId: 'DETAIL_S_003',
-        taskId: 'TASK_S_003',
-        inspectionId: 'INSP_S_003',
-        inspectionName: '电梯运行检查',
-        itemId: 'ITEM_S_003',
-        state: '20200405',
-        stateName: '待巡检',
-        pointStartTime: '14:00',
-        pointEndTime: '14:30',
-      },
-    ]
-
-    noData.value = inspections.value.length === 0
-  }
-  catch (error) {
-    console.error('加载员工巡检详情失败:', error)
-    uni.showToast({
-      title: '加载失败',
-      icon: 'none',
-    })
-  }
-  finally {
-    loading.value = false
-  }
+  await sendLoadStaffInspectionDetail()
 }
 
 onMounted(() => {

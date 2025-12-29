@@ -14,7 +14,10 @@
 import type { FormInstance } from 'wot-design-uni/components/wd-form/types'
 import type { InspectionTask } from '@/types/inspection'
 import { onLoad } from '@dcloudio/uni-app'
+import { useRequest } from 'alova/client'
 import { onMounted, reactive, ref } from 'vue'
+import { getStaffList, transferInspectionTask } from '@/api/inspection'
+import { router } from '@/router'
 
 /** 路由参数 */
 const taskInfoStr = ref('')
@@ -48,9 +51,6 @@ const formData = reactive({
   transferDesc: '',
 })
 
-/** 是否正在提交 */
-const submitting = ref(false)
-
 /** 是否显示员工选择器 */
 const showStaffPicker = ref(false)
 
@@ -66,29 +66,19 @@ const rules = {
 /**
  * 获取员工列表
  */
-async function getStaffList() {
-  try {
-    // TODO: 调用 Alova 接口获取数据
-    // const result = await getStaffListApi({
-    //   communityId: getCurrentCommunity().communityId,
-    // })
-    // staffList.value = result.data || []
+const {
+  send: sendGetStaffList,
+  onSuccess: onGetStaffListSuccess,
+} = useRequest(() => getStaffList(), {
+  immediate: false,
+})
 
-    // 临时 Mock 数据
-    staffList.value = [
-      { userId: 'USER_001', userName: '张三' },
-      { userId: 'USER_002', userName: '李四' },
-      { userId: 'USER_003', userName: '王五' },
-      { userId: 'USER_004', userName: '赵六' },
-    ]
-  }
-  catch (error) {
-    console.error('获取员工列表失败:', error)
-    uni.showToast({
-      title: '获取员工失败',
-      icon: 'none',
-    })
-  }
+onGetStaffListSuccess((data) => {
+  staffList.value = data.data || []
+})
+
+async function loadStaffList() {
+  await sendGetStaffList()
 }
 
 /**
@@ -111,6 +101,26 @@ function handleStaffConfirm(value: { value: string, label: string }) {
 /**
  * 提交流转
  */
+const {
+  loading: submitting,
+  send: sendTransferTask,
+  onSuccess: onTransferSuccess,
+} = useRequest(transferData => transferInspectionTask(transferData), {
+  immediate: false,
+})
+
+onTransferSuccess(() => {
+  uni.showToast({
+    title: '流转成功',
+    icon: 'success',
+  })
+
+  // 跳转回巡检打卡页
+  setTimeout(() => {
+    router.replace({ name: 'inspection-task-list' })
+  }, 1500)
+})
+
 async function submitTransfer() {
   // 表单校验
   const valid = await formRef.value?.validate()
@@ -129,41 +139,13 @@ async function submitTransfer() {
     return
   }
 
-  submitting.value = true
-
-  try {
-    // TODO: 调用 Alova 接口提交数据
-    // const result = await transferInspectionTaskApi({
-    //   transferDesc: formData.transferDesc,
-    //   staffId: formData.staffId,
-    //   staffName: formData.staffName,
-    //   communityId: taskInfo.value.communityId,
-    //   taskId: taskInfo.value.taskId,
-    //   taskType: 2000,
-    //   ...taskInfo.value,
-    // })
-
-    // 临时模拟提交成功
-    uni.showToast({
-      title: '流转成功',
-      icon: 'success',
-    })
-
-    // 跳转回巡检打卡页
-    setTimeout(() => {
-      router.replace({ name: 'inspection-task-list' })
-    }, 1500)
-  }
-  catch (error) {
-    console.error('提交流转失败:', error)
-    uni.showToast({
-      title: '流转失败',
-      icon: 'none',
-    })
-  }
-  finally {
-    submitting.value = false
-  }
+  // 提交流转数据
+  await sendTransferTask({
+    taskId: taskInfo.value.taskId,
+    staffId: formData.staffId,
+    staffName: formData.staffName,
+    transferDesc: formData.transferDesc,
+  })
 }
 
 onMounted(() => {
@@ -182,7 +164,7 @@ onMounted(() => {
   }
 
   // 获取员工列表
-  getStaffList()
+  loadStaffList()
 })
 </script>
 

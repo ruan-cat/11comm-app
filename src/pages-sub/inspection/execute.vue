@@ -13,7 +13,9 @@
 <script setup lang="ts">
 import type { InspectionTaskDetail } from '@/types/inspection'
 import { onLoad, onShow } from '@dcloudio/uni-app'
+import { useRequest } from 'alova/client'
 import { computed, onMounted, ref } from 'vue'
+import { getInspectionTaskDetail } from '@/api/inspection'
 import { TypedRouter } from '@/router'
 
 /** 路由参数 */
@@ -28,9 +30,6 @@ onLoad((options) => {
 
 /** 巡检任务详情列表 */
 const taskDetails = ref<InspectionTaskDetail[]>([])
-
-/** 是否加载中 */
-const loading = ref(false)
 
 /** 计算巡检进度 */
 const progress = computed(() => {
@@ -53,71 +52,24 @@ const totalCount = computed(() => {
 /**
  * 获取巡检任务详情
  */
+const {
+  loading,
+  send: sendGetTaskDetails,
+  onSuccess,
+} = useRequest(() => getInspectionTaskDetail({
+  taskId: taskId.value,
+  page: 1,
+  row: 100,
+}), {
+  immediate: false,
+})
+
+onSuccess((data) => {
+  taskDetails.value = data.data?.list || []
+})
+
 async function getTaskDetails() {
-  loading.value = true
-
-  try {
-    // TODO: 调用 Alova 接口获取数据
-    // const result = await getInspectionTaskDetailApi({
-    //   communityId: getCurrentCommunity().communityId,
-    //   taskId: taskId,
-    //   page: 1,
-    //   row: 100,
-    // })
-    // taskDetails.value = result.data || []
-
-    // 临时 Mock 数据
-    taskDetails.value = [
-      {
-        taskDetailId: 'DETAIL_001',
-        taskId: taskId.value,
-        inspectionId: 'INSP_001',
-        inspectionName: '大门岗亭检查',
-        itemId: 'ITEM_001',
-        state: '20200407',
-        stateName: '已完成',
-        pointStartTime: '09:00',
-        pointEndTime: '09:30',
-        description: '巡检情况: 正常; 备注: 无异常',
-        photos: [
-          { url: 'https://via.placeholder.com/300', fileId: 'FILE_001' },
-          { url: 'https://via.placeholder.com/300', fileId: 'FILE_002' },
-        ],
-      },
-      {
-        taskDetailId: 'DETAIL_002',
-        taskId: taskId.value,
-        inspectionId: 'INSP_002',
-        inspectionName: '消防通道检查',
-        itemId: 'ITEM_002',
-        state: '20200405',
-        stateName: '待巡检',
-        pointStartTime: '09:30',
-        pointEndTime: '10:00',
-      },
-      {
-        taskDetailId: 'DETAIL_003',
-        taskId: taskId.value,
-        inspectionId: 'INSP_003',
-        inspectionName: '电梯运行检查',
-        itemId: 'ITEM_003',
-        state: '20200405',
-        stateName: '待巡检',
-        pointStartTime: '10:00',
-        pointEndTime: '10:30',
-      },
-    ]
-  }
-  catch (error) {
-    console.error('获取巡检任务详情失败:', error)
-    uni.showToast({
-      title: '获取详情失败',
-      icon: 'none',
-    })
-  }
-  finally {
-    loading.value = false
-  }
+  await sendGetTaskDetails()
 }
 
 /**

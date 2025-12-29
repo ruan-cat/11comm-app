@@ -10,8 +10,10 @@
 <script setup lang="ts">
 import type { InspectionTask } from '@/types/inspection'
 import { onShow } from '@dcloudio/uni-app'
+import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
+import { getInspectionTaskList } from '@/api/inspection'
 import { TypedRouter } from '@/router'
 
 /** 巡检任务列表 */
@@ -20,62 +22,29 @@ const tasks = ref<InspectionTask[]>([])
 /** 是否无数据 */
 const noData = ref(false)
 
-/** 是否加载中 */
-const loading = ref(false)
-
 /**
  * 获取巡检任务列表
  */
+const {
+  loading,
+  send: sendGetTasks,
+  onSuccess,
+} = useRequest(() => getInspectionTaskList({
+  page: 1,
+  row: 10,
+  moreState: '20200405,20200406',
+  isToday: 1,
+}), {
+  immediate: false,
+})
+
+onSuccess((data) => {
+  tasks.value = data.data?.list || []
+  noData.value = tasks.value.length === 0
+})
+
 async function getInspectionTasks() {
-  loading.value = true
-  noData.value = false
-
-  try {
-    // TODO: 调用 Alova 接口获取数据
-    // const result = await getInspectionTaskListApi({
-    //   page: 1,
-    //   row: 10,
-    //   moreState: "20200405,20200406",
-    //   isToday: 1,
-    // })
-    // tasks.value = result.data || []
-
-    // 临时 Mock 数据
-    tasks.value = [
-      {
-        taskId: 'TASK_001',
-        inspectionPlanId: 'PLAN_001',
-        inspectionPlanName: '小区日常巡检',
-        planUserName: '张三',
-        planInsTime: '2025-12-29 09:00',
-        signTypeName: '移动定位',
-        stateName: '待开始',
-        state: '20200405',
-      },
-      {
-        taskId: 'TASK_002',
-        inspectionPlanId: 'PLAN_002',
-        inspectionPlanName: '消防设施检查',
-        planUserName: '李四',
-        planInsTime: '2025-12-29 14:00',
-        signTypeName: '二维码扫描',
-        stateName: '进行中',
-        state: '20200406',
-      },
-    ]
-
-    noData.value = tasks.value.length === 0
-  }
-  catch (error) {
-    console.error('获取巡检任务失败:', error)
-    uni.showToast({
-      title: '获取任务失败',
-      icon: 'none',
-    })
-  }
-  finally {
-    loading.value = false
-  }
+  await sendGetTasks()
 }
 
 /**

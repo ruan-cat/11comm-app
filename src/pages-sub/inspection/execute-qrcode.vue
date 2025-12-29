@@ -13,8 +13,10 @@
 <script setup lang="ts">
 import type { InspectionTaskDetail } from '@/types/inspection'
 import { onLoad } from '@dcloudio/uni-app'
+import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
+import { getInspectionTaskDetail } from '@/api/inspection'
 import { redirectToTyped } from '@/router'
 
 /** 路由参数 */
@@ -32,70 +34,46 @@ onLoad((options) => {
 /** 任务详情列表 */
 const taskDetails = ref<InspectionTaskDetail[]>([])
 
-/** 是否加载中 */
-const loading = ref(false)
-
 /**
  * 查询巡检任务详情
  */
-async function queryTaskDetails() {
-  loading.value = true
+const {
+  loading,
+  send: sendQueryTaskDetails,
+  onSuccess,
+} = useRequest(() => {
+  const currentTime = dayjs().format('HH:mm')
+  return getInspectionTaskDetail({
+    inspectionId: inspectionId.value,
+    state: '20200405',
+    qrCodeTime: currentTime,
+    page: 1,
+    row: 100,
+  })
+}, {
+  immediate: false,
+})
 
-  try {
-    // 获取当前时间（模拟）
-    const currentTime = dayjs().format('HH:mm')
+onSuccess((data) => {
+  taskDetails.value = data.data?.list || []
 
-    // TODO: 调用 Alova 接口获取数据
-    // const result = await getInspectionTaskDetailApi({
-    //   communityId: getCurrentCommunity().communityId,
-    //   planUserId: getUserInfo().userId,
-    //   inspectionId: inspectionId,
-    //   state: "20200405",
-    //   qrCodeTime: currentTime,
-    //   page: 1,
-    //   row: 100,
-    // })
-    // taskDetails.value = result.data || []
+  // 如果找到任务，跳转到执行单项巡检页
+  if (taskDetails.value.length > 0) {
+    const item = taskDetails.value[0]
 
-    // 临时 Mock 数据
-    taskDetails.value = [
-      {
-        taskDetailId: 'DETAIL_QR_001',
-        taskId: 'TASK_QR_001',
-        inspectionId: inspectionId.value,
-        inspectionName: inspectionName.value,
-        itemId: itemId.value,
-        state: '20200405',
-        stateName: '待巡检',
-      },
-    ]
-
-    // 如果找到任务，跳转到执行单项巡检页
-    if (taskDetails.value.length > 0) {
-      const item = taskDetails.value[0]
-
-      redirectToTyped('/pages-sub/inspection/execute-single', {
-        taskDetailId: item.taskDetailId,
-        taskId: item.taskId,
-        inspectionId: inspectionId.value,
-        inspectionName: inspectionName.value,
-        itemId: itemId.value,
-        fromPage: 'QrCode',
-      })
-    }
-    else {
-      // 没有找到任务
-      loading.value = false
-    }
-  }
-  catch (error) {
-    console.error('查询巡检任务详情失败:', error)
-    uni.showToast({
-      title: '查询失败',
-      icon: 'none',
+    redirectToTyped('/pages-sub/inspection/execute-single', {
+      taskDetailId: item.taskDetailId,
+      taskId: item.taskId,
+      inspectionId: inspectionId.value,
+      inspectionName: inspectionName.value,
+      itemId: itemId.value,
+      fromPage: 'QrCode',
     })
-    loading.value = false
   }
+})
+
+async function queryTaskDetails() {
+  await sendQueryTaskDetails()
 }
 
 onMounted(() => {
