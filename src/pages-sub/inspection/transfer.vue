@@ -185,7 +185,7 @@ onMounted(() => {
             value-key="value"
             @confirm="handleStaffConfirm"
           >
-            <wd-cell title-width="120" is-link>
+            <wd-cell title-width="120rpx" is-link>
               <text :class="formData.staffName ? 'text-gray-900' : 'text-gray-400'">
                 {{ formData.staffName || '请选择接收员工' }}
               </text>
