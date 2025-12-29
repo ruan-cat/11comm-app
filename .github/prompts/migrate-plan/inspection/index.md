@@ -22,7 +22,7 @@
 1. 阅读 `.github\prompts\route-migration-map.yml` 的 `inspection_modules` 部分。
 2. 阅读全部的 `src\pages-sub\inspection` vue 组件代码，确保这部分的页面都补全和其他模块代码一样的 `旧代码` 注释。便于我追踪旧代码。
 
-## <!-- TODO: --> 移动 `src\pages-sub\inspection\types.ts` 类型文件到正确的位置
+## 004 移动 `src\pages-sub\inspection\types.ts` 类型文件到正确的位置
 
 1. 按照 `.claude\skills\api-migration\类型定义规范.md` ，移动该类型文件到正确的位置。
 
