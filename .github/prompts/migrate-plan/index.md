@@ -1026,7 +1026,7 @@ const showTotalAmount = computed(() => model.feeFlag === "1001");
 
 3. 更新 `.claude\skills\code-migration` 技能。确保以后在涉及到组件显隐的状态代码写法时，能够使用正确的代码写法。
 
-## 061 <!-- TODO: --> 恢复关于强类型路由跳转的知识，补全 `route-migration` 技能
+## 061 恢复关于强类型路由跳转的知识，补全 `route-migration` 技能
 
 1. `.claude\skills\route-migration\SKILL.md` ，即 `route-migration` 技能，在上次实现子代理迁移时，丢失了很多知识点。关于如何定义强类型的路由跳转工具的的知识点，全部都丢失了。
 2. 我需要你现在全面阅读 `src\router` 内全部的文件，搞清楚在实现旧项目迁移到新项目时，路由跳转工具应该如何定义。
