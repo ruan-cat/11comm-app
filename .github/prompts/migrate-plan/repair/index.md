@@ -575,7 +575,7 @@ invoker	@	vue.runtime.esm.js:10209
 1. 针对 `src\pages-sub\repair\handle.vue` `处理维修工单` 页面
 2. 使用 uni.setNavigationBarTitle 和 onReady 来完成进入本页面，根据路由参数，动态变化标题。
 
-## 042 <!-- TODO: --> 优化 `src\pages-sub\repair\dispatch.vue` 维修待办单的视觉效果
+## 042 优化 `src\pages-sub\repair\dispatch.vue` 维修待办单的视觉效果
 
 1. 针对 `维修待办单` 页面。
 2. 阅读以下 url 图片地址：
