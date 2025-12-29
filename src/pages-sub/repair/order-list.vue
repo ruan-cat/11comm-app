@@ -200,6 +200,23 @@ function checkAuth(privilegeId: string): boolean {
   return true
 }
 
+// ==================== 按钮显示状态判断 ====================
+
+/** 是否显示派单按钮（待派单状态） */
+function canDispatch(item: RepairOrder): boolean {
+  return item.statusCd === '10001' && checkAuth('502019101946430010')
+}
+
+/** 是否显示结束按钮（未完成且未关闭） */
+function canEnd(item: RepairOrder): boolean {
+  return item.statusCd !== '10004' && item.statusCd !== '10005' && checkAuth('502019101946430010')
+}
+
+/** 是否显示抢单按钮（抢单模式且待派单） */
+function canRob(item: RepairOrder): boolean {
+  return item.repairWay === '100' && item.statusCd === '10001' && checkAuth('502021012099350016')
+}
+
 /** 格式化预约时间 */
 function formatAppointmentTime(timeStr?: string): string {
   if (!timeStr)
@@ -343,7 +360,7 @@ function getStatusTagType(statusCd?: string): TagType {
               详情
             </wd-button>
             <wd-button
-              v-if="item.statusCd === '10001' && checkAuth('502019101946430010')"
+              v-if="canDispatch(item)"
               size="small"
               type="warning"
               @click="handleDispatch(item)"
@@ -351,7 +368,7 @@ function getStatusTagType(statusCd?: string): TagType {
               派单
             </wd-button>
             <wd-button
-              v-if="item.statusCd !== '10004' && item.statusCd !== '10005' && checkAuth('502019101946430010')"
+              v-if="canEnd(item)"
               size="small"
               type="error"
               @click="handleEndRepair(item)"
@@ -359,7 +376,7 @@ function getStatusTagType(statusCd?: string): TagType {
               结束
             </wd-button>
             <wd-button
-              v-if="item.repairWay === '100' && item.statusCd === '10001' && checkAuth('502021012099350016')"
+              v-if="canRob(item)"
               size="small"
               type="warning"
               @click="handleRobOrder(item)"

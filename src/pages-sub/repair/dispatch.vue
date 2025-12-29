@@ -282,6 +282,28 @@ function checkAuth(privilegeId: string): boolean {
   return true
 }
 
+// ==================== 按钮显示状态判断 ====================
+
+/** 是否显示启动按钮（已派单） */
+function canStart(item: RepairOrder): boolean {
+  return item.statusCd === '10002'
+}
+
+/** 是否显示转单/暂停/办结按钮（已派单或处理中） */
+function canProcessing(item: RepairOrder): boolean {
+  return item.statusCd === '10002' || item.statusCd === '10003'
+}
+
+/** 是否显示退单按钮 */
+function canReturn(item: RepairOrder): boolean {
+  return item.preStaffId !== '-1'
+}
+
+/** 是否显示回访按钮（已完成且需回访） */
+function canAppraise(item: RepairOrder): boolean {
+  return item.statusCd === '10004' && item.returnVisitFlag === '003' && checkAuth('502021040151320003')
+}
+
 /** 格式化预约时间 */
 function formatAppointmentTime(timeStr?: string): string {
   if (!timeStr)
@@ -428,7 +450,7 @@ function getStatusTagType(statusCd?: string): TagType {
 
             <!-- 启动按钮：已派单 -->
             <wd-button
-              v-if="item.statusCd === '10002'"
+              v-if="canStart(item)"
               size="small"
               type="success"
               @click="handleStartRepair(item)"
@@ -438,7 +460,7 @@ function getStatusTagType(statusCd?: string): TagType {
 
             <!-- 转单按钮：已派单/处理中 -->
             <wd-button
-              v-if="item.statusCd === '10002' || item.statusCd === '10003'"
+              v-if="canProcessing(item)"
               size="small"
               type="warning"
               @click="handleTransfer(item)"
@@ -448,7 +470,7 @@ function getStatusTagType(statusCd?: string): TagType {
 
             <!-- 暂停按钮：已派单/处理中 -->
             <wd-button
-              v-if="item.statusCd === '10002' || item.statusCd === '10003'"
+              v-if="canProcessing(item)"
               size="small"
               type="warning"
               @click="handleStopRepair(item)"
@@ -458,7 +480,7 @@ function getStatusTagType(statusCd?: string): TagType {
 
             <!-- 退单按钮 -->
             <wd-button
-              v-if="item.preStaffId !== '-1'"
+              v-if="canReturn(item)"
               size="small"
               type="error"
               @click="handleReturn(item)"
@@ -468,7 +490,7 @@ function getStatusTagType(statusCd?: string): TagType {
 
             <!-- 办结按钮：已派单/处理中 -->
             <wd-button
-              v-if="item.statusCd === '10002' || item.statusCd === '10003'"
+              v-if="canProcessing(item)"
               size="small"
               type="success"
               @click="handleFinish(item)"
@@ -478,7 +500,7 @@ function getStatusTagType(statusCd?: string): TagType {
 
             <!-- 回访按钮：已完成且需回访 -->
             <wd-button
-              v-if="item.statusCd === '10004' && item.returnVisitFlag === '003' && checkAuth('502021040151320003')"
+              v-if="canAppraise(item)"
               size="small"
               type="success"
               @click="handleAppraise(item)"

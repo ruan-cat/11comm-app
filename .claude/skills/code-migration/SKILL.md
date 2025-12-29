@@ -389,6 +389,136 @@ const statusName = statusItem.label; // 展示名称
 
 > **📚 详细规范**: 参阅 [数据字典常量规范.md](数据字典常量规范.md)
 
+### 8. 组件显隐状态封装规范
+
+**核心原则**:
+
+1. 避免在模板中直接编写冗长的 `v-if` 判断语句
+2. 使用 `computed` 或函数封装组件的显示状态逻辑
+3. 函数/计算属性命名应语义化，清晰表达判断意图
+
+**❌ 不合适的写法 - 行内冗长判断**:
+
+```vue
+<template>
+	<!-- 转单按钮：已派单/处理中 -->
+	<wd-button
+		v-if="item.statusCd === '10002' || item.statusCd === '10003'"
+		size="small"
+		type="warning"
+		@click="handleTransfer(item)"
+	>
+		转单
+	</wd-button>
+
+	<!-- 回访按钮：已完成且需回访 -->
+	<wd-button
+		v-if="item.statusCd === '10004' && item.returnVisitFlag === '003' && checkAuth('502021040151320003')"
+		size="small"
+		type="success"
+		@click="handleAppraise(item)"
+	>
+		回访
+	</wd-button>
+</template>
+```
+
+**✅ 推荐写法 - 使用 computed 或函数封装**:
+
+**方式 1: 使用 computed（适用于依赖组件响应式状态）**
+
+```typescript
+<script setup lang="ts">
+import { computed } from 'vue'
+
+/** 是否显示维修师傅选择（派单/转单/退单时） */
+const showStaffSelector = computed(() => model.action !== 'FINISH')
+
+/** 是否显示商品选择按钮 */
+const showResourceSelector = computed(() =>
+  model.feeFlag === '1001' || model.feeFlag === '1003'
+)
+
+/** 是否显示图片上传（仅办结时） */
+const showImages = computed(() => model.action === 'FINISH')
+</script>
+
+<template>
+  <wd-cell v-if="showStaffSelector" title="维修师傅">
+    <!-- ... -->
+  </wd-cell>
+
+  <wd-button v-if="showResourceSelector" @click="handleSelectResource">
+    选择商品
+  </wd-button>
+
+  <wd-upload v-if="showImages" v-model="model.images" />
+</template>
+```
+
+**方式 2: 使用函数（适用于依赖列表项数据）**
+
+```typescript
+<script setup lang="ts">
+import type { RepairOrder } from '@/types/repair'
+
+// ==================== 按钮显示状态判断 ====================
+
+/** 是否显示转单/暂停/办结按钮（已派单或处理中） */
+function canProcessing(item: RepairOrder): boolean {
+  return item.statusCd === '10002' || item.statusCd === '10003'
+}
+
+/** 是否显示回访按钮（已完成且需回访） */
+function canAppraise(item: RepairOrder): boolean {
+  return item.statusCd === '10004'
+    && item.returnVisitFlag === '003'
+    && checkAuth('502021040151320003')
+}
+</script>
+
+<template>
+  <view v-for="item in repairList" :key="item.repairId">
+    <!-- 转单按钮 -->
+    <wd-button
+      v-if="canProcessing(item)"
+      size="small"
+      type="warning"
+      @click="handleTransfer(item)"
+    >
+      转单
+    </wd-button>
+
+    <!-- 回访按钮 -->
+    <wd-button
+      v-if="canAppraise(item)"
+      size="small"
+      type="success"
+      @click="handleAppraise(item)"
+    >
+      回访
+    </wd-button>
+  </view>
+</template>
+```
+
+**命名规范**:
+
+| 场景           | 命名模式                     | 示例                                        |
+| :------------- | :--------------------------- | :------------------------------------------ |
+| 显示/隐藏判断  | `show{ComponentName}`        | `showStaffSelector`, `showResourceList`     |
+| 按钮可用性判断 | `can{ActionName}`            | `canStart`, `canProcessing`, `canAppraise`  |
+| 条件满足判断   | `should{ActionName}`         | `shouldShowOpinion`, `shouldDisplayWarning` |
+| 位置选择器显示 | `show{LocationType}Selector` | `showFloorSelector`, `showUnitSelector`     |
+
+**实际应用示例**:
+
+参考项目中的以下文件：
+
+- `src/pages-sub/repair/dispatch.vue` - 按钮显示状态封装（函数方式）
+- `src/pages-sub/repair/handle.vue` - 表单项显示状态封装（computed 方式）
+- `src/pages-sub/repair/add-order.vue` - 位置选择器显示封装（computed 方式）
+
 ## 迁移检查清单
 
 ### 代码结构检查

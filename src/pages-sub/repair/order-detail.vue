@@ -169,6 +169,17 @@ function getStatusColor(statusCd: string): string {
   }
   return colorMap[statusCd] || 'bg-gray-400'
 }
+
+// ==================== 流转记录显示状态判断 ====================
+
+/**
+ * 是否显示处理意见（已结束或待支付）
+ * @param record - 工单流转记录
+ * @example shouldShowProcessOpinion(staffRecord)
+ */
+function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
+  return !!record.endTime || record.statusCd === '10009' || record.statusCd === '10004'
+}
 </script>
 
 <template>
@@ -326,7 +337,7 @@ function getStatusColor(statusCd: string): string {
 
               <!-- 处理意见 - 待支付或已结束时显示 -->
               <view
-                v-if="record.endTime || record.statusCd === '10009' || record.statusCd === '10004'"
+                v-if="shouldShowProcessOpinion(record)"
                 class="timeline-record-content mb-1 text-gray-600"
               >
                 <text>处理意见：{{ record.context || '暂无' }}</text>

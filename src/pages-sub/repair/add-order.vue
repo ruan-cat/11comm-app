@@ -130,6 +130,19 @@ const priceScope = computed(() => {
   return ''
 })
 
+/** 是否显示楼栋选择（楼栋/单元/房屋） */
+const showFloorSelector = computed(() =>
+  repairObjType.value === '002' || repairObjType.value === '003' || repairObjType.value === '004',
+)
+
+/** 是否显示单元选择（单元/房屋） */
+const showUnitSelector = computed(() =>
+  repairObjType.value === '003' || repairObjType.value === '004',
+)
+
+/** 是否显示房屋选择（仅房屋） */
+const showRoomSelector = computed(() => repairObjType.value === '004')
+
 // ==================== 表单校验规则 ====================
 
 /** 表单校验规则 */
@@ -557,7 +570,7 @@ onUnload(() => {
 
         <!-- 楼栋选择 -->
         <wd-cell
-          v-if="repairObjType === '002' || repairObjType === '003' || repairObjType === '004'"
+          v-if="showFloorSelector"
           title="楼栋"
           :title-width="LABEL_WIDTH"
           is-link
@@ -572,7 +585,7 @@ onUnload(() => {
 
         <!-- 单元选择 -->
         <wd-cell
-          v-if="repairObjType === '003' || repairObjType === '004'"
+          v-if="showUnitSelector"
           title="单元"
           :title-width="LABEL_WIDTH"
           is-link
@@ -587,7 +600,7 @@ onUnload(() => {
 
         <!-- 房屋选择 -->
         <wd-cell
-          v-if="repairObjType === '004'"
+          v-if="showRoomSelector"
           title="房屋信息"
           :title-width="LABEL_WIDTH"
           is-link
