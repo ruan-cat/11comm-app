@@ -8,3 +8,11 @@
 4. 新建任务清单：
    - 为了避免你丢失任务信息和上下文，我要求你在 `.github\prompts\migrate-plan\inspection` 目录内，新建一个迁移目标，迁移任务清单的文件。避免你因为上下文合并或者是其他意外情况，导致丢失任务进度信息。
    - 请你先完成这样的清单文件新建。然后再开始下一步的迁移任务。
+
+## <!-- TODO: --> 初始化强类型路由、
+
+## <!-- TODO: --> 初始化业务类型、mock 接口、与 api
+
+## <!-- TODO: --> 移动 `src\pages-sub\inspection\types.ts` 类型文件到正确的位置
+
+1. 按照 `.claude\skills\api-migration\类型定义规范.md` ，移动该类型文件到正确的位置。
