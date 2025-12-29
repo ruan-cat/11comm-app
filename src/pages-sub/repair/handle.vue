@@ -123,6 +123,7 @@ const pageTitle = computed(() => {
     case 'TRANSFER':
       return '转单'
     case 'RETURN':
+    case 'BACK':
       return '退单'
     case 'FINISH':
       return '办结'
