@@ -11,7 +11,7 @@
 -->
 
 <script setup lang="ts">
-import type { InspectionTaskDetail } from './types'
+import type { InspectionTaskDetail } from '@/types/inspection'
 import { onLoad } from '@dcloudio/uni-app'
 import { onMounted, ref } from 'vue'
 

@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import type { FormInstance } from 'wot-design-uni/components/wd-form/types'
-import type { InspectionTask } from './types'
+import type { InspectionTask } from '@/types/inspection'
 import { onLoad } from '@dcloudio/uni-app'
 import { onMounted, reactive, ref } from 'vue'
 

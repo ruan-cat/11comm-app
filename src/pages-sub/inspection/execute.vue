@@ -11,7 +11,7 @@
 -->
 
 <script setup lang="ts">
-import type { InspectionTaskDetail } from './types'
+import type { InspectionTaskDetail } from '@/types/inspection'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { computed, onMounted, ref } from 'vue'
 import { TypedRouter } from '@/router'

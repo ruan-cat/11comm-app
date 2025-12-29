@@ -8,7 +8,7 @@
 -->
 
 <script setup lang="ts">
-import type { InspectionTodayReport } from './types'
+import type { InspectionTodayReport } from '@/types/inspection'
 import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
 import { TypedRouter } from '@/router'

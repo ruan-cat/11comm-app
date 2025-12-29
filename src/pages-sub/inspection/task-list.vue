@@ -8,7 +8,7 @@
 -->
 
 <script setup lang="ts">
-import type { InspectionTask } from './types'
+import type { InspectionTask } from '@/types/inspection'
 import { onShow } from '@dcloudio/uni-app'
 import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
