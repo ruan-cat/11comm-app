@@ -949,7 +949,9 @@
 
 ## 060 <!-- TODO: --> 代码写法，避免行内写冗长的 v-if 语句
 
-1. 不合适写法
+我要求你改写具体代码的写法，然后迭代更新相关技能文件的写法。
+
+1. 不合适写法： 不应该直接在 vue 组件上面写那么冗长的 v-if 判断语句，看起来很繁杂冗长。
 
 ```vue
 <template>
@@ -1003,7 +1005,7 @@
 </template>
 ```
 
-2. 合适写法
+2. 合适写法： 就像 `src\pages-sub\repair\handle.vue` 一样，应该将组件的显示状态，单独用 `computed` 来封装，便于阅读和维护。
 
 ```ts
 /** 是否显示维修师傅选择（派单/转单/退单时） */
@@ -1022,6 +1024,4 @@ const showImages = computed(() => model.action === "FINISH");
 const showTotalAmount = computed(() => model.feeFlag === "1001");
 ```
 
-3. 更新 `.claude\skills\code-migration` 技能。
-
-## 061 <!-- TODO: -->
+3. 更新 `.claude\skills\code-migration` 技能。确保以后在涉及到组件显隐的状态代码写法时，能够使用正确的代码写法。
