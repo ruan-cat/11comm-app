@@ -20,6 +20,8 @@
   - 办结: http://localhost:9000/#/pages-sub/repair/handle?action=FINISH&repairId=REP_001
 -->
 
+<!-- 基本完成检查审核 -->
+
 <script setup lang="ts">
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import type { UploadBeforeUpload, UploadFile } from 'wot-design-uni/components/wd-upload/types'
