@@ -946,3 +946,82 @@
 4. **说明清楚技能被触发的前提和条件**： 未来不再是用户主动调用子代理了，而是大模型`渐进式揭露`地的使用技能。所以你要认真学习，认真理解好子代理的触发前提，编写好完整的技能触发前提。确保以后完成迁移任务时，能够主动的，精确的使用这几款迁移技能。
 5. **技能名称和子代理名称保持相同**： 比如这款 `api-migration` 子代理，应该新建成 `api-migration` 技能。保留命名风格。
 6. **及时更新用语说明**： 及时更新 `CLAUDE.md` 对子代理的说明，改换成技能说明。以后没有子代理，而是技能文件。
+
+## 060 <!-- TODO: --> 代码写法，避免行内写冗长的 v-if 语句
+
+1. 不合适写法
+
+```vue
+<template>
+	<!-- 启动按钮：已派单 -->
+	<wd-button v-if="item.statusCd === '10002'" size="small" type="success" @click="handleStartRepair(item)">
+		启动
+	</wd-button>
+
+	<!-- 转单按钮：已派单/处理中 -->
+	<wd-button
+		v-if="item.statusCd === '10002' || item.statusCd === '10003'"
+		size="small"
+		type="warning"
+		@click="handleTransfer(item)"
+	>
+		转单
+	</wd-button>
+
+	<!-- 暂停按钮：已派单/处理中 -->
+	<wd-button
+		v-if="item.statusCd === '10002' || item.statusCd === '10003'"
+		size="small"
+		type="warning"
+		@click="handleStopRepair(item)"
+	>
+		暂停
+	</wd-button>
+
+	<!-- 退单按钮 -->
+	<wd-button v-if="item.preStaffId !== '-1'" size="small" type="error" @click="handleReturn(item)"> 退单 </wd-button>
+
+	<!-- 办结按钮：已派单/处理中 -->
+	<wd-button
+		v-if="item.statusCd === '10002' || item.statusCd === '10003'"
+		size="small"
+		type="success"
+		@click="handleFinish(item)"
+	>
+		办结
+	</wd-button>
+
+	<!-- 回访按钮：已完成且需回访 -->
+	<wd-button
+		v-if="item.statusCd === '10004' && item.returnVisitFlag === '003' && checkAuth('502021040151320003')"
+		size="small"
+		type="success"
+		@click="handleAppraise(item)"
+	>
+		回访
+	</wd-button>
+</template>
+```
+
+2. 合适写法
+
+```ts
+/** 是否显示维修师傅选择（派单/转单/退单时） */
+const showStaffSelector = computed(() => model.action !== "FINISH");
+/** 是否显示商品选择按钮 */
+const showResourceSelector = computed(() => model.feeFlag === "1001" || model.feeFlag === "1003");
+/** 是否显示商品列表 */
+const showResourceList = computed(
+	() => (model.feeFlag === "1001" || model.feeFlag === "1003") && model.resourceList.length > 0,
+);
+/** 是否显示支付方式 */
+const showPayType = computed(() => model.feeFlag === "1001");
+/** 是否显示图片上传（仅办结时） */
+const showImages = computed(() => model.action === "FINISH");
+/** 是否显示总计金额 */
+const showTotalAmount = computed(() => model.feeFlag === "1001");
+```
+
+3. 更新 `.claude\skills\code-migration` 技能。
+
+## 061 <!-- TODO: -->
