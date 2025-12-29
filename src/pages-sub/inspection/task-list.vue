@@ -153,7 +153,7 @@ onShow(() => {
     <wd-status-tip v-else-if="noData && !loading" image="search" tip="暂无巡检任务" />
 
     <!-- 加载状态 -->
-    <wd-loading v-if="loading" type="circular" />
+    <wd-loading v-if="loading" type="ring" />
   </view>
 </template>
 

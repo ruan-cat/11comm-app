@@ -17,7 +17,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { onMounted, reactive, ref } from 'vue'
 import { getStaffList, transferInspectionTask } from '@/api/inspection'
-import { router } from '@/router'
+import { TypedRouter } from '@/router'
 
 /** 路由参数 */
 const taskInfoStr = ref('')
@@ -51,8 +51,8 @@ const formData = reactive({
   transferDesc: '',
 })
 
-/** 是否显示员工选择器 */
-const showStaffPicker = ref(false)
+/** 选中的员工ID（用于 wd-picker 的 v-model） */
+const selectedStaffUserId = ref('')
 
 /** 员工列表 */
 const staffList = ref<Array<{ userId: string, userName: string }>>([])
@@ -82,20 +82,13 @@ async function loadStaffList() {
 }
 
 /**
- * 打开员工选择器
- */
-function openStaffPicker() {
-  showStaffPicker.value = true
-}
-
-/**
  * 员工选择确认
- * @param value 选中的值
+ * @param value 选中的员工信息
  */
 function handleStaffConfirm(value: { value: string, label: string }) {
   formData.staffId = value.value
   formData.staffName = value.label
-  showStaffPicker.value = false
+  selectedStaffUserId.value = value.value
 }
 
 /**
@@ -117,7 +110,7 @@ onTransferSuccess(() => {
 
   // 跳转回巡检打卡页
   setTimeout(() => {
-    router.replace({ name: 'inspection-task-list' })
+    TypedRouter.toInspectionTaskList()
   }, 1500)
 })
 
@@ -152,7 +145,7 @@ onMounted(() => {
   // 解析任务信息
   if (taskInfoStr.value) {
     try {
-      taskInfo.value = JSON.parse(taskInfoStr)
+      taskInfo.value = JSON.parse(taskInfoStr.value)
     }
     catch (error) {
       console.error('解析任务信息失败:', error)
@@ -185,16 +178,19 @@ onMounted(() => {
       <wd-form ref="formRef" :model="formData" :rules="rules">
         <!-- 接收员工 -->
         <wd-form-item label="接收员工" prop="staffId" required>
-          <wd-input
-            v-model="formData.staffName"
-            placeholder="请选择接收员工"
-            readonly
-            @click="openStaffPicker"
+          <wd-picker
+            v-model="selectedStaffUserId"
+            :columns="staffList.map((staff) => ({ value: staff.userId, label: staff.userName }))"
+            label-key="label"
+            value-key="value"
+            @confirm="handleStaffConfirm"
           >
-            <template #suffix>
-              <wd-icon name="arrow-right" />
-            </template>
-          </wd-input>
+            <wd-cell title-width="120" is-link>
+              <text :class="formData.staffName ? 'text-gray-900' : 'text-gray-400'">
+                {{ formData.staffName || '请选择接收员工' }}
+              </text>
+            </wd-cell>
+          </wd-picker>
         </wd-form-item>
 
         <!-- 流转说明 -->
@@ -202,7 +198,7 @@ onMounted(() => {
           <wd-textarea
             v-model="formData.transferDesc"
             placeholder="请输入流转说明"
-            maxlength="512"
+            :maxlength="512"
             show-word-limit
           />
         </wd-form-item>
@@ -221,14 +217,6 @@ onMounted(() => {
         提交
       </wd-button>
     </view>
-
-    <!-- 员工选择器 -->
-    <wd-picker
-      v-model="showStaffPicker"
-      :columns="staffList.map((staff) => ({ value: staff.userId, label: staff.userName }))"
-      @confirm="handleStaffConfirm"
-      @cancel="showStaffPicker = false"
-    />
   </view>
 </template>
 

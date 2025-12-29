@@ -90,7 +90,7 @@ onMounted(() => {
       </view>
     </view>
 
-    <wd-loading v-if="loading" type="circular" />
+    <wd-loading v-if="loading" type="ring" />
   </view>
 </template>
 

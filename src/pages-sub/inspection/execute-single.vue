@@ -12,13 +12,13 @@
 
 <script setup lang="ts">
 import type { FormInstance } from 'wot-design-uni/components/wd-form/types'
-import type { UploadFile } from 'wot-design-uni/components/wd-upload/types'
+import type { UploadFile, UploadRemoveEvent, UploadSuccessEvent } from 'wot-design-uni/components/wd-upload/types'
 import type { InspectionItemTitle } from '@/types/inspection'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { onMounted, reactive, ref } from 'vue'
 import { getInspectionItemTitles, submitInspection } from '@/api/inspection'
-import { router } from '@/router'
+import { TypedRouter } from '@/router'
 
 /** 路由参数 */
 const taskDetailId = ref('')
@@ -145,18 +145,21 @@ async function loadInspectionItemTitles() {
 
 /**
  * 照片上传成功回调
- * @param files 上传成功的文件列表
+ * @param event 上传成功事件
  */
-function handleUploadSuccess(files: UploadFile[]) {
+function handleUploadSuccess(event: UploadSuccessEvent) {
+  const files = event.fileList as UploadFile[]
   uploadFiles.value = files
   formData.photos = files.map(file => file.url || '')
 }
 
 /**
  * 照片删除回调
- * @param files 删除后的文件列表
+ * @param event 删除事件
  */
-function handleUploadRemove(files: UploadFile[]) {
+function handleUploadRemove(event: UploadRemoveEvent) {
+  // 从当前文件列表中移除被删除的文件
+  const files = uploadFiles.value.filter(file => file !== event.file) as UploadFile[]
   uploadFiles.value = files
   formData.photos = files.map(file => file.url || '')
 }
@@ -242,11 +245,11 @@ onSubmitSuccess(() => {
   setTimeout(() => {
     if (fromPage.value === 'QrCode') {
       // 从二维码扫描进入，跳转到巡检打卡页
-      router.replace({ name: 'inspection-task-list' })
+      TypedRouter.toInspectionTaskList()
     }
     else {
       // 正常流程，返回上一页
-      router.back()
+      uni.navigateBack()
     }
   }, 1500)
 })
@@ -361,7 +364,7 @@ onMounted(() => {
           <wd-textarea
             v-model="item.radio as string"
             placeholder="请回答"
-            maxlength="512"
+            :maxlength="512"
             show-word-limit
           />
         </wd-form-item>
@@ -385,7 +388,7 @@ onMounted(() => {
         <wd-textarea
           v-model="formData.description"
           placeholder="请输入巡检说明"
-          maxlength="512"
+          :maxlength="512"
           show-word-limit
         />
       </wd-form-item>
