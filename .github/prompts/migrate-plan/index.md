@@ -936,7 +936,7 @@
 
 经过调研，使用原生的 `uni.setNavigationBarTitle` 和 `onReady` 来完成进入页面更改标题的功能。
 
-## 059 <!-- TODO: --> 迁移重构子代理文件为 claude code skill 技能文件
+## 059 迁移重构子代理文件为 claude code skill 技能文件
 
 1. **阅读 skill 技能写法**： 请你先阅读 claude code skill 的格式文档，和最佳实践。我需要你迁移的格式是项目级别的 skills 技能文件。
    - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
