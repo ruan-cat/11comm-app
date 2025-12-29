@@ -575,7 +575,20 @@ invoker	@	vue.runtime.esm.js:10209
 1. 针对 `src\pages-sub\repair\handle.vue` `处理维修工单` 页面
 2. 使用 uni.setNavigationBarTitle 和 onReady 来完成进入本页面，根据路由参数，动态变化标题。
 
-## 041 <!-- TODO: --> 样式写法一律使用 unocss 来完成
+## 042 <!-- TODO: --> 优化 `src\pages-sub\repair\dispatch.vue` 维修待办单的视觉效果
+
+1. 针对 `维修待办单` 页面。
+2. 阅读以下 url 图片地址：
+
+![2025-12-29-12-23-39](https://s2.loli.net/2025/12/29/9KhxEICin5MHuaO.png)
+
+3. 不使用 `popup` 组件来实现弹框打开和输入信息的功能，显示效果很不美观。换 `message-box` 组件来实现。在 `src\pages-sub\repair\dispatch.vue` 内，已经有类似的写法实现 `message-box` 的使用了。请你替换写法。
+   - 参考资料： https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/message-box.md
+4. 更新相关技能： 我不希望你之后的代码写法，仍旧出现类似的生成不美观代码的错误。需要你将相关经验，总结成具体可复用的 claude code 技能。
+   - `.claude\skills\component-migration` 在组件迁移技能内，重点说明弹框交互式的组件选型，选型为 `wd-message-box` 而不是 `wd-popup` 组件。
+   - `.claude\skills\beautiful-component-design` 在美观组件设计技能内，增加该内容。说明使用正确的组件选型。
+
+## 043 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
 2. 针对 `维修工单流程模块系列页面` 的 vue 组件，存在额外使用 scss 的情况。请你用 `style-migration` 来改造代码，使其满足子代理的要求。
