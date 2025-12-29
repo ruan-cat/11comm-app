@@ -1032,3 +1032,10 @@ const showTotalAmount = computed(() => model.feeFlag === "1001");
 2. 我需要你现在全面阅读 `src\router` 内全部的文件，搞清楚在实现旧项目迁移到新项目时，路由跳转工具应该如何定义。
 3. 我需要你仔细阅读 `src\pages-sub\repair` 报修模块内，各个页面是如何使用这个强类型路由跳转工具的。
 4. 在阅读搞懂上述的强类型路由跳转机制后。请你恢复 `route-migration` 技能对迁移旧路由的知识点。
+
+## 062 补全恢复 `component-migration` 技能对 `<wd-empty>` 组件替换成 `<wd-status-tip>` 组件的知识
+
+1. `component-migration` 技能在上次迁移的时候，丢失了避免使用错误组件 `<wd-empty>` 的知识。导致部分页面使用了错误的组件。
+2. 你应该告诉 `component-migration` 技能，不应该使用这个不存在的组件。
+3. `<wd-status-tip>` 组件文档：
+   - https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/status-tip.md

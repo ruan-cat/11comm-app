@@ -243,29 +243,56 @@ import FormSectionTitle from "@/components/common/form-section-title/index.vue";
 
 ### 6. 空状态组件迁移
 
-**强制使用 `<wd-status-tip>` 替换 `no-data-page`**
+**⚠️ 严格禁止使用 `<wd-empty>` 组件 - 该组件在 wot-design-uni 中不存在！**
+
+**强制使用 `<wd-status-tip>` 组件**
 
 ```vue
-<!-- 旧代码 -->
+<!-- ❌ 错误：wd-empty 组件不存在！ -->
+<wd-empty description="暂无数据" />
+
+<!-- ❌ 错误：使用旧项目的空状态组件 -->
 <view v-if="list.length === 0">
   <no-data-page></no-data-page>
 </view>
 
-<!-- 新代码 -->
+<!-- ✅ 正确：使用 wd-status-tip -->
 <view v-if="list.length === 0">
   <wd-status-tip image="search" tip="暂无数据" />
 </view>
+
+<!-- ✅ 正确：在 z-paging 的 empty 插槽中使用 -->
+<template #empty>
+	<wd-status-tip image="search" tip="暂无数据" />
+</template>
 ```
 
 **7 种内置状态类型**:
 
-- `search`: 搜索无结果
+- `search`: 搜索无结果（推荐用于列表、搜索页）
 - `network`: 网络连接失败
-- `content`: 内容为空（默认）
+- `content`: 内容为空（默认值）
 - `collect`: 收藏/收集为空
 - `comment`: 评论/联系人为空
 - `halo`: 操作失败/支付失败
 - `message`: 消息通知
+
+**使用场景示例**:
+
+```vue
+<!-- 搜索结果为空 -->
+<wd-status-tip image="search" tip="暂无搜索结果" />
+
+<!-- 列表数据为空 -->
+<wd-status-tip image="content" tip="暂无数据" />
+
+<!-- 网络错误 -->
+<wd-status-tip image="network" tip="网络连接失败">
+  <template #bottom>
+    <wd-button @click="retry">重新加载</wd-button>
+  </template>
+</wd-status-tip>
+```
 
 **自定义图片内容**:
 
@@ -276,6 +303,16 @@ import FormSectionTitle from "@/components/common/form-section-title/index.vue";
   </template>
 </wd-status-tip>
 ```
+
+**常见属性**:
+
+| 属性         | 说明                         | 类型                 | 默认值    |
+| ------------ | ---------------------------- | -------------------- | --------- |
+| `image`      | 预设图片类型或自定义图片 URL | string               | 'network' |
+| `tip`        | 提示文案                     | string               | -         |
+| `image-size` | 图片尺寸                     | string/number/object | -         |
+
+> **📚 完整文档**: https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/status-tip.md
 
 ### 7. 全局反馈组件
 
