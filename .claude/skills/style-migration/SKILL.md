@@ -7,6 +7,35 @@ description: 专注于 ColorUI 到 UnoCSS + wot-design-uni 的样式系统迁移
 
 从 Vue2 项目的 **ColorUI + SCSS** 样式系统迁移到 Vue3 项目的 **UnoCSS + wot-design-uni** 现代化原子 CSS 样式系统。
 
+## ⚠️ 迁移前必读（Critical）
+
+**🚨 禁止直接编写代码！必须先完成：**
+
+1. ✅ **第一步：阅读参考文件**
+   - 推荐：`src/pages-sub/repair/*.vue`（UnoCSS + wot-design-uni 样式示例）
+   - 推荐：`uno.config.ts`（主题配置和公共变量）
+   - 必读：本技能文件的完整内容
+
+2. ✅ **第二步：理解核心差异**
+   - ColorUI 类名（`cu-btn`）→ UnoCSS 原子类（`bg-blue-500 p-2 rounded`）
+   - SCSS 变量（`$primary-color`）→ UnoCSS 主题（`bg-primary`）
+   - 固定像素（`20px`）→ 响应式单位（`20rpx`）
+
+3. ✅ **第三步：严格遵循规范**
+   - **禁止**滥用 UnoCSS shortcuts 功能
+   - **禁止**将 ColorUI 类名直接转为 shortcuts
+   - **优先**展开为原子化 UnoCSS 类名
+   - **仅在** `uno.config.ts` 定义主题和公共变量
+
+### 🚫 常见错误（严禁犯）
+
+|      ❌ 错误写法       |               ✅ 正确写法               |        说明        |
+| :--------------------: | :-------------------------------------: | :----------------: |
+|    `class="cu-btn"`    | `class="bg-blue-500 px-4 py-2 rounded"` |    展开为原子类    |
+| shortcuts 定义业务样式 |             仅定义主题颜色              | 禁止滥用 shortcuts |
+|    `20px` 固定像素     |           `20rpx` 响应式单位            |   使用 rpx 单位    |
+|   保留 ColorUI 类名    |             完全使用 UnoCSS             |      彻底迁移      |
+
 ## 核心方针
 
 从 ColorUI 传统 CSS 框架迁移到 UnoCSS 原子化 CSS,实现样式文件体积从 **195KB 减少到 80KB,减少 60%**。

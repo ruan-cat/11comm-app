@@ -31,3 +31,16 @@
 1. 阅读 `.github\prompts\route-migration-map.yml` 的 `inspection_modules` 部分。
 2. 阅读全部的 `src\pages-sub\inspection` vue 组件代码，反向追踪旧代码。
 3. 按照 `api-migration` api 迁移技能，完整地迁移 inspection 巡检业务的业务类型、mock 接口、和使用的 api 接口函数。
+
+### 01 处理类型错误
+
+1. 阅读全部的 `.claude\skills\api-migration` 迁移技能。
+2. 修复 `src\api\mock\inspection.mock.ts` 出现的类型报错。
+3. 注意阅读其他的 xxx.mock.ts 接口，模仿其他 mock 接口的实现方式。
+
+### 02 继续处理修复 `src\api\mock\inspection.mock.ts` 出现的类型报错
+
+## 006 处理错误的组件使用类型错误
+
+1. 阅读全部的 `src\pages-sub\inspection` vue 组件代码，阅读其出现的类型报错。
+2. 使用 `.claude\skills\component-migration` 的要求，处理代码出现的组件 props 类型使用错误。

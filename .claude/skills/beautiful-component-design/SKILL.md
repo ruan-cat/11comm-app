@@ -10,6 +10,37 @@ color: pink
 
 用于指导编写视觉美观、文本与图标对齐良好、响应式友好的 Vue 组件的最佳实践。
 
+## ⚠️ 设计前必读（Critical）
+
+**🚨 禁止直接编写代码！必须先完成：**
+
+1. ✅ **第一步：阅读参考文件**
+   - 推荐：`src/pages-sub/repair/staff-todo-detail.vue`（完整美化示例）
+   - 推荐：`src/components/activity/*.vue`（组件封装示例）
+   - 必读：`.claude/skills/beautiful-component-design/icon-usage.md`
+   - 必读：`.claude/skills/beautiful-component-design/text-alignment.md`
+
+2. ✅ **第二步：理解设计规范**
+   - 图标必须使用 `<wd-icon>` + Carbon Icons
+   - 图标与文本对齐：`flex items-center`
+   - 统一字号：标题 `32rpx`，正文 `28rpx`，辅助 `24rpx`
+   - 响应式单位：使用 `rpx` 而非 `px`
+
+3. ✅ **第三步：严格遵循规范**
+   - **必须**使用 Carbon Icons 图标集
+   - **必须**保证图标与文本对齐
+   - **必须**使用 rpx 响应式单位
+   - **必须**遵循统一的字号规范
+
+### 🚫 常见错误（严禁犯）
+
+|     ❌ 错误写法      |            ✅ 正确写法             |      说明      |
+| :------------------: | :--------------------------------: | :------------: |
+| `class="cuIcon-xxx"` | `<wd-icon name="">` + Carbon Icons | 使用 Icon 组件 |
+|    图标文本不对齐    |        `flex items-center`         |  垂直居中对齐  |
+|  `font-size: 14px`   |            `text-28rpx`            | 使用 rpx 单位  |
+|       随意字号       |       遵循 32/28/24rpx 规范        |    统一字号    |
+
 ## 1. 专业能力
 
 - **图标规范设计**: 精通 Carbon Icons 图标集使用，熟悉图标与文本对齐的视觉设计原则

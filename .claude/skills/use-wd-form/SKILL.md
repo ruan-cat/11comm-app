@@ -7,6 +7,34 @@ description: 使用 wot-design-uni 的 wd-form 组件编写表单页的标准规
 
 本技能文件定义了在本项目中使用 `wot-design-uni` 组件库的 `<wd-form>` 组件编写表单页的标准规范。所有表单页面必须遵循此规范，确保代码风格统一、美观且易于维护。
 
+## ⚠️ 编写前必读（Critical）
+
+**🚨 禁止直接编写表单代码！必须先完成：**
+
+1. ✅ **第一步：阅读参考文件**
+   - 推荐：`src/pages-sub/repair/pool-dispatch.vue`（完整表单示例）
+   - 推荐：`src/pages-sub/repair/pool-finish.vue`（复杂表单示例）
+   - 必读：本技能文件的完整内容
+
+2. ✅ **第二步：查阅组件文档**
+   - wd-form 文档：https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/form.md
+   - wd-cell 文档：https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/cell.md
+
+3. ✅ **第三步：严格遵循规范**
+   - 必须使用 `<wd-form>` 包裹所有表单项
+   - 必须使用 `<wd-cell-group>` 分组表单项
+   - 必须定义 `formRules` 校验规则
+   - 必须使用 `FormInstance` 类型导入
+
+### 🚫 常见错误（严禁犯）
+
+|       ❌ 错误写法        |          ✅ 正确写法           |          说明          |
+| :----------------------: | :----------------------------: | :--------------------: |
+|    不使用 `<wd-form>`    |   `<wd-form ref="formRef">`    |    必须使用表单组件    |
+|    缺少 `rules` 配置     |      `:rules="formRules"`      |    必须定义校验规则    |
+|       类型导入错误       | `import type { FormInstance }` | 必须从正确路径导入类型 |
+| 不使用 `<wd-cell-group>` |    `<wd-cell-group border>`    |     必须分组表单项     |
+
 ## 1. 核心组件文档
 
 在编写表单之前，请先阅读以下组件文档：

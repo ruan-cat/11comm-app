@@ -5,6 +5,35 @@ description: z-paging 分页组件与 api-migration 适配方案 - 提供 z-pagi
 
 # z-paging 分页组件集成方案
 
+## ⚠️ 集成前必读（Critical）
+
+**🚨 禁止直接编写代码！必须先完成：**
+
+1. ✅ **第一步：阅读参考文件**
+   - 必读：`src/pages-sub/repair/pool-list.vue`（完整的 z-paging + useRequest 示例）
+   - 必读：`src/pages-sub/repair/staff-todo-list.vue`（复杂筛选 + 分页示例）
+   - 必读：本技能文件的完整内容
+
+2. ✅ **第二步：理解核心机制**
+   - z-paging 在 `@query` 事件中触发请求
+   - useRequest 在 `onSuccess` 中调用 `complete()`
+   - 筛选条件变化时调用 `reload()` 重置到第 1 页
+
+3. ✅ **第三步：严格遵循规范**
+   - **必须**在 `@query` 中调用 `send()`
+   - **必须**在 `onSuccess` 中调用 `complete(list, hasMore)`
+   - **必须**在 `onError` 中调用 `complete(false)`
+   - **禁止**使用 `try/catch` 包装
+
+### 🚫 常见错误（严禁犯）
+
+|      ❌ 错误写法       |       ✅ 正确写法       |         说明         |
+| :--------------------: | :---------------------: | :------------------: |
+| 在 `@query` 外调用请求 | 在 `@query` 中 `send()` | 必须在 @query 中触发 |
+|    `send().then()`     | `send() + onSuccess()`  | 使用回调而非 Promise |
+| 忘记调用 `complete()`  |    `complete(list)`     |  必须通知 z-paging   |
+|    手动管理 loading    |        自动管理         | useRequest 自动管理  |
+
 ## 1. 适用场景
 
 当页面需要使用 `<z-paging>` 组件实现分页列表功能，同时需要遵循 `api-migration` 规范使用 `useRequest` 管理接口请求时，必须使用本 Skill 中的集成方案。

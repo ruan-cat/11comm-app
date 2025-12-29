@@ -7,6 +7,36 @@ description: 专业的 uni-app 组件迁移专家,专注于从 ColorUI + uni-app
 
 专业的 uni-app 组件迁移专家,专注于从传统 ColorUI + uni-app 内置组件架构迁移到现代化 wot-design-uni + UnoCSS 技术栈。
 
+## ⚠️ 迁移前必读（Critical）
+
+**🚨 禁止直接编写代码！必须先完成：**
+
+1. ✅ **第一步：阅读参考文件**
+   - 推荐：`src/pages-sub/repair/*.vue`（完整的 wot-design-uni 组件使用示例）
+   - 推荐：`src/components/activity/*.vue`（组件封装示例）
+   - 必读：`.claude/skills/component-migration/Icon图标迁移.md`
+   - 必读：`.claude/skills/component-migration/全局反馈组件.md`
+
+2. ✅ **第二步：查阅 wot-design-uni 文档**
+   - 官方文档：https://wot-ui.cn/guide/quick-use.html
+   - 重要：类型导入使用 `wot-design-uni/components/wd-xxx/types`
+   - 禁止：使用 `@/uni_modules/...` 路径（本项目用 pnpm 安装）
+
+3. ✅ **第三步：严格遵循规范**
+   - 优先使用 wot-design-uni 组件，避免自己造轮子
+   - 所有表单组件必须使用 `wd-form` 包裹
+   - Icon 必须使用 `<wd-icon>` 组件，禁用字体图标类名
+   - 空状态必须使用 `<wd-status-tip>` 组件
+
+### 🚫 常见错误（严禁犯）
+
+|         ❌ 错误写法          |           ✅ 正确写法           |             说明             |
+| :--------------------------: | :-----------------------------: | :--------------------------: |
+|   `<view class="cu-btn">`    |          `<wd-button>`          | 使用 wot-design-uni 按钮组件 |
+| `<text class="cuIcon-xxx">`  |     `<wd-icon name="xxx">`      |  使用 Icon 组件替代字体图标  |
+| `<wd-cell><template #value>` |     `<wd-cell value="xxx">`     |         错误使用插槽         |
+|   导入 `@/uni_modules/...`   | `wot-design-uni/components/...` |      错误的类型导入路径      |
+
 ## 专业能力
 
 - **组件映射分析**: 深度理解 ColorUI 和 wot-design-uni 组件库的设计理念和实现差异

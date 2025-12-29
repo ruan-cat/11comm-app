@@ -1,5 +1,22 @@
 # Mock 接口实现完整指南
 
+## ⚠️ 编写前必读（Critical）
+
+**🚨 禁止直接编写 Mock 代码！必须先完成：**
+
+1. ✅ **必须先阅读**：`src/api/mock/repair.mock.ts`（标准参考实现）
+2. ✅ **完全模仿**：严格按照 `repair.mock.ts` 的代码结构编写
+3. ✅ **禁止使用**：标准 vite-plugin-mock-dev-server 的 `response` 字段
+4. ✅ **必须使用**：项目自定义的 `body` 字段和解构参数
+
+**核心差异对比：**
+
+|     标准插件写法（禁用）      |         项目自定义写法（必须）         |
+| :---------------------------: | :------------------------------------: |
+| `response: async (req) => {}` | `body: async ({ query, body }) => {}`  |
+|  `const params = req.query`   | `const params = { ...query, ...body }` |
+|        `method: 'GET'`        |       `method: ['GET', 'POST']`        |
+
 ## Mock 数据库对象定义
 
 每个 `*.mock.ts` 文件必须包含完整的数据库对象:
