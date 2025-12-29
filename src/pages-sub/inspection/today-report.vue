@@ -126,7 +126,7 @@ onMounted(() => {
           is-link
           @click="goToDetail(item)"
         >
-          <template #value>
+          <template #right>
             <view class="staff-status">
               <text class="finish-count">已巡检: {{ item.finishCount }}</text>
               <text class="wait-count">未巡检: {{ item.waitCount }}</text>
@@ -137,7 +137,7 @@ onMounted(() => {
     </view>
 
     <!-- 空状态 -->
-    <wd-empty v-else-if="noData && !loading" description="暂无巡检统计" />
+    <wd-status-tip v-else-if="noData && !loading" image="search" tip="暂无巡检统计" />
 
     <!-- 加载状态 -->
     <wd-loading v-if="loading" type="circular" />

@@ -169,7 +169,7 @@ onShow(() => {
     <view class="progress-info">
       <wd-cell-group>
         <wd-cell title="巡检进度" center>
-          <template #value>
+          <template #right>
             <view class="progress-value">
               <text class="count">{{ completedCount }}/{{ totalCount }}</text>
               <wd-progress :percentage="progress" hide-label />
@@ -221,7 +221,7 @@ onShow(() => {
             class="photo-item"
             @click="previewImage(item, photoIndex)"
           >
-            <image
+            <wd-img
               :src="photo.url"
               mode="aspectFill"
               class="photo-image"
@@ -245,7 +245,7 @@ onShow(() => {
     </view>
 
     <!-- 空状态 -->
-    <wd-empty v-else-if="!loading && taskDetails.length === 0" description="暂无巡检项" />
+    <wd-status-tip v-else-if="!loading && taskDetails.length === 0" image="search" tip="暂无巡检项" />
 
     <!-- 加载状态 -->
     <wd-loading v-if="loading" type="circular" />

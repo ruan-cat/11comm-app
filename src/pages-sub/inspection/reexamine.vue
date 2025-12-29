@@ -165,7 +165,7 @@ onShow(() => {
     </view>
 
     <!-- 空状态 -->
-    <wd-empty v-else-if="noData && !loading" description="暂无补检任务" />
+    <wd-status-tip v-else-if="noData && !loading" image="search" tip="暂无补检任务" />
 
     <!-- 加载状态 -->
     <wd-loading v-if="loading" type="circular" />
