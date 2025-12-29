@@ -7,6 +7,7 @@
   建议携带参数: ?feeFlag=1001
 
   完整示例: http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001
+  上级页面: http://localhost:9000/#/pages-sub/repair/handle 处理维修工单页面
 
   有偿维修（显示价格输入框）
   http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001
