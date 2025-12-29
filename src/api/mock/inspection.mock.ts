@@ -96,7 +96,7 @@ function generateInspectionTask(index: number): InspectionTask {
     planInsTime: formatDateTime(planTime),
     signTypeName: signTypeItem.label,
     stateName: statusItem.label,
-    state: statusItem.value,
+    state: statusItem.value as string,
   }
 }
 
@@ -116,7 +116,7 @@ function generateInspectionTaskDetail(taskId: string, index: number): Inspection
     inspectionId: `INSP_${String(index).padStart(3, '0')}`,
     inspectionName: itemName,
     itemId: `ITEM_${String(index).padStart(3, '0')}`,
-    state: statusItem.value,
+    state: statusItem.value as string,
     stateName: statusItem.label,
     pointStartTime,
     pointEndTime,
@@ -154,7 +154,7 @@ function generateInspectionItemTitle(index: number, type: 'radio' | 'checkbox' |
     return {
       titleId,
       itemTitle: item.title,
-      titleType: titleTypeItem.value,
+      titleType: titleTypeItem.value as string,
       radio: '',
       inspectionItemTitleValueDtos: item.values.map(v => ({ itemValue: v })),
     }
@@ -165,7 +165,7 @@ function generateInspectionItemTitle(index: number, type: 'radio' | 'checkbox' |
     return {
       titleId,
       itemTitle: item.title,
-      titleType: titleTypeItem.value,
+      titleType: titleTypeItem.value as string,
       radio: [],
       inspectionItemTitleValueDtos: item.values.map(v => ({ itemValue: v })),
     }
@@ -176,7 +176,7 @@ function generateInspectionItemTitle(index: number, type: 'radio' | 'checkbox' |
   return {
     titleId,
     itemTitle: item.title,
-    titleType: titleTypeItem.value,
+    titleType: titleTypeItem.value as string,
     radio: '',
     inspectionItemTitleValueDtos: [],
   }
@@ -356,7 +356,7 @@ class InspectionDatabase {
       if (detail) {
         // 更新为已完成状态
         const completedStatus = INSPECTION_STATES.find(s => s.value === '20200407')!
-        detail.state = completedStatus.value
+        detail.state = completedStatus.value as string
         detail.stateName = completedStatus.label
         detail.description = data.description
         detail.photos = data.photos.map((url, i) => ({
@@ -398,10 +398,11 @@ export default defineUniAppMock([
   /** 1. 查询巡检任务列表 */
   {
     url: '/app/inspection.listInspectionTasks',
-    method: 'GET',
-    response: async (req) => {
-      await randomDelay()
-      const params = req.query as any
+    method: ['GET', 'POST'],
+    delay: [300, 800],
+    body: async ({ query, body }) => {
+      await randomDelay(300, 800)
+      const params = { ...query, ...body }
       mockLog('getInspectionTaskList', params)
 
       const result = inspectionDB.getTaskList({
@@ -421,10 +422,11 @@ export default defineUniAppMock([
   /** 2. 查询今日巡检统计 */
   {
     url: '/app/inspection.getTodayReport',
-    method: 'GET',
-    response: async (req) => {
-      await randomDelay()
-      const params = req.query as any
+    method: ['GET', 'POST'],
+    delay: [200, 600],
+    body: async ({ query, body }) => {
+      await randomDelay(200, 600)
+      const params = { ...query, ...body }
       mockLog('getTodayReport', params)
 
       const data = inspectionDB.getTodayReport({
@@ -440,10 +442,11 @@ export default defineUniAppMock([
   /** 3. 查询巡检任务详情 */
   {
     url: '/app/inspection.listInspectionTaskDetails',
-    method: 'GET',
-    response: async (req) => {
-      await randomDelay()
-      const params = req.query as any
+    method: ['GET', 'POST'],
+    delay: [200, 600],
+    body: async ({ query, body }) => {
+      await randomDelay(200, 600)
+      const params = { ...query, ...body }
       mockLog('getInspectionTaskDetail', params)
 
       const result = inspectionDB.getTaskDetail({
@@ -466,10 +469,11 @@ export default defineUniAppMock([
   /** 4. 查询巡检项标题 */
   {
     url: '/app/inspection.listInspectionItemTitles',
-    method: 'GET',
-    response: async (req) => {
-      await randomDelay()
-      const params = req.query as any
+    method: ['GET', 'POST'],
+    delay: [200, 500],
+    body: async ({ query, body }) => {
+      await randomDelay(200, 500)
+      const params = { ...query, ...body }
       mockLog('getInspectionItemTitles', params)
 
       const result = inspectionDB.getItemTitles({
@@ -488,9 +492,10 @@ export default defineUniAppMock([
   {
     url: '/app/inspection.submitInspection',
     method: 'POST',
-    response: async (req) => {
-      await randomDelay()
-      const data = req.body as InspectionSubmitParams
+    delay: [500, 1000],
+    body: async ({ body }) => {
+      await randomDelay(500, 1000)
+      const data = body as InspectionSubmitParams
       mockLog('submitInspection', data)
 
       const success = inspectionDB.submitInspection(data)
@@ -507,10 +512,11 @@ export default defineUniAppMock([
   /** 6. 查询员工列表 */
   {
     url: '/app/staff.listStaffs',
-    method: 'GET',
-    response: async (req) => {
-      await randomDelay()
-      const params = req.query as any
+    method: ['GET', 'POST'],
+    delay: [200, 500],
+    body: async ({ query, body }) => {
+      await randomDelay(200, 500)
+      const params = { ...query, ...body }
       mockLog('getStaffList', params)
 
       const data = inspectionDB.getStaffList({
@@ -526,9 +532,10 @@ export default defineUniAppMock([
   {
     url: '/app/inspection.transferTask',
     method: 'POST',
-    response: async (req) => {
-      await randomDelay()
-      const data = req.body as InspectionTransferParams
+    delay: [400, 800],
+    body: async ({ body }) => {
+      await randomDelay(400, 800)
+      const data = body as InspectionTransferParams
       mockLog('transferInspectionTask', data)
 
       const success = inspectionDB.transferTask(data)
