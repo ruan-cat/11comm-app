@@ -1,6 +1,7 @@
 <!--
   选择维修物资
   功能：选择维修所需的物品/资源，支持标准商品和自定义商品
+  表单页
 
   访问地址: http://localhost:9000/#/pages-sub/repair/select-resource
   建议携带参数: ?feeFlag=1001

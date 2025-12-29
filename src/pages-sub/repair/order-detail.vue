@@ -1,5 +1,6 @@
 <!--
   维修工单详情
+  详情页
   功能：显示维修工单详细信息，包括基本信息、图片和流转时间轴
 
   访问地址: http://localhost:9000/#/pages-sub/repair/order-detail
