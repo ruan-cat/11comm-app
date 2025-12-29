@@ -3,6 +3,8 @@
   功能：显示今日巡检统计和详细记录
 
   访问地址: http://localhost:9000/#/pages-sub/inspection/today-report
+
+  旧代码： gitee-example/pages/inspection/inspectionTodayReport.vue
 -->
 
 <script setup lang="ts">

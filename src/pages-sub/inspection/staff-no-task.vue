@@ -6,6 +6,8 @@
   建议携带参数: ?staffId=xxx&staffName=xxx&queryTime=xxx
 
   示例: http://localhost:9000/#/pages-sub/inspection/staff-no-task?staffId=STAFF_001&staffName=张三&queryTime=2025-12-29
+
+  旧代码： gitee-example/pages/inspection/staffNoInspection.vue
 -->
 
 <script setup lang="ts">

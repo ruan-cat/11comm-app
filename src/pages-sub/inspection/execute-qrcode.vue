@@ -6,6 +6,8 @@
   建议携带参数: ?inspectionId=xxx&inspectionName=xxx&itemId=xxx
 
   示例: http://localhost:9000/#/pages-sub/inspection/execute-qrcode?inspectionId=INSP_002&inspectionName=消防通道检查&itemId=ITEM_002
+
+  旧代码： gitee-example/pages/excuteOneQrCodeInspection/excuteOneQrCodeInspection.vue
 -->
 
 <script setup lang="ts">

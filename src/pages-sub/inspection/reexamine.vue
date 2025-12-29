@@ -3,6 +3,8 @@
   功能：显示需要补检的巡检任务列表，支持发起补检流程
 
   访问地址: http://localhost:9000/#/pages-sub/inspection/reexamine
+
+  旧代码： gitee-example/pages/inspectionReexamine/inspectionReexamine.vue
 -->
 
 <script setup lang="ts">

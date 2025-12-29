@@ -6,6 +6,8 @@
   建议携带参数: ?task=xxx (JSON字符串)
 
   示例: http://localhost:9000/#/pages-sub/inspection/transfer?task={"taskId":"TASK_001",...}
+
+  旧代码： gitee-example/pages/inspectionTransfer/inspectionTransfer.vue
 -->
 
 <script setup lang="ts">

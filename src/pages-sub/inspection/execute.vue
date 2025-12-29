@@ -6,6 +6,8 @@
   建议携带参数: ?taskId=xxx&inspectionPlanName=xxx
 
   示例: http://localhost:9000/#/pages-sub/inspection/execute?taskId=TASK_001&inspectionPlanName=小区日常巡检
+
+  旧代码： gitee-example/pages/excuteInspection/excuteInspection.vue
 -->
 
 <script setup lang="ts">
