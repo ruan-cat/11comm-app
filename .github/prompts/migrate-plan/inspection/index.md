@@ -17,8 +17,17 @@
 2. 按照技能，初始化强类型的路由
 3. 去更改 `src\pages-sub\inspection` 目录内全部的页面，使用正确的写法。避免使用不存在的 `uni-mini-router` 。
 
-## <!-- TODO: --> 初始化业务类型、mock 接口、与 api
+## 003 <!-- TODO: --> 补全旧代码说明入口
+
+1. 阅读 `.github\prompts\route-migration-map.yml` 的 `inspection_modules` 部分。
+2. 阅读全部的 `src\pages-sub\inspection` vue 组件代码，确保这部分的页面都补全和其他模块代码一样的 `旧代码` 注释。便于我追踪旧代码。
 
 ## <!-- TODO: --> 移动 `src\pages-sub\inspection\types.ts` 类型文件到正确的位置
 
 1. 按照 `.claude\skills\api-migration\类型定义规范.md` ，移动该类型文件到正确的位置。
+
+## <!-- TODO: --> 初始化业务类型、mock 接口、与 api
+
+1. 阅读 `.github\prompts\route-migration-map.yml` 的 `inspection_modules` 部分。
+2. 阅读全部的 `src\pages-sub\inspection` vue 组件代码，反向追踪旧代码。
+3. 按照 `api-migration` api 迁移技能，迁移 inspection 巡检业务的业务类型、mock 接口、和使用的 api 接口函数。
