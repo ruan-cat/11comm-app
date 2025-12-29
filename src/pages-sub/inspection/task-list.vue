@@ -9,11 +9,8 @@
 import type { InspectionTask } from './types'
 import { onShow } from '@dcloudio/uni-app'
 import dayjs from 'dayjs'
-import { useRouter } from 'uni-mini-router'
 import { onMounted, ref } from 'vue'
-
-/** 路由实例 */
-const router = useRouter()
+import { TypedRouter } from '@/router'
 
 /** 巡检任务列表 */
 const tasks = ref<InspectionTask[]>([])
@@ -97,13 +94,7 @@ function startInspection(item: InspectionTask) {
   }
 
   // 跳转到巡检过程页
-  router.push({
-    name: 'inspection-execute',
-    query: {
-      taskId: item.taskId,
-      inspectionPlanName: item.inspectionPlanName,
-    },
-  })
+  TypedRouter.toInspectionExecute(item.taskId, item.inspectionPlanName)
 }
 
 /**
@@ -112,21 +103,14 @@ function startInspection(item: InspectionTask) {
  */
 function transferInspection(item: InspectionTask) {
   // 跳转到任务流转页，传递完整任务对象
-  router.push({
-    name: 'inspection-transfer',
-    query: {
-      task: JSON.stringify(item),
-    },
-  })
+  TypedRouter.toInspectionTransfer(JSON.stringify(item))
 }
 
 /**
  * 跳转到巡检补检页
  */
 function goToReexamine() {
-  router.push({
-    name: 'inspection-reexamine',
-  })
+  TypedRouter.toInspectionReexamine()
 }
 
 onMounted(() => {

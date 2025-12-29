@@ -12,20 +12,26 @@
 import type { FormInstance } from 'wot-design-uni/components/wd-form/types'
 import type { UploadFile } from 'wot-design-uni/components/wd-upload/types'
 import type { InspectionItemTitle } from './types'
-import { useRouter } from 'uni-mini-router'
+import { onLoad } from '@dcloudio/uni-app'
 import { onMounted, reactive, ref } from 'vue'
 
-/** 路由实例 */
-const router = useRouter()
+/** 路由参数 */
+const taskDetailId = ref('')
+const taskId = ref('')
+const inspectionId = ref('')
+const inspectionName = ref('')
+const itemId = ref('')
+const fromPage = ref('') // 来源页面（用于判断是否从二维码扫描进入）
 
 /** 获取路由参数 */
-const { query } = router.currentRoute.value
-const taskDetailId = query.taskDetailId as string
-const taskId = query.taskId as string
-const inspectionId = query.inspectionId as string
-const inspectionName = query.inspectionName as string
-const itemId = query.itemId as string
-const fromPage = query.fromPage as string // 来源页面（用于判断是否从二维码扫描进入）
+onLoad((options) => {
+  taskDetailId.value = options?.taskDetailId as string || ''
+  taskId.value = options?.taskId as string || ''
+  inspectionId.value = options?.inspectionId as string || ''
+  inspectionName.value = options?.inspectionName as string || ''
+  itemId.value = options?.itemId as string || ''
+  fromPage.value = options?.fromPage as string || ''
+})
 
 /** 表单实例 */
 const formRef = ref<FormInstance>()
@@ -311,7 +317,7 @@ async function submitInspection() {
 
     // 返回上一页或跳转到巡检打卡页
     setTimeout(() => {
-      if (fromPage === 'QrCode') {
+      if (fromPage.value === 'QrCode') {
         // 从二维码扫描进入，跳转到巡检打卡页
         router.replace({ name: 'inspection-task-list' })
       }

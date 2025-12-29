@@ -142,13 +142,46 @@ export class TypedRouter {
     return navigateToTyped('/pages-sub/complaint/handle', { complaintId })
   }
 
-  /** 巡检模块导航 */
-  static toInspectionList(params?: PageParams['/pages-sub/inspection/list']) {
-    return navigateToTyped('/pages-sub/inspection/list', params)
+  /** 巡检模块导航 (8个页面) */
+
+  /** 跳转到巡检任务列表 */
+  static toInspectionTaskList() {
+    return navigateToTyped('/pages-sub/inspection/task-list', {})
   }
 
-  static toInspectionExecute(taskId: string, type?: 'normal' | 'reexamine') {
-    return navigateToTyped('/pages-sub/inspection/execute', { taskId, type })
+  /** 跳转到巡检过程页 */
+  static toInspectionExecute(taskId: string, inspectionPlanName?: string) {
+    return navigateToTyped('/pages-sub/inspection/execute', { taskId, inspectionPlanName })
+  }
+
+  /** 跳转到二维码巡检页 */
+  static toInspectionExecuteQrcode(inspectionId: string, inspectionName: string, itemId: string) {
+    return navigateToTyped('/pages-sub/inspection/execute-qrcode', { inspectionId, inspectionName, itemId })
+  }
+
+  /** 跳转到执行单项巡检页 */
+  static toInspectionExecuteSingle(params: PageParams['/pages-sub/inspection/execute-single']) {
+    return navigateToTyped('/pages-sub/inspection/execute-single', params)
+  }
+
+  /** 跳转到补检页 */
+  static toInspectionReexamine() {
+    return navigateToTyped('/pages-sub/inspection/reexamine', {})
+  }
+
+  /** 跳转到任务流转页 */
+  static toInspectionTransfer(task: string) {
+    return navigateToTyped('/pages-sub/inspection/transfer', { task })
+  }
+
+  /** 跳转到员工未巡检详情页 */
+  static toInspectionStaffNoTask(staffId: string, staffName: string, queryTime: string) {
+    return navigateToTyped('/pages-sub/inspection/staff-no-task', { staffId, staffName, queryTime })
+  }
+
+  /** 跳转到今日巡检统计页 */
+  static toInspectionTodayReport() {
+    return navigateToTyped('/pages-sub/inspection/today-report', {})
   }
 
   /** 基础页面导航 */
@@ -286,8 +319,14 @@ export function isValidRoute(path: string): path is PageRoute {
     '/pages-sub/complaint/detail',
     '/pages-sub/complaint/handle',
     // 巡检管理模块
-    '/pages-sub/inspection/list',
+    '/pages-sub/inspection/task-list',
     '/pages-sub/inspection/execute',
+    '/pages-sub/inspection/execute-qrcode',
+    '/pages-sub/inspection/execute-single',
+    '/pages-sub/inspection/reexamine',
+    '/pages-sub/inspection/transfer',
+    '/pages-sub/inspection/staff-no-task',
+    '/pages-sub/inspection/today-report',
     // 物业管理模块
     '/pages-sub/property/apply-room',
     '/pages-sub/property/apply-room-detail',

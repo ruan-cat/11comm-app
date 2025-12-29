@@ -10,17 +10,20 @@
 
 <script setup lang="ts">
 import type { InspectionTaskDetail } from './types'
-import { useRouter } from 'uni-mini-router'
+import { onLoad } from '@dcloudio/uni-app'
 import { onMounted, ref } from 'vue'
 
-/** 路由实例 */
-const router = useRouter()
+/** 路由参数 */
+const staffId = ref('')
+const staffName = ref('')
+const queryTime = ref('')
 
 /** 获取路由参数 */
-const { query } = router.currentRoute.value
-const staffId = query.staffId as string
-const staffName = query.staffName as string
-const queryTime = query.queryTime as string
+onLoad((options) => {
+  staffId.value = options?.staffId as string || ''
+  staffName.value = options?.staffName as string || ''
+  queryTime.value = options?.queryTime as string || ''
+})
 
 /** 巡检详情列表 */
 const inspections = ref<InspectionTaskDetail[]>([])

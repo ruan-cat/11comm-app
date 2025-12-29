@@ -10,18 +10,22 @@
 
 <script setup lang="ts">
 import type { InspectionTaskDetail } from './types'
+import { onLoad } from '@dcloudio/uni-app'
 import dayjs from 'dayjs'
-import { useRouter } from 'uni-mini-router'
 import { onMounted, ref } from 'vue'
+import { redirectToTyped } from '@/router'
 
-/** 路由实例 */
-const router = useRouter()
+/** 路由参数 */
+const inspectionId = ref('')
+const inspectionName = ref('')
+const itemId = ref('')
 
 /** 获取路由参数 */
-const { query } = router.currentRoute.value
-const inspectionId = query.inspectionId as string
-const inspectionName = query.inspectionName as string
-const itemId = query.itemId as string
+onLoad((options) => {
+  inspectionId.value = options?.inspectionId as string || ''
+  inspectionName.value = options?.inspectionName as string || ''
+  itemId.value = options?.itemId as string || ''
+})
 
 /** 任务详情列表 */
 const taskDetails = ref<InspectionTaskDetail[]>([])
@@ -56,9 +60,9 @@ async function queryTaskDetails() {
       {
         taskDetailId: 'DETAIL_QR_001',
         taskId: 'TASK_QR_001',
-        inspectionId,
-        inspectionName,
-        itemId,
+        inspectionId: inspectionId.value,
+        inspectionName: inspectionName.value,
+        itemId: itemId.value,
         state: '20200405',
         stateName: '待巡检',
       },
@@ -68,16 +72,13 @@ async function queryTaskDetails() {
     if (taskDetails.value.length > 0) {
       const item = taskDetails.value[0]
 
-      router.replace({
-        name: 'inspection-execute-single',
-        query: {
-          taskDetailId: item.taskDetailId,
-          taskId: item.taskId,
-          inspectionId,
-          inspectionName,
-          itemId,
-          fromPage: 'QrCode',
-        },
+      redirectToTyped('/pages-sub/inspection/execute-single', {
+        taskDetailId: item.taskDetailId,
+        taskId: item.taskId,
+        inspectionId: inspectionId.value,
+        inspectionName: inspectionName.value,
+        itemId: itemId.value,
+        fromPage: 'QrCode',
       })
     }
     else {

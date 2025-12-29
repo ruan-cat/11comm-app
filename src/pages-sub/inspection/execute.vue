@@ -10,17 +10,19 @@
 
 <script setup lang="ts">
 import type { InspectionTaskDetail } from './types'
-import { onShow } from '@dcloudio/uni-app'
-import { useRouter } from 'uni-mini-router'
+import { onLoad, onShow } from '@dcloudio/uni-app'
 import { computed, onMounted, ref } from 'vue'
+import { TypedRouter } from '@/router'
 
-/** 路由实例 */
-const router = useRouter()
+/** 路由参数 */
+const taskId = ref('')
+const inspectionPlanName = ref('')
 
 /** 获取路由参数 */
-const { query } = router.currentRoute.value
-const taskId = query.taskId as string
-const inspectionPlanName = query.inspectionPlanName as string
+onLoad((options) => {
+  taskId.value = options?.taskId as string || ''
+  inspectionPlanName.value = options?.inspectionPlanName as string || ''
+})
 
 /** 巡检任务详情列表 */
 const taskDetails = ref<InspectionTaskDetail[]>([])
@@ -66,7 +68,7 @@ async function getTaskDetails() {
     taskDetails.value = [
       {
         taskDetailId: 'DETAIL_001',
-        taskId,
+        taskId: taskId.value,
         inspectionId: 'INSP_001',
         inspectionName: '大门岗亭检查',
         itemId: 'ITEM_001',
@@ -82,7 +84,7 @@ async function getTaskDetails() {
       },
       {
         taskDetailId: 'DETAIL_002',
-        taskId,
+        taskId: taskId.value,
         inspectionId: 'INSP_002',
         inspectionName: '消防通道检查',
         itemId: 'ITEM_002',
@@ -93,7 +95,7 @@ async function getTaskDetails() {
       },
       {
         taskDetailId: 'DETAIL_003',
-        taskId,
+        taskId: taskId.value,
         inspectionId: 'INSP_003',
         inspectionName: '电梯运行检查',
         itemId: 'ITEM_003',
@@ -121,15 +123,12 @@ async function getTaskDetails() {
  * @param item 巡检项详情
  */
 function executeInspection(item: InspectionTaskDetail) {
-  router.push({
-    name: 'inspection-execute-single',
-    query: {
-      taskDetailId: item.taskDetailId,
-      taskId: item.taskId,
-      inspectionId: item.inspectionId,
-      inspectionName: item.inspectionName,
-      itemId: item.itemId,
-    },
+  TypedRouter.toInspectionExecuteSingle({
+    taskDetailId: item.taskDetailId,
+    taskId: item.taskId,
+    inspectionId: item.inspectionId,
+    inspectionName: item.inspectionName,
+    itemId: item.itemId,
   })
 }
 

@@ -11,18 +11,27 @@
 <script setup lang="ts">
 import type { FormInstance } from 'wot-design-uni/components/wd-form/types'
 import type { InspectionTask } from './types'
-import { useRouter } from 'uni-mini-router'
+import { onLoad } from '@dcloudio/uni-app'
 import { onMounted, reactive, ref } from 'vue'
 
-/** 路由实例 */
-const router = useRouter()
-
-/** 获取路由参数 */
-const { query } = router.currentRoute.value
-const taskInfoStr = query.task as string
+/** 路由参数 */
+const taskInfoStr = ref('')
 
 /** 任务信息 */
 const taskInfo = ref<InspectionTask>({} as InspectionTask)
+
+/** 获取路由参数 */
+onLoad((options) => {
+  taskInfoStr.value = options?.task as string || ''
+  if (taskInfoStr.value) {
+    try {
+      taskInfo.value = JSON.parse(taskInfoStr.value)
+    }
+    catch (error) {
+      console.error('解析任务信息失败:', error)
+    }
+  }
+})
 
 /** 表单实例 */
 const formRef = ref<FormInstance>()
@@ -157,7 +166,7 @@ async function submitTransfer() {
 
 onMounted(() => {
   // 解析任务信息
-  if (taskInfoStr) {
+  if (taskInfoStr.value) {
     try {
       taskInfo.value = JSON.parse(taskInfoStr)
     }

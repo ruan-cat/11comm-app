@@ -29,8 +29,15 @@ export type PageRoute
     | '/pages-sub/complaint/list'
     | '/pages-sub/complaint/detail'
     | '/pages-sub/complaint/handle'
-    | '/pages-sub/inspection/list'
-    | '/pages-sub/inspection/execute'
+	/** 巡检管理模块 (8个页面) */
+    | '/pages-sub/inspection/task-list' // 巡检任务列表
+    | '/pages-sub/inspection/execute' // 巡检过程页
+    | '/pages-sub/inspection/execute-qrcode' // 二维码巡检
+    | '/pages-sub/inspection/execute-single' // 执行单项巡检
+    | '/pages-sub/inspection/reexamine' // 补检页
+    | '/pages-sub/inspection/transfer' // 任务流转
+    | '/pages-sub/inspection/staff-no-task' // 员工未巡检详情
+    | '/pages-sub/inspection/today-report' // 今日巡检统计
     | '/pages-sub/property/apply-room'
     | '/pages-sub/property/apply-room-detail'
     | '/pages-sub/property/apply-room-record'
@@ -124,14 +131,35 @@ export interface PageParams {
   '/pages-sub/complaint/handle': {
     complaintId: string
   }
-  /** 巡检模块参数 */
-  '/pages-sub/inspection/list': {
-    status?: 'pending' | 'completed'
-  }
+  /** 巡检模块参数 (8个页面) */
+  '/pages-sub/inspection/task-list': {} // 巡检任务列表，无参数
   '/pages-sub/inspection/execute': {
     taskId: string
-    type?: 'normal' | 'reexamine'
+    inspectionPlanName?: string
   }
+  '/pages-sub/inspection/execute-qrcode': {
+    inspectionId: string
+    inspectionName: string
+    itemId: string
+  }
+  '/pages-sub/inspection/execute-single': {
+    taskDetailId: string
+    taskId: string
+    inspectionId: string
+    inspectionName: string
+    itemId: string
+    fromPage?: string // 来源页面标识
+  }
+  '/pages-sub/inspection/reexamine': {} // 补检页，无参数
+  '/pages-sub/inspection/transfer': {
+    task: string // JSON字符串，包含任务信息
+  }
+  '/pages-sub/inspection/staff-no-task': {
+    staffId: string
+    staffName: string
+    queryTime: string
+  }
+  '/pages-sub/inspection/today-report': {} // 今日巡检统计，无参数
   /** 物业管理模块参数 */
   '/pages-sub/property/apply-room': {}
   '/pages-sub/property/apply-room-detail': {

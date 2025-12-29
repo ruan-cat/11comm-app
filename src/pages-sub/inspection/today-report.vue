@@ -8,11 +8,8 @@
 <script setup lang="ts">
 import type { InspectionTodayReport } from './types'
 import dayjs from 'dayjs'
-import { useRouter } from 'uni-mini-router'
-import { onMounted, ref } from 'view'
-
-/** 路由实例 */
-const router = useRouter()
+import { onMounted, ref } from 'vue'
+import { TypedRouter } from '@/router'
 
 /** 巡检统计列表 */
 const inspections = ref<InspectionTodayReport[]>([])
@@ -91,14 +88,7 @@ function handleDateChange(value: string) {
  * @param item 巡检统计信息
  */
 function goToDetail(item: InspectionTodayReport) {
-  router.push({
-    name: 'inspection-staff-no-task',
-    query: {
-      staffId: item.staffId,
-      staffName: item.staffName,
-      queryTime: queryDate.value,
-    },
-  })
+  TypedRouter.toInspectionStaffNoTask(item.staffId, item.staffName, queryDate.value)
 }
 
 onMounted(() => {
