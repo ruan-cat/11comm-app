@@ -232,7 +232,113 @@ color: pink
 - ❌ **禁止使用 `#value` 插槽**: **`wd-cell` 组件没有 `#value` 插槽**！不要将 `wd-picker` 或任何内容放在 `wd-cell` 的 `#value` 插槽内
 - ❌ **禁止错误嵌套**: 将 `wd-picker` 放在 `wd-cell` 内部会导致点击事件被阻挡
 
-## 7. 典型应用场景
+## 7. 弹框交互组件选型（⚠️ 重要）
+
+在实现弹框交互时，**必须优先使用 `wd-message-box`** 而非 `wd-popup`，以确保视觉美观和用户体验。
+
+### 7.1. ⚠️ 错误做法：使用 `wd-popup` 实现用户输入
+
+```vue
+<!-- ❌ 严重的视觉和代码问题 -->
+<template>
+	<wd-popup v-model="showStopModal" position="center" closable>
+		<view class="p-6" style="width: 80vw;">
+			<view class="mb-4 text-center text-lg font-bold">暂停原因</view>
+			<!-- 问题1: 输入框没有边界，用户不知道哪里可以点击 -->
+			<!-- 问题2: 布局留白过大，视觉重心不稳 -->
+			<wd-textarea v-model="stopReason" placeholder="请填写暂停原因" :maxlength="200" show-word-limit :rows="4" />
+			<!-- 问题3: 按钮主次不分明，取消按钮颜色过于突出 -->
+			<view class="mt-4 flex gap-3">
+				<wd-button block @click="showStopModal = false">取消</wd-button>
+				<wd-button block type="primary" @click="handleConfirm">确定</wd-button>
+			</view>
+		</view>
+	</wd-popup>
+</template>
+```
+
+**视觉问题总结**（参考用户反馈截图）：
+
+| 问题分类 |                     具体表现                      |            用户体验影响            |
+| :------: | :-----------------------------------------------: | :--------------------------------: |
+| 输入区域 |   输入框无边框/背景色，占位符悬空，字数统计孤立   | 用户不知道哪里可以输入，认知负荷高 |
+| 布局留白 |        垂直高度过高，中间空白区域占比过大         |    视觉流线断裂，廉价感、不专业    |
+| 按钮样式 | 取消/确定按钮视觉权重接近，主次不分（颜色对比低） |    容易误操作，无障碍设计不达标    |
+| 标题层级 |         标题与内容区分度不够，缺少分割线          |          内容层次感不清晰          |
+
+### 7.2. ✅ 正确做法：使用 `wd-message-box.prompt()`
+
+```vue
+<!-- ✅ 系统原生风格，开箱即用，视觉美观 -->
+<template>
+	<wd-button @click="handleStop(item)">暂停</wd-button>
+</template>
+
+<script setup lang="ts">
+import { useGlobalMessage } from "@/hooks/useGlobalMessage";
+
+const message = useGlobalMessage();
+
+function handleStop(item: RepairOrder) {
+	message.prompt({
+		title: "暂停维修",
+		msg: "请填写暂停原因",
+		inputPlaceholder: "请输入暂停原因（必填）",
+		inputValue: "",
+		maxlength: 200,
+		inputValidate: (value: string) => {
+			if (!value || !value.trim()) {
+				return "暂停原因不能为空";
+			}
+			return true;
+		},
+		success: async (res) => {
+			if (res.action === "confirm" && res.value) {
+				// 直接使用输入值
+				await stopRepair({ repairId: item.repairId, remark: res.value.trim() });
+			}
+		},
+	});
+}
+</script>
+```
+
+### 7.3. 视觉效果对比
+
+|      对比项      |               `wd-popup`                |          `wd-message-box`           |
+| :--------------: | :-------------------------------------: | :---------------------------------: |
+|  **输入框边界**  | ❌ 无边框，占位符悬空，无法识别输入区域 | ✅ 清晰的边框和背景色，输入区域明确 |
+|   **布局留白**   |      ❌ 垂直留白过大，视觉重心不稳      |      ✅ 紧凑合理，内容密度适中      |
+| **按钮主次关系** |    ❌ 取消/确定颜色对比低，易误操作     |  ✅ 主次分明，确定按钮视觉权重更高  |
+|  **代码复杂度**  |      ❌ 需维护状态、模板、样式代码      |    ✅ 零状态管理，一次性配置对象    |
+|  **无障碍设计**  |       ❌ 颜色对比度不足，可读性差       |        ✅ 符合无障碍设计标准        |
+
+### 7.4. 组件选型决策
+
+```plain
+需要弹框交互？
+  ├─ 是标准场景（确认、提示、输入）？
+  │   └─ 是 → ✅ 使用 `wd-message-box`（confirm/alert/prompt）
+  └─ 需要复杂自定义内容（如多步骤表单、富文本编辑器）？
+      ├─ 是 → 使用 `wd-popup`
+      └─ 否 → ⚠️ 优先使用 `wd-message-box`，避免自己实现视觉细节
+```
+
+### 7.5. 迁移检查清单
+
+发现代码中使用 `wd-popup` 实现用户输入时，检查是否应该迁移：
+
+- [ ] 弹框是否仅用于确认、提示或输入？
+- [ ] 是否手动实现了输入框边框、按钮样式等视觉细节？
+- [ ] 是否存在视觉问题（输入框无边界、留白过大、按钮主次不分明）？
+- [ ] 是否维护了多个状态变量（`showModal`、`inputValue`）？
+
+如果以上任意一项为 **是**，**强烈建议迁移到 `wd-message-box`**。
+
+> **📚 详细文档**: 参阅 `.claude/skills/component-migration/SKILL.md` 第 8 节
+> **📚 实际案例**: `src/pages-sub/repair/dispatch.vue:208-233`
+
+## 8. 典型应用场景
 
 - 维修工单详情页的信息展示
 - 报修记录的列表项设计
@@ -240,10 +346,11 @@ color: pink
 - 图片墙和画廊展示
 - 时间轴和流程记录
 - **表单中选择器组件的统一对齐**
+- **标准弹框交互（确认、提示、输入）**
 
-## 8. 设计检查清单
+## 9. 设计检查清单
 
-### 8.1. 通用美化检查
+### 9.1. 通用美化检查
 
 - [ ] 图标和文本是否垂直居中对齐？
 - [ ] 文本大小是否在 24-32rpx 之间？
@@ -252,7 +359,7 @@ color: pink
 - [ ] 是否正确使用 `:deep()` 穿透组件样式？
 - [ ] 间距是否使用 8 的倍数？
 
-### 8.2. 选择器组件专项检查（⚠️ 必须检查）
+### 9.2. 选择器组件专项检查（⚠️ 必须检查）
 
 - [ ] **组件嵌套顺序是否正确？**（`wd-picker` 在外层，`wd-cell` 在内层）
 - [ ] **是否优先使用标准模式？**（通过 `label` 属性设置标题）
@@ -261,3 +368,11 @@ color: pink
 - [ ] **选择器能否正常点击弹出？**（实际测试点击功能）
 - [ ] **是否避免了使用不存在的 `#value` 插槽？**（**`wd-cell` 组件没有 `#value` 插槽**，不要使用）
 - [ ] **是否避免了禁止的嵌套方式？**（`wd-picker` 绝不能在 `wd-cell` 内部）
+
+### 9.3. 弹框交互组件专项检查（⚠️ 必须检查）
+
+- [ ] **是否使用了 `wd-popup` 实现标准交互？**（确认、提示、输入）
+- [ ] **弹框是否存在视觉问题？**（输入框无边界、留白过大、按钮主次不分明）
+- [ ] **是否优先使用了 `wd-message-box`？**（confirm/alert/prompt）
+- [ ] **是否不必要地维护了状态变量？**（`showModal`、`inputValue`）
+- [ ] **自定义弹框是否真的需要？**（能用 `wd-message-box` 就不要用 `wd-popup`）

@@ -119,7 +119,7 @@ message.prompt("请输入您的姓名");
 // 详细配置
 message.prompt({
 	title: "输入信息",
-	message: "请输入新的名称",
+	msg: "请输入新的名称",
 	inputValue: "默认值",
 	inputPlaceholder: "请输入内容",
 	success: (res) => {
@@ -131,6 +131,73 @@ message.prompt({
 		console.log("用户取消输入");
 	},
 });
+
+// ✅ 带输入验证的正确写法
+message.prompt({
+	title: "暂停维修",
+	msg: "请填写暂停原因",
+	inputPlaceholder: "请输入暂停原因（必填）",
+	inputValue: "",
+	inputError: "暂停原因不能为空", // ✅ 错误信息通过 inputError 参数指定
+	inputValidate: (value) => {
+		// ⚠️ 重要：只能返回 boolean，不能返回字符串
+		const strValue = String(value || "").trim();
+		return strValue.length > 0; // ✅ 返回 boolean
+	},
+	success: (res) => {
+		if (res.action === "confirm" && res.value) {
+			console.log("用户输入:", String(res.value).trim());
+		}
+	},
+});
+```
+
+##### ⚠️ prompt() 常见错误
+
+**❌ 错误写法 1：`inputValidate` 返回字符串**
+
+```typescript
+message.prompt({
+	inputValidate: (value) => {
+		if (!value.trim()) {
+			return "输入不能为空"; // ❌ 类型错误！只能返回 boolean
+		}
+		return true;
+	},
+});
+```
+
+**❌ 错误写法 2：误用 Promise 模式**
+
+```typescript
+// ❌ 错误：useGlobalMessage() 不返回 Promise
+async function handleInput() {
+	const value = await message.prompt({
+		title: "输入信息",
+	}); // ❌ 类型错误！返回 void，不是 Promise
+}
+```
+
+**✅ 正确写法：使用回调模式**
+
+```typescript
+function handleInput() {
+	message.prompt({
+		title: "输入信息",
+		msg: "请输入内容",
+		inputError: "输入不能为空", // ✅ 错误信息
+		inputValidate: (value) => {
+			// ✅ 只返回 boolean
+			return String(value || "").trim().length > 0;
+		},
+		success: (res) => {
+			// ✅ 使用 success 回调处理结果
+			if (res.action === "confirm" && res.value) {
+				console.log("用户输入:", res.value);
+			}
+		},
+	});
+}
 ```
 
 #### close()
@@ -145,18 +212,22 @@ message.close();
 
 ### GlobalMessageOptions
 
-| 参数              | 类型     | 默认值 | 说明                                       |
-| ----------------- | -------- | ------ | ------------------------------------------ |
-| title             | string   | -      | 弹窗标题                                   |
-| message           | string   | -      | 弹窗内容                                   |
-| type              | string   | -      | 弹窗类型：'alert' \| 'confirm' \| 'prompt' |
-| showCancelButton  | boolean  | -      | 是否显示取消按钮（自动设置）               |
-| inputValue        | string   | -      | 输入框默认值（prompt 类型）                |
-| inputPlaceholder  | string   | -      | 输入框占位符（prompt 类型）                |
-| success           | Function | -      | 成功回调函数                               |
-| fail              | Function | -      | 失败回调函数                               |
-| confirmButtonText | string   | '确定' | 确认按钮文本                               |
-| cancelButtonText  | string   | '取消' | 取消按钮文本                               |
+|       参数        |   类型   | 默认值 |                                                  说明                                                  |
+| :---------------: | :------: | :----: | :----------------------------------------------------------------------------------------------------: |
+|       title       |  string  |   -    |                                                弹窗标题                                                |
+|    msg/message    |  string  |   -    |                                                弹窗内容                                                |
+|       type        |  string  |   -    |                               弹窗类型：'alert' \| 'confirm' \| 'prompt'                               |
+| showCancelButton  | boolean  |   -    |                                      是否显示取消按钮（自动设置）                                      |
+|    inputValue     |  string  |   -    |                                      输入框默认值（prompt 类型）                                       |
+| inputPlaceholder  |  string  |   -    |                                      输入框占位符（prompt 类型）                                       |
+|   inputValidate   | Function |   -    | 输入框验证函数（prompt 类型）<br/>**⚠️ 只能返回 `boolean`**<br/>`(value: string \| number) => boolean` |
+|    inputError     |  string  |   -    | 输入框验证失败的错误提示（prompt 类型）<br/>**⚠️ 错误信息通过此参数指定，不能从 `inputValidate` 返回** |
+|   inputPattern    |  RegExp  |   -    |                                     输入框正则验证（prompt 类型）                                      |
+|     maxlength     |  number  |   -    |                                     输入框最大长度（prompt 类型）                                      |
+|      success      | Function |   -    |                                              成功回调函数                                              |
+|       fail        | Function |   -    |                                              失败回调函数                                              |
+| confirmButtonText |  string  | '确定' |                                              确认按钮文本                                              |
+| cancelButtonText  |  string  | '取消' |                                              取消按钮文本                                              |
 
 ### MessageResult
 
@@ -492,19 +563,44 @@ export default {
    });
    ```
 
-4. **输入验证**
+4. **输入验证（⚠️ 重要）**
 
    ```typescript
-   // ✅ 验证输入内容
+   // ✅ 正确：使用 inputValidate + inputError
    message.prompt({
    	title: "输入信息",
+   	msg: "请输入内容",
+   	inputError: "输入不能为空", // ✅ 错误信息
+   	inputValidate: (value) => {
+   		// ⚠️ 只能返回 boolean
+   		return String(value || "").trim().length > 0;
+   	},
+   	success: (res) => {
+   		if (res.action === "confirm") {
+   			// 验证已通过，直接使用
+   			console.log("用户输入:", res.value);
+   		}
+   	},
+   });
+
+   // ❌ 错误：inputValidate 返回字符串
+   message.prompt({
+   	inputValidate: (value) => {
+   		if (!value.trim()) {
+   			return "输入不能为空"; // ❌ 类型错误！
+   		}
+   		return true;
+   	},
+   });
+
+   // ❌ 错误：在回调中验证（应该用 inputValidate）
+   message.prompt({
    	success: (res) => {
    		if (res.action === "confirm") {
    			const value = res.value.trim();
    			if (!value) {
-   				toast.error("输入不能为空");
+   				toast.error("输入不能为空"); // ❌ 太晚了！
    			}
-   			// 处理输入
    		}
    	},
    });
@@ -552,7 +648,7 @@ export default {
 function handleCompleteOperation() {
 	message.confirm({
 		title: "确认操作",
-		message: "确定要执行这个操作吗？",
+		msg: "确定要执行这个操作吗？",
 		success: async (res) => {
 			if (res.action === "confirm") {
 				const loading = useGlobalLoading();
@@ -572,3 +668,221 @@ function handleCompleteOperation() {
 	});
 }
 ```
+
+## ⚠️ 常见类型错误和解决方案
+
+### 错误 1: `inputValidate` 返回类型错误
+
+**错误代码**:
+
+```typescript
+message.prompt({
+	inputValidate: (value: string) => {
+		if (!value || !value.trim()) {
+			return "暂停原因不能为空"; // ❌ Type Error
+		}
+		return true;
+	},
+});
+```
+
+**TypeScript 错误信息**:
+
+```plain
+error TS2322: Type '(value: string) => true | "暂停原因不能为空"' is not assignable to type 'InputValidate'.
+  Type 'string | boolean' is not assignable to type 'boolean'.
+    Type 'string' is not assignable to type 'boolean'.
+```
+
+**根本原因**:
+
+- wot-design-uni 的 `InputValidate` 类型定义为 `(value: string | number) => boolean`
+- **只能返回 `boolean`，不能返回字符串**
+- 错误信息必须通过 `inputError` 参数指定
+
+**✅ 正确解决方案**:
+
+```typescript
+message.prompt({
+	inputError: "暂停原因不能为空", // ✅ 错误信息通过此参数指定
+	inputValidate: (value) => {
+		// ✅ 只返回 boolean
+		const strValue = String(value || "").trim();
+		return strValue.length > 0;
+	},
+	success: (res) => {
+		if (res.action === "confirm" && res.value) {
+			console.log("用户输入:", String(res.value).trim());
+		}
+	},
+});
+```
+
+---
+
+### 错误 2: 误用 Promise 模式
+
+**错误代码**:
+
+```typescript
+async function handleStopRepair(item: RepairOrder) {
+	try {
+		const value = await message.prompt({
+			// ❌ Type Error
+			title: "暂停维修",
+			msg: "请填写暂停原因",
+		});
+
+		await stopRepair({
+			remark: value.trim(), // ❌ Property 'trim' does not exist on type 'void'
+		});
+	} catch (error) {
+		console.error(error);
+	}
+}
+```
+
+**TypeScript 错误信息**:
+
+```plain
+error TS2339: Property 'trim' does not exist on type 'void'.
+```
+
+**根本原因**:
+
+- 项目的 `useGlobalMessage()` **不返回 Promise**，返回 `void`
+- wot-design-uni 的原生 API 支持 Promise，但项目封装使用回调模式
+- 必须使用 `success` 回调处理结果
+
+**✅ 正确解决方案**:
+
+```typescript
+function handleStopRepair(item: RepairOrder) {
+	message.prompt({
+		title: "暂停维修",
+		msg: "请填写暂停原因",
+		inputPlaceholder: "请输入暂停原因（必填）",
+		inputValue: "",
+		inputError: "暂停原因不能为空",
+		inputValidate: (value) => {
+			const strValue = String(value || "").trim();
+			return strValue.length > 0;
+		},
+		success: (res) => {
+			// ✅ 使用 success 回调
+			if (res.action === "confirm" && res.value) {
+				stopRepair({
+					repairId: item.repairId!,
+					communityId: item.communityId,
+					remark: String(res.value).trim(),
+				}).catch((error) => {
+					console.error("暂停维修失败:", error);
+				});
+			}
+		},
+	});
+}
+```
+
+---
+
+### 错误 3: 参数名称使用错误
+
+**错误代码**:
+
+```typescript
+message.prompt({
+	title: "输入信息",
+	message: "请输入内容", // ❌ 应该用 msg
+	success: (res) => {
+		console.log(res.value);
+	},
+});
+```
+
+**问题**:
+
+- 项目中应使用 `msg` 而不是 `message` 作为弹窗内容参数
+- 虽然类型定义中两者都支持，但推荐统一使用 `msg`
+
+**✅ 正确写法**:
+
+```typescript
+message.prompt({
+	title: "输入信息",
+	msg: "请输入内容", // ✅ 使用 msg
+	success: (res) => {
+		console.log(res.value);
+	},
+});
+```
+
+---
+
+### 错误 4: 类型转换缺失
+
+**潜在问题代码**:
+
+```typescript
+message.prompt({
+	success: (res) => {
+		if (res.action === "confirm" && res.value) {
+			// res.value 类型为 string | number | undefined
+			const remark = res.value.trim(); // ❌ 可能出错
+		}
+	},
+});
+```
+
+**问题**:
+
+- `res.value` 的类型是 `string | number | undefined`
+- 直接调用 `.trim()` 可能在 `number` 类型时报错
+
+**✅ 安全写法**:
+
+```typescript
+message.prompt({
+	success: (res) => {
+		if (res.action === "confirm" && res.value) {
+			// ✅ 显式转换为字符串
+			const remark = String(res.value).trim();
+			console.log("用户输入:", remark);
+		}
+	},
+});
+```
+
+---
+
+## 类型错误快速排查清单
+
+当遇到 `message.prompt()` 相关的类型错误时，按以下顺序检查：
+
+1. **`inputValidate` 是否只返回 `boolean`？**
+   - ✅ 正确：`return value.trim().length > 0`
+   - ❌ 错误：`return "输入不能为空"`
+
+2. **错误信息是否通过 `inputError` 参数指定？**
+   - ✅ 正确：`inputError: "输入不能为空"`
+   - ❌ 错误：从 `inputValidate` 返回字符串
+
+3. **是否使用了 `await message.prompt()`？**
+   - ✅ 正确：使用 `success` 回调
+   - ❌ 错误：`const value = await message.prompt(...)`
+
+4. **`res.value` 是否进行了类型转换？**
+   - ✅ 正确：`String(res.value).trim()`
+   - ❌ 风险：直接 `res.value.trim()`
+
+5. **参数名是否正确？**
+   - ✅ 正确：`msg: "弹窗内容"`
+   - ⚠️ 可用但不推荐：`message: "弹窗内容"`
+
+---
+
+## 参考链接
+
+- [wot-design-uni MessageBox 文档](https://wot-ui.cn/components/message-box.html)
+- [InputValidate 类型定义](https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/message-box.md)
+- [useGlobalMessage 实现](../../../hooks/useGlobalMessage.ts)

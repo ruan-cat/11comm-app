@@ -312,7 +312,277 @@ loading.hide();
 
 > **📚 详细文档**: 参阅 [全局反馈组件.md](全局反馈组件.md)
 
-### 8. z-paging 分页组件
+### 8. 弹框交互组件选型
+
+**核心原则**: 弹框交互优先使用 `wd-message-box` 而非 `wd-popup`，获得更好的用户体验。
+
+#### 8.1. 组件选型对比
+
+|    对比项    |                `wd-message-box`                |              `wd-popup`              |
+| :----------: | :--------------------------------------------: | :----------------------------------: |
+|   **场景**   |         确认、提示、输入等标准交互场景         |    自定义复杂内容的弹出式容器组件    |
+| **视觉效果** | 系统原生风格，按钮主次分明，输入框有明显边界框 | 需手动实现按钮样式、输入框边框等细节 |
+|   **代码**   |     一次性配置对象，支持 Promise 链式调用      |     需维护多个状态变量和模板代码     |
+|  **易用性**  |             开箱即用，无需额外代码             |    需手动实现布局、样式和交互逻辑    |
+
+#### 8.2. 错误做法：使用 `wd-popup` 实现用户输入
+
+```vue
+<!-- ❌ 错误做法：视觉效果差，代码冗余 -->
+<template>
+	<wd-button @click="showStopModal = true">暂停</wd-button>
+
+	<!-- 需要手动维护弹窗状态 -->
+	<wd-popup v-model="showStopModal" position="center" closable>
+		<view class="p-6" style="width: 80vw;">
+			<view class="mb-4 text-center text-lg font-bold">暂停原因</view>
+			<!-- 输入框没有边界感，留白过大 -->
+			<wd-textarea v-model="stopReason" placeholder="请填写暂停原因" :maxlength="200" show-word-limit :rows="4" />
+			<!-- 按钮主次不分明 -->
+			<view class="mt-4 flex gap-3">
+				<wd-button block @click="showStopModal = false">取消</wd-button>
+				<wd-button block type="primary" @click="handleConfirm">确定</wd-button>
+			</view>
+		</view>
+	</wd-popup>
+</template>
+
+<script setup lang="ts">
+import { ref } from "vue";
+
+// 需要维护多个状态变量
+const showStopModal = ref(false);
+const stopReason = ref("");
+const currentItem = ref(null);
+
+// 需要手动校验和处理
+function handleConfirm() {
+	if (!stopReason.value.trim()) {
+		uni.showToast({ title: "请填写原因", icon: "none" });
+		return;
+	}
+	// 业务逻辑...
+	showStopModal.value = false;
+}
+</script>
+```
+
+**存在的问题**:
+
+- 视觉效果差：输入框无边界、留白过大、按钮主次不分明
+- 代码冗余：需要维护多个状态变量（`showStopModal`、`stopReason`、`currentItem`）
+- 手动校验：需要手动编写输入校验逻辑
+- 样式调试：需要反复调试 CSS 才能实现美观效果
+
+#### 8.3. 正确做法：使用 `wd-message-box.prompt()`
+
+```vue
+<!-- ✅ 正确做法：简洁高效，视觉美观 -->
+<template>
+	<wd-button @click="handleStop(item)">暂停</wd-button>
+</template>
+
+<script setup lang="ts">
+import { useGlobalMessage } from "@/hooks/useGlobalMessage";
+
+const message = useGlobalMessage();
+
+function handleStop(item: RepairOrder) {
+	message.prompt({
+		title: "暂停维修",
+		msg: "请填写暂停原因",
+		inputPlaceholder: "请输入暂停原因（必填）",
+		inputValue: "",
+		maxlength: 200,
+		inputValidate: (value: string) => {
+			if (!value || !value.trim()) {
+				return "暂停原因不能为空";
+			}
+			return true;
+		},
+		success: async (res) => {
+			if (res.action === "confirm" && res.value) {
+				// 直接使用输入值进行业务处理
+				await stopRepair({
+					repairId: item.repairId,
+					remark: res.value.trim(),
+				});
+			}
+		},
+	});
+}
+</script>
+```
+
+**优势**:
+
+- ✅ 零状态管理：无需定义 `showModal`、`inputValue` 等状态变量
+- ✅ 内置校验：`inputValidate` 函数自动校验，校验失败自动提示
+- ✅ 视觉规范：系统原生风格，按钮主次分明，输入框有清晰边框
+- ✅ Promise 支持：支持 `.then().catch()` 链式调用（可选）
+- ✅ 简洁高效：代码量减少 70%，无需维护冗余模板
+
+#### 8.4. `wd-message-box` 常用方法
+
+|   方法    |        场景        |              核心配置               |
+| :-------: | :----------------: | :---------------------------------: |
+| `confirm` |   确认/取消操作    |   `title`, `msg`, `success` 回调    |
+|  `alert`  |      提示信息      |      `title`, `msg`, `success`      |
+| `prompt`  | 用户输入（推荐！） | `inputPlaceholder`, `inputValidate` |
+
+#### 8.5. `prompt` 方法核心参数
+
+|        参数        |      说明      |            类型             |         示例值         |
+| :----------------: | :------------: | :-------------------------: | :--------------------: |
+|      `title`       |    弹窗标题    |          `string`           |      `"暂停维修"`      |
+|       `msg`        |    提示信息    |          `string`           |   `"请填写暂停原因"`   |
+| `inputPlaceholder` |  输入框占位符  |          `string`           | `"请输入原因（必填）"` |
+|    `inputValue`    |  输入框初始值  |       `string/number`       |          `""`          |
+|    `maxlength`     | 输入字符数限制 |          `number`           |         `200`          |
+|  `inputValidate`   | 自定义校验函数 | `(value) => boolean/string` |       见上方示例       |
+|     `success`      |  确认回调函数  |       `(res) => void`       |       见上方示例       |
+
+#### 8.6. 选型决策树
+
+```plain
+需要弹框交互？
+  ├─ 是标准场景（确认/提示/输入）？
+  │   ├─ 是 → 使用 `wd-message-box`（confirm/alert/prompt）
+  │   └─ 否 → 继续判断
+  └─ 需要复杂自定义内容（如富文本、自定义表单、多步骤流程）？
+      ├─ 是 → 使用 `wd-popup`
+      └─ 否 → 优先使用 `wd-message-box`
+```
+
+#### 8.7. 迁移检查清单
+
+当发现代码中使用 `wd-popup` 实现用户输入时，检查是否可以迁移：
+
+- [ ] 弹框内容是否为标准确认/提示/输入场景？
+- [ ] 是否仅包含一个输入框和确认/取消按钮？
+- [ ] 是否手动维护了多个状态变量（`showModal`、`inputValue`）？
+- [ ] 是否手动实现了输入校验逻辑？
+- [ ] 视觉效果是否存在问题（输入框无边界、按钮主次不分明）？
+
+如果以上任意一项为 **是**，**强烈建议迁移到 `wd-message-box.prompt()`**。
+
+> **📚 相关示例**: `src/pages-sub/repair/dispatch.vue:208-231`
+
+#### 8.4. ⚠️ message-box 类型安全使用规范
+
+**核心规范**: 使用 `message.prompt()` 时必须遵守严格的类型安全规范，避免常见的类型错误。
+
+**常见类型错误 1: `inputValidate` 返回类型错误**
+
+```typescript
+// ❌ 错误：返回 string | boolean
+message.prompt({
+	inputValidate: (value: string) => {
+		if (!value || !value.trim()) {
+			return "暂停原因不能为空"; // ❌ Type Error
+		}
+		return true;
+	},
+});
+
+// TypeScript 错误:
+// Type '(value: string) => true | "暂停原因不能为空"' is not assignable to type 'InputValidate'.
+// Type 'string | boolean' is not assignable to type 'boolean'.
+```
+
+**根本原因**:
+
+- wot-design-uni 的 `InputValidate` 类型定义为 `(value: string | number) => boolean`
+- **只能返回 `boolean`，不能返回字符串**
+- 错误信息必须通过 `inputError` 参数指定
+
+**✅ 正确写法**:
+
+```typescript
+message.prompt({
+	inputError: "暂停原因不能为空", // ✅ 错误信息通过此参数指定
+	inputValidate: (value) => {
+		// ✅ 只返回 boolean
+		const strValue = String(value || "").trim();
+		return strValue.length > 0;
+	},
+	success: (res) => {
+		if (res.action === "confirm" && res.value) {
+			console.log("用户输入:", String(res.value).trim());
+		}
+	},
+});
+```
+
+---
+
+**常见类型错误 2: 误用 Promise 模式**
+
+```typescript
+// ❌ 错误：项目的 useGlobalMessage() 不返回 Promise
+async function handleInput() {
+	const value = await message.prompt({
+		// ❌ Type Error: 返回 void
+		title: "输入信息",
+	});
+	console.log(value.trim()); // ❌ Property 'trim' does not exist on type 'void'
+}
+```
+
+**根本原因**:
+
+- 项目的 `useGlobalMessage()` **不返回 Promise**，返回 `void`
+- wot-design-uni 的原生 API 支持 Promise，但项目封装使用回调模式
+- 必须使用 `success` 回调处理结果
+
+**✅ 正确写法**:
+
+```typescript
+function handleInput() {
+	message.prompt({
+		title: "输入信息",
+		msg: "请输入内容",
+		inputError: "输入不能为空",
+		inputValidate: (value) => String(value || "").trim().length > 0,
+		success: (res) => {
+			// ✅ 使用 success 回调
+			if (res.action === "confirm" && res.value) {
+				console.log("用户输入:", String(res.value).trim());
+			}
+		},
+	});
+}
+```
+
+---
+
+**类型安全检查清单**:
+
+- [ ] **`inputValidate` 是否只返回 `boolean`？**
+  - ✅ 正确：`return value.trim().length > 0`
+  - ❌ 错误：`return "输入不能为空"`
+
+- [ ] **错误信息是否通过 `inputError` 参数指定？**
+  - ✅ 正确：`inputError: "输入不能为空"`
+  - ❌ 错误：从 `inputValidate` 返回字符串
+
+- [ ] **是否使用了 `await message.prompt()`？**
+  - ✅ 正确：使用 `success` 回调
+  - ❌ 错误：`const value = await message.prompt(...)`
+
+- [ ] **`res.value` 是否进行了类型转换？**
+  - ✅ 正确：`String(res.value).trim()`
+  - ❌ 风险：直接 `res.value.trim()`
+
+- [ ] **参数名是否正确？**
+  - ✅ 正确：`msg: "弹窗内容"`
+  - ⚠️ 可用但不推荐：`message: "弹窗内容"`
+
+> **📚 详细文档**: `src/components/global/message/README.md` - "常见类型错误和解决方案"章节
+
+---
+
+### 9. z-paging 分页组件
 
 **必配项**:
 

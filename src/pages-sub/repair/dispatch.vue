@@ -46,11 +46,6 @@ const total = ref(0)
 /** z-paging 组件引用 */
 const pagingRef = ref()
 
-/** 暂停弹窗 */
-const showStopModal = ref(false)
-const stopReason = ref('')
-const currentStopItem = ref<RepairOrder | null>(null)
-
 /** 获取用户信息 */
 const userInfo = getUserInfo()
 const communityInfo = getCurrentCommunity()
@@ -186,20 +181,12 @@ function handleTransfer(item: RepairOrder) {
 }
 
 /** 暂停维修 */
-function handleStopRepair(item: RepairOrder) {
-  currentStopItem.value = item
-  stopReason.value = ''
-  showStopModal.value = true
-}
-
-/** 确认暂停 */
 const { send: stopRepair, onSuccess: onStopSuccess, onError: onStopError } = useRequest(
   (params: { repairId: string, communityId: string, remark: string }) => repairStop(params),
   { immediate: false },
 )
 
 onStopSuccess(() => {
-  showStopModal.value = false
   uni.showToast({
     title: '暂停成功',
     icon: 'success',
@@ -218,22 +205,28 @@ onStopError((error) => {
   })
 })
 
-async function handleConfirmStop() {
-  if (!stopReason.value.trim()) {
-    uni.showToast({
-      title: '请填写暂停原因',
-      icon: 'none',
-    })
-    return
-  }
-
-  if (!currentStopItem.value)
-    return
-
-  await stopRepair({
-    repairId: currentStopItem.value.repairId!,
-    communityId: currentStopItem.value.communityId,
-    remark: stopReason.value,
+function handleStopRepair(item: RepairOrder) {
+  message.prompt({
+    title: '暂停维修',
+    msg: '请填写暂停原因',
+    inputPlaceholder: '请输入暂停原因（必填）',
+    inputValue: '',
+    inputError: '暂停原因不能为空',
+    inputValidate: (value) => {
+      const strValue = String(value || '').trim()
+      return strValue.length > 0
+    },
+    success: (res) => {
+      if (res.action === 'confirm' && res.value) {
+        stopRepair({
+          repairId: item.repairId!,
+          communityId: item.communityId,
+          remark: String(res.value).trim(),
+        }).catch((error) => {
+          console.error('暂停维修失败:', error)
+        })
+      }
+    },
   })
 }
 
@@ -528,30 +521,6 @@ function getStatusTagType(statusCd?: string): TagType {
         />
       </template>
     </z-paging>
-
-    <!-- 暂停原因弹窗 -->
-    <wd-popup v-model="showStopModal" position="center" closable>
-      <view class="stop-modal p-6" style="width: 80vw;">
-        <view class="mb-4 text-center text-lg font-bold">
-          暂停原因
-        </view>
-        <wd-textarea
-          v-model="stopReason"
-          placeholder="请填写暂停原因"
-          :maxlength="200"
-          show-word-limit
-          :rows="4"
-        />
-        <view class="mt-4 flex gap-3">
-          <wd-button block @click="showStopModal = false">
-            取消
-          </wd-button>
-          <wd-button block type="primary" @click="handleConfirmStop">
-            确定
-          </wd-button>
-        </view>
-      </view>
-    </wd-popup>
   </view>
 </template>
 
