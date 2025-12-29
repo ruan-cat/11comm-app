@@ -231,6 +231,38 @@
 					}
 				},
 				{
+					"path": "inspection/execute-qrcode",
+					"type": "page"
+				},
+				{
+					"path": "inspection/execute-single",
+					"type": "page"
+				},
+				{
+					"path": "inspection/execute",
+					"type": "page"
+				},
+				{
+					"path": "inspection/reexamine",
+					"type": "page"
+				},
+				{
+					"path": "inspection/staff-no-task",
+					"type": "page"
+				},
+				{
+					"path": "inspection/task-list",
+					"type": "page"
+				},
+				{
+					"path": "inspection/today-report",
+					"type": "page"
+				},
+				{
+					"path": "inspection/transfer",
+					"type": "page"
+				},
+				{
 					"path": "repair/add-order",
 					"type": "page",
 					"style": {

@@ -1,0 +1,368 @@
+<!--
+  巡检过程页面
+  功能：显示巡检任务的详细内容，展示各巡检项的完成情况
+
+  访问地址: http://localhost:9000/#/pages-sub/inspection/execute
+  建议携带参数: ?taskId=xxx&inspectionPlanName=xxx
+
+  示例: http://localhost:9000/#/pages-sub/inspection/execute?taskId=TASK_001&inspectionPlanName=小区日常巡检
+-->
+
+<script setup lang="ts">
+import type { InspectionTaskDetail } from './types'
+import { onShow } from '@dcloudio/uni-app'
+import { useRouter } from 'uni-mini-router'
+import { computed, onMounted, ref } from 'vue'
+
+/** 路由实例 */
+const router = useRouter()
+
+/** 获取路由参数 */
+const { query } = router.currentRoute.value
+const taskId = query.taskId as string
+const inspectionPlanName = query.inspectionPlanName as string
+
+/** 巡检任务详情列表 */
+const taskDetails = ref<InspectionTaskDetail[]>([])
+
+/** 是否加载中 */
+const loading = ref(false)
+
+/** 计算巡检进度 */
+const progress = computed(() => {
+  if (taskDetails.value.length === 0)
+    return 0
+  const completedCount = taskDetails.value.filter(item => item.state === '20200407').length
+  return Math.round((completedCount / taskDetails.value.length) * 100)
+})
+
+/** 已完成数量 */
+const completedCount = computed(() => {
+  return taskDetails.value.filter(item => item.state === '20200407').length
+})
+
+/** 总数量 */
+const totalCount = computed(() => {
+  return taskDetails.value.length
+})
+
+/**
+ * 获取巡检任务详情
+ */
+async function getTaskDetails() {
+  loading.value = true
+
+  try {
+    // TODO: 调用 Alova 接口获取数据
+    // const result = await getInspectionTaskDetailApi({
+    //   communityId: getCurrentCommunity().communityId,
+    //   taskId: taskId,
+    //   page: 1,
+    //   row: 100,
+    // })
+    // taskDetails.value = result.data || []
+
+    // 临时 Mock 数据
+    taskDetails.value = [
+      {
+        taskDetailId: 'DETAIL_001',
+        taskId,
+        inspectionId: 'INSP_001',
+        inspectionName: '大门岗亭检查',
+        itemId: 'ITEM_001',
+        state: '20200407',
+        stateName: '已完成',
+        pointStartTime: '09:00',
+        pointEndTime: '09:30',
+        description: '巡检情况: 正常; 备注: 无异常',
+        photos: [
+          { url: 'https://via.placeholder.com/300', fileId: 'FILE_001' },
+          { url: 'https://via.placeholder.com/300', fileId: 'FILE_002' },
+        ],
+      },
+      {
+        taskDetailId: 'DETAIL_002',
+        taskId,
+        inspectionId: 'INSP_002',
+        inspectionName: '消防通道检查',
+        itemId: 'ITEM_002',
+        state: '20200405',
+        stateName: '待巡检',
+        pointStartTime: '09:30',
+        pointEndTime: '10:00',
+      },
+      {
+        taskDetailId: 'DETAIL_003',
+        taskId,
+        inspectionId: 'INSP_003',
+        inspectionName: '电梯运行检查',
+        itemId: 'ITEM_003',
+        state: '20200405',
+        stateName: '待巡检',
+        pointStartTime: '10:00',
+        pointEndTime: '10:30',
+      },
+    ]
+  }
+  catch (error) {
+    console.error('获取巡检任务详情失败:', error)
+    uni.showToast({
+      title: '获取详情失败',
+      icon: 'none',
+    })
+  }
+  finally {
+    loading.value = false
+  }
+}
+
+/**
+ * 执行单项巡检
+ * @param item 巡检项详情
+ */
+function executeInspection(item: InspectionTaskDetail) {
+  router.push({
+    name: 'inspection-execute-single',
+    query: {
+      taskDetailId: item.taskDetailId,
+      taskId: item.taskId,
+      inspectionId: item.inspectionId,
+      inspectionName: item.inspectionName,
+      itemId: item.itemId,
+    },
+  })
+}
+
+/**
+ * 预览图片
+ * @param item 巡检项详情
+ * @param index 当前图片索引
+ */
+function previewImage(item: InspectionTaskDetail, index: number) {
+  if (!item.photos || item.photos.length === 0)
+    return
+
+  const urls = item.photos.map(photo => photo.url)
+  uni.previewImage({
+    urls,
+    current: index,
+  })
+}
+
+onMounted(() => {
+  getTaskDetails()
+})
+
+onShow(() => {
+  // 页面显示时刷新详情
+  getTaskDetails()
+})
+</script>
+
+<template>
+  <view class="inspection-execute">
+    <!-- 标题 -->
+    <view class="page-title">
+      {{ inspectionPlanName }}
+    </view>
+
+    <!-- 进度信息 -->
+    <view class="progress-info">
+      <wd-cell-group>
+        <wd-cell title="巡检进度" center>
+          <template #value>
+            <view class="progress-value">
+              <text class="count">{{ completedCount }}/{{ totalCount }}</text>
+              <wd-progress :percentage="progress" hide-label />
+            </view>
+          </template>
+        </wd-cell>
+      </wd-cell-group>
+    </view>
+
+    <!-- 巡检项列表 -->
+    <view v-if="!loading && taskDetails.length > 0" class="inspection-list">
+      <view class="list-header">
+        巡检点
+      </view>
+
+      <view
+        v-for="(item, index) in taskDetails"
+        :key="index"
+        class="inspection-item"
+        :class="{ completed: item.state === '20200407' }"
+      >
+        <!-- 巡检项名称和时间 -->
+        <view class="item-header">
+          <view class="item-name">
+            <wd-icon
+              :name="item.state === '20200407' ? 'check-outline' : 'clock'"
+              :color="item.state === '20200407' ? '#4CAF50' : '#999999'"
+              size="20px"
+            />
+            <text class="name-text">{{ item.inspectionName }}</text>
+          </view>
+          <view v-if="item.state !== '20200407' && item.pointStartTime && item.pointEndTime" class="item-time">
+            {{ item.pointStartTime }} - {{ item.pointEndTime }}
+          </view>
+        </view>
+
+        <!-- 已完成项的处理意见 -->
+        <view v-if="item.state === '20200407'" class="item-description">
+          <wd-cell-group>
+            <wd-cell title="处理意见" :value="item.description" />
+          </wd-cell-group>
+        </view>
+
+        <!-- 已完成项的照片 -->
+        <view v-if="item.state === '20200407' && item.photos && item.photos.length > 0" class="item-photos">
+          <view
+            v-for="(photo, photoIndex) in item.photos"
+            :key="photoIndex"
+            class="photo-item"
+            @click="previewImage(item, photoIndex)"
+          >
+            <image
+              :src="photo.url"
+              mode="aspectFill"
+              class="photo-image"
+            />
+          </view>
+        </view>
+
+        <!-- 未完成项的操作按钮 -->
+        <view v-if="item.state !== '20200407'" class="item-action">
+          <wd-button
+            type="success"
+            size="large"
+            block
+            @click="executeInspection(item)"
+          >
+            <wd-icon name="camera" size="18px" />
+            巡检
+          </wd-button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <wd-empty v-else-if="!loading && taskDetails.length === 0" description="暂无巡检项" />
+
+    <!-- 加载状态 -->
+    <wd-loading v-if="loading" type="circular" />
+  </view>
+</template>
+
+<style scoped lang="scss">
+.inspection-execute {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+
+  .page-title {
+    font-size: 28rpx;
+    font-weight: 400;
+    color: rgba(69, 90, 100, 0.6);
+    padding: 40rpx 30rpx 20rpx;
+  }
+
+  .progress-info {
+    margin: 0 20rpx 20rpx;
+    background: #ffffff;
+    border-radius: 16rpx;
+    overflow: hidden;
+
+    .progress-value {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12rpx;
+      min-width: 200rpx;
+
+      .count {
+        font-size: 28rpx;
+        font-weight: 500;
+        color: #333333;
+      }
+    }
+  }
+
+  .inspection-list {
+    padding: 0 20rpx;
+
+    .list-header {
+      font-size: 28rpx;
+      color: rgba(69, 90, 100, 0.6);
+      padding: 20rpx 0;
+      text-align: center;
+    }
+
+    .inspection-item {
+      background: #ffffff;
+      border-radius: 16rpx;
+      padding: 32rpx;
+      margin-bottom: 20rpx;
+      border-left: 6rpx solid #e0e0e0;
+      transition: all 0.3s ease;
+
+      &.completed {
+        border-left-color: #4caf50;
+      }
+
+      .item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20rpx;
+
+        .item-name {
+          display: flex;
+          align-items: center;
+          gap: 16rpx;
+
+          .name-text {
+            font-size: 32rpx;
+            font-weight: 500;
+            color: #333333;
+          }
+        }
+
+        .item-time {
+          font-size: 24rpx;
+          color: #999999;
+        }
+      }
+
+      .item-description {
+        margin-top: 20rpx;
+      }
+
+      .item-photos {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20rpx;
+        margin-top: 20rpx;
+
+        .photo-item {
+          position: relative;
+          padding-bottom: 100%;
+          border-radius: 12rpx;
+          overflow: hidden;
+          background: #f5f5f5;
+
+          .photo-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+
+      .item-action {
+        margin-top: 24rpx;
+      }
+    }
+  }
+}
+</style>
