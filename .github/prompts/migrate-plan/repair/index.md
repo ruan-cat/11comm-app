@@ -597,7 +597,7 @@ invoker	@	vue.runtime.esm.js:10209
 1. 针对 `src\pages-sub\repair\dispatch.vue` `维修待办单` 代码。阅读全部的 `card-actions` 部分。可以得知这里有很多不同的按钮。
 2. 深刻阅读理解 `维修待办单` 页面的状态逻辑，找到对应的 mock 接口代码，并增加足够的 mock 数据，确保全部种类的 `card-actions` 按钮都能够显示出来，便于我测试。
 
-### 002 <!-- TODO: --> 抽象状态 `RepairStatus` 专用的标签组件
+### 002 抽象状态 `RepairStatus` 专用的标签组件
 
 1. 阅读代码：
    - src\pages-sub\repair\dispatch.vue
