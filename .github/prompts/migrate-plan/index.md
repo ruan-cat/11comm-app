@@ -1088,7 +1088,7 @@ definePage({
    - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
    - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
 
-## 067 <!-- TODO: --> 确保 `add-new-component` 技能满足 `route-migration` 的要求
+## 067 确保 `add-new-component` 技能满足 `route-migration` 的要求
 
 1. 全面阅读 `add-new-component` 技能的文档，确保其实例代码必定满足其 `route-migration` 技能的要求。
 2. `src\pages\test-use` 目录内的页面明显不满足 `route-migration` 技能的要求，请修改。
