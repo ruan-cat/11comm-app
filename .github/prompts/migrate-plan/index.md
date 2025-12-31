@@ -1054,3 +1054,16 @@ const showTotalAmount = computed(() => model.feeFlag === "1001");
 3. 编写技能时，务必遵照 claude code 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
 4. 及时更新 `.claude\skills\check-trigger.md` 触发器说明文件，说明在需要完成动态页面标题设置时，使用该技能文件。
 5. 及时更新 `CLAUDE.md` 文件，说明增加了新的技能。
+
+## 065 新建一个专门说明清楚本项目新建组件的规范性技能文件，`add-new-component`
+
+1. 请你阅读 `src\components\common` 目录下全部的文件和内容，认真调研学习其代码组织方式。
+2. 认阅读组件的实例演示页面目录 `src\pages\test-use` 的代码，看懂其代码组织形式。
+3. 认真阅读其他全部的 claude code 技能文件组织方式和写法。`.claude\skills` 的全部 markdown 文件。
+4. 认真阅读 claude code 的技能：
+   - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
+   - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
+5. 你的任务时，根据 `src\components\common` 组件的组织方式，为我整理归纳一个通用技能，叫做 `add-new-component`，以后我使用 `add-new-component` 技能时，就能约束好增加新的组件规范。我需要你建立新的规范。
+6. 新建完 `add-new-component` 后，请及时更新：
+   - `.claude\skills\check-trigger.md` ，说明清楚在新建全新的公共组件时，才会触发 `add-new-component` 技能，并执行 `add-new-component` 的规范。
+   - `CLAUDE.md` ，说明增加了新的技能。
