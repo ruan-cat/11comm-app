@@ -10,27 +10,58 @@ color: pink
 
 用于指导编写视觉美观、文本与图标对齐良好、响应式友好的 Vue 组件的最佳实践。
 
-## ⚠️ 设计前必读（Critical）
+## ⚠️ 设计前必读（Critical - 强制执行）
 
-**🚨 禁止直接编写代码！必须先完成：**
+**🚨 禁止直接编写代码！必须先完成以下所有步骤：**
 
-1. ✅ **第一步：阅读参考文件**
-   - 推荐：`src/pages-sub/repair/staff-todo-detail.vue`（完整美化示例）
-   - 推荐：`src/components/activity/*.vue`（组件封装示例）
-   - 必读：`.claude/skills/beautiful-component-design/icon-usage.md`
-   - 必读：`.claude/skills/beautiful-component-design/text-alignment.md`
+### 步骤 1：阅读完整文档（必须全部完成）
 
-2. ✅ **第二步：理解设计规范**
-   - 图标必须使用 `<wd-icon>` + Carbon Icons
-   - 图标与文本对齐：`flex items-center`
-   - 统一字号：标题 `32rpx`，正文 `28rpx`，辅助 `24rpx`
-   - 响应式单位：使用 `rpx` 而非 `px`
+- [ ] 阅读本 SKILL.md 主文件的**所有章节**
+- [ ] 阅读 [icon-usage.md](icon-usage.md) - 图标使用规范
+- [ ] 阅读 [text-alignment.md](text-alignment.md) - 文本样式规范
+- [ ] 阅读 [responsive-design.md](responsive-design.md) - 响应式设计规范
+- [ ] **⚠️ 表单页面必读**：阅读 [form-section-title.md](form-section-title.md) - 表单分区标题组件
 
-3. ✅ **第三步：严格遵循规范**
-   - **必须**使用 Carbon Icons 图标集
-   - **必须**保证图标与文本对齐
-   - **必须**使用 rpx 响应式单位
-   - **必须**遵循统一的字号规范
+**违规后果**：
+
+- ❌ 跳过 form-section-title.md 将导致使用错误的 `<view class="section-title">` 而非 `<FormSectionTitle>`
+- ❌ 跳过其他文档将导致图标、文本、样式不符合规范
+
+### 步骤 2：查阅项目示例（至少 2 个）
+
+- [ ] `src/pages-sub/repair/staff-todo-detail.vue` - 完整美化示例
+- [ ] `src/pages-sub/repair/select-resource.vue` - 表单页面示例
+- [ ] `src/pages-sub/repair/add-order.vue` - FormSectionTitle 使用示例
+- [ ] `src/components/activity/*.vue` - 组件封装示例
+
+### 步骤 3：搜索相关组件使用（强制执行）
+
+```bash
+# 表单页面必须搜索 FormSectionTitle 的使用
+Grep: pattern="FormSectionTitle" path="src/" output_mode="files_with_matches"
+
+# 搜索图标使用示例
+Grep: pattern="i-carbon-" path="src/" output_mode="content" -n=true
+```
+
+### 步骤 4：理解核心规范
+
+- 图标必须使用 `<wd-icon>` + Carbon Icons
+- 图标与文本对齐：`flex items-center`
+- 统一字号：标题 `32rpx`，正文 `28rpx`，辅助 `24rpx`
+- 响应式单位：使用 `rpx` 而非 `px`
+- **表单分区标题必须使用 `<FormSectionTitle>` 组件**（禁止使用 `<view class="section-title">`）
+
+### 步骤 5：创建任务清单
+
+使用 TodoWrite 创建任务清单，列出所有需要修改的内容。
+
+**🚫 绝对禁止的行为**：
+
+- ❌ 跳过任何一个步骤直接编码
+- ❌ 只读主文件，不读子文档
+- ❌ 凭经验猜测，不查阅示例
+- ❌ 不搜索项目，不了解现有实现
 
 ### 🚫 常见错误（严禁犯）
 
