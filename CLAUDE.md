@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## 主动问询实施细节
+## 1. 主动问询实施细节
 
 在我与你沟通并要求你具体实施更改时，难免会遇到很多模糊不清的事情。
 
@@ -10,11 +10,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 我会与你共同补充细化实现细节。我们先迭代出一轮完整完善的实施清单，然后再由你亲自落实实施下去。
 
-## 对话沟通术语表
+## 2. 对话沟通术语表
 
 在我和你沟通时，我会使用以下术语，便于你理解。
 
-### 全局术语
+### 2.1. 全局术语
 
 在任何沟通下，这些术语都生效。
 
@@ -34,17 +34,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `use-wd-form`： `使用 wd-form 表单组件编写表单页的实施规范` 技能。即 `.claude\skills\use-wd-form\SKILL.md` 文件。
 - `use-uniapp-dynamic-page-title`： `uni-app 动态页面标题设置` 技能。即 `.claude\skills\use-uniapp-dynamic-page-title\SKILL.md` 文件。
 
-### 业务术语
+### 2.2. 业务术语
 
 在实现具体业务时，某些热点组件会经常修改，为了便于沟通，这里说明清楚其简称，便于你快速找到对应组件。
 
 - `选择器系列页面` ： `src\pages-sub\selector\*.vue` ，一个 glob 匹配语法，指代一系列 vue 组件。
 
-#### 维修工单流程模块
+#### 2.2.1. 维修工单流程模块
 
 - `维修工单流程模块系列页面` ： `src\pages-sub\repair\*.vue` ，一个 glob 匹配语法，指代一系列 vue 组件。
 
-#### 房屋申请业务
+#### 2.2.2. 房屋申请业务
 
 - `房屋申请列表页` ： `src\pages-sub\property\apply-room.vue`
 - `房屋申请记录页` ： `src\pages-sub\property\apply-room-record.vue`
@@ -53,14 +53,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `房屋申请记录处理页` ： `src\pages-sub\property\apply-room-record-handle.vue`
 - `房屋申请系列页面` ： `src\pages-sub\property\*.vue` ，一个 glob 匹配语法，指代一系列 vue 组件。
 
-#### 活动业务
+#### 2.2.3. 活动业务
 
 - `活动操作按钮组件` ： `src\components\activity\activity-actions.vue`
 - `活动信息组件` ： `src\components\activity\activity-info.vue`
 - `活动详情页` ： `src\pages\activity\detail.vue`
 - `活动列表页` ： `src\pages\activity\index.vue`
 
-## 迁移任务的重要原则
+## 3. 迁移任务的重要原则
 
 在实现 `vue3项目` 迁移到 `vue2项目` 时，请遵守以下几条重要原则：
 
@@ -69,9 +69,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 3. 不考虑严格的鉴权逻辑： 我们不做任何鉴权功能。在跳转路由的时候，`vue3项目` 不做任何形式的鉴权处理。任何页面都可以随意跳转，任意访问。
 4. 不许滥用 unocss 的 shortcuts 功能： 不要将业务性质的，非公共性质的样式类，都写入到 `uno.config.ts` 配置文件内。避免滥用全局变量性质的配置文件，
 
-## 技能触发与协同策略
+## 4. 技能触发与协同策略
 
-### ⚠️ 强制执行技能触发检查
+### 4.1. ⚠️ 强制执行技能触发检查
 
 **在执行任何开发任务前，必须先阅读 `.claude/skills/check-trigger.md` 进行技能触发检查。**
 
@@ -81,7 +81,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - ✅ 理解多技能协同关系（避免单一技能思维）
 - ✅ 按照正确顺序执行（避免顺序混乱）
 
-### 技能触发矩阵
+### 4.2. 技能触发矩阵
 
 根据任务特征快速识别需要使用的技能：
 
@@ -102,11 +102,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 从 Vue2 完整迁移表单页 | `code-migration` + `component-migration` + `style-migration` + `use-wd-form` + `api-migration` + `beautiful-component-design`  |                       需要 6 个技能协同                        |
 | 从 Vue2 完整迁移列表页 | `code-migration` + `component-migration` + `style-migration` + `api-migration` + `z-paging-integration` + `api-error-handling` |                       需要 6 个技能协同                        |
 
-### 多技能协同原则
+### 4.3. 多技能协同原则
 
 **⚠️ 重要：大多数实际任务都需要多个技能协同，禁止单一技能思维！**
 
-#### 1. 表单页面的技能组合
+#### 4.3.1. 表单页面的技能组合
 
 ```plaintext
 表单页面（创建/修改）：
@@ -123,7 +123,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - [ ] 有选择功能 → 必须使用 `wd-picker`（禁止 wd-radio-group）
 - [ ] 需要调用 API → 必须使用 `api-migration` + `api-error-handling`
 
-#### 2. 列表页面的技能组合
+#### 4.3.2. 列表页面的技能组合
 
 ```plaintext
 列表页面（分页列表）：
@@ -133,7 +133,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - beautiful-component-design（可选）- 美化
 ```
 
-#### 3. 从 Vue2 迁移的技能组合
+#### 4.3.3. 从 Vue2 迁移的技能组合
 
 ```plaintext
 从 Vue2 迁移单个页面：
@@ -146,7 +146,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     - 列表页：+ z-paging-integration + api-migration + api-error-handling
 ```
 
-### 技能执行流程
+### 4.4. 技能执行流程
 
 **强制执行以下流程：**
 
@@ -176,7 +176,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - 逐项完成任务并标记
 ```
 
-### 违规后果警告
+### 4.5. 违规后果警告
 
 **如果跳过技能触发检查或只使用部分技能，将导致：**
 
@@ -187,7 +187,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - ❌ 代码不符合项目规范
 - ❌ **需要返工重写，浪费时间**
 
-### 快速参考
+### 4.6. 快速参考
 
 **常见问题快速查询：**
 
@@ -206,13 +206,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 5. **Q: 分页功能需要哪些技能？**
    - A: 必须同时使用 `z-paging-integration` + `api-migration` + `api-error-handling` 三个技能
 
-## 代码/编码格式要求
+## 5. 代码/编码格式要求
 
-### 1. markdown 文档的 table 编写格式
+### 5.1. markdown 文档的 table 编写格式
 
 每当你在 markdown 文档内编写表格时，表格的格式一定是**居中对齐**的，必须满足**居中对齐**的格式要求。
 
-### 2. markdown 文档的 vue 组件代码片段编写格式
+### 5.2. markdown 文档的 vue 组件代码片段编写格式
 
 错误写法：
 
@@ -248,7 +248,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 </template>
 ```
 
-### 3. javascript / typescript 的代码注释写法
+### 5.3. javascript / typescript 的代码注释写法
 
 代码注释写法应该写成 jsdoc 格式。而不是单纯的双斜杠注释。比如：
 
@@ -282,22 +282,22 @@ export function successResponse<T>(data: T, message: string = "操作成功") {
 }
 ```
 
-### 4. unocss 配置不应该创建过多的 shortcuts 样式类快捷方式
+### 5.4. unocss 配置不应该创建过多的 shortcuts 样式类快捷方式
 
 在你做样式迁移的时候，**不允许滥用** unocss 的 shortcuts 功能。不要把那么多样式类都设计成公共全局级别的快捷方式。
 
-### 5. vue 组件编写规则
+### 5.5. vue 组件编写规则
 
 1. vue 组件命名风格，使用短横杠的命名风格，而不是大驼峰命名。
 2. 先 `<script setup lang="ts">`、然后 `<template>`、最后是 `<style scoped>` 。
 3. 每个 vue 组件的最前面，提供少量的 html 注释，说明本组件是做什么的。
 
-### 6. jsdoc 注释的 `@example` 标签不要写冗长复杂的例子
+### 5.6. jsdoc 注释的 `@example` 标签不要写冗长复杂的例子
 
 1. 你应该积极主动的函数编写 jsdoc 注释的 `@example` 标签。
 2. 但是 `@example` 标签不允许写复杂的例子，请写简单的单行例子。完整的函数使用例子，你应该择机在函数文件的附近编写 md 文档，在文档内给出使用例子。
 
-### 7. 页面 vue 组件必须提供注释说明本组件的`业务名`和`访问地址`
+### 5.7. 页面 vue 组件必须提供注释说明本组件的`业务名`和`访问地址`
 
 比如以下的这几个例子：
 
@@ -325,14 +325,14 @@ export function successResponse<T>(data: T, message: string = "操作成功") {
 
 每个页面都必须提供最顶部的文件说明，说明其业务名称，提供访问地址。
 
-### 4. markdown 的多级标题要主动提供序号
+### 5.8. markdown 的多级标题要主动提供序号
 
-对于每一份 markdown 文件的三级标题，你都应该要：
+对于每一份 markdown 文件的二级标题、三级标题和四级标题，你都应该要：
 
 1. 主动添加**数字**序号，便于我阅读文档。
 2. 主动**维护正确的数字序号顺序**。如果你处理的 markdown 文档，其手动添加的序号顺序不对，请你及时的更新序号顺序。
 
-## 报告编写规范
+## 6. 报告编写规范
 
 在大多数情况下，你的更改是**不需要**编写任何说明报告的。但是每当你需要编写报告时，请你首先遵循以下要求：
 
@@ -356,15 +356,15 @@ export function successResponse<T>(data: T, message: string = "操作成功") {
 
 - 报告语言： 默认用简体中文。
 
-## 其他注意事项
+## 7. 其他注意事项
 
 1. 每次你完成更改时，都**不要运行**任何类型检查命令。我们项目不需要你去运行类型检查命令。
 2. 不要去更改 `prettier.config.js` 文件，**不要自作主张**的给这个配置文件**增加单引号**。
 3. 报告输出地址： 你在生成 markdown 格式的报告时，请默认输出到 `docs\reports` 目录下面，这便于我阅读。
 
-## 代码搜索与检查策略
+## 8. 代码搜索与检查策略
 
-### 1. 为什么需要严格的搜索策略？
+### 8.1. 为什么需要严格的搜索策略？
 
 在进行代码规范检查、组件用法迁移等任务时，**单次搜索极易遗漏**，可能导致：
 
@@ -372,11 +372,11 @@ export function successResponse<T>(data: T, message: string = "操作成功") {
 - ❌ 依赖单一搜索方式，没有交叉验证
 - ❌ 只检查部分文件，未系统性覆盖所有相关文件
 
-### 2. 多重搜索策略（必须执行）
+### 8.2. 多重搜索策略（必须执行）
 
 当需要在代码库中查找特定模式时，**必须使用至少 2 种以上的搜索方法**进行交叉验证：
 
-#### 方法 A：正则表达式搜索
+#### 8.2.1. 方法 A：正则表达式搜索
 
 ```bash
 # 示例：搜索 <template #value> 用法
@@ -385,7 +385,7 @@ Grep: pattern="template.*#value" path="src/" glob="*.vue"
 
 **适用场景**：查找包含特定关键词组合的代码模式
 
-#### 方法 B：宽泛关键词搜索 + 人工筛选
+#### 8.2.2. 方法 B：宽泛关键词搜索 + 人工筛选
 
 ```bash
 # 示例：搜索所有 wd-cell 用法，手动筛选错误用法
@@ -394,7 +394,7 @@ Grep: pattern="wd-cell" path="src/pages-sub/repair" glob="*.vue" output_mode="co
 
 **适用场景**：当正则表达式难以精确匹配，需要人工判断时
 
-#### 方法 C：搜索相关标签/属性
+#### 8.2.3. 方法 C：搜索相关标签/属性
 
 ```bash
 # 示例：搜索所有 template 插槽用法
@@ -403,31 +403,31 @@ Grep: pattern="<template #" path="src/" glob="*.vue"
 
 **适用场景**：从更广的范围搜索，避免遗漏边缘情况
 
-### 3. 系统性检查方法（用于重要任务）
+### 8.3. 系统性检查方法（用于重要任务）
 
 对于关键的代码规范检查（如组件迁移、API 迁移），**禁止仅依赖搜索**，必须：
 
-#### 步骤 1：列出所有相关文件
+#### 8.3.1. 步骤 1：列出所有相关文件
 
 ```bash
 # 使用 Glob 工具列出所有需要检查的文件
 Glob: pattern="**/*.vue" path="src/pages-sub/repair"
 ```
 
-#### 步骤 2：逐文件阅读关键部分
+#### 8.3.2. 步骤 2：逐文件阅读关键部分
 
 - 不要跳过任何一个相关文件
 - 重点检查 `<template>` 区域的组件用法
 - 检查 `<script>` 区域的类型导入和 API 调用
 
-#### 步骤 3：交叉验证
+#### 8.3.3. 步骤 3：交叉验证
 
 - 用不同搜索方法确认结果一致性
 - 搜索结果为 0 时，**必须用另一种方法再次确认**
 
-### 4. 常见搜索场景示例
+### 8.4. 常见搜索场景示例
 
-#### 场景 1：检查 `wd-cell` 组件的错误用法
+#### 8.4.1. 场景 1：检查 `wd-cell` 组件的错误用法
 
 ```bash
 # 方法 A：搜索 #value 插槽（错误用法）
@@ -440,7 +440,7 @@ Grep: pattern="template.*#title" path="src/" glob="*.vue"
 Grep: pattern="wd-cell" path="src/" output_mode="content" -n=true
 ```
 
-#### 场景 2：检查 API 调用方式
+#### 8.4.2. 场景 2：检查 API 调用方式
 
 ```bash
 # 方法 A：搜索旧的 API 调用方式
@@ -454,7 +454,7 @@ Glob: pattern="*.ts" path="src/api"
 # 然后逐个文件检查导入语句
 ```
 
-#### 场景 3：检查样式迁移情况
+#### 8.4.3. 场景 3：检查样式迁移情况
 
 ```bash
 # 方法 A：搜索旧的 ColorUI 类名
@@ -467,7 +467,7 @@ Grep: pattern="style=" path="src/" glob="*.vue"
 Grep: pattern="<style.*scoped" path="src/"
 ```
 
-### 5. 避免遗漏的检查清单
+### 8.5. 避免遗漏的检查清单
 
 当执行代码规范检查任务时，请务必完成以下清单：
 
@@ -477,9 +477,9 @@ Grep: pattern="<style.*scoped" path="src/"
 - [ ] **在修改后，立即搜索验证是否还有遗漏**
 - [ ] **记录搜索过程**，便于复查和调试
 
-### 6. 错误示例与改进
+### 8.6. 错误示例与改进
 
-#### ❌ 错误做法
+#### 8.6.1. ❌ 错误做法
 
 ```bash
 # 单次搜索，搜索失败就认为"没问题"
@@ -488,7 +488,7 @@ Grep: pattern="<template #value>"  # 可能因转义问题搜索不到
 # 错误结论：没有错误用法 ❌
 ```
 
-#### ✅ 正确做法
+#### 8.6.2. ✅ 正确做法
 
 ```bash
 # 方法 1：正则表达式
@@ -504,7 +504,7 @@ Glob: pattern="*.vue" path="src/pages-sub/repair"
 # 逐个文件阅读 <template> 区域
 ```
 
-### 7. 搜索命令速查表
+### 8.7. 搜索命令速查表
 
 |     任务      |             推荐搜索命令              |                备用搜索命令                 |
 | :-----------: | :-----------------------------------: | :-----------------------------------------: |
@@ -513,26 +513,26 @@ Glob: pattern="*.vue" path="src/pages-sub/repair"
 | 查找 API 调用 | `Grep: pattern="import.*from.*@/api"` |        `Grep: pattern="useRequest"`         |
 | 查找样式类名  |       `Grep: pattern="class="`        |          `Grep: pattern="<style"`           |
 
-## 项目概述
+## 9. 项目概述
 
 这是基于 unibest 框架的智慧社区物业管理系统，使用 uniapp + Vue3 + TypeScript + Vite5 + UnoCSS 技术栈开发，支持 H5、小程序、APP 多平台。
 
-## 开发环境要求
+## 10. 开发环境要求
 
 - Node.js >= 22
 - pnpm >= 10
 - Vue Official >= 2.1.10
 - TypeScript >= 5.0
 
-## 常用开发命令
+## 11. 常用开发命令
 
-### 安装依赖
+### 11.1. 安装依赖
 
 ```bash
 pnpm install
 ```
 
-### 开发环境
+### 11.2. 开发环境
 
 ```bash
 # H5 开发 (默认端口 9000)
@@ -556,7 +556,7 @@ pnpm dev:test         # 测试环境
 pnpm dev:prod         # 生产环境
 ```
 
-### 构建打包
+### 11.3. 构建打包
 
 ```bash
 # H5 构建
@@ -575,7 +575,7 @@ pnpm build:test       # 测试环境构建
 pnpm build:prod       # 生产环境构建
 ```
 
-### 代码质量检查
+### 11.4. 代码质量检查
 
 ```bash
 # ESLint 检查
@@ -588,7 +588,7 @@ pnpm lint:fix
 pnpm type-check
 ```
 
-### 其他常用命令
+### 11.5. 其他常用命令
 
 ```bash
 # 依赖升级
@@ -605,9 +605,9 @@ pnpm docs:build
 pnpm ci
 ```
 
-## 项目架构与目录结构
+## 12. 项目架构与目录结构
 
-### 核心配置文件
+### 12.1. 核心配置文件
 
 - `package.json` - 项目依赖和脚本配置
 - `vite.config.ts` - Vite 构建配置，包含插件配置和平台适配
@@ -616,7 +616,7 @@ pnpm ci
 - `uno.config.ts` - UnoCSS 配置
 - `tsconfig.json` - TypeScript 配置
 
-### 源码目录结构
+### 12.2. 源码目录结构
 
 ```plain
 src/
@@ -640,7 +640,7 @@ src/
 └── uni.scss        # uni-app 全局样式
 ```
 
-### 核心技术栈
+### 12.3. 核心技术栈
 
 - **框架**: uni-app 3.x (Vue3 + TypeScript)
 - **构建工具**: Vite 5.x
@@ -652,7 +652,7 @@ src/
 - **日期处理**: dayjs
 - **代码质量**: ESLint + TypeScript + husky + commitlint
 
-### 环境配置
+### 12.4. 环境配置
 
 项目使用自定义 `env/` 目录管理环境变量：
 
@@ -660,25 +660,25 @@ src/
 - `env/.env.test` - 测试环境配置
 - `env/.env.production` - 生产环境配置
 
-### 路由与页面管理
+### 12.5. 路由与页面管理
 
 - 使用约定式路由，文件名即路由路径
 - 支持分包加载，分包页面放在 `pages-sub/` 目录
 - 布局组件放在 `layouts/` 目录，支持嵌套布局
 
-### 平台适配策略
+### 12.6. 平台适配策略
 
 - 使用条件编译 (`#ifdef` / `#endif`) 处理平台差异
 - 支持的平台：H5、微信小程序、APP、支付宝小程序等
 - 平台特定代码应放在对应的条件编译块中
 
-### 开发调试
+### 12.7. 开发调试
 
 - **H5**: 访问 http://localhost:9000
 - **微信小程序**: 构建后导入 `dist/dev/mp-weixin` 到微信开发者工具
 - **APP**: 构建后导入 `dist/dev/app` 到 HBuilderX
 
-### 业务特点
+### 12.8. 业务特点
 
 这是一个智慧社区物业管理系统，主要功能模块包括：
 
@@ -690,7 +690,7 @@ src/
 
 当前项目处于开发阶段，使用 `dev-rc` 分支进行开发，主分支为 `main`。
 
-### 重要注意事项
+### 12.9. 重要注意事项
 
 1. 必须使用 pnpm 作为包管理器
 2. 代码提交前会自动进行 ESLint 检查和格式化
@@ -698,18 +698,18 @@ src/
 4. 新增组件会自动注册，无需手动引入
 5. 使用 UnoCSS 进行样式开发，支持原子化 CSS
 
-## 获取技术栈对应的上下文
+## 13. 获取技术栈对应的上下文
 
-### 阅读 `wot-design-uni` 组件库的文档
+### 13.1. 阅读 `wot-design-uni` 组件库的文档
 
 我们项目是移动端项目，高强度的使用了 `wot-design-uni` 组件库。你应该在编写 vue 组件时，主动地获取组件库的文档，及时使用正确的组件。
 
-#### 1. 文档资源
+#### 13.1.1. 文档资源
 
 - **官方文档**: https://wot-ui.cn/guide/quick-use.html （推荐优先查看）
 - **GitHub 文档**: https://github.com/Moonofweisheng/wot-design-uni/tree/master/docs/component
 
-#### 2. 类型导入的正确方式
+#### 13.1.2. 类型导入的正确方式
 
 ⚠️ **重要**：本项目使用 pnpm 安装 wot-design-uni，而不是 uni_modules 插件方式。
 
@@ -740,7 +740,7 @@ import type { XXX } from 'wot-design-uni/components/wd-xxx/types'
 
 即：去掉 `@/uni_modules/` 前缀。
 
-#### 3. 常用组件的类型导入示例
+#### 13.1.3. 常用组件的类型导入示例
 
 |      组件      |                     导入路径                     |              常用类型              |
 | :------------: | :----------------------------------------------: | :--------------------------------: |
@@ -750,7 +750,7 @@ import type { XXX } from 'wot-design-uni/components/wd-xxx/types'
 | wd-picker-view | `wot-design-uni/components/wd-picker-view/types` |            `ColumnItem`            |
 |  wd-textarea   |  `wot-design-uni/components/wd-textarea/types`   |          `TextareaProps`           |
 
-#### 4. 获取文档的方式
+#### 13.1.4. 获取文档的方式
 
 你可以使用以下工具查找文档：
 
@@ -759,7 +759,7 @@ import type { XXX } from 'wot-design-uni/components/wd-xxx/types'
 
 **注意**：从 GitHub 获取的文档中的类型导入路径需要按照上述规则进行转换。
 
-### claude code skill
+### 13.2. claude code skill
 
 - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
 - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
