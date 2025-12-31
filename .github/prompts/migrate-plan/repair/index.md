@@ -623,6 +623,22 @@ invoker	@	vue.runtime.esm.js:10209
 6. 整体略微增加组件大小和文本大小，便于更好的展示动效背景和文本。
 7. 在代码结构上，适当的做向后拓展的抽象。该组件要做好随时增加美观动效的准备。未来我可能会要求你给其他状态增加不同形式的动效。
 
+### 003 <!-- TODO: 用Anthropic模型完成一次 --> 设计报修的公共业务组件 `repair-list-item`，优化 `src\pages-sub\repair\dispatch.vue` 和 `src\pages-sub\repair\order-list.vue` 的代码写法
+
+1. 针对 `src\pages-sub\repair\dispatch.vue` 和 `src\pages-sub\repair\order-list.vue` 。
+2. 注意针对性阅读以下 class 选择器的部分：
+   - repair-card
+   - card-header
+   - card-body
+   - card-actions
+3. 这两个都是列表页，大部分内容和布局，都是相通相似的。我要求你抽象出一个公共的组件 `repair-list-item`，实现重复冗余代码的整体优化。
+4. 组件编写位置： `src\components\common\repair-list-item` 。
+5. 插槽设计： `card-actions` 是很明显的区别项。我要求你必须设计明显的插槽位置，暴露给具体的列表页组件来填充按钮。
+6. 编写技能要求： 按照 `add-new-component` 技能的要求来做。
+7. 美观设计要求：
+   - 现在的列表项其实很不美观，我要求你主动使用 gemini MCP，设计一个根据美观的，好看的列表页项目。
+   - 充分使用 `wot-design-uni` 组件库提供的组件，设计出美观、好看、一致的列表页项目组件。 `repair-list-item` 。
+
 ## 044 <!-- TODO: --> 维修已办
 
 ## 045 维修工单评价页 `src\pages-sub\repair\appraise.vue`
