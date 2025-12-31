@@ -1039,3 +1039,10 @@ const showTotalAmount = computed(() => model.feeFlag === "1001");
 2. 你应该告诉 `component-migration` 技能，不应该使用这个不存在的组件。
 3. `<wd-status-tip>` 组件文档：
    - https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/status-tip.md
+
+## 062 按照技能执行缺漏的报告，集中地，全面的优化技能文件
+
+按照以下报告文档所述，请全面的更新迭代本项目的多款技能文档。按照报告的改进方案来改造。
+
+- docs\reports\2025-12-31-skill-trigger-failure-analysis.md
+- docs\reports\2025-12-31-skill-file-execution-failure-analysis.md
