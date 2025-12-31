@@ -33,6 +33,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `z-paging-integration`： `z-paging 分页组件集成方案` 技能。即 `.claude\skills\z-paging-integration\SKILL.md` 文件。
 - `use-wd-form`： `使用 wd-form 表单组件编写表单页的实施规范` 技能。即 `.claude\skills\use-wd-form\SKILL.md` 文件。
 - `use-uniapp-dynamic-page-title`： `uni-app 动态页面标题设置` 技能。即 `.claude\skills\use-uniapp-dynamic-page-title\SKILL.md` 文件。
+- `add-new-component`： `新建公共组件规范` 技能。即 `.claude\skills\add-new-component\SKILL.md` 文件。
 
 ### 2.2. 业务术语
 
@@ -99,6 +100,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 |      需要分页功能      |                                `z-paging-integration` + `api-migration` + `api-error-handling`                                 |                 z-paging 几乎总是需要 3 个技能                 |
 |    需要接口错误提示    |                                                      `api-error-handling`                                                      |                 所有 API 调用都应该有错误提示                  |
 |    需要动态页面标题    |                                                `use-uniapp-dynamic-page-title`                                                 |      根据参数/状态动态设置标题（如派单/转单显示不同标题）      |
+|    新建公共组件        |                                                   `add-new-component`                                                           |         src/components/common 目录下新建公共组件规范           |
 | 从 Vue2 完整迁移表单页 | `code-migration` + `component-migration` + `style-migration` + `use-wd-form` + `api-migration` + `beautiful-component-design`  |                       需要 6 个技能协同                        |
 | 从 Vue2 完整迁移列表页 | `code-migration` + `component-migration` + `style-migration` + `api-migration` + `z-paging-integration` + `api-error-handling` |                       需要 6 个技能协同                        |
 

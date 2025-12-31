@@ -96,6 +96,20 @@
 - [ ] **需要根据 URL 参数动态显示标题吗？**
   - ✅ 是 → **必须使用** `.claude/skills/use-uniapp-dynamic-page-title/SKILL.md`
 
+### 1.9. 新建公共组件相关
+
+- [ ] **需要新建公共组件吗？**（在 `src/components/common` 目录下创建新组件）
+  - ✅ 是 → **必须使用** `.claude/skills/add-new-component/SKILL.md`
+
+- [ ] **新建的组件需要 TypeScript 类型定义吗？**
+  - ✅ 是 → **必须遵循** `add-new-component` 技能的 types.ts 规范
+
+- [ ] **新建的组件需要编写使用文档吗？**
+  - ✅ 是 → **必须遵循** `add-new-component` 技能的 index.md 规范
+
+- [ ] **新建的组件需要创建测试页面吗？**
+  - ✅ 是 → **必须遵循** `add-new-component` 技能的测试页面规范
+
 ---
 
 ## 阶段 2：功能需求识别
@@ -284,6 +298,7 @@ Grep: pattern="___" path="src/" output_mode="files_with_matches"
 |   需要分页功能    |           `z-paging-integration` + `api-migration`           |
 | 需要错误提示功能  |                     `api-error-handling`                     |
 | 需要动态页面标题  |               `use-uniapp-dynamic-page-title`                |
+|   新建公共组件    |                     `add-new-component`                      |
 
 ---
 
