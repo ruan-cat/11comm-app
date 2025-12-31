@@ -57,7 +57,7 @@
 
 我需要你从本次的错误内，找到通用的解决方案。下次迁移别的模块时，不要出现类似的错误。
 
-## 007 <!-- TODO: --> 优化并解决 `src\pages-sub\inspection\execute-single.vue` 执行单项巡检页面，出现选择项问题
+## 007 优化并解决 `src\pages-sub\inspection\execute-single.vue` 执行单项巡检页面，出现选择项问题
 
 ### 你之前向我询问过以下组件使用问题
 
