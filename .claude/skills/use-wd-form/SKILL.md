@@ -1,46 +1,48 @@
 ---
 name: use-wd-form
-description: 使用 wot-design-uni 的 wd-form 组件编写表单页的标准规范 - 提供完整的表单结构、组件使用、校验规则和代码组织最佳实践。当需要实现表单页面、编写包含用户输入的 Vue 组件、或需要统一表单代码风格时使用
+description: 使用 wot-design-uni 的 wd-form 组件编写表单页的标准规范。当需要实现表单页面（包含 <wd-form>）、添加选择功能（必须使用 wd-picker 而非 wd-radio-group）、表单分区标题（必须使用 FormSectionTitle）时使用。必须与 beautiful-component-design 技能协同。
 ---
 
 # 使用 `<wd-form>` 表单组件编写表单页的实施规范
 
 本技能文件定义了在本项目中使用 `wot-design-uni` 组件库的 `<wd-form>` 组件编写表单页的标准规范。所有表单页面必须遵循此规范，确保代码风格统一、美观且易于维护。
 
-## ⚠️ 编写前必读（Critical）
+## ⚠️ 多技能协同
 
-**🚨 禁止直接编写表单代码！必须先完成：**
+表单页面通常需要同时使用：
 
-1. ✅ **第一步：阅读参考文件**
-   - 推荐：`src/pages-sub/repair/pool-dispatch.vue`（完整表单示例）
-   - 推荐：`src/pages-sub/repair/pool-finish.vue`（复杂表单示例）
-   - 必读：本技能文件的完整内容
+- `beautiful-component-design` - FormSectionTitle、图标、美化
+- `api-migration` - 如果有接口调用
+- `api-error-handling` - 如果有接口调用
 
-2. ✅ **第二步：查阅组件文档**
-   - wd-form 文档：https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/form.md
-   - wd-cell 文档：https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/cell.md
+从 Vue2 迁移表单：
 
-3. ✅ **第三步：严格遵循规范**
-   - 必须使用 `<wd-form>` 包裹所有表单项
-   - 必须使用 `<wd-cell-group>` 分组表单项
-   - 必须定义 `formRules` 校验规则
-   - 必须使用 `FormInstance` 类型导入
+- `code-migration` + `component-migration` - 代码和组件迁移
 
-### 🚫 常见错误（严禁犯）
+参阅 `.claude/skills/check-trigger.md` 了解完整的技能触发检查流程。
 
-|       ❌ 错误写法        |          ✅ 正确写法           |          说明          |
-| :----------------------: | :----------------------------: | :--------------------: |
-|    不使用 `<wd-form>`    |   `<wd-form ref="formRef">`    |    必须使用表单组件    |
-|    缺少 `rules` 配置     |      `:rules="formRules"`      |    必须定义校验规则    |
-|       类型导入错误       | `import type { FormInstance }` | 必须从正确路径导入类型 |
-| 不使用 `<wd-cell-group>` |    `<wd-cell-group border>`    |     必须分组表单项     |
+---
 
-## 1. 核心组件文档
+## 核心文档与参考
 
-在编写表单之前，请先阅读以下组件文档：
+参考示例：
 
-- **wd-form 组件文档**: https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/form.md
-- **wd-cell-group 和 wd-cell 组件文档**: https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/cell.md
+- `src/pages-sub/repair/pool-dispatch.vue` - 完整表单示例
+- `src/pages-sub/repair/pool-finish.vue` - 复杂表单示例
+
+组件文档：
+
+- [wd-form 组件文档](https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/form.md)
+- [wd-cell 组件文档](https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/cell.md)
+
+## 1. 核心规范概述
+
+表单必须：
+
+- 使用 `<wd-form>` 包裹所有表单项
+- 使用 `<wd-cell-group>` 分组表单项
+- 定义 `formRules` 校验规则
+- 使用 `FormInstance` 类型导入
 
 ## 2. 表单组件基本结构
 

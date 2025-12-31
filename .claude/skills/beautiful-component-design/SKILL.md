@@ -1,76 +1,43 @@
 ---
 name: beautiful-component-design
-description: 移动端 uni-app + wot-design-uni 组件美化规范。包含图标使用、文本样式、对齐方式、响应式设计等优化技巧。在编写维修工单详情页风格的信息展示页面时使用。
+description: 移动端 uni-app + wot-design-uni 组件美化规范。当需要添加 FormSectionTitle、使用 Carbon Icons、实现响应式设计、选择器组件美化、弹框交互时使用。表单页面必须与 use-wd-form 技能协同。
 color: pink
 ---
 
 # 组件美化设计规范
 
-> **📚 关联 Skill**: 无关联其他 Skill，本技能独立提供组件美化设计指导。
-
 用于指导编写视觉美观、文本与图标对齐良好、响应式友好的 Vue 组件的最佳实践。
 
-## ⚠️ 设计前必读（Critical - 强制执行）
+## ⚠️ 多技能协同
 
-**🚨 禁止直接编写代码！必须先完成以下所有步骤：**
+表单页面通常需要同时使用：
 
-### 步骤 1：阅读完整文档（必须全部完成）
+- `use-wd-form` - 表单结构、wd-picker、校验规则
+- `api-migration` - 如果有接口调用
+- `api-error-handling` - 如果有接口调用
 
-- [ ] 阅读本 SKILL.md 主文件的**所有章节**
-- [ ] 阅读 [icon-usage.md](icon-usage.md) - 图标使用规范
-- [ ] 阅读 [text-alignment.md](text-alignment.md) - 文本样式规范
-- [ ] 阅读 [responsive-design.md](responsive-design.md) - 响应式设计规范
-- [ ] **⚠️ 表单页面必读**：阅读 [form-section-title.md](form-section-title.md) - 表单分区标题组件
+列表页面通常需要：
 
-**违规后果**：
+- `z-paging-integration` + `api-migration` - 分页列表
 
-- ❌ 跳过 form-section-title.md 将导致使用错误的 `<view class="section-title">` 而非 `<FormSectionTitle>`
-- ❌ 跳过其他文档将导致图标、文本、样式不符合规范
+参阅 `.claude/skills/check-trigger.md` 了解完整的技能触发检查流程。
 
-### 步骤 2：查阅项目示例（至少 2 个）
+---
 
-- [ ] `src/pages-sub/repair/staff-todo-detail.vue` - 完整美化示例
-- [ ] `src/pages-sub/repair/select-resource.vue` - 表单页面示例
-- [ ] `src/pages-sub/repair/add-order.vue` - FormSectionTitle 使用示例
-- [ ] `src/components/activity/*.vue` - 组件封装示例
+## 核心文档
 
-### 步骤 3：搜索相关组件使用（强制执行）
+使用本技能前必须阅读：
 
-```bash
-# 表单页面必须搜索 FormSectionTitle 的使用
-Grep: pattern="FormSectionTitle" path="src/" output_mode="files_with_matches"
+- [icon-usage.md](icon-usage.md) - 图标使用规范
+- [text-alignment.md](text-alignment.md) - 文本样式规范
+- [responsive-design.md](responsive-design.md) - 响应式设计规范
+- [form-section-title.md](form-section-title.md) - 表单分区标题组件（表单页面必读）
 
-# 搜索图标使用示例
-Grep: pattern="i-carbon-" path="src/" output_mode="content" -n=true
-```
+参考示例：
 
-### 步骤 4：理解核心规范
-
-- 图标必须使用 `<wd-icon>` + Carbon Icons
-- 图标与文本对齐：`flex items-center`
-- 统一字号：标题 `32rpx`，正文 `28rpx`，辅助 `24rpx`
-- 响应式单位：使用 `rpx` 而非 `px`
-- **表单分区标题必须使用 `<FormSectionTitle>` 组件**（禁止使用 `<view class="section-title">`）
-
-### 步骤 5：创建任务清单
-
-使用 TodoWrite 创建任务清单，列出所有需要修改的内容。
-
-**🚫 绝对禁止的行为**：
-
-- ❌ 跳过任何一个步骤直接编码
-- ❌ 只读主文件，不读子文档
-- ❌ 凭经验猜测，不查阅示例
-- ❌ 不搜索项目，不了解现有实现
-
-### 🚫 常见错误（严禁犯）
-
-|     ❌ 错误写法      |            ✅ 正确写法             |      说明      |
-| :------------------: | :--------------------------------: | :------------: |
-| `class="cuIcon-xxx"` | `<wd-icon name="">` + Carbon Icons | 使用 Icon 组件 |
-|    图标文本不对齐    |        `flex items-center`         |  垂直居中对齐  |
-|  `font-size: 14px`   |            `text-28rpx`            | 使用 rpx 单位  |
-|       随意字号       |       遵循 32/28/24rpx 规范        |    统一字号    |
+- `src/pages-sub/repair/staff-todo-detail.vue` - 完整美化示例
+- `src/pages-sub/repair/select-resource.vue` - 表单页面示例
+- `src/pages-sub/repair/add-order.vue` - FormSectionTitle 使用示例
 
 ## 1. 专业能力
 

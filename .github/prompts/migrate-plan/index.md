@@ -1040,7 +1040,7 @@ const showTotalAmount = computed(() => model.feeFlag === "1001");
 3. `<wd-status-tip>` 组件文档：
    - https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/status-tip.md
 
-## 062 按照技能执行缺漏的报告，集中地，全面的优化技能文件
+## 063 按照技能执行缺漏的报告，集中地，全面的优化技能文件
 
 按照以下报告文档所述，请全面的更新迭代本项目的多款技能文档。按照报告的改进方案来改造。
 

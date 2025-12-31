@@ -1,9 +1,19 @@
 ---
 name: z-paging-integration
-description: z-paging 分页组件与 api-migration 适配方案 - 提供 z-paging 与 useRequest 回调钩子模式的正确集成方式
+description: z-paging 分页组件与 api-migration 适配方案 - 提供 z-paging 与 useRequest 回调钩子模式的正确集成方式。当需要实现列表分页功能、集成 z-paging 与 Alova useRequest、处理分页筛选刷新时使用。必须与 api-migration、api-error-handling 协同。
 ---
 
 # z-paging 分页组件集成方案
+
+## ⚠️ 多技能协同
+
+**强制组合**（分页功能必须使用）：
+
+- `api-migration` + `api-error-handling`
+
+参阅 `.claude/skills/check-trigger.md` 了解完整的技能触发检查流程。
+
+---
 
 ## ⚠️ 集成前必读（Critical）
 

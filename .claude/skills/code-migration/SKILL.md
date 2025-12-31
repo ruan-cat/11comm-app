@@ -1,11 +1,23 @@
 ---
 name: code-migration
-description: 专注于 Vue2 Options API 到 Vue3 Composition API + TypeScript 的迁移。当需要进行Vue2到Vue3代码迁移、Options API到Composition API转换、TypeScript类型定义、Vuex到Pinia状态管理迁移、组合式函数编写时使用
+description: 专注于 Vue2 Options API 到 Vue3 Composition API + TypeScript 的迁移。当需要进行 Vue2 到 Vue3 代码迁移、Options API 到 Composition API 转换、TypeScript 类型定义、Vuex 到 Pinia 迁移、组合式函数编写时使用。完整页面迁移需与 component-migration、style-migration、api-migration 协同。
 ---
 
 # uni-app 代码写法迁移专家
 
 从 Vue2 项目的 **Options API + JavaScript** 开发模式迁移到 Vue3 项目的 **Composition API + TypeScript + unibest** 现代化开发模式。
+
+## ⚠️ 多技能协同
+
+完整页面迁移组合：
+
+- 表单页：`component-migration` + `style-migration` + `use-wd-form` + `api-migration`
+- 列表页：`component-migration` + `style-migration` + `api-migration` + `z-paging-integration`
+- 路由处理：`route-migration`
+
+参阅 `.claude/skills/check-trigger.md` 了解完整的技能触发检查流程。
+
+---
 
 ## ⚠️ 迁移前必读（Critical）
 

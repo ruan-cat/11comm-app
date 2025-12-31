@@ -1,11 +1,31 @@
 ---
 name: style-migration
-description: 专注于 ColorUI 到 UnoCSS + wot-design-uni 的样式系统迁移,处理从传统CSS框架到现代化原子CSS的完整迁移,提供完整的样式映射规则、组件映射策略和最佳实践指导
+description: 专注于 ColorUI 到 UnoCSS + wot-design-uni 的样式系统迁移，从传统 CSS 框架到现代化原子 CSS。当需要迁移 ColorUI 类名到 UnoCSS 原子类、SCSS 变量到 UnoCSS 主题配置、固定像素到响应式单位时使用。完整页面迁移需与 component-migration、code-migration 协同。
 ---
 
 # 样式系统迁移专家
 
 从 Vue2 项目的 **ColorUI + SCSS** 样式系统迁移到 Vue3 项目的 **UnoCSS + wot-design-uni** 现代化原子 CSS 样式系统。
+
+## ⚠️ 重要原则
+
+**禁止滥用 UnoCSS shortcuts 功能！** 不要将业务性质的、非公共性质的样式类写入 `uno.config.ts`。
+
+## ⚠️ 多技能协同
+
+完整页面迁移：
+
+- `component-migration` + `code-migration`
+
+样式优化：
+
+- `beautiful-component-design`
+
+参阅 `.claude/skills/check-trigger.md` 了解完整的技能触发检查流程。
+
+**📝 提示**：在开始工作前，建议先阅读 `.claude/skills/check-trigger.md` 进行技能触发检查。
+
+---
 
 ## ⚠️ 迁移前必读（Critical）
 

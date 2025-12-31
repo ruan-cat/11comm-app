@@ -68,6 +68,142 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 3. 不考虑严格的鉴权逻辑： 我们不做任何鉴权功能。在跳转路由的时候，`vue3项目` 不做任何形式的鉴权处理。任何页面都可以随意跳转，任意访问。
 4. 不许滥用 unocss 的 shortcuts 功能： 不要将业务性质的，非公共性质的样式类，都写入到 `uno.config.ts` 配置文件内。避免滥用全局变量性质的配置文件，
 
+## 技能触发与协同策略
+
+### ⚠️ 强制执行技能触发检查
+
+**在执行任何开发任务前，必须先阅读 `.claude/skills/check-trigger.md` 进行技能触发检查。**
+
+该文件提供了系统化的技能识别流程，帮助确保：
+
+- ✅ 识别所有相关技能（避免遗漏）
+- ✅ 理解多技能协同关系（避免单一技能思维）
+- ✅ 按照正确顺序执行（避免顺序混乱）
+
+### 技能触发矩阵
+
+根据任务特征快速识别需要使用的技能：
+
+|        任务特征        |                                                         必须使用的技能                                                         |                              说明                              |
+| :--------------------: | :----------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------: |
+|    包含 `<wd-form>`    |                                          `use-wd-form` + `beautiful-component-design`                                          |                  表单页面必须同时使用两个技能                  |
+|      需要选择功能      |                                              `use-wd-form`（第 3.2 节 wd-picker）                                              |            必须使用 wd-picker，禁止 wd-radio-group             |
+|    需要表单分区标题    |                                     `beautiful-component-design`（form-section-title.md）                                      | 必须使用 FormSectionTitle，禁止 `<view class="section-title">` |
+|      需要美化组件      |                                                  `beautiful-component-design`                                                  |                 添加图标、调整样式、响应式设计                 |
+|    ColorUI 组件迁移    |                                                     `component-migration`                                                      |            ColorUI / uni-app 组件 → wot-design-uni             |
+|    ColorUI 样式迁移    |                                                       `style-migration`                                                        |                  ColorUI 类名 → UnoCSS 原子类                  |
+|      API 接口迁移      |                                                        `api-migration`                                                         |       Java110Context + uni.request → Alova + TypeScript        |
+| Vue2 到 Vue3 代码迁移  |                                                        `code-migration`                                                        |           Options API → Composition API + TypeScript           |
+|        路由迁移        |                                                       `route-migration`                                                        |                    pages.json → 约定式路由                     |
+|      需要分页功能      |                                `z-paging-integration` + `api-migration` + `api-error-handling`                                 |                 z-paging 几乎总是需要 3 个技能                 |
+|    需要接口错误提示    |                                                      `api-error-handling`                                                      |                 所有 API 调用都应该有错误提示                  |
+| 从 Vue2 完整迁移表单页 | `code-migration` + `component-migration` + `style-migration` + `use-wd-form` + `api-migration` + `beautiful-component-design`  |                       需要 6 个技能协同                        |
+| 从 Vue2 完整迁移列表页 | `code-migration` + `component-migration` + `style-migration` + `api-migration` + `z-paging-integration` + `api-error-handling` |                       需要 6 个技能协同                        |
+
+### 多技能协同原则
+
+**⚠️ 重要：大多数实际任务都需要多个技能协同，禁止单一技能思维！**
+
+#### 1. 表单页面的技能组合
+
+```plaintext
+表单页面（创建/修改）：
+  - use-wd-form（必须）- 表单结构、wd-picker、校验规则
+  - beautiful-component-design（必须）- FormSectionTitle、图标、美化
+  - api-migration（如果有接口）- API 调用
+  - api-error-handling（如果有接口）- 错误提示
+```
+
+**检查清单**：
+
+- [ ] 包含 `<wd-form>` → 必须使用 `use-wd-form`
+- [ ] 需要分区标题 → 必须使用 `beautiful-component-design`（FormSectionTitle）
+- [ ] 有选择功能 → 必须使用 `wd-picker`（禁止 wd-radio-group）
+- [ ] 需要调用 API → 必须使用 `api-migration` + `api-error-handling`
+
+#### 2. 列表页面的技能组合
+
+```plaintext
+列表页面（分页列表）：
+  - z-paging-integration（必须）- 分页组件
+  - api-migration（必须）- API 接口
+  - api-error-handling（必须）- 错误提示
+  - beautiful-component-design（可选）- 美化
+```
+
+#### 3. 从 Vue2 迁移的技能组合
+
+```plaintext
+从 Vue2 迁移单个页面：
+  - code-migration（必须）- Vue2 → Vue3 代码写法
+  - component-migration（必须）- ColorUI → wot-design-uni
+  - style-migration（必须）- 样式类名迁移
+  - route-migration（必须）- 路由配置迁移
+  - 根据页面类型添加：
+    - 表单页：+ use-wd-form + beautiful-component-design
+    - 列表页：+ z-paging-integration + api-migration + api-error-handling
+```
+
+### 技能执行流程
+
+**强制执行以下流程：**
+
+```plaintext
+收到任务
+  ↓
+步骤 1：技能触发检查
+  - 打开 .claude/skills/check-trigger.md
+  - 逐项回答检查问题
+  - 生成技能清单
+  ↓
+步骤 2：阅读所有相关技能
+  - 阅读每个技能的主文件（SKILL.md）
+  - 阅读所有子文档（*.md）
+  - 查阅推荐的示例文件
+  ↓
+步骤 3：理解技能协同关系
+  - 确认技能之间的依赖关系
+  - 理解执行顺序
+  ↓
+步骤 4：创建任务清单
+  - 使用 TodoWrite 列出所有任务
+  - 包含"阅读技能文件"的任务
+  ↓
+步骤 5：开始执行
+  - 严格按照技能文件规范执行
+  - 逐项完成任务并标记
+```
+
+### 违规后果警告
+
+**如果跳过技能触发检查或只使用部分技能，将导致：**
+
+- ❌ 使用错误的组件（如 `wd-radio-group` 代替 `wd-picker`）
+- ❌ 使用错误的样式类（如 `<view class="section-title">` 代替 `FormSectionTitle`）
+- ❌ 组件嵌套顺序错误
+- ❌ 缺少必需的功能和美化效果
+- ❌ 代码不符合项目规范
+- ❌ **需要返工重写，浪费时间**
+
+### 快速参考
+
+**常见问题快速查询：**
+
+1. **Q: 如何判断需要使用哪些技能？**
+   - A: 阅读 `.claude/skills/check-trigger.md`，按照检查清单逐项回答
+
+2. **Q: 表单页面需要使用哪些技能？**
+   - A: 至少需要 `use-wd-form` + `beautiful-component-design`
+
+3. **Q: 什么时候使用 wd-picker，什么时候使用 wd-radio-group？**
+   - A: 绝大多数情况使用 `wd-picker`；只有动态场景（选项不固定）才考虑 `wd-radio-group`
+
+4. **Q: 如何添加表单分区标题？**
+   - A: 必须使用 `FormSectionTitle` 组件，禁止使用 `<view class="section-title">`
+
+5. **Q: 分页功能需要哪些技能？**
+   - A: 必须同时使用 `z-paging-integration` + `api-migration` + `api-error-handling` 三个技能
+
 ## 代码/编码格式要求
 
 ### 1. markdown 文档的 table 编写格式

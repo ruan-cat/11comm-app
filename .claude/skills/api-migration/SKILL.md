@@ -1,49 +1,39 @@
 ---
 name: api-migration
-description: 专业的接口请求迁移专家,专注于从 Java110Context + uni.request 架构迁移到 Alova + TypeScript + 模拟接口的现代化开发模式。当需要实现API接口迁移、编写Mock接口、定义接口类型或处理useRequest集成时使用
+description: 专业的接口请求迁移专家，从 Java110Context + uni.request 迁移到 Alova + TypeScript + Mock 接口。当需要实现 API 接口迁移、编写 Mock 接口、定义接口类型、处理 useRequest 集成时使用。分页功能必须与 z-paging-integration 协同。
 ---
 
 # 接口请求迁移专家
 
-> **📚 关联 Skill**:
->
-> - **api-error-handling**: 处理接口错误提示时,会自动加载此 Skill
-> - **z-paging-integration**: 使用 z-paging 分页组件时,会自动加载此 Skill
+## ⚠️ 多技能协同
 
-## ⚠️ 开始前必读（Critical - 必须严格执行）
+常见组合场景：
 
-### 📋 强制执行的工作流程
+- 表单提交接口：`use-wd-form` + `api-error-handling`
+- 列表分页接口：`z-paging-integration` + `api-error-handling`
+- Vue2 迁移 API：`code-migration` + `api-error-handling`
 
-**🚨 禁止直接编写代码！必须先完成以下步骤：**
+参阅 `.claude/skills/check-trigger.md` 了解完整的技能触发检查流程。
 
-1. ✅ **第一步：阅读完整参考文件**
-   - 必读：`src/api/mock/repair.mock.ts`（最完整、最标准的参考实现）
-   - 必读：`.claude/skills/api-migration/mock-实现指南.md`
-   - 必读：`.claude/skills/api-migration/mock-规范.md`
-   - 必读：`.claude/skills/api-migration/mock-响应格式.md`
+---
 
-2. ✅ **第二步：对比理解差异**
-   - 检查参数格式：`{ query, body }` 解构 vs `req.query`
-   - 检查字段名称：`body` 字段 vs `response` 字段
-   - 检查 method 格式：`['GET', 'POST']` 数组 vs `'GET'` 字符串
-   - 检查 delay 配置：`delay: [300, 800]` vs 无配置
+## 核心文档与参考
 
-3. ✅ **第三步：严格模仿现有代码**
-   - 完全按照 `repair.mock.ts` 的模式编写
-   - 不要凭经验或通用插件知识直接编写
-   - 不要假设标准 vite-plugin-mock-dev-server 的用法
+必读文件：
 
-### 🚫 常见错误（严禁犯）
+- `src/api/mock/repair.mock.ts` - 最完整、最标准的参考实现
+- `.claude/skills/api-migration/mock-实现指南.md`
+- `.claude/skills/api-migration/mock-规范.md`
+- `.claude/skills/api-migration/mock-响应格式.md`
 
-|          ❌ 错误写法          |              ✅ 正确写法               |              说明               |
-| :---------------------------: | :------------------------------------: | :-----------------------------: |
-| `response: async (req) => {}` | `body: async ({ query, body }) => {}`  | 项目使用自定义 defineUniAppMock |
-|  `const params = req.query`   | `const params = { ...query, ...body }` |          参数解构方式           |
-|        `method: 'GET'`        |       `method: ['GET', 'POST']`        |        method 必须是数组        |
-|        无 `delay` 字段        |          `delay: [300, 800]`           |      必须明确设置延迟范围       |
-|    `import { ResultEnum }`    |       `import { ResultEnumMap }`       |    Mock 文件禁用 ResultEnum     |
+关键要求：
 
-### 🎯 核心原则
+- 使用 `{ query, body }` 解构参数
+- method 必须是数组：`['GET', 'POST']`
+- 必须设置 `delay: [300, 800]`
+- Mock 文件使用 `ResultEnumMap`，非 `ResultEnum`
+
+## 核心原则
 
 - **参考优先**：以现有 Mock 文件为标准，不以通用插件文档为准
 - **完全模仿**：100% 按照 `repair.mock.ts` 的代码结构编写

@@ -1,6 +1,6 @@
 ---
 name: component-migration
-description: 专业的 uni-app 组件迁移专家,专注于从 ColorUI + uni-app 内置组件到 wot-design-uni 组件库的迁移。当需要进行组件映射转换、Icon图标迁移、表单组件迁移、空状态组件迁移、全局反馈组件配置，以及修复现有代码的 wot-design-uni 组件使用错误（包括类型错误）时使用
+description: 专业的 uni-app 组件迁移专家，从 ColorUI + uni-app 内置组件到 wot-design-uni 组件库的迁移。当需要组件映射转换、Icon 图标迁移、表单组件迁移、修复 wot-design-uni 组件使用错误（类型错误、插槽错误、嵌套顺序错误）时使用。表单迁移必须与 use-wd-form 协同。
 ---
 
 # 组件迁移/修复专家
@@ -14,27 +14,29 @@ description: 专业的 uni-app 组件迁移专家,专注于从 ColorUI + uni-app
 - 组件嵌套顺序错误
 - 插槽使用错误
 
-## 🚨 强制执行检查清单（绝对优先级）
+## ⚠️ 多技能协同
 
-**在修改任何 wot-design-uni 组件前，必须先阅读并执行：**
+常见组合场景：
 
-👉 **[EXECUTION-CHECKLIST.md](./EXECUTION-CHECKLIST.md)** 👈
+- 表单迁移：`use-wd-form` + `beautiful-component-design` + `style-migration`
+- 列表迁移：`z-paging-integration` + `api-migration` + `style-migration`
+- Vue2 迁移：`code-migration` + `style-migration`
 
-**检查清单核心要求**：
+参阅 `.claude/skills/check-trigger.md` 了解完整的技能触发检查流程。
 
-1. ✅ 识别要修改的组件和属性
-2. ✅ **使用 WebFetch 查阅官方文档（强制执行）**
-3. ✅ 查阅项目中的正确示例
-4. ✅ 制定修改方案
-5. ✅ 执行修改（一次只改一个）
-6. ✅ 验证修改结果
-7. ✅ 使用 TodoWrite 记录进度
+---
 
-**🚫 绝对禁止**：
+## 核心执行规范
 
-- ❌ 不查文档就修改代码
-- ❌ 批量修改多个文件
-- ❌ 凭经验猜测组件用法
+在修改 wot-design-uni 组件前，必须阅读：
+
+- **[EXECUTION-CHECKLIST.md](./EXECUTION-CHECKLIST.md)** - 完整执行检查清单
+
+关键要求：
+
+1. 使用 WebFetch 查阅官方文档（强制）
+2. 查阅项目中的正确示例
+3. 一次只改一个组件
 
 ---
 

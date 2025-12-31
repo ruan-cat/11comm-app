@@ -1,9 +1,21 @@
 ---
 name: api-error-handling
-description: 接口错误提示能力 - 提供统一的接口错误提示标准和实施方案，基于 wot-design-uni 和 Alova useRequest 回调模式
+description: 接口错误提示能力 - 提供统一的接口错误提示标准和实施方案，基于 wot-design-uni 和 Alova useRequest 回调模式。当需要实现接口错误提示、处理 useRequest onError 回调、全局错误拦截时使用。几乎所有 API 调用都需要此技能。
 ---
 
 # 接口错误提示能力
+
+## ⚠️ 多技能协同
+
+常见组合场景：
+
+- API 调用：与 `api-migration` 协同
+- 分页列表：与 `z-paging-integration` + `api-migration` 协同
+- 表单提交：与 `use-wd-form` + `api-migration` 协同
+
+参阅 `.claude/skills/check-trigger.md` 了解完整的技能触发检查流程。
+
+---
 
 ## ⚠️ 实施前必读（Critical）
 
