@@ -274,6 +274,13 @@ src/components/common/[组件名]/
 ```vue
 <script setup lang="ts">
 import [ComponentName] from "@/components/common/[组件名]/index.vue";
+
+// ✅ 页面中使用必须添加 definePage 配置
+definePage({
+	style: {
+		navigationBarTitleText: "示例页面",
+	},
+});
 </script>
 
 <template><[component-name] prop1="value" /></template>
@@ -487,6 +494,13 @@ definePage({
 ```vue
 <script setup lang="ts">
 import FormSectionTitle from "@/components/common/form-section-title/index.vue";
+
+// ✅ 页面中使用必须添加 definePage 配置
+definePage({
+	style: {
+		navigationBarTitleText: "示例页面",
+	},
+});
 </script>
 
 <template>
