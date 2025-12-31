@@ -21,6 +21,13 @@ import { getInspectionItemTitles, submitInspection } from '@/api/inspection'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { TypedRouter } from '@/router'
 
+definePage({
+  style: {
+    navigationBarTitleText: '执行单项巡检',
+    enablePullDownRefresh: false,
+  },
+})
+
 /** 表单标签统一宽度 */
 const LABEL_WIDTH = '80px'
 
@@ -285,6 +292,25 @@ async function handleSubmitInspection() {
   })
 }
 
+/**
+ * 根据索引获取表单项的 icon 配置
+ * @param index 表单项索引
+ */
+function getFormItemIcon(index: number): { icon: string, iconClass: string } {
+  const iconConfigs = [
+    { icon: 'task-view', iconClass: 'i-carbon-task-view text-blue-500' },
+    { icon: 'inspect', iconClass: 'i-carbon-inspect text-purple-500' },
+    { icon: 'warning-alt', iconClass: 'i-carbon-warning-alt text-orange-500' },
+    { icon: 'edit', iconClass: 'i-carbon-edit text-green-500' },
+    { icon: 'checkbox-checked', iconClass: 'i-carbon-checkbox-checked text-cyan-500' },
+    { icon: 'data-check', iconClass: 'i-carbon-data-check text-indigo-500' },
+    { icon: 'certificate-check', iconClass: 'i-carbon-certificate-check text-pink-500' },
+    { icon: 'task-complete', iconClass: 'i-carbon-task-complete text-teal-500' },
+  ]
+
+  return iconConfigs[index % iconConfigs.length]
+}
+
 onMounted(() => {
   getCurrentLocation()
   loadInspectionItemTitles()
@@ -309,8 +335,8 @@ onMounted(() => {
       >
         <FormSectionTitle
           :title="item.itemTitle"
-          icon="checkbox-checked"
-          icon-class="i-carbon-checkbox-checked text-blue-500"
+          :icon="getFormItemIcon(index).icon"
+          :icon-class="getFormItemIcon(index).iconClass"
         />
 
         <!-- 单选 -->
