@@ -623,7 +623,7 @@ invoker	@	vue.runtime.esm.js:10209
 6. 整体略微增加组件大小和文本大小，便于更好的展示动效背景和文本。
 7. 在代码结构上，适当的做向后拓展的抽象。该组件要做好随时增加美观动效的准备。未来我可能会要求你给其他状态增加不同形式的动效。
 
-### 003 <!-- TODO: 用Anthropic模型完成一次 --> 设计报修的公共业务组件 `repair-list-item`，优化 `src\pages-sub\repair\dispatch.vue` 和 `src\pages-sub\repair\order-list.vue` 的代码写法
+### 003 设计报修的公共业务组件 `repair-list-item`，优化 `src\pages-sub\repair\dispatch.vue` 和 `src\pages-sub\repair\order-list.vue` 的代码写法
 
 1. 针对 `src\pages-sub\repair\dispatch.vue` 和 `src\pages-sub\repair\order-list.vue` 。
 2. 注意针对性阅读以下 class 选择器的部分：
