@@ -109,3 +109,10 @@
 1. 我不喜欢表单项的标题使用相同的 icon，发挥你的探索能力，选用美观的，特别的 icon 做出区分。
 2. 为什么这个页面的标题不统一？其他页面都有配置 definePage 宏的。为什么你当初在完成迁移时，没有及时使用 definePage 宏配置，并完成最基础的页面标题配置？请补全配置。
 3. `route-migration` 路由迁移技能 和 `code-migration` 代码写法迁移技能 ，都有说明如何使用 definePage ，为什么你没有及时设置好？是这些 claude code 技能文件的触发词没有说明清楚什么时候要补全 definePage 宏么？请你更新迭代这两个技能，确保以后在全局注入提示词时，能够主动使用关于 definePage 的使用知识点。
+
+### 009 统一补全 definePage 宏设置
+
+1. 阅读 `docs\reports\vue2-route-navigation-map.md` 的 `巡检管理流程模块` 。
+2. 阅读 `.github\prompts\route-migration-map.yml` 巡检管理模块 inspection_modules 的路径。
+3. 反向阅读旧代码。读取旧代码内这些巡检模块页面正确的标题。
+4. 按照 `.claude\skills\route-migration\SKILL.md` 技能要求，去补全全部 `src\pages-sub\inspection` 目录内的 vue 页面，补全 definePage 的使用。
