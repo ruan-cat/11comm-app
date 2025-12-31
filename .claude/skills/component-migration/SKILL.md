@@ -269,6 +269,126 @@ import FormSectionTitle from "@/components/common/form-section-title/index.vue";
 
 > **📚 详细规范**: 参阅 [wd-picker 使用规范.md](wd-picker使用规范.md)
 
+**单选和多选组件选型**: 严格遵循统一的组件选型原则!
+
+**核心规则**:
+
+- **单选场景**: 一律使用 `wd-picker` 组件（包括动态数据）
+- **多选场景**: 一律使用 `wd-checkbox` 组件（包括动态数据）
+
+```vue
+<!-- ✅ 正确: 单选使用 wd-picker -->
+<wd-picker
+	v-if="item.titleType === '1001'"
+	v-model="item.value"
+	label="请选择"
+	:label-width="LABEL_WIDTH"
+	:columns="
+		item.options.map((opt) => ({
+			label: opt.name,
+			value: opt.id,
+		}))
+	"
+	label-key="label"
+	value-key="value"
+/>
+
+<!-- ✅ 正确: 多选使用 wd-checkbox -->
+<view v-else-if="item.titleType === '2002'" class="p-3">
+  <wd-checkbox-group
+    v-model="item.values"
+    @change="(event) => handleCheckboxChange(event.value, item)"
+  >
+    <wd-checkbox
+      v-for="(opt, idx) in item.options"
+      :key="idx"
+      :value="opt.id"
+    >
+      {{ opt.name }}
+    </wd-checkbox>
+  </wd-checkbox-group>
+</view>
+
+<!-- ❌ 错误: 单选使用 wd-radio-group -->
+<wd-radio-group v-model="item.value">  <!-- 错误! -->
+  <wd-radio v-for="opt in item.options" :key="opt.id" :value="opt.id">
+    {{ opt.name }}
+  </wd-radio>
+</wd-radio-group>
+```
+
+**核心要点**:
+
+1. **单选场景**: 无论数据是否动态，统一使用 `wd-picker`
+2. **多选场景**: 数据绑定到 `string[]` 数组，使用 `wd-checkbox-group` + `wd-checkbox`
+3. **事件处理**: `wd-checkbox-group` 使用 `@change` 事件，参数为 `{ value: string[] }`
+
+**完整示例** (参考 `src/pages-sub/inspection/execute-single.vue:316-345`):
+
+```vue
+<template>
+	<wd-cell-group v-for="(item, index) in titleList" :key="index" border>
+		<FormSectionTitle :title="item.itemTitle" />
+
+		<!-- 单选 -->
+		<wd-picker
+			v-if="item.titleType === '1001'"
+			v-model="item.radio as string"
+			label="请选择"
+			:label-width="LABEL_WIDTH"
+			:columns="
+				item.inspectionItemTitleValueDtos.map((v) => ({
+					label: v.itemValue,
+					value: v.itemValue,
+				}))
+			"
+			label-key="label"
+			value-key="value"
+		/>
+
+		<!-- 多选 -->
+		<view v-else-if="item.titleType === '2002'" class="p-3">
+			<wd-checkbox-group v-model="item.radio as string[]" @change="(event) => handleCheckboxChange(event.value, item)">
+				<wd-checkbox
+					v-for="(valueItem, valueIndex) in item.inspectionItemTitleValueDtos"
+					:key="valueIndex"
+					:value="valueItem.itemValue"
+				>
+					{{ valueItem.itemValue }}
+				</wd-checkbox>
+			</wd-checkbox-group>
+		</view>
+	</wd-cell-group>
+</template>
+
+<script setup lang="ts">
+/** 单选 Picker 变更 */
+function handlePickerChange(value: string, item: InspectionItemTitle) {
+	item.radio = value;
+}
+
+/** 多选 Checkbox 变更 */
+function handleCheckboxChange(values: string[], item: InspectionItemTitle) {
+	item.radio = values;
+}
+
+/** 初始化数据 */
+onLoadTitlesSuccess((data) => {
+	titleList.value = data.data?.list || [];
+
+	titleList.value.forEach((item) => {
+		if (item.titleType === "1001") {
+			// 单选：初始化为空字符串
+			item.radio = "";
+		} else if (item.titleType === "2002") {
+			// 多选：初始化为空数组
+			item.radio = [];
+		}
+	});
+});
+</script>
+```
+
 ### 5. 图片组件迁移
 
 **强制使用 `<wd-img>` 替换 `<image>`**

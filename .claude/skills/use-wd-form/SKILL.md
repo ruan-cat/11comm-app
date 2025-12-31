@@ -285,6 +285,322 @@ async function handleSubmit() {
 
 **使用场景**：仅在需要动态标题或复杂自定义显示时使用。
 
+---
+
+#### 3.2.3. 单选和多选组件选型原则
+
+**⚠️ 核心规则**：严格遵循统一的组件选型标准，确保用户体验一致性。
+
+| 场景 |   必须使用的组件    |  数据类型  |                              说明                              |
+| :--: | :-----------------: | :--------: | :------------------------------------------------------------: |
+| 单选 |     `wd-picker`     |  `string`  |             无论数据是否动态，统一使用 `wd-picker`             |
+| 多选 | `wd-checkbox-group` | `string[]` | 无论数据是否动态，统一使用 `wd-checkbox-group` + `wd-checkbox` |
+
+**❌ 禁止使用**：
+
+- `wd-radio-group` - 即使是单选场景，也应该使用 `wd-picker`
+- 在多选场景中使用 `wd-picker` 的多列选择模式
+
+---
+
+**1. 单选场景 - 使用 `wd-picker`**
+
+```vue
+<template>
+	<wd-cell-group border>
+		<FormSectionTitle title="基本信息" />
+
+		<!-- ✅ 正确：单选使用 wd-picker -->
+		<wd-picker
+			v-model="model.category"
+			label="分类"
+			:label-width="LABEL_WIDTH"
+			:columns="categoryOptions"
+			label-key="name"
+			value-key="id"
+		/>
+	</wd-cell-group>
+</template>
+
+<script setup lang="ts">
+const categoryOptions = [
+	{ id: "1", name: "选项A" },
+	{ id: "2", name: "选项B" },
+	{ id: "3", name: "选项C" },
+];
+
+const model = reactive({
+	category: "", // 单选：string 类型
+});
+</script>
+```
+
+---
+
+**2. 动态单选场景 - 仍然使用 `wd-picker`**
+
+即使选项是动态从后端获取的，仍然使用 `wd-picker`：
+
+```vue
+<template>
+	<wd-cell-group border>
+		<FormSectionTitle :title="item.itemTitle" />
+
+		<!-- ✅ 正确：动态单选仍使用 wd-picker -->
+		<wd-picker
+			v-if="item.titleType === '1001'"
+			v-model="item.value"
+			label="请选择"
+			:label-width="LABEL_WIDTH"
+			:columns="
+				item.options.map((opt) => ({
+					label: opt.name,
+					value: opt.id,
+				}))
+			"
+			label-key="label"
+			value-key="value"
+		/>
+	</wd-cell-group>
+</template>
+
+<script setup lang="ts">
+/** 动态表单项数据初始化 */
+onLoadSuccess((data) => {
+	titleList.value = data.data?.list || [];
+
+	titleList.value.forEach((item) => {
+		if (item.titleType === "1001") {
+			// 单选：初始化为空字符串
+			item.value = "";
+		}
+	});
+});
+</script>
+```
+
+---
+
+**3. 多选场景 - 使用 `wd-checkbox-group`**
+
+```vue
+<template>
+	<wd-cell-group border>
+		<FormSectionTitle title="选择功能" />
+
+		<!-- ✅ 正确：多选使用 wd-checkbox-group -->
+		<view class="p-3">
+			<wd-checkbox-group v-model="model.features" @change="handleFeaturesChange">
+				<wd-checkbox v-for="feature in featureOptions" :key="feature.id" :value="feature.id">
+					{{ feature.name }}
+				</wd-checkbox>
+			</wd-checkbox-group>
+		</view>
+	</wd-cell-group>
+</template>
+
+<script setup lang="ts">
+const featureOptions = [
+	{ id: "feature1", name: "功能1" },
+	{ id: "feature2", name: "功能2" },
+	{ id: "feature3", name: "功能3" },
+];
+
+const model = reactive({
+	features: [] as string[], // 多选：string[] 类型
+});
+
+/** 多选变更处理 */
+function handleFeaturesChange(event: { value: string[] }) {
+	model.features = event.value;
+	console.log("已选择:", model.features);
+}
+</script>
+```
+
+---
+
+**4. 动态多选场景 - 仍然使用 `wd-checkbox-group`**
+
+```vue
+<template>
+	<wd-cell-group border>
+		<FormSectionTitle :title="item.itemTitle" />
+
+		<!-- ✅ 正确：动态多选使用 wd-checkbox-group -->
+		<view v-if="item.titleType === '2002'" class="p-3">
+			<wd-checkbox-group v-model="item.values" @change="(event) => handleCheckboxChange(event.value, item)">
+				<wd-checkbox v-for="(opt, idx) in item.options" :key="idx" :value="opt.id">
+					{{ opt.name }}
+				</wd-checkbox>
+			</wd-checkbox-group>
+		</view>
+	</wd-cell-group>
+</template>
+
+<script setup lang="ts">
+/** 多选变更处理 */
+function handleCheckboxChange(values: string[], item: any) {
+	item.values = values;
+	console.log(`${item.itemTitle} 已选择:`, values);
+}
+
+/** 动态表单项数据初始化 */
+onLoadSuccess((data) => {
+	titleList.value = data.data?.list || [];
+
+	titleList.value.forEach((item) => {
+		if (item.titleType === "2002") {
+			// 多选：初始化为空数组
+			item.values = [];
+		}
+	});
+});
+</script>
+```
+
+---
+
+**5. 完整示例：单选和多选混合场景**
+
+参考 `src/pages-sub/inspection/execute-single.vue:316-345`
+
+```vue
+<template>
+	<view class="inspection-execute-single">
+		<wd-form ref="formRef" :model="formData" :rules="formRules">
+			<!-- 动态表单项 -->
+			<wd-cell-group v-for="(item, index) in titleList" :key="index" border :class="index > 0 ? 'mt-3' : ''">
+				<FormSectionTitle
+					:title="item.itemTitle"
+					icon="checkbox-checked"
+					icon-class="i-carbon-checkbox-checked text-blue-500"
+				/>
+
+				<!-- 单选 -->
+				<wd-picker
+					v-if="item.titleType === '1001'"
+					v-model="item.radio as string"
+					label="请选择"
+					:label-width="LABEL_WIDTH"
+					:columns="
+						item.inspectionItemTitleValueDtos.map((v) => ({
+							label: v.itemValue,
+							value: v.itemValue,
+						}))
+					"
+					label-key="label"
+					value-key="value"
+				/>
+
+				<!-- 多选 -->
+				<view v-else-if="item.titleType === '2002'" class="p-3">
+					<wd-checkbox-group
+						v-model="item.radio as string[]"
+						@change="(event) => handleCheckboxChange(event.value, item)"
+					>
+						<wd-checkbox
+							v-for="(valueItem, valueIndex) in item.inspectionItemTitleValueDtos"
+							:key="valueIndex"
+							:value="valueItem.itemValue"
+						>
+							{{ valueItem.itemValue }}
+						</wd-checkbox>
+					</wd-checkbox-group>
+				</view>
+
+				<!-- 文本输入 -->
+				<wd-textarea v-else v-model="item.radio as string" placeholder="请回答" :maxlength="512" show-word-limit />
+			</wd-cell-group>
+		</wd-form>
+	</view>
+</template>
+
+<script setup lang="ts">
+import type { FormInstance, FormRules } from "wot-design-uni/components/wd-form/types";
+import type { InspectionItemTitle } from "@/types/inspection";
+import { onMounted, reactive, ref } from "vue";
+import { useRequest } from "alova/client";
+import { getInspectionItemTitles } from "@/api/inspection";
+import FormSectionTitle from "@/components/common/form-section-title/index.vue";
+
+/** 表单标签统一宽度 */
+const LABEL_WIDTH = "80px";
+
+/** 表单实例 */
+const formRef = ref<FormInstance>();
+
+/** 巡检项标题列表（动态表单项） */
+const titleList = ref<InspectionItemTitle[]>([]);
+
+/** 加载巡检项标题 */
+const { send: sendLoadTitles, onSuccess: onLoadTitlesSuccess } = useRequest(
+	() =>
+		getInspectionItemTitles({
+			itemId: itemId.value,
+			page: 1,
+			row: 100,
+		}),
+	{
+		immediate: false,
+	},
+);
+
+onLoadTitlesSuccess((data) => {
+	titleList.value = data.data?.list || [];
+
+	// 初始化 radio 字段
+	titleList.value.forEach((item) => {
+		if (item.titleType === "1001") {
+			// 单选：初始化为空字符串
+			item.radio = "";
+		} else if (item.titleType === "2002") {
+			// 多选：初始化为空数组
+			item.radio = [];
+		}
+	});
+});
+
+/** 多选 Checkbox 变更 */
+function handleCheckboxChange(values: string[], item: InspectionItemTitle) {
+	item.radio = values;
+}
+</script>
+```
+
+---
+
+**6. 组件选型决策树**
+
+```plain
+需要选择功能？
+  ├─ 单选（只能选一个）？
+  │   └─ 使用 wd-picker
+  │       - 数据类型: string
+  │       - 静态数据: 直接定义 columns
+  │       - 动态数据: map 转换为 columns 格式
+  │
+  └─ 多选（可以选多个）？
+      └─ 使用 wd-checkbox-group + wd-checkbox
+          - 数据类型: string[]
+          - 事件: @change="(event) => handler(event.value)"
+          - 初始化: 空数组 []
+```
+
+---
+
+**7. 常见错误**
+
+| ❌ 错误写法                      | ✅ 正确写法           | 说明                           |
+| :------------------------------- | :-------------------- | :----------------------------- |
+| `<wd-radio-group>` 用于单选      | `<wd-picker>`         | 单选统一使用 wd-picker         |
+| 多选初始化为 `''`                | 多选初始化为 `[]`     | 多选数据类型必须是数组         |
+| 单选初始化为 `[]`                | 单选初始化为 `''`     | 单选数据类型必须是字符串       |
+| `@update:model-value` 处理多选   | `@change` 处理多选    | wd-checkbox-group 使用 @change |
+| 多选直接赋值 `item.values = '1'` | `item.values = ['1']` | 多选赋值必须是数组             |
+
+---
+
 ### 3.3. 日期时间选择器（wd-datetime-picker）
 
 ```vue
