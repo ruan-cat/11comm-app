@@ -1,6 +1,6 @@
 <!--
   维修状态标签组件
-  功能：显示维修工单状态标签，支持状态样式和呼吸动效
+  功能：显示维修工单状态标签，支持状态样式和丝绸呼吸动效
 
   功能点：
   - 统一管理维修状态标签的样式
@@ -9,7 +9,9 @@
   - 做好向后的抽象扩展，可随时为其他状态增加动效
 -->
 <script setup lang="ts">
-import type { REPAIR_STATUS_CONFIG_MAP, RepairStatusTagProps } from './types'
+import type { RepairStatusTagProps } from './types'
+import { computed } from 'vue'
+import { REPAIR_STATUS_CONFIG_MAP } from './types'
 
 const props = withDefaults(defineProps<RepairStatusTagProps>(), {
   statusName: '',
@@ -17,44 +19,26 @@ const props = withDefaults(defineProps<RepairStatusTagProps>(), {
   plain: true,
 })
 
-/** 状态配置映射 */
-const STATUS_CONFIG_MAP: typeof REPAIR_STATUS_CONFIG_MAP = {
-  10001: { statusCd: '10001', statusName: '待派单', tagType: 'warning', animated: false },
-  10002: { statusCd: '10002', statusName: '已派单', tagType: 'primary', animated: false },
-  10003: { statusCd: '10003', statusName: '处理中', tagType: 'primary', animated: true },
-  10004: { statusCd: '10004', statusName: '已完成', tagType: 'success', animated: false },
-  10005: { statusCd: '10005', statusName: '已取消', tagType: 'danger', animated: false },
-}
+/** 当前状态配置 */
+const config = computed(() => REPAIR_STATUS_CONFIG_MAP[props.statusCd] || REPAIR_STATUS_CONFIG_MAP['10001'])
 
-/** 获取状态配置 */
-function getStatusConfig(statusCd: string) {
-  return STATUS_CONFIG_MAP[statusCd] || STATUS_CONFIG_MAP[10001]
-}
-
-/** 获取显示文本 */
-function getDisplayText(): string {
-  if (props.statusName && props.statusName.trim()) {
+/** 显示文本 */
+const displayText = computed(() => {
+  if (props.statusName?.trim())
     return props.statusName
-  }
-  return getStatusConfig(props.statusCd).statusName
-}
-
-/** 获取标签类型 */
-function getTagType(): 'primary' | 'success' | 'warning' | 'danger' {
-  return getStatusConfig(props.statusCd).tagType
-}
+  return config.value.statusName
+})
 
 /** 是否显示动效 */
-function shouldAnimate(): boolean {
+const shouldAnimate = computed(() => {
   if (!props.animated)
     return false
-  return getStatusConfig(props.statusCd).animated || false
-}
+  return config.value.animated || false
+})
 
-/** 获取状态对应的样式类 */
-function getStatusClass(): string {
-  const config = getStatusConfig(props.statusCd)
-  switch (config.tagType) {
+/** 状态样式类 */
+const statusClass = computed(() => {
+  switch (config.value.tagType) {
     case 'warning':
       return 'status-warning'
     case 'success':
@@ -64,20 +48,20 @@ function getStatusClass(): string {
     default:
       return 'status-primary'
   }
-}
+})
 </script>
 
 <template>
-  <view class="status-tag" :class="[getStatusClass()]">
+  <view class="status-tag" :class="[statusClass]">
     <!-- 处理中状态：丝绸动效 -->
-    <template v-if="shouldAnimate()">
+    <template v-if="shouldAnimate">
       <!-- 丝绸褶皱层：深浅蓝色交替流动 -->
       <view class="silk-folds" />
       <!-- 丝绸高光层：白色光带流转 -->
       <view class="silk-sheen" />
     </template>
 
-    <text class="tag-text">{{ getDisplayText() }}</text>
+    <text class="tag-text">{{ displayText }}</text>
   </view>
 </template>
 
