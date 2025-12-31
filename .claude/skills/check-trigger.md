@@ -85,6 +85,17 @@
   - ✅ 是 → **必须使用** `.claude/skills/z-paging-integration/SKILL.md`
   - ✅ 是 → **必须配合** `.claude/skills/api-migration/SKILL.md`（z-paging 需要与 useRequest 集成）
 
+### 1.8. 页面标题相关
+
+- [ ] **需要根据页面参数或业务状态动态设置页面标题吗？**
+  - ✅ 是 → **必须使用** `.claude/skills/use-uniapp-dynamic-page-title/SKILL.md`
+
+- [ ] **同一个页面在不同场景下需要显示不同的标题吗？**（如派单/转单/办结显示不同标题）
+  - ✅ 是 → **必须使用** `.claude/skills/use-uniapp-dynamic-page-title/SKILL.md`
+
+- [ ] **需要根据 URL 参数动态显示标题吗？**
+  - ✅ 是 → **必须使用** `.claude/skills/use-uniapp-dynamic-page-title/SKILL.md`
+
 ---
 
 ## 阶段 2：功能需求识别
@@ -272,6 +283,7 @@ Grep: pattern="___" path="src/" output_mode="files_with_matches"
 | Vue2 到 Vue3 迁移 | `code-migration` + `component-migration` + `style-migration` |
 |   需要分页功能    |           `z-paging-integration` + `api-migration`           |
 | 需要错误提示功能  |                     `api-error-handling`                     |
+| 需要动态页面标题  |               `use-uniapp-dynamic-page-title`                |
 
 ---
 
