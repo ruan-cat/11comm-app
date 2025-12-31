@@ -105,6 +105,16 @@
 		// #endif
 		// #ifdef H5
 		{
+			"path": "pages/test-use/repair-status-tag",
+			"type": "page",
+			"name": "test-repair-status-tag",
+			"style": {
+				"navigationBarTitleText": "维修状态标签组件演示"
+			}
+		},
+		// #endif
+		// #ifdef H5
+		{
 			"path": "pages/test-use/z-paging-loading",
 			"type": "page",
 			"name": "test-z-paging-loading",

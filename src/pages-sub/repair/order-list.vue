@@ -18,6 +18,7 @@ import type { RepairOrder } from '@/types/repair'
 import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
 import { getRepairOrderList, getRepairStates, robRepairOrder } from '@/api/repair'
+import RepairStatusTag from '@/components/common/repair-status-tag/index.vue'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { REPAIR_STATUSES } from '@/constants/repair'
 import { TypedRouter } from '@/router'
@@ -243,21 +244,6 @@ function displayReporter(item: RepairOrder): string {
   const phone = (item.tel || '').trim()
   return phone ? `${name} (${phone})` : name
 }
-
-type TagType = 'primary' | 'success' | 'warning' | 'danger'
-
-/** 派单状态对应的标签颜色 */
-const statusTagTypeMap: Record<string, TagType> = {
-  10001: 'warning', // 待派单
-  10002: 'primary', // 已派单
-  10003: 'primary', // 处理中
-  10004: 'success', // 已完成
-  10005: 'danger', // 已关闭/已作废
-}
-
-function getStatusTagType(statusCd?: string): TagType {
-  return statusTagTypeMap[statusCd || ''] || 'primary'
-}
 </script>
 
 <template>
@@ -327,9 +313,7 @@ function getStatusTagType(statusCd?: string): TagType {
               <text class="title-text">{{ item.title || item.repairId }}</text>
               <text class="id-text">工单号：{{ item.repairId }}</text>
             </view>
-            <wd-tag :type="getStatusTagType(item.statusCd)" plain>
-              {{ item.statusName || '待处理' }}
-            </wd-tag>
+            <RepairStatusTag :status-cd="item.statusCd || ''" :status-name="item.statusName" />
           </view>
 
           <view class="card-body">
