@@ -356,9 +356,8 @@ const submitForm = async () => {
 ```vue
 <!-- src/pages/task/list.vue -->
 <script setup lang="ts">
-// 页面配置
+// 页面配置（必须添加，否则页面标题显示为 "unibest"）
 definePage({
-	name: "TaskList",
 	style: {
 		navigationBarTitleText: "任务列表",
 		enablePullDownRefresh: true,
