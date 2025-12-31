@@ -388,17 +388,14 @@ onMounted(() => {
           icon-class="i-carbon-checkmark text-green-500"
           required
         />
-        <view class="p-3">
-          <wd-radio-group v-model="formData.patrolType">
-            <wd-radio
-              v-for="option in patrolTypeOptions"
-              :key="option.value"
-              :value="option.value"
-            >
-              {{ option.label }}
-            </wd-radio>
-          </wd-radio-group>
-        </view>
+        <wd-picker
+          v-model="formData.patrolType"
+          label="选择情况"
+          :label-width="LABEL_WIDTH"
+          :columns="patrolTypeOptions"
+          label-key="label"
+          value-key="value"
+        />
       </wd-cell-group>
 
       <!-- 巡检说明 -->
