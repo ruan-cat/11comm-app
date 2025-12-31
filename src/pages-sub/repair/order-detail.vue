@@ -19,6 +19,7 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { computed, ref } from 'vue'
 import { getRepairDetail, getRepairStaffRecords } from '@/api/repair'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import RepairStatusTag from '@/components/common/repair-status-tag/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
@@ -213,156 +214,175 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
         </view>
       </view>
 
-      <!-- 2. 报修内容卡片（小圆角） -->
-      <view class="mb-3 rounded-sm bg-white p-4 shadow-sm">
-        <view class="mb-3 flex items-center gap-2 text-base text-gray-800 font-bold">
-          <wd-icon name="" custom-class="i-carbon-document text-blue-500 w-36rpx h-36rpx" />
-          <text>报修内容</text>
-        </view>
-        <view class="mb-4 text-sm text-gray-600 leading-relaxed">
-          {{ repairDetail.context }}
-        </view>
+      <!-- 2. 报修内容卡片（应用 FormSectionTitle - 蓝色系） -->
+      <view class="mb-3 overflow-hidden rounded-sm bg-white shadow-sm">
+        <!-- 标题栏：蓝色系，静态 -->
+        <FormSectionTitle
+          title="报修内容"
+          icon="document"
+          icon-class="i-carbon-document text-blue-500"
+          :animated="true"
+        />
 
-        <!-- 基础信息列表（嵌入式） -->
-        <view class="flex flex-col gap-3 border-t border-gray-100 pt-4">
-          <view class="flex items-center justify-between">
-            <text class="text-sm text-gray-500">报修人</text>
-            <text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairName }}</text>
+        <!-- 内容区：补回 padding -->
+        <view class="p-4">
+          <view class="mb-4 text-sm text-gray-600 leading-relaxed">
+            {{ repairDetail.context }}
           </view>
-          <view class="flex items-center justify-between">
-            <text class="text-sm text-gray-500">联系方式</text>
-            <text class="text-sm text-blue-500 font-medium" @click="handleCall(repairDetail.tel)">
-              {{ repairDetail.tel }}
-            </text>
-          </view>
-          <view class="flex items-center justify-between">
-            <text class="text-sm text-gray-500">报修位置</text>
-            <text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairObjName }}</text>
-          </view>
-          <view class="flex items-center justify-between">
-            <text class="text-sm text-gray-500">报修类型</text>
-            <text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairTypeName }}</text>
+
+          <!-- 基础信息列表（嵌入式） -->
+          <view class="flex flex-col gap-3 border-t border-gray-100 pt-4">
+            <view class="flex items-center justify-between">
+              <text class="text-sm text-gray-500">报修人</text>
+              <text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairName }}</text>
+            </view>
+            <view class="flex items-center justify-between">
+              <text class="text-sm text-gray-500">联系方式</text>
+              <text class="text-sm text-blue-500 font-medium" @click="handleCall(repairDetail.tel)">
+                {{ repairDetail.tel }}
+              </text>
+            </view>
+            <view class="flex items-center justify-between">
+              <text class="text-sm text-gray-500">报修位置</text>
+              <text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairObjName }}</text>
+            </view>
+            <view class="flex items-center justify-between">
+              <text class="text-sm text-gray-500">报修类型</text>
+              <text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairTypeName }}</text>
+            </view>
           </view>
         </view>
       </view>
 
-      <!-- 3. 图片展示区域（小圆角） -->
+      <!-- 3. 工单附件卡片（应用 FormSectionTitle - 橙色系） -->
       <template v-if="hasImages">
-        <view class="mb-3 rounded-sm bg-white p-4 shadow-sm">
-          <view class="mb-3 flex items-center gap-2 text-base text-gray-800 font-bold">
-            <wd-icon name="" custom-class="i-carbon-image text-orange-500 w-36rpx h-36rpx" />
-            <text>工单附件</text>
-          </view>
+        <view class="mb-3 overflow-hidden rounded-sm bg-white shadow-sm">
+          <!-- 标题栏：橙色系，静态 -->
+          <FormSectionTitle
+            title="工单附件"
+            icon="image"
+            icon-class="i-carbon-image text-orange-500"
+            :animated="true"
+          />
 
-          <!-- 业主报修图片 -->
-          <view v-if="repairDetail.repairPhotos?.length" class="mb-4 last:mb-0">
-            <text class="mb-2 block text-xs text-gray-400">报修图片</text>
-            <view class="grid grid-cols-3 gap-2">
-              <wd-img
-                v-for="(photo, index) in repairDetail.repairPhotos"
-                :key="index"
-                :src="photo.url || photo.photo"
-                :image-urls="getImageUrls(repairDetail.repairPhotos)"
-                :current-index="index"
-                mode="aspectFill"
-                class="aspect-square w-full rounded-sm bg-gray-100"
-                :enable-preview="true"
-              />
+          <!-- 内容区：补回 padding -->
+          <view class="p-4">
+            <!-- 业主报修图片 -->
+            <view v-if="repairDetail.repairPhotos?.length" class="mb-4 last:mb-0">
+              <text class="mb-2 block text-xs text-gray-400">报修图片</text>
+              <view class="grid grid-cols-3 gap-2">
+                <wd-img
+                  v-for="(photo, index) in repairDetail.repairPhotos"
+                  :key="index"
+                  :src="photo.url || photo.photo"
+                  :image-urls="getImageUrls(repairDetail.repairPhotos)"
+                  :current-index="index"
+                  mode="aspectFill"
+                  class="aspect-square w-full rounded-sm bg-gray-100"
+                  :enable-preview="true"
+                />
+              </view>
             </view>
-          </view>
 
-          <!-- 维修前图片 -->
-          <view v-if="repairDetail.beforePhotos?.length" class="mb-4 last:mb-0">
-            <text class="mb-2 block text-xs text-gray-400">维修前图片</text>
-            <view class="grid grid-cols-3 gap-2">
-              <wd-img
-                v-for="(photo, index) in repairDetail.beforePhotos"
-                :key="index"
-                :src="photo.url || photo.photo"
-                :image-urls="getImageUrls(repairDetail.beforePhotos)"
-                :current-index="index"
-                mode="aspectFill"
-                class="aspect-square w-full rounded-sm bg-gray-100"
-                :enable-preview="true"
-              />
+            <!-- 维修前图片 -->
+            <view v-if="repairDetail.beforePhotos?.length" class="mb-4 last:mb-0">
+              <text class="mb-2 block text-xs text-gray-400">维修前图片</text>
+              <view class="grid grid-cols-3 gap-2">
+                <wd-img
+                  v-for="(photo, index) in repairDetail.beforePhotos"
+                  :key="index"
+                  :src="photo.url || photo.photo"
+                  :image-urls="getImageUrls(repairDetail.beforePhotos)"
+                  :current-index="index"
+                  mode="aspectFill"
+                  class="aspect-square w-full rounded-sm bg-gray-100"
+                  :enable-preview="true"
+                />
+              </view>
             </view>
-          </view>
 
-          <!-- 维修后图片 -->
-          <view v-if="repairDetail.afterPhotos?.length" class="mb-0">
-            <text class="mb-2 block text-xs text-gray-400">维修完成图片</text>
-            <view class="grid grid-cols-3 gap-2">
-              <wd-img
-                v-for="(photo, index) in repairDetail.afterPhotos"
-                :key="index"
-                :src="photo.url || photo.photo"
-                :image-urls="getImageUrls(repairDetail.afterPhotos)"
-                :current-index="index"
-                mode="aspectFill"
-                class="aspect-square w-full rounded-sm bg-gray-100"
-                :enable-preview="true"
-              />
+            <!-- 维修后图片 -->
+            <view v-if="repairDetail.afterPhotos?.length" class="mb-0">
+              <text class="mb-2 block text-xs text-gray-400">维修完成图片</text>
+              <view class="grid grid-cols-3 gap-2">
+                <wd-img
+                  v-for="(photo, index) in repairDetail.afterPhotos"
+                  :key="index"
+                  :src="photo.url || photo.photo"
+                  :image-urls="getImageUrls(repairDetail.afterPhotos)"
+                  :current-index="index"
+                  mode="aspectFill"
+                  class="aspect-square w-full rounded-sm bg-gray-100"
+                  :enable-preview="true"
+                />
+              </view>
             </view>
           </view>
         </view>
       </template>
 
-      <!-- 4. 工单流转时间轴（小圆角） -->
-      <view v-if="staffRecords.length > 0" class="mb-3 rounded-sm bg-white p-4 shadow-sm">
-        <view class="mb-4 flex items-center gap-2 text-base text-gray-800 font-bold">
-          <wd-icon name="" custom-class="i-carbon-history text-cyan-500 w-36rpx h-36rpx" />
-          <text>流转记录</text>
-        </view>
+      <!-- 4. 流转记录卡片（应用 FormSectionTitle - 青色系 + 呼吸动效） -->
+      <view v-if="staffRecords.length > 0" class="mb-3 overflow-hidden rounded-sm bg-white shadow-sm">
+        <!-- 标题栏：青色系，启用呼吸动效 -->
+        <FormSectionTitle
+          title="流转记录"
+          icon="time"
+          icon-class="i-carbon-time text-cyan-500"
+          :animated="true"
+        />
 
-        <view class="relative pl-2">
-          <view
-            v-for="(record, index) in staffRecords"
-            :key="index"
-            class="relative flex gap-4 pb-6 last:pb-0"
-          >
-            <!-- 时间轴线与节点 -->
-            <view class="flex flex-col items-center">
-              <!-- 节点圆点：最新的为蓝色，历史为灰色 -->
-              <view
-                class="z-10 h-3 w-3 border-2 rounded-full bg-white"
-                :class="index === 0 ? 'border-blue-500 shadow-md' : 'border-gray-300'"
-              />
-              <!-- 垂直连接线 -->
-              <view
-                v-if="index !== staffRecords.length - 1"
-                class="my-1 w-[1px] flex-1 bg-gray-200"
-              />
-            </view>
-
-            <!-- 内容区域 -->
-            <view class="flex-1 -mt-1">
-              <!-- 时间 -->
-              <text class="mb-1 block text-xs text-gray-400 font-mono">{{ record.startTime }}</text>
-
-              <!-- 状态与人员 -->
-              <view class="mb-2 flex flex-wrap items-center gap-2">
-                <!-- 在时间轴中使用 StatusTag -->
-                <RepairStatusTag
-                  :status-cd="record.statusCd"
-                  :status-name="record.statusName"
-                  :plain="true"
-                  :animated="false"
-                  class="origin-left scale-90"
+        <!-- 内容区：补回 padding -->
+        <view class="p-4">
+          <view class="relative pl-2">
+            <view
+              v-for="(record, index) in staffRecords"
+              :key="index"
+              class="relative flex gap-4 pb-6 last:pb-0"
+            >
+              <!-- 时间轴线与节点 -->
+              <view class="flex flex-col items-center">
+                <!-- 节点圆点：最新的为蓝色，历史为灰色 -->
+                <view
+                  class="z-10 h-3 w-3 border-2 rounded-full bg-white"
+                  :class="index === 0 ? 'border-blue-500 shadow-md' : 'border-gray-300'"
                 />
-                <text class="text-sm text-gray-800 font-bold">{{ record.staffName }}</text>
+                <!-- 垂直连接线 -->
+                <view
+                  v-if="index !== staffRecords.length - 1"
+                  class="my-1 w-[1px] flex-1 bg-gray-200"
+                />
               </view>
 
-              <!-- 处理意见/备注 -->
-              <view v-if="shouldShowProcessOpinion(record) && record.context" class="rounded-sm bg-gray-50 p-2 text-xs text-gray-600">
-                <text>{{ record.context }}</text>
-                <text v-if="record.payTypeName" class="ml-1 text-blue-500">({{ record.payTypeName }})</text>
-              </view>
+              <!-- 内容区域 -->
+              <view class="flex-1 -mt-1">
+                <!-- 时间 -->
+                <text class="mb-1 block text-xs text-gray-400 font-mono">{{ record.startTime }}</text>
 
-              <!-- 操作按钮 -->
-              <view v-if="record.statusCd === '10007'" class="mt-2">
-                <wd-button size="small" type="success" plain @click="handleReplyAppraise(record)">
-                  回复评价
-                </wd-button>
+                <!-- 状态与人员 -->
+                <view class="mb-2 flex flex-wrap items-center gap-2">
+                  <!-- 在时间轴中使用 StatusTag -->
+                  <RepairStatusTag
+                    :status-cd="record.statusCd"
+                    :status-name="record.statusName"
+                    :plain="true"
+                    :animated="false"
+                    class="origin-left scale-90"
+                  />
+                  <text class="text-sm text-gray-800 font-bold">{{ record.staffName }}</text>
+                </view>
+
+                <!-- 处理意见/备注 -->
+                <view v-if="shouldShowProcessOpinion(record) && record.context" class="rounded-sm bg-gray-50 p-2 text-xs text-gray-600">
+                  <text>{{ record.context }}</text>
+                  <text v-if="record.payTypeName" class="ml-1 text-blue-500">({{ record.payTypeName }})</text>
+                </view>
+
+                <!-- 操作按钮 -->
+                <view v-if="record.statusCd === '10007'" class="mt-2">
+                  <wd-button size="small" type="success" plain @click="handleReplyAppraise(record)">
+                    回复评价
+                  </wd-button>
+                </view>
               </view>
             </view>
           </view>
