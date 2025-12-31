@@ -597,6 +597,32 @@ invoker	@	vue.runtime.esm.js:10209
 1. 针对 `src\pages-sub\repair\dispatch.vue` `维修待办单` 代码。阅读全部的 `card-actions` 部分。可以得知这里有很多不同的按钮。
 2. 深刻阅读理解 `维修待办单` 页面的状态逻辑，找到对应的 mock 接口代码，并增加足够的 mock 数据，确保全部种类的 `card-actions` 按钮都能够显示出来，便于我测试。
 
+### 002 <!-- TODO: --> 抽象状态 `RepairStatus` 专用的标签组件
+
+1. 阅读代码：
+   - src\pages-sub\repair\dispatch.vue
+   - src\pages-sub\repair\order-list.vue
+2. 针对性阅读这一小段代码：
+
+```vue
+<template>
+	<wd-tag :type="getStatusTagType(item.statusCd)" plain>
+		{{ item.statusName || "待处理" }}
+	</wd-tag>
+</template>
+```
+
+3. 我希望你新建一个专门的组件，实现重复代码的集中管理，避免业务代码出现重复相同代码。按照 `add-new-component` 技能要求的规范，新建组件。在 `src\components\common\repair-status-tag` 内新建这款 `repair-status-tag` `维修状态标签组件`。
+4. `维修状态标签组件` 是和业务类型高度绑定关联的组件，应该大胆的，直接的使用来自 `src\types\repair.ts` 提供的业务类型。
+5. 请阅读以下 url 图片：
+   - ![2026-01-01-03-18-52](https://s2.loli.net/2026/01/01/GPWXZlSqNCpOVRj.png)
+   - 如图，我希望`处理中`的状态下，其状态按钮的背景显示有动态的呼吸动效，从左到右的波浪丝绸动效。
+   - 丝绸动效的颜色和按钮的主题色相似。允许你出现一部分的主题色差异。务必发挥 UI 设计能力，确保动态波浪动效的颜色和效果不会喧宾夺主。
+   - 请积极主动的调用 gemini 的能力，主动使用 gemini MCP，实现美观的 UI 动效设计。
+   - 设计动效时，请务必使用 unocss 原子类来实现样式编写。
+6. 整体略微增加组件大小和文本大小，便于更好的展示动效背景和文本。
+7. 在代码结构上，适当的做向后拓展的抽象。该组件要做好随时增加美观动效的准备。未来我可能会要求你给其他状态增加不同形式的动效。
+
 ## 044 <!-- TODO: --> 维修已办
 
 ## 045 维修工单评价页 `src\pages-sub\repair\appraise.vue`
