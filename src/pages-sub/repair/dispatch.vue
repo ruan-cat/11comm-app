@@ -18,7 +18,7 @@ import type { RepairOrder } from '@/types/repair'
 import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
 import { getRepairStaffList, getRepairStates, repairStart, repairStop } from '@/api/repair'
-import RepairStatusTag from '@/components/common/repair-status-tag/index.vue'
+import RepairListItem from '@/components/common/repair-list-item/index.vue'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { useGlobalMessage } from '@/hooks/useGlobalMessage'
 import { TypedRouter } from '@/router'
@@ -299,33 +299,6 @@ function canReturn(item: RepairOrder): boolean {
 function canAppraise(item: RepairOrder): boolean {
   return item.statusCd === '10004' && item.returnVisitFlag === '003' && checkAuth('502021040151320003')
 }
-
-/** 格式化预约时间 */
-function formatAppointmentTime(timeStr?: string): string {
-  if (!timeStr)
-    return ''
-  try {
-    const date = new Date(timeStr.replace(/-/g, '/'))
-    return `${date.getMonth() + 1}-${date.getDate()}`
-  }
-  catch {
-    return timeStr
-  }
-}
-
-function displayLocation(item: RepairOrder): string {
-  return item.repairObjName || item.address || '未填写位置'
-}
-
-function displayAppointment(item: RepairOrder): string {
-  return formatAppointmentTime(item.appointmentTime || item.createTime) || '未填写时间'
-}
-
-function displayReporter(item: RepairOrder): string {
-  const name = item.repairName || '未填写报修人'
-  const phone = (item.tel || '').trim()
-  return phone ? `${name} (${phone})` : name
-}
 </script>
 
 <template>
@@ -385,43 +358,12 @@ function displayReporter(item: RepairOrder): string {
 
       <!-- 列表内容 -->
       <view class="repair-list">
-        <view
+        <repair-list-item
           v-for="item in repairList"
           :key="item.repairId"
-          class="repair-card"
+          :item="item"
         >
-          <view class="card-header">
-            <view class="card-title">
-              <text class="title-text">{{ item.title || item.repairId }}</text>
-              <text class="id-text">工单号：{{ item.repairId }}</text>
-            </view>
-            <RepairStatusTag :status-cd="item.statusCd || ''" :status-name="item.statusName" />
-          </view>
-
-          <view class="card-body">
-            <view class="row">
-              <text class="label">报修类型</text>
-              <text class="value value-strong">{{ item.repairTypeName || '其他维修' }}</text>
-            </view>
-            <view class="row">
-              <text class="label">报修人</text>
-              <text class="value value-strong">{{ displayReporter(item) }}</text>
-            </view>
-            <view class="row">
-              <text class="label">位置</text>
-              <text class="value value-strong">{{ displayLocation(item) }}</text>
-            </view>
-            <view class="row">
-              <text class="label">预约时间</text>
-              <text class="value value-strong">{{ displayAppointment(item) }}</text>
-            </view>
-            <view class="row">
-              <text class="label">报修内容</text>
-              <text class="value multiline value-strong">{{ item.context || '暂无报修内容' }}</text>
-            </view>
-          </view>
-
-          <view class="card-actions">
+          <template #action>
             <!-- 详情按钮 -->
             <wd-button size="small" plain @click="handleViewDetail(item)">
               详情
@@ -486,8 +428,8 @@ function displayReporter(item: RepairOrder): string {
             >
               回访
             </wd-button>
-          </view>
-        </view>
+          </template>
+        </repair-list-item>
       </view>
 
       <!-- 空状态 -->
@@ -573,85 +515,6 @@ function displayReporter(item: RepairOrder): string {
   padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-
-.repair-card {
-  background: #ffffff;
-  border-radius: 10px;
-  padding: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #f1f1f1;
-  padding-bottom: 8px;
-  margin-bottom: 10px;
-}
-
-.card-title {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.title-text {
-  font-size: 15px;
-  font-weight: 600;
-  color: #263238;
-}
-
-.id-text {
-  font-size: 12px;
-  color: #607d8b;
-}
-
-.card-body {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.label {
-  font-size: 13px;
-  color: #607d8b;
-  flex-shrink: 0;
-}
-
-.value {
-  font-size: 15px;
-  color: #263238;
-  text-align: right;
-  flex: 1;
-}
-
-.value-strong {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1f2d3d;
-}
-
-.multiline {
-  white-space: normal;
-  text-align: right;
-}
-
-.card-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  border-top: 1px solid #f1f1f1;
-  padding-top: 10px;
-  margin-top: 8px;
 }
 
 .empty-wrap {
