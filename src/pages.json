@@ -236,7 +236,11 @@
 				},
 				{
 					"path": "inspection/execute-single",
-					"type": "page"
+					"type": "page",
+					"style": {
+						"navigationBarTitleText": "执行单项巡检",
+						"enablePullDownRefresh": false
+					}
 				},
 				{
 					"path": "inspection/execute",
