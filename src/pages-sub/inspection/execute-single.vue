@@ -11,14 +11,18 @@
 -->
 
 <script setup lang="ts">
-import type { FormInstance } from 'wot-design-uni/components/wd-form/types'
+import type { FormInstance, FormRules } from 'wot-design-uni/components/wd-form/types'
 import type { UploadFile, UploadRemoveEvent, UploadSuccessEvent } from 'wot-design-uni/components/wd-upload/types'
 import type { InspectionItemTitle } from '@/types/inspection'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { onMounted, reactive, ref } from 'vue'
 import { getInspectionItemTitles, submitInspection } from '@/api/inspection'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { TypedRouter } from '@/router'
+
+/** 表单标签统一宽度 */
+const LABEL_WIDTH = '80px'
 
 /** 路由参数 */
 const taskDetailId = ref('')
@@ -74,7 +78,7 @@ const locationInfo = ref({
 })
 
 /** 表单校验规则 */
-const rules = {
+const formRules: FormRules = {
   patrolType: [{ required: true, message: '请选择巡检情况' }],
   description: [{ required: true, message: '请填写巡检说明' }],
   photos: [
@@ -310,21 +314,28 @@ onMounted(() => {
 
 <template>
   <view class="inspection-execute-single">
-    <!-- 标题 -->
+    <!-- 页面标题 -->
     <view class="page-title">
       {{ inspectionName }}巡检
     </view>
 
     <!-- 表单 -->
-    <wd-form ref="formRef" :model="formData" :rules="rules">
+    <wd-form ref="formRef" :model="formData" :rules="formRules">
       <!-- 动态表单项 -->
-      <view v-for="(item, index) in titleList" :key="index" class="form-section">
-        <view class="section-title">
-          {{ item.itemTitle }}
-        </view>
+      <wd-cell-group
+        v-for="(item, index) in titleList"
+        :key="index"
+        border
+        :class="index > 0 ? 'mt-3' : ''"
+      >
+        <FormSectionTitle
+          :title="item.itemTitle"
+          icon="checkbox-checked"
+          icon-class="i-carbon-checkbox-checked text-blue-500"
+        />
 
         <!-- 单选 -->
-        <wd-form-item v-if="item.titleType === '1001'" :prop="`title_${index}`">
+        <view v-if="item.titleType === '1001'" class="p-3">
           <wd-radio-group
             :model-value="item.radio as string"
             @update:model-value="(value) => handleRadioChange(value, item)"
@@ -337,10 +348,10 @@ onMounted(() => {
               {{ valueItem.itemValue }}
             </wd-radio>
           </wd-radio-group>
-        </wd-form-item>
+        </view>
 
         <!-- 多选 -->
-        <wd-form-item v-else-if="item.titleType === '2002'" :prop="`title_${index}`">
+        <view v-else-if="item.titleType === '2002'" class="p-3">
           <wd-checkbox-group
             :model-value="
               Array.isArray(item.radio)
@@ -357,71 +368,106 @@ onMounted(() => {
               {{ valueItem.itemValue }}
             </wd-checkbox>
           </wd-checkbox-group>
-        </wd-form-item>
+        </view>
 
         <!-- 文本输入 -->
-        <wd-form-item v-else :prop="`title_${index}`">
-          <wd-textarea
-            v-model="item.radio as string"
-            placeholder="请回答"
-            :maxlength="512"
-            show-word-limit
-          />
-        </wd-form-item>
-      </view>
+        <wd-textarea
+          v-else
+          v-model="item.radio as string"
+          placeholder="请回答"
+          :maxlength="512"
+          show-word-limit
+        />
+      </wd-cell-group>
 
       <!-- 巡检情况 -->
-      <wd-form-item label="巡检情况" prop="patrolType" required>
-        <wd-radio-group v-model="formData.patrolType">
-          <wd-radio
-            v-for="option in patrolTypeOptions"
-            :key="option.value"
-            :value="option.value"
-          >
-            {{ option.label }}
-          </wd-radio>
-        </wd-radio-group>
-      </wd-form-item>
+      <wd-cell-group border class="mt-3">
+        <FormSectionTitle
+          title="巡检情况"
+          icon="checkmark"
+          icon-class="i-carbon-checkmark text-green-500"
+          required
+        />
+        <view class="p-3">
+          <wd-radio-group v-model="formData.patrolType">
+            <wd-radio
+              v-for="option in patrolTypeOptions"
+              :key="option.value"
+              :value="option.value"
+            >
+              {{ option.label }}
+            </wd-radio>
+          </wd-radio-group>
+        </view>
+      </wd-cell-group>
 
       <!-- 巡检说明 -->
-      <wd-form-item label="巡检说明" prop="description" required>
+      <wd-cell-group border class="mt-3">
+        <FormSectionTitle
+          title="巡检说明"
+          icon="document"
+          icon-class="i-carbon-document text-purple-500"
+          required
+        />
         <wd-textarea
           v-model="formData.description"
           placeholder="请输入巡检说明"
           :maxlength="512"
           show-word-limit
         />
-      </wd-form-item>
+      </wd-cell-group>
 
-      <!-- 照片上传 -->
-      <wd-form-item label="巡检照片" prop="photos" required>
-        <wd-upload
-          v-model="uploadFiles"
-          :limit="4"
-          action="https://ftf.jd.com/api/uploadImg"
-          @success="handleUploadSuccess"
-          @remove="handleUploadRemove"
-        />
-      </wd-form-item>
+      <!-- 巡检照片 -->
+      <view class="mt-3">
+        <wd-cell-group border>
+          <FormSectionTitle
+            title="巡检照片"
+            icon="image"
+            icon-class="i-carbon-image text-orange-500"
+            subtitle="最多上传4张"
+            required
+          />
+        </wd-cell-group>
+        <view class="mt-2 bg-white p-3">
+          <wd-upload
+            v-model="uploadFiles"
+            :limit="4"
+            action="https://ftf.jd.com/api/uploadImg"
+            @success="handleUploadSuccess"
+            @remove="handleUploadRemove"
+          />
+        </view>
+      </view>
 
       <!-- 当前位置 -->
-      <wd-form-item label="当前位置">
-        <wd-input v-model="locationInfo.address" disabled />
-      </wd-form-item>
-    </wd-form>
+      <wd-cell-group border class="mt-3">
+        <FormSectionTitle
+          title="当前位置"
+          icon="location"
+          icon-class="i-carbon-location text-red-500"
+        />
+        <wd-input
+          v-model="locationInfo.address"
+          label="位置"
+          :label-width="LABEL_WIDTH"
+          disabled
+          readonly
+        />
+      </wd-cell-group>
 
-    <!-- 提交按钮 -->
-    <view class="submit-area">
-      <wd-button
-        type="success"
-        size="large"
-        block
-        :loading="submitting"
-        @click="handleSubmitInspection"
-      >
-        提交
-      </wd-button>
-    </view>
+      <!-- 提交按钮 -->
+      <view class="mt-6 px-3 pb-6">
+        <wd-button
+          type="success"
+          size="large"
+          block
+          :loading="submitting"
+          @click="handleSubmitInspection"
+        >
+          提交
+        </wd-button>
+      </view>
+    </wd-form>
   </view>
 </template>
 
@@ -429,34 +475,14 @@ onMounted(() => {
 .inspection-execute-single {
   min-height: 100vh;
   background-color: #f5f5f5;
-  padding-bottom: 120rpx;
+  padding-bottom: 100rpx;
 
   .page-title {
-    font-size: 28rpx;
-    font-weight: 400;
-    color: rgba(69, 90, 100, 0.6);
+    margin: 0;
+    font-weight: 500;
+    font-size: 32rpx;
+    color: #455a64;
     padding: 40rpx 30rpx 20rpx;
-  }
-
-  .form-section {
-    margin-bottom: 32rpx;
-
-    .section-title {
-      font-size: 28rpx;
-      font-weight: 400;
-      color: rgba(69, 90, 100, 0.6);
-      padding: 40rpx 30rpx 20rpx;
-    }
-  }
-
-  .submit-area {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 20rpx;
-    background: #ffffff;
-    box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.08);
   }
 }
 </style>
