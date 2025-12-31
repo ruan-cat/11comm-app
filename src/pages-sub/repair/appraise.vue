@@ -1,6 +1,7 @@
 <!--
   维修工单评价页
   功能：业主对维修服务进行评分和评价
+  表单页
 
   访问地址: http://localhost:9000/#/pages-sub/repair/appraise
   建议携带参数: ?repairId=REP_001&repairType=水电维修&communityId=COMM_001

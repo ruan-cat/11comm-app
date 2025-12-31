@@ -597,7 +597,17 @@ invoker	@	vue.runtime.esm.js:10209
 1. 针对 `src\pages-sub\repair\dispatch.vue` `维修待办单` 代码。阅读全部的 `card-actions` 部分。可以得知这里有很多不同的按钮。
 2. 深刻阅读理解 `维修待办单` 页面的状态逻辑，找到对应的 mock 接口代码，并增加足够的 mock 数据，确保全部种类的 `card-actions` 按钮都能够显示出来，便于我测试。
 
-## 维修已办
+## 044 <!-- TODO: --> 维修已办
+
+## 045 维修工单评价页 `src\pages-sub\repair\appraise.vue`
+
+1. 针对 `src\pages-sub\repair\appraise.vue` `维修工单评价页` 代码。
+
+### 01 <!-- TODO: --> 严格按照表单页的技能来修改优化代码
+
+1. 针对 `src\pages-sub\repair\appraise.vue` `维修工单评价页` 代码。
+2. 先阅读对应的旧代码 `gitee-example/pages/appraiseRepair/appraiseRepair.vue` ，了解被迁移的内容项目。
+3. 这是一个表单页，但是很多代码写法不满足 `.claude\skills\use-wd-form\SKILL.md` `使用 wd-form 表单组件编写表单页的实施规范` 技能，需要你按照技能文档，严格落实代码写法。统一并优化代码写法。
 
 ## 043 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
