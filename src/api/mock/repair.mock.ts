@@ -97,6 +97,13 @@ function createMockRepair(id: string): RepairOrder {
   const address = generateAddress()
   const appointment = formatDateTime(dayjs(now).add(Math.floor(Math.random() * 7), 'day'))
 
+  // 根据状态决定 preStaffId（用于退单按钮显示条件：preStaffId !== '-1'）
+  const isDispatchedOrProcessing = statusItem.value === '10002' || statusItem.value === '10003'
+  const preStaffId = isDispatchedOrProcessing ? `STAFF_${String(Math.floor(Math.random() * 5) + 1).padStart(3, '0')}` : undefined
+
+  // 根据状态决定 returnVisitFlag（用于回访按钮显示条件：statusCd === '10004' && returnVisitFlag === '003'）
+  const returnVisitFlag = statusItem.value === '10004' ? (Math.random() > 0.5 ? '003' : '001') : undefined
+
   return {
     repairId: `REP_${id}`,
     repairType: typeItem.value as RepairType,
@@ -117,6 +124,10 @@ function createMockRepair(id: string): RepairOrder {
     actualCost: statusItem.value === '10004' ? generateAmount(40, 600) : null,
     images: Math.random() > 0.5 ? [`https://picsum.photos/400/300?random=${id}`] : [],
     communityId: 'COMM_001',
+    // 退单按钮需要 preStaffId !== '-1'
+    preStaffId,
+    // 回访按钮需要 returnVisitFlag === '003'
+    returnVisitFlag,
     evaluation:
 			statusItem.value === '10004' && Math.random() > 0.3
 			  ? {
@@ -542,16 +553,18 @@ const mockRepairDatabase = {
     return false
   },
 
-  /** 获取待办单列表（ASSIGNED 和 IN_PROGRESS 状态） */
+  /** 获取待办单列表（ASSIGNED、IN_PROGRESS 和需要回访的 COMPLETED 状态） */
   getDispatchList(params: RepairListParams) {
     const result = this.getRepairList(params)
 
-    // 只返回 已派单/处理中 状态的工单，支持按传入的 statusCd 精确过滤
+    // 已派单/处理中 状态 + 需要回访的已完成状态
+    // 回访按钮显示条件：statusCd === '10004' && returnVisitFlag === '003'
     const allowedStatus = ['10002', '10003']
     result.list = result.list.filter((repair) => {
-      const isAllowed = allowedStatus.includes(repair.statusCd || '')
+      const isAssignedOrProcessing = allowedStatus.includes(repair.statusCd || '')
+      const isCompletedWithReturnVisit = repair.statusCd === '10004' && repair.returnVisitFlag === '003'
       const matchFilter = params.statusCd ? repair.statusCd === params.statusCd : true
-      return isAllowed && matchFilter
+      return (isAssignedOrProcessing || isCompletedWithReturnVisit) && matchFilter
     })
     result.total = result.list.length
 
