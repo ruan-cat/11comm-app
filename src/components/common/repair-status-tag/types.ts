@@ -4,7 +4,7 @@
  */
 
 /** 维修状态标签类型 */
-export type RepairStatusTagType = 'primary' | 'success' | 'warning' | 'danger'
+export type RepairStatusTagType = 'primary' | 'success' | 'warning' | 'danger' | 'info'
 
 /** 维修状态代码（与 statusCd 字段对应） */
 export type RepairStatusCode = string
@@ -44,7 +44,7 @@ export const REPAIR_STATUS_CONFIG_MAP: Record<RepairStatusCode, RepairStatusConf
   10002: {
     statusCd: '10002',
     statusName: '已派单',
-    tagType: 'primary',
+    tagType: 'info',
     animated: false,
   },
   10003: {

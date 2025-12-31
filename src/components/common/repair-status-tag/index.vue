@@ -45,6 +45,8 @@ const statusClass = computed(() => {
       return 'status-success'
     case 'danger':
       return 'status-danger'
+    case 'info':
+      return 'status-info'
     default:
       return 'status-primary'
   }
@@ -90,41 +92,46 @@ const statusClass = computed(() => {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-// 待派单 - 橙色
+// 待派单 - 暖橙色（警示色，代表等待关注）
 .status-warning {
   background-color: #ff9900;
   color: #ffffff;
 }
 
-// 已派单 / 处理中 - 蓝色
-.status-primary {
-  background-color: #4a6cf7;
+// 已派单 - 青蓝色（清新独立，区别于处理中）
+.status-info {
+  background-color: #06b6d4;
   color: #ffffff;
 }
 
-// 已完成 - 绿色
+// 处理中 - 纯正蓝色（去除紫色调，更有活力）
+.status-primary {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+// 已完成 - 鲜绿色（代表成功完成）
 .status-success {
   background-color: #52c41a;
   color: #ffffff;
 }
 
-// 已取消 - 灰色
+// 已取消 - 中灰色（实心高对比度，低调但清晰）
 .status-danger {
-  background-color: #f5f5f5;
-  color: #999999;
-  border: 2rpx solid #d9d9d9;
+  background-color: #9ca3af;
+  color: #ffffff;
 }
 
 // ==================== 丝绸动效 ====================
 
-// 丝绸褶皱层：深浅蓝色交替，模拟布料纹理
+// 丝绸褶皱层：纯蓝色深浅交替，模拟布料纹理（基于 #3b82f6 调整）
 .silk-folds {
   position: absolute;
   inset: 0;
   width: 200%;
   height: 100%;
   z-index: 1;
-  background: repeating-linear-gradient(115deg, #4a6cf7 0%, #5e7ff9 15%, #4a6cf7 30%, #3d5ce0 45%, #4a6cf7 60%);
+  background: repeating-linear-gradient(115deg, #3b82f6 0%, #60a5fa 15%, #3b82f6 30%, #2563eb 45%, #3b82f6 60%);
   background-size: 50% 100%;
   animation: folds-flow 4s linear infinite;
 }
