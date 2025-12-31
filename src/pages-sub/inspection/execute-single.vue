@@ -132,13 +132,13 @@ onLoadTitlesSuccess((data) => {
 
   // 初始化 radio 字段
   titleList.value.forEach((item) => {
-    if (item.titleType === '2002') {
-      // 多选：初始化为数组
-      item.radio = item.inspectionItemTitleValueDtos.map(() => ({
-        checked: false,
-        itemValue: '',
-        selected: '0',
-      }))
+    if (item.titleType === '1001') {
+      // 单选：初始化为空字符串
+      item.radio = ''
+    }
+    else if (item.titleType === '2002') {
+      // 多选：初始化为空数组
+      item.radio = []
     }
   })
 })
@@ -169,35 +169,21 @@ function handleUploadRemove(event: UploadRemoveEvent) {
 }
 
 /**
- * 单选框变更
+ * 单选 Picker 变更
  * @param value 选中的值
  * @param item 标题项
  */
-function handleRadioChange(value: string, item: InspectionItemTitle) {
+function handlePickerChange(value: string, item: InspectionItemTitle) {
   item.radio = value
 }
 
 /**
- * 多选框变更
+ * 多选 Checkbox 变更
  * @param values 选中的值数组
  * @param item 标题项
  */
 function handleCheckboxChange(values: string[], item: InspectionItemTitle) {
-  if (Array.isArray(item.radio)) {
-    item.radio.forEach((radioItem, index) => {
-      const itemValue = item.inspectionItemTitleValueDtos[index].itemValue
-      if (values.includes(itemValue)) {
-        radioItem.selected = '1'
-        radioItem.checked = true
-        radioItem.itemValue = itemValue
-      }
-      else {
-        radioItem.selected = '0'
-        radioItem.checked = false
-        radioItem.itemValue = itemValue
-      }
-    })
-  }
+  item.radio = values
 }
 
 /**
@@ -208,19 +194,12 @@ function buildDescription(): string {
 
   titleList.value.forEach((item) => {
     if (item.titleType === '2002') {
-      // 多选
-      let itemValue = ''
-      if (Array.isArray(item.radio)) {
-        item.radio.forEach((radioItem) => {
-          if (radioItem.selected === '1') {
-            itemValue += `${radioItem.itemValue},`
-          }
-        })
-      }
+      // 多选：radio 是字符串数组
+      const itemValue = Array.isArray(item.radio) ? item.radio.join(',') : ''
       description += `${item.itemTitle}:${itemValue};`
     }
     else {
-      // 单选或文本
+      // 单选或文本：radio 是字符串
       description += `${item.itemTitle}:${item.radio};`
     }
   })
@@ -335,30 +314,25 @@ onMounted(() => {
         />
 
         <!-- 单选 -->
-        <view v-if="item.titleType === '1001'" class="p-3">
-          <wd-radio-group
-            :model-value="item.radio as string"
-            @update:model-value="(value) => handleRadioChange(value, item)"
-          >
-            <wd-radio
-              v-for="(valueItem, valueIndex) in item.inspectionItemTitleValueDtos"
-              :key="valueIndex"
-              :value="valueItem.itemValue"
-            >
-              {{ valueItem.itemValue }}
-            </wd-radio>
-          </wd-radio-group>
-        </view>
+        <wd-picker
+          v-if="item.titleType === '1001'"
+          v-model="item.radio as string"
+          label="请选择"
+          :label-width="LABEL_WIDTH"
+          :columns="item.inspectionItemTitleValueDtos.map(v => ({
+            label: v.itemValue,
+            value: v.itemValue,
+          }))"
+          label-key="label"
+          value-key="value"
+          @change="(value) => handlePickerChange(value.value, item)"
+        />
 
         <!-- 多选 -->
         <view v-else-if="item.titleType === '2002'" class="p-3">
           <wd-checkbox-group
-            :model-value="
-              Array.isArray(item.radio)
-                ? item.radio.filter((r) => r.selected === '1').map((r) => r.itemValue)
-                : []
-            "
-            @update:model-value="(values) => handleCheckboxChange(values, item)"
+            v-model="item.radio as string[]"
+            @change="(event) => handleCheckboxChange(event.value, item)"
           >
             <wd-checkbox
               v-for="(valueItem, valueIndex) in item.inspectionItemTitleValueDtos"
