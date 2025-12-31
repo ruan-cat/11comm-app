@@ -100,7 +100,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 |      需要分页功能      |                                `z-paging-integration` + `api-migration` + `api-error-handling`                                 |                 z-paging 几乎总是需要 3 个技能                 |
 |    需要接口错误提示    |                                                      `api-error-handling`                                                      |                 所有 API 调用都应该有错误提示                  |
 |    需要动态页面标题    |                                                `use-uniapp-dynamic-page-title`                                                 |      根据参数/状态动态设置标题（如派单/转单显示不同标题）      |
-|    新建公共组件        |                                                   `add-new-component`                                                           |         src/components/common 目录下新建公共组件规范           |
+|      新建公共组件      |                                                      `add-new-component`                                                       |          src/components/common 目录下新建公共组件规范          |
 | 从 Vue2 完整迁移表单页 | `code-migration` + `component-migration` + `style-migration` + `use-wd-form` + `api-migration` + `beautiful-component-design`  |                       需要 6 个技能协同                        |
 | 从 Vue2 完整迁移列表页 | `code-migration` + `component-migration` + `style-migration` + `api-migration` + `z-paging-integration` + `api-error-handling` |                       需要 6 个技能协同                        |
 
@@ -733,6 +733,15 @@ gemini MCP 提供了一个工具 `gemini`，用于调用 Google Gemini 模型执
 - **需求清晰化**：在任务开始阶段辅助生成引导性问题。
 - **任务规划**：生成 Step-by-step 的实施计划。
 - **前端原型**：编写 CSS、HTML、UI 组件代码，调整样式风格。
+
+## 使用 `gemini MCP` 或直接使用 `gemini` 时需要额外主动获取上下文
+
+1. 在使用 `gemini MCP` 或直接使用 `gemini` 时，由于传递信息的关系，gemini是不会主动的先阅读来自claude code的配置文件的，因此你必须要告诉gemini，并约束gemini的上下文读取行为，**必须要求**gemini首先要无条件的阅读claude code的上下文。
+2. 请务必先主动阅读 `CLAUDE.md` 和 `.claude` 目录内的全部的指导文件。
+3. 不需要你阅读以下文件：
+   - .claude\settings.json
+   - .claude\statusline.sh
+4. 你的修改必须按照这些 claude code 文档的要求和约束来做。特别是 `agents` 和 `skills` 的要求。
 
 ## 13. 获取技术栈对应的上下文
 
