@@ -56,3 +56,46 @@
 我需要你提出一个长期解决方案，为什么你在使用技能文件来完成迁移任务时，会经常性的出现上下文缺失的情况？是技能文件太长？触发词汇没写好？还是你没有认真落实渐进式揭露的原则？
 
 我需要你从本次的错误内，找到通用的解决方案。下次迁移别的模块时，不要出现类似的错误。
+
+## 007 <!-- TODO: --> 优化并解决 `src\pages-sub\inspection\execute-single.vue` 执行单项巡检页面，出现选择项问题
+
+### 你之前向我询问过以下组件使用问题
+
+❓ 请教一个问题
+
+关于动态表单项部分（第 325-381 行），目前使用了 wd-radio-group 和 wd-checkbox-group：
+
+```vue
+<template>
+	<!-- 单选 -->
+	<view v-if="item.titleType === '1001'" class="p-3">
+		<wd-radio-group>...</wd-radio-group>
+	</view>
+
+	<!-- 多选 -->
+	<view v-else-if="item.titleType === '2002'" class="p-3">
+		<wd-checkbox-group>...</wd-checkbox-group>
+	</view>
+</template>
+```
+
+这部分是根据后端返回的数据动态生成的，选项数量不固定。请问：
+
+1. 是否也应该改为 wd-picker？
+2. 还是动态场景可以使用 wd-radio-group？
+
+我需要您的指导来决定如何处理这部分代码。
+
+### 具体解答与指示如下
+
+1. 对于动态返回的数据，仍旧使用 `wd-picker` 组件。
+2. 对于 `执行单项巡检页面` 出现的单选和多选情况。按照这样的原则处置：
+   - 单选时，一律用 `wd-picker` 组件。
+   - 多选时，一律用 `wd-checkbox` 组件。
+
+### 你要执行的步骤
+
+1. 去修改 `执行单项巡检页面` 。使用正确的组件。
+2. 阅读 `https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/checkbox.md` 文档，使用正确的 `wd-checkbox` 组件用法。
+3. 更新迭代 `.claude\skills\component-migration\SKILL.md` 技能，说明清楚在多选情况下，使用 `wd-checkbox` 组件。
+4. 更新迭代 `.claude\skills\use-wd-form\SKILL.md` 技能，补充说明上述的组件选用原则，并补充多选业务下使用的 `wd-checkbox` 组件细则。
