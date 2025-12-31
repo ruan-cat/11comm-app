@@ -19,6 +19,7 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { computed, ref } from 'vue'
 import { getRepairDetail, getRepairStaffRecords } from '@/api/repair'
+import RepairStatusTag from '@/components/common/repair-status-tag/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 import { getCurrentCommunity } from '@/utils/user'
@@ -156,18 +157,16 @@ function handleReplyAppraise(record: RepairStaffRecord) {
 }
 
 /**
- * 获取工单状态对应的颜色
- * @param statusCd - 状态代码
- * @example getStatusColor('10007')
+ * 拨打电话
+ * @param phone - 电话号码
+ * @example handleCall('18259941587')
  */
-function getStatusColor(statusCd: string): string {
-  const colorMap: Record<string, string> = {
-    10004: 'bg-green-500', // 已结束
-    10007: 'bg-blue-500', // 评价已完成
-    10009: 'bg-orange-500', // 待支付
-    12000: 'bg-purple-500', // 已完成
+function handleCall(phone?: string) {
+  if (!phone) {
+    toast.error('电话号码不存在')
+    return
   }
-  return colorMap[statusCd] || 'bg-gray-400'
+  uni.makePhoneCall({ phoneNumber: phone })
 }
 
 // ==================== 流转记录显示状态判断 ====================
@@ -185,170 +184,183 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
 <template>
   <view class="repair-detail-page">
     <!-- 加载状态 -->
-    <view v-if="detailLoading" class="flex items-center justify-center p-8">
-      <wd-loading />
+    <view v-if="detailLoading" class="flex flex-col items-center justify-center p-10 py-20">
+      <wd-loading size="30px" />
+      <text class="mt-4 text-sm text-gray-400">加载工单详情...</text>
     </view>
 
-    <!-- 工单详情 -->
-    <view v-else-if="repairDetail" class="p-3">
-      <!-- 基本信息 -->
-      <view class="mb-3 bg-white">
-        <wd-cell-group border>
-          <wd-cell title="报修ID" :value="repairDetail.repairId" title-class="text-36rpx" value-class="text-36rpx">
-            <template #icon>
-              <wd-icon name="" custom-class="i-carbon-edit text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
-            </template>
-          </wd-cell>
-          <wd-cell title="报修类型" :value="repairDetail.repairTypeName" title-class="text-36rpx" value-class="text-36rpx">
-            <template #icon>
-              <wd-icon name="" custom-class="i-carbon-ticket text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
-            </template>
-          </wd-cell>
-          <wd-cell title="报修人" :value="repairDetail.repairName" title-class="text-36rpx" value-class="text-36rpx">
-            <template #icon>
-              <wd-icon name="" custom-class="i-carbon-user-avatar text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
-            </template>
-          </wd-cell>
-          <wd-cell title="联系方式" :value="repairDetail.tel" title-class="text-36rpx" value-class="text-36rpx">
-            <template #icon>
-              <wd-icon name="" custom-class="i-carbon-phone text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
-            </template>
-          </wd-cell>
-          <wd-cell title="报修位置" :value="repairDetail.repairObjName" title-class="text-36rpx" value-class="text-36rpx">
-            <template #icon>
-              <wd-icon name="" custom-class="i-carbon-location text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
-            </template>
-          </wd-cell>
-          <wd-cell title="预约时间" :value="repairDetail.appointmentTime" title-class="text-36rpx" value-class="text-36rpx">
-            <template #icon>
-              <wd-icon name="" custom-class="i-carbon-time text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
-            </template>
-          </wd-cell>
-          <wd-cell title="状态" :value="repairDetail.statusName" title-class="text-36rpx" value-class="text-36rpx">
-            <template #icon>
-              <wd-icon name="" custom-class="i-carbon-checkmark-outline text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
-            </template>
-          </wd-cell>
-          <wd-cell title="报修内容" :value="repairDetail.context" title-class="text-36rpx" value-class="text-36rpx">
-            <template #icon>
-              <wd-icon name="" custom-class="i-carbon-document text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
-            </template>
-          </wd-cell>
-        </wd-cell-group>
+    <!-- 工单详情内容 -->
+    <view v-else-if="repairDetail" class="p-3 pb-safe">
+      <!-- 1. 头部核心状态卡片（小圆角） -->
+      <view class="relative mb-3 overflow-hidden rounded-sm bg-white p-4 shadow-sm">
+        <view class="flex items-start justify-between">
+          <view>
+            <text class="mb-1 block text-xs text-gray-500">工单编号</text>
+            <view class="mb-2 text-xl text-gray-900 font-bold leading-none">
+              {{ repairDetail.repairId }}
+            </view>
+            <view class="flex items-center gap-2 text-sm text-gray-500">
+              <wd-icon name="" custom-class="i-carbon-time w-28rpx h-28rpx" />
+              <text>{{ repairDetail.appointmentTime }}</text>
+            </view>
+          </view>
+          <!-- 使用新优化的状态组件 -->
+          <RepairStatusTag
+            :status-cd="repairDetail.statusCd || ''"
+            :status-name="repairDetail.statusName"
+            :animated="true"
+          />
+        </view>
       </view>
 
-      <!-- 图片展示区域 -->
+      <!-- 2. 报修内容卡片（小圆角） -->
+      <view class="mb-3 rounded-sm bg-white p-4 shadow-sm">
+        <view class="mb-3 flex items-center gap-2 text-base text-gray-800 font-bold">
+          <wd-icon name="" custom-class="i-carbon-document text-blue-500 w-36rpx h-36rpx" />
+          <text>报修内容</text>
+        </view>
+        <view class="mb-4 text-sm text-gray-600 leading-relaxed">
+          {{ repairDetail.context }}
+        </view>
+
+        <!-- 基础信息列表（嵌入式） -->
+        <view class="flex flex-col gap-3 border-t border-gray-100 pt-4">
+          <view class="flex items-center justify-between">
+            <text class="text-sm text-gray-500">报修人</text>
+            <text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairName }}</text>
+          </view>
+          <view class="flex items-center justify-between">
+            <text class="text-sm text-gray-500">联系方式</text>
+            <text class="text-sm text-blue-500 font-medium" @click="handleCall(repairDetail.tel)">
+              {{ repairDetail.tel }}
+            </text>
+          </view>
+          <view class="flex items-center justify-between">
+            <text class="text-sm text-gray-500">报修位置</text>
+            <text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairObjName }}</text>
+          </view>
+          <view class="flex items-center justify-between">
+            <text class="text-sm text-gray-500">报修类型</text>
+            <text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairTypeName }}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 3. 图片展示区域（小圆角） -->
       <template v-if="hasImages">
-        <!-- 业主报修图片 -->
-        <view
-          v-if="repairDetail.repairPhotos && repairDetail.repairPhotos.length > 0"
-          class="mb-3 bg-white p-3"
-        >
-          <view class="image-section-title mb-2 flex items-center text-gray-700 font-bold">
-            <wd-icon name="" custom-class="i-carbon-image text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
-            <text>业主报修图片</text>
+        <view class="mb-3 rounded-sm bg-white p-4 shadow-sm">
+          <view class="mb-3 flex items-center gap-2 text-base text-gray-800 font-bold">
+            <wd-icon name="" custom-class="i-carbon-image text-orange-500 w-36rpx h-36rpx" />
+            <text>工单附件</text>
           </view>
-          <view class="grid grid-cols-3 gap-2">
-            <wd-img
-              v-for="(photo, index) in repairDetail.repairPhotos"
-              :key="index"
-              :src="photo.url || photo.photo"
-              :image-urls="getImageUrls(repairDetail.repairPhotos)"
-              :current-index="index"
-              mode="aspectFill"
-              class="aspect-square w-full rounded"
-              :enable-preview="true"
-            />
-          </view>
-        </view>
 
-        <!-- 维修前图片 -->
-        <view
-          v-if="repairDetail.beforePhotos && repairDetail.beforePhotos.length > 0"
-          class="mb-3 bg-white p-3"
-        >
-          <view class="image-section-title mb-2 flex items-center text-gray-700 font-bold">
-            <wd-icon name="" custom-class="i-carbon-image text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
-            <text>维修前图片</text>
+          <!-- 业主报修图片 -->
+          <view v-if="repairDetail.repairPhotos?.length" class="mb-4 last:mb-0">
+            <text class="mb-2 block text-xs text-gray-400">报修图片</text>
+            <view class="grid grid-cols-3 gap-2">
+              <wd-img
+                v-for="(photo, index) in repairDetail.repairPhotos"
+                :key="index"
+                :src="photo.url || photo.photo"
+                :image-urls="getImageUrls(repairDetail.repairPhotos)"
+                :current-index="index"
+                mode="aspectFill"
+                class="aspect-square w-full rounded-sm bg-gray-100"
+                :enable-preview="true"
+              />
+            </view>
           </view>
-          <view class="grid grid-cols-3 gap-2">
-            <wd-img
-              v-for="(photo, index) in repairDetail.beforePhotos"
-              :key="index"
-              :src="photo.url || photo.photo"
-              :image-urls="getImageUrls(repairDetail.beforePhotos)"
-              :current-index="index"
-              mode="aspectFill"
-              class="aspect-square w-full rounded"
-              :enable-preview="true"
-            />
-          </view>
-        </view>
 
-        <!-- 维修后图片 -->
-        <view
-          v-if="repairDetail.afterPhotos && repairDetail.afterPhotos.length > 0"
-          class="mb-3 bg-white p-3"
-        >
-          <view class="image-section-title mb-2 flex items-center text-gray-700 font-bold">
-            <wd-icon name="" custom-class="i-carbon-image text-colorui-green mr-8rpx w-36rpx h-36rpx flex items-center justify-center" />
-            <text>维修后图片</text>
+          <!-- 维修前图片 -->
+          <view v-if="repairDetail.beforePhotos?.length" class="mb-4 last:mb-0">
+            <text class="mb-2 block text-xs text-gray-400">维修前图片</text>
+            <view class="grid grid-cols-3 gap-2">
+              <wd-img
+                v-for="(photo, index) in repairDetail.beforePhotos"
+                :key="index"
+                :src="photo.url || photo.photo"
+                :image-urls="getImageUrls(repairDetail.beforePhotos)"
+                :current-index="index"
+                mode="aspectFill"
+                class="aspect-square w-full rounded-sm bg-gray-100"
+                :enable-preview="true"
+              />
+            </view>
           </view>
-          <view class="grid grid-cols-3 gap-2">
-            <wd-img
-              v-for="(photo, index) in repairDetail.afterPhotos"
-              :key="index"
-              :src="photo.url || photo.photo"
-              :image-urls="getImageUrls(repairDetail.afterPhotos)"
-              :current-index="index"
-              mode="aspectFill"
-              class="aspect-square w-full rounded"
-              :enable-preview="true"
-            />
+
+          <!-- 维修后图片 -->
+          <view v-if="repairDetail.afterPhotos?.length" class="mb-0">
+            <text class="mb-2 block text-xs text-gray-400">维修完成图片</text>
+            <view class="grid grid-cols-3 gap-2">
+              <wd-img
+                v-for="(photo, index) in repairDetail.afterPhotos"
+                :key="index"
+                :src="photo.url || photo.photo"
+                :image-urls="getImageUrls(repairDetail.afterPhotos)"
+                :current-index="index"
+                mode="aspectFill"
+                class="aspect-square w-full rounded-sm bg-gray-100"
+                :enable-preview="true"
+              />
+            </view>
           </view>
         </view>
       </template>
 
-      <!-- 工单流转时间轴 -->
-      <view v-if="staffRecords.length > 0" class="bg-white p-3">
-        <view class="timeline-title mb-3 text-gray-700 font-bold">
-          工单流转记录
+      <!-- 4. 工单流转时间轴（小圆角） -->
+      <view v-if="staffRecords.length > 0" class="mb-3 rounded-sm bg-white p-4 shadow-sm">
+        <view class="mb-4 flex items-center gap-2 text-base text-gray-800 font-bold">
+          <wd-icon name="" custom-class="i-carbon-history text-cyan-500 w-36rpx h-36rpx" />
+          <text>流转记录</text>
         </view>
 
-        <view class="relative">
+        <view class="relative pl-2">
           <view
             v-for="(record, index) in staffRecords"
             :key="index"
-            class="relative mb-4 flex gap-3"
-            :class="{ 'last-timeline-item': index === staffRecords.length - 1 }"
+            class="relative flex gap-4 pb-6 last:pb-0"
           >
-            <!-- 时间轴节点 -->
-            <view class="timeline-node">
-              <view class="node-dot" :class="getStatusColor(record.statusCd)" />
-              <view v-if="index !== staffRecords.length - 1" class="node-line" />
+            <!-- 时间轴线与节点 -->
+            <view class="flex flex-col items-center">
+              <!-- 节点圆点：最新的为蓝色，历史为灰色 -->
+              <view
+                class="z-10 h-3 w-3 border-2 rounded-full bg-white"
+                :class="index === 0 ? 'border-blue-500 shadow-md' : 'border-gray-300'"
+              />
+              <!-- 垂直连接线 -->
+              <view
+                v-if="index !== staffRecords.length - 1"
+                class="my-1 w-[1px] flex-1 bg-gray-200"
+              />
             </view>
 
-            <!-- 时间轴内容 -->
-            <view class="flex-1 pb-2">
-              <!-- 标题 -->
-              <view class="timeline-record-title mb-1 font-medium">
-                <text>{{ record.startTime }} 到达 {{ record.staffName }} 工位 - {{ record.statusName }}</text>
+            <!-- 内容区域 -->
+            <view class="flex-1 -mt-1">
+              <!-- 时间 -->
+              <text class="mb-1 block text-xs text-gray-400 font-mono">{{ record.startTime }}</text>
+
+              <!-- 状态与人员 -->
+              <view class="mb-2 flex flex-wrap items-center gap-2">
+                <!-- 在时间轴中使用 StatusTag -->
+                <RepairStatusTag
+                  :status-cd="record.statusCd"
+                  :status-name="record.statusName"
+                  :plain="true"
+                  :animated="false"
+                  class="origin-left scale-90"
+                />
+                <text class="text-sm text-gray-800 font-bold">{{ record.staffName }}</text>
               </view>
 
-              <!-- 处理意见 - 待支付或已结束时显示 -->
-              <view
-                v-if="shouldShowProcessOpinion(record)"
-                class="timeline-record-content mb-1 text-gray-600"
-              >
-                <text>处理意见：{{ record.context || '暂无' }}</text>
-                <text v-if="record.payTypeName" class="ml-1 text-blue-500">
-                  ({{ record.payTypeName }})
-                </text>
+              <!-- 处理意见/备注 -->
+              <view v-if="shouldShowProcessOpinion(record) && record.context" class="rounded-sm bg-gray-50 p-2 text-xs text-gray-600">
+                <text>{{ record.context }}</text>
+                <text v-if="record.payTypeName" class="ml-1 text-blue-500">({{ record.payTypeName }})</text>
               </view>
 
-              <!-- 评价已完成 - 显示回复按钮 -->
+              <!-- 操作按钮 -->
               <view v-if="record.statusCd === '10007'" class="mt-2">
-                <wd-button size="small" type="success" @click="handleReplyAppraise(record)">
+                <wd-button size="small" type="success" plain @click="handleReplyAppraise(record)">
                   回复评价
                 </wd-button>
               </view>
@@ -363,79 +375,16 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
 <style lang="scss" scoped>
 .repair-detail-page {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: #f5f5f7;
 }
 
-/** 强制设置 wd-cell 的文本大小 */
-:deep(.wd-cell__title) {
-  font-size: 28rpx !important;
-  line-height: 36rpx !important;
+/** 底部安全区适配 */
+.pb-safe {
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
 }
 
-:deep(.wd-cell__value) {
-  font-size: 28rpx !important;
-  line-height: 36rpx !important;
-}
-
-/** 确保 wd-cell 的 icon 区域垂直居中 */
-:deep(.wd-cell__icon) {
-  display: flex !important;
-  align-items: center !important;
-}
-
-/** 图片区域标题 */
-.image-section-title {
-  font-size: 28rpx !important;
-  line-height: 36rpx !important;
-}
-
-/** 时间轴标题 */
-.timeline-title {
-  font-size: 28rpx !important;
-  line-height: 36rpx !important;
-}
-
-/** 时间轴记录标题 */
-.timeline-record-title {
-  font-size: 28rpx !important;
-  line-height: 36rpx !important;
-}
-
-/** 时间轴记录内容 */
-.timeline-record-content {
-  font-size: 28rpx !important;
-  line-height: 36rpx !important;
-}
-
-/** 时间轴最后一项隐藏连接线 */
-.last-timeline-item {
-  .node-line {
-    display: none;
-  }
-}
-
-/** 时间轴节点 */
-.timeline-node {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 2px;
-
-  .node-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: rgb(66, 153, 225); // 使用 rgb() 替代硬编码
-    z-index: 1;
-  }
-
-  .node-line {
-    flex: 1;
-    width: 2px;
-    background-color: rgb(226, 232, 240);
-    margin-top: 4px;
-    min-height: 40px;
-  }
+/** 解决 UnoCSS transform 缩放后的对齐问题 */
+.origin-left {
+  transform-origin: left center;
 }
 </style>
