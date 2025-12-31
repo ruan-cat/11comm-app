@@ -16,6 +16,13 @@ import { onMounted, ref } from 'vue'
 import { getInspectionTaskList } from '@/api/inspection'
 import { TypedRouter } from '@/router'
 
+definePage({
+  style: {
+    navigationBarTitleText: '巡检打卡',
+    enablePullDownRefresh: false,
+  },
+})
+
 /** 巡检任务列表 */
 const tasks = ref<InspectionTask[]>([])
 

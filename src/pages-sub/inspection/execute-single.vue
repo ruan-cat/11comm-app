@@ -26,7 +26,7 @@ import { TypedRouter } from '@/router'
 
 definePage({
   style: {
-    navigationBarTitleText: '执行单项巡检',
+    navigationBarTitleText: '执行巡检',
     enablePullDownRefresh: false,
   },
 })

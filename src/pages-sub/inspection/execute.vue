@@ -18,6 +18,13 @@ import { computed, onMounted, ref } from 'vue'
 import { getInspectionTaskDetail } from '@/api/inspection'
 import { TypedRouter } from '@/router'
 
+definePage({
+  style: {
+    navigationBarTitleText: '巡检过程',
+    enablePullDownRefresh: false,
+  },
+})
+
 /** 路由参数 */
 const taskId = ref('')
 const inspectionPlanName = ref('')

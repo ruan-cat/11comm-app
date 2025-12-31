@@ -17,6 +17,13 @@ import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
 import { getInspectionTaskDetail } from '@/api/inspection'
 
+definePage({
+  style: {
+    navigationBarTitleText: '员工未巡检',
+    enablePullDownRefresh: false,
+  },
+})
+
 /** 路由参数 */
 const staffId = ref('')
 const staffName = ref('')

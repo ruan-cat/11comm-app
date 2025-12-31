@@ -15,6 +15,13 @@ import { onMounted, ref } from 'vue'
 import { getInspectionTodayReport } from '@/api/inspection'
 import { TypedRouter } from '@/router'
 
+definePage({
+  style: {
+    navigationBarTitleText: '今日巡检',
+    enablePullDownRefresh: false,
+  },
+})
+
 /** 巡检统计列表 */
 const inspections = ref<InspectionTodayReport[]>([])
 

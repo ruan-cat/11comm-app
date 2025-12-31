@@ -19,6 +19,13 @@ import { onMounted, ref } from 'vue'
 import { getInspectionTaskDetail } from '@/api/inspection'
 import { redirectToTyped } from '@/router'
 
+definePage({
+  style: {
+    navigationBarTitleText: '二维码巡检',
+    enablePullDownRefresh: false,
+  },
+})
+
 /** 路由参数 */
 const inspectionId = ref('')
 const inspectionName = ref('')

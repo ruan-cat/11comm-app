@@ -19,6 +19,13 @@ import { onMounted, reactive, ref } from 'vue'
 import { getStaffList, transferInspectionTask } from '@/api/inspection'
 import { TypedRouter } from '@/router'
 
+definePage({
+  style: {
+    navigationBarTitleText: '任务流转',
+    enablePullDownRefresh: false,
+  },
+})
+
 /** 路由参数 */
 const taskInfoStr = ref('')
 
