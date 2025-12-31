@@ -1050,7 +1050,7 @@ const showTotalAmount = computed(() => model.feeFlag === "1001");
 ## 064 增加动态设置页面标题的技能 `use-uniapp-dynamic-page-title`
 
 1. 阅读 `src\pages-sub\repair\handle.vue` ，和 `docs\reports\2025-12-28-uniapp-dynamic-page-title-research.md` 报告，学会如何在 uniapp 项目内使用动态标题。
-2. 将这个实践经验，转化成可以高度服用的 claude code 技能。命名为 `use-uniapp-dynamic-page-title` 。
+2. 将这个实践经验，转化成可以高度复用的 claude code 技能。命名为 `use-uniapp-dynamic-page-title` 。
 3. 编写技能时，务必遵照 claude code 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
 4. 及时更新 `.claude\skills\check-trigger.md` 触发器说明文件，说明在需要完成动态页面标题设置时，使用该技能文件。
 5. 及时更新 `CLAUDE.md` 文件，说明增加了新的技能。
