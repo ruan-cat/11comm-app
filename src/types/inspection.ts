@@ -72,8 +72,8 @@ export interface InspectionItemTitle {
   itemTitle: string
   /** 标题类型 (1001=单选, 2002=多选, 其他=文本) */
   titleType: string
-  /** 选中的值 */
-  radio: string | Array<{ checked: boolean, itemValue: string, selected: string }>
+  /** 选中的值 (单选/文本时为字符串，多选时为字符串数组) */
+  radio: string | string[]
   /** 标题值选项 */
   inspectionItemTitleValueDtos: Array<{
     /** 选项值 */

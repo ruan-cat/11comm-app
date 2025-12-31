@@ -85,7 +85,7 @@ const formRules: FormRules = {
     {
       required: true,
       message: '请上传巡检照片',
-      validator: (value: string[]) => value.length > 0,
+      validator: (value: any) => Array.isArray(value) && value.length > 0,
     },
   ],
 }
@@ -316,7 +316,7 @@ onMounted(() => {
         <!-- 单选 -->
         <wd-picker
           v-if="item.titleType === '1001'"
-          v-model="item.radio as string"
+          v-model="item.radio"
           label="请选择"
           :label-width="LABEL_WIDTH"
           :columns="item.inspectionItemTitleValueDtos.map(v => ({
@@ -325,14 +325,15 @@ onMounted(() => {
           }))"
           label-key="label"
           value-key="value"
-          @change="(value) => handlePickerChange(value.value, item)"
+          @change="(value: any) => handlePickerChange(value.value, item)"
         />
 
         <!-- 多选 -->
         <view v-else-if="item.titleType === '2002'" class="p-3">
           <wd-checkbox-group
-            v-model="item.radio as string[]"
-            @change="(event) => handleCheckboxChange(event.value, item)"
+            :model-value="Array.isArray(item.radio) ? item.radio : []"
+            @update:model-value="(value) => { item.radio = value }"
+            @change="(event: any) => handleCheckboxChange(event.value, item)"
           >
             <wd-checkbox
               v-for="(valueItem, valueIndex) in item.inspectionItemTitleValueDtos"
@@ -347,10 +348,11 @@ onMounted(() => {
         <!-- 文本输入 -->
         <wd-textarea
           v-else
-          v-model="item.radio as string"
+          :model-value="typeof item.radio === 'string' ? item.radio : ''"
           placeholder="请回答"
           :maxlength="512"
           show-word-limit
+          @update:model-value="(value) => { item.radio = value }"
         />
       </wd-cell-group>
 
