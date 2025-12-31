@@ -367,7 +367,248 @@ function handleStop(item: RepairOrder) {
 > **📚 详细文档**: 参阅 `.claude/skills/component-migration/SKILL.md` 第 8 节
 > **📚 实际案例**: `src/pages-sub/repair/dispatch.vue:208-233`
 
-## 8. 典型应用场景
+## 8. 详情页卡片设计规范（⚠️ 重要）
+
+详情页通常包含多个信息卡片，需要统一的视觉风格和清晰的信息层次。本节介绍如何在详情页中使用 `FormSectionTitle` 组件和色彩编码系统。
+
+### 8.1. 设计理念：通栏标题 + 色彩编码
+
+#### 核心策略
+
+采用 **"通栏标题 + 色彩编码"** 的设计策略：
+
+- **结构融合**：`FormSectionTitle` 不仅是分隔符，而是作为每个信息卡片的 **"页眉 (Header)"**。通过消除卡片容器的内边距，让淡灰色的标题栏撑满卡片顶部，形成 _"灰色标题区 + 白色内容区"_ 的经典文档结构。
+- **色彩编码系统**：为不同类型的信息区域分配特定颜色，提升视觉识别度和导航效率。
+- **圆角一致性**：严格遵循小圆角 (`rounded-sm`) 规范，使用 `overflow-hidden` 确保标题栏与卡片完美融合。
+
+#### 色彩编码体系
+
+| 颜色类型 | HEX 色值  | 使用场景           | Carbon 图标示例         | 色彩心理学                 |
+| :------: | :-------- | :----------------- | :---------------------- | :------------------------- |
+| 🟦 蓝色  | `#3b82f6` | 报修内容、核心信息 | `document`, `file-doc`  | 理性、客观、文档数据       |
+| 💠 青色  | `#06b6d4` | 流转记录、时间轴   | `time`, `history`       | 时间流逝、状态变更、流动感 |
+| 🟧 橙色  | `#ff9900` | 工单附件、图片墙   | `image`, `folder-media` | 视觉媒体、活力、吸引注意力 |
+| 🟩 绿色  | `#52c41a` | 完成状态、成功提示 | `checkmark`, `success`  | 成功、完成、正向反馈       |
+| 🟥 红色  | `#ef4444` | 警告信息、必填项   | `warning`, `error`      | 警告、危险、需要关注       |
+
+### 8.2. ✅ 正确做法：卡片结构调整
+
+#### 标准卡片模板
+
+```vue
+<template>
+	<!-- ✅ 正确：移除 padding，添加 overflow-hidden -->
+	<view class="mb-3 overflow-hidden rounded-sm bg-white shadow-sm">
+		<!-- 标题栏：FormSectionTitle 作为卡片头部 -->
+		<FormSectionTitle title="报修内容" icon="document" icon-class="i-carbon-document text-blue-500" :animated="false" />
+
+		<!-- 内容区：重新包裹并补回 padding -->
+		<view class="p-4">
+			<!-- 卡片内容 -->
+			<view class="text-sm text-gray-600 leading-relaxed">
+				{{ content }}
+			</view>
+		</view>
+	</view>
+</template>
+```
+
+#### 结构调整技巧
+
+|    步骤    | 操作                                     | 目的                                 |
+| :--------: | :--------------------------------------- | :----------------------------------- |
+| **步骤 1** | 移除卡片容器的 `p-4`                     | 让 FormSectionTitle 撑满卡片宽度     |
+| **步骤 2** | 添加 `overflow-hidden`                   | 配合小圆角，让直角的标题栏被自动裁剪 |
+| **步骤 3** | `FormSectionTitle` 直接放在卡片顶部      | 形成通栏标题效果                     |
+| **步骤 4** | 内容区域用 `<view class="p-4">` 重新包裹 | 补回内边距，确保内容不贴边           |
+
+#### ⚠️ 常见错误
+
+```vue
+<!-- ❌ 错误1：卡片容器保留了 padding -->
+<view class="mb-3 rounded-sm bg-white p-4 shadow-sm">
+  <FormSectionTitle title="报修内容" />
+  <!-- 问题：FormSectionTitle 两侧有留白，无法形成通栏效果 -->
+</view>
+
+<!-- ❌ 错误2：缺少 overflow-hidden -->
+<view class="mb-3 rounded-sm bg-white shadow-sm">
+  <FormSectionTitle title="报修内容" />
+  <!-- 问题：FormSectionTitle 默认直角，与卡片圆角不匹配 -->
+</view>
+
+<!-- ❌ 错误3：内容区域没有 padding -->
+<view class="mb-3 overflow-hidden rounded-sm bg-white shadow-sm">
+  <FormSectionTitle title="报修内容" />
+  <view class="text-sm">内容贴边显示</view>
+  <!-- 问题：内容直接贴边，缺少呼吸感 -->
+</view>
+```
+
+### 8.3. 色彩编码应用矩阵
+
+#### 维修工单详情页示例
+
+| 卡片区域     | 标题文本 | 图标 (`icon`)      | 图标样式 (`icon-class`)           | 动效 (`animated`) | 理由                                 |
+| :----------- | :------- | :----------------- | :-------------------------------- | :---------------- | :----------------------------------- |
+| **报修内容** | 报修内容 | `document`         | `i-carbon-document text-blue-500` | `false`           | 静态核心信息，蓝色代表理性/文档      |
+| **工单附件** | 工单附件 | `image`            | `i-carbon-image text-orange-500`  | `false`           | 图片区域，橙色代表视觉媒体           |
+| **流转记录** | 流转记录 | `time` / `history` | `i-carbon-time text-cyan-500`     | `true`            | 动态区域，青色呼应状态流转，启用动效 |
+
+#### 动效使用原则
+
+- ✅ **启用动效**：流转记录、处理中状态、动态更新区域
+- ❌ **禁用动效**：静态内容、已完成状态、图片附件
+
+### 8.4. 实际案例代码
+
+#### 完整示例：维修工单详情页
+
+```vue
+<script setup lang="ts">
+import FormSectionTitle from "@/components/common/form-section-title/index.vue";
+import RepairStatusTag from "@/components/common/repair-status-tag/index.vue";
+</script>
+
+<template>
+	<view class="repair-detail-page">
+		<!-- 1. 头部状态卡片（不使用 FormSectionTitle，保持独立设计） -->
+		<view class="relative mb-3 overflow-hidden rounded-sm bg-white p-4 shadow-sm">
+			<view class="flex items-start justify-between">
+				<view>
+					<text class="mb-1 block text-xs text-gray-500">工单编号</text>
+					<view class="mb-2 text-xl text-gray-900 font-bold leading-none">
+						{{ repairDetail.repairId }}
+					</view>
+				</view>
+				<RepairStatusTag :status-cd="repairDetail.statusCd" :status-name="repairDetail.statusName" :animated="true" />
+			</view>
+		</view>
+
+		<!-- 2. 报修内容卡片（蓝色系，静态） -->
+		<view class="mb-3 overflow-hidden rounded-sm bg-white shadow-sm">
+			<FormSectionTitle
+				title="报修内容"
+				icon="document"
+				icon-class="i-carbon-document text-blue-500"
+				:animated="false"
+			/>
+			<view class="p-4">
+				<view class="mb-4 text-sm text-gray-600 leading-relaxed">
+					{{ repairDetail.context }}
+				</view>
+				<!-- 基础信息列表 -->
+				<view class="flex flex-col gap-3 border-t border-gray-100 pt-4">
+					<view class="flex items-center justify-between">
+						<text class="text-sm text-gray-500">报修人</text>
+						<text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairName }}</text>
+					</view>
+				</view>
+			</view>
+		</view>
+
+		<!-- 3. 工单附件卡片（橙色系，静态） -->
+		<view v-if="hasImages" class="mb-3 overflow-hidden rounded-sm bg-white shadow-sm">
+			<FormSectionTitle title="工单附件" icon="image" icon-class="i-carbon-image text-orange-500" :animated="false" />
+			<view class="p-4">
+				<view class="grid grid-cols-3 gap-2">
+					<wd-img
+						v-for="(photo, index) in photos"
+						:key="index"
+						:src="photo.url"
+						mode="aspectFill"
+						class="aspect-square w-full rounded-sm bg-gray-100"
+						:enable-preview="true"
+					/>
+				</view>
+			</view>
+		</view>
+
+		<!-- 4. 流转记录卡片（青色系，启用动效） -->
+		<view v-if="staffRecords.length > 0" class="mb-3 overflow-hidden rounded-sm bg-white shadow-sm">
+			<FormSectionTitle title="流转记录" icon="time" icon-class="i-carbon-time text-cyan-500" :animated="true" />
+			<view class="p-4">
+				<!-- 时间轴内容 -->
+				<view class="relative pl-2">
+					<view v-for="(record, index) in staffRecords" :key="index">
+						<!-- 时间轴节点和内容 -->
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<style lang="scss" scoped>
+.repair-detail-page {
+	min-height: 100vh;
+	background-color: #f5f5f7;
+}
+
+.pb-safe {
+	padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+}
+</style>
+```
+
+### 8.5. 设计检查清单
+
+#### 详情页卡片专项检查
+
+- [ ] **卡片容器是否移除了 `padding`？**（确保 FormSectionTitle 通栏效果）
+- [ ] **卡片是否添加了 `overflow-hidden`？**（配合小圆角 `rounded-sm`）
+- [ ] **内容区域是否重新包裹并补回了 `padding`？**（确保内容不贴边）
+- [ ] **FormSectionTitle 是否直接放在卡片顶部？**（作为卡片头部）
+- [ ] **图标颜色是否符合色彩编码体系？**（蓝/青/橙/绿/红）
+- [ ] **动效使用是否合理？**（仅在动态区域启用）
+- [ ] **头部状态卡片是否保持独立设计？**（不使用 FormSectionTitle）
+
+#### 色彩一致性检查
+
+- [ ] **蓝色用于核心信息/文档**（`text-blue-500`, `#3b82f6`）
+- [ ] **青色用于时间轴/流转记录**（`text-cyan-500`, `#06b6d4`）
+- [ ] **橙色用于附件/图片**（`text-orange-500`, `#ff9900`）
+- [ ] **绿色用于成功/完成状态**（`text-green-500`, `#52c41a`）
+- [ ] **红色用于警告/必填项**（`text-red-500`, `#ef4444`）
+
+### 8.6. 视觉效果预期
+
+实施该方案后，用户将看到：
+
+1. **极具秩序感**：每个板块由淡灰色标题条开启，清晰界定信息区域
+2. **色彩导航**：潜意识建立色彩关联 — 蓝色看内容，橙色看图片，青色看进度
+3. **精致细节**：
+   - 卡片圆角处理得当，标题栏与卡片完美融合
+   - 呼吸动效在流转记录处轻微律动，暗示工单正在处理中
+   - 2px 微妙分割线（FormSectionTitle 的 `margin-bottom: 2px`）
+
+### 8.7. FormSectionTitle 在表单页 vs 详情页
+
+|    对比项    |        表单页 (`use-wd-form`)        |               详情页（本节内容）               |
+| :----------: | :----------------------------------: | :--------------------------------------------: |
+| **使用频率** |          每个表单分区都使用          |         仅在重要信息区域使用（3-4 个）         |
+| **背景处理** |   直接放在页面中，背景自然融入表单   |   作为卡片头部，通过 `overflow-hidden` 融合    |
+| **动效使用** |     通常启用（强调表单区域划分）     |         仅在动态区域启用（如流转记录）         |
+| **色彩编码** |      通常使用单一颜色（如蓝色）      |     多色彩编码（蓝/青/橙），提升信息识别度     |
+| **卡片结构** |        无需调整，直接使用即可        | 需要移除卡片 `padding`，添加 `overflow-hidden` |
+| **配合组件** | `wd-form`, `wd-picker`, 表单校验规则 |      `RepairStatusTag`, 时间轴, 图片网格       |
+
+### 8.8. 参考案例
+
+**详情页最佳实践**：
+
+- ✅ `src/pages-sub/repair/order-detail.vue` - 维修工单详情页（完整色彩编码示例）
+- ✅ `src/pages-sub/repair/staff-todo-detail.vue` - 待办详情页
+- ✅ `src/pages-sub/property/apply-room-detail.vue` - 房屋申请详情页
+
+**表单页最佳实践**：
+
+- ✅ `src/pages-sub/repair/add-order.vue` - FormSectionTitle 在表单中的使用
+- ✅ `src/pages-sub/repair/select-resource.vue` - 表单分区标题示例
+
+---
+
+## 9. 典型应用场景
 
 - 维修工单详情页的信息展示
 - 报修记录的列表项设计
@@ -376,6 +617,7 @@ function handleStop(item: RepairOrder) {
 - 时间轴和流程记录
 - **表单中选择器组件的统一对齐**
 - **标准弹框交互（确认、提示、输入）**
+- **详情页卡片的通栏标题和色彩编码**
 
 ## 9. 设计检查清单
 
