@@ -1067,3 +1067,28 @@ const showTotalAmount = computed(() => model.feeFlag === "1001");
 6. 新建完 `add-new-component` 后，请及时更新：
    - `.claude\skills\check-trigger.md` ，说明清楚在新建全新的公共组件时，才会触发 `add-new-component` 技能，并执行 `add-new-component` 的规范。
    - `CLAUDE.md` ，说明增加了新的技能。
+
+## 066 更新 `route-migration` 技能，说明不允许使用错误的，不存在的 name 字段
+
+1. 观察以下代码：
+
+```ts
+definePage({
+	name: "test-z-paging-loading",
+	style: {
+		navigationBarTitleText: "z-paging-loading 组件测试",
+	},
+});
+```
+
+2. 这个写法就是错误的，可是 `route-migration` 技能没有说清楚 name 字段是非法字段。`route-migration` 技能应该增加这个错误写法说明。并且要极力避免以后出现类似的错误。
+3. definepage 使用说明文档：务必要认真阅读该文档，避免 `route-migration` 技能走偏。
+   - https://github.com/uni-helper/website/blob/main/content/vite-plugin-uni-pages/2.definepage.md
+4. 务必确保在编写 claude code 技能文件时，遵循以下文档的要求：
+   - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
+   - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
+
+## 067 <!-- TODO: --> 确保 `add-new-component` 技能满足 `route-migration` 的要求
+
+1. 全面阅读 `add-new-component` 技能的文档，确保其实例代码必定满足其 `route-migration` 技能的要求。
+2. `src\pages\test-use` 目录内的页面明显不满足 `route-migration` 技能的要求，请修改。
