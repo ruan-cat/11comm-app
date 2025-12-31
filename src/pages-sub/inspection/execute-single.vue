@@ -1,6 +1,7 @@
 <!--
   执行单项巡检页面
   功能：执行单个巡检项，填写巡检结果、上传照片等
+  表单页
 
   访问地址: http://localhost:9000/#/pages-sub/inspection/execute-single
   建议携带参数: ?taskDetailId=xxx&taskId=xxx&inspectionId=xxx&inspectionName=xxx&itemId=xxx
@@ -345,7 +346,8 @@ onMounted(() => {
         <wd-picker
           v-if="item.titleType === '1001'"
           v-model="item.radio"
-          label="请选择"
+          :label="item.itemTitle"
+          placeholder="请选择"
           :label-width="LABEL_WIDTH"
           :columns="item.inspectionItemTitleValueDtos.map(v => ({
             label: v.itemValue,
@@ -394,7 +396,8 @@ onMounted(() => {
         />
         <wd-picker
           v-model="formData.patrolType"
-          label="选择情况"
+          label="巡检情况"
+          placeholder="请选择"
           :label-width="LABEL_WIDTH"
           :columns="patrolTypeOptions"
           label-key="label"
