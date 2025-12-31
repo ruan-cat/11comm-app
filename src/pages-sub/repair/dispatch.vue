@@ -11,6 +11,8 @@
   旧代码：gitee-example/pages/repairDispatch/repairDispatch.vue
 -->
 
+<!-- 基本完成检查审核 -->
+
 <script setup lang="ts">
 import type { RepairOrder } from '@/types/repair'
 import { useRequest } from 'alova/client'
