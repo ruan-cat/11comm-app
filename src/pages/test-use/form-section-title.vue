@@ -8,6 +8,12 @@
 <script setup lang="ts">
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 
+definePage({
+  style: {
+    navigationBarTitleText: '表单分区标题组件演示',
+  },
+})
+
 const formData = ref({
   name: '',
   phone: '',

@@ -364,7 +364,6 @@ import [ComponentName] from '@/components/common/[组件名]/index.vue'
 // import type { [ComponentName]Props } from '@/components/common/[组件名]/types'
 
 definePage({
-  name: 'test-[组件名]',
   style: {
     navigationBarTitleText: '[组件名] 组件演示',
   },

@@ -11,7 +11,6 @@ import { ref } from 'vue'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 
 definePage({
-  name: 'test-z-paging-loading',
   style: {
     navigationBarTitleText: 'z-paging-loading 组件测试',
   },

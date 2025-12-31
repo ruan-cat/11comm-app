@@ -8,7 +8,6 @@
 import RepairStatusTag from '@/components/common/repair-status-tag/index.vue'
 
 definePage({
-  name: 'test-repair-status-tag',
   style: {
     navigationBarTitleText: '维修状态标签组件演示',
   },
