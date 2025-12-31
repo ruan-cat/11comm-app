@@ -700,7 +700,7 @@ src/
 4. 新增组件会自动注册，无需手动引入
 5. 使用 UnoCSS 进行样式开发，支持原子化 CSS
 
-## <!-- https://github.com/GuDaStudio/geminimcp --> Core Instruction for Gemini MCP
+## 13. <!-- https://github.com/GuDaStudio/geminimcp --> Core Instruction for Gemini MCP
 
 在任何时刻，你必须思考当前过程可以如何与 gemini 进行协作，如何调用 gemini 为你提供的MCP工具作为你**客观全面分析**的保障。
 
@@ -715,7 +715,7 @@ src/
 - **注意：** Gemini 十分擅长前端代码，并精通样式、UI组件设计。在涉及前端代码时，你必须向其索要代码原型（CSS/React/Vue/HTML等前端代码），任何时刻，你**必须以gemini的前端设计（原型代码）为最终的前端代码基点**。
 - 例如，当你识别到用户给出了前端设计需求，你的首要行为必须自动调整为，将用户需求原封不动转发给gemini，并让其出具代码示例（此阶段严禁对用户需求进行任何改动、简写等等）。即你必须从gemini获取代码基点，才可以进行接下来的各种行为。
 
-## <!-- https://github.com/GuDaStudio/geminimcp --> Gemini Tool Invocation Specification
+## 14. <!-- https://github.com/GuDaStudio/geminimcp --> Gemini Tool Invocation Specification
 
 1.  工具概述
 
@@ -734,7 +734,7 @@ gemini MCP 提供了一个工具 `gemini`，用于调用 Google Gemini 模型执
 - **任务规划**：生成 Step-by-step 的实施计划。
 - **前端原型**：编写 CSS、HTML、UI 组件代码，调整样式风格。
 
-## 使用 `gemini MCP` 或直接使用 `gemini` 时需要额外主动获取上下文
+## 15. 使用 `gemini MCP` 或直接使用 `gemini` 时需要额外主动获取上下文
 
 1. 在使用 `gemini MCP` 或直接使用 `gemini` 时，由于传递信息的关系，gemini是不会主动的先阅读来自claude code的配置文件的，因此你必须要告诉gemini，并约束gemini的上下文读取行为，**必须要求**gemini首先要无条件的阅读claude code的上下文。
 2. 请务必先主动阅读 `CLAUDE.md` 和 `.claude` 目录内的全部的指导文件。
@@ -743,18 +743,18 @@ gemini MCP 提供了一个工具 `gemini`，用于调用 Google Gemini 模型执
    - .claude\statusline.sh
 4. 你的修改必须按照这些 claude code 文档的要求和约束来做。特别是 `agents` 和 `skills` 的要求。
 
-## 13. 获取技术栈对应的上下文
+## 16. 获取技术栈对应的上下文
 
-### 13.1. 阅读 `wot-design-uni` 组件库的文档
+### 16.1. 阅读 `wot-design-uni` 组件库的文档
 
 我们项目是移动端项目，高强度的使用了 `wot-design-uni` 组件库。你应该在编写 vue 组件时，主动地获取组件库的文档，及时使用正确的组件。
 
-#### 13.1.1. 文档资源
+#### 16.1.1. 文档资源
 
 - **官方文档**: https://wot-ui.cn/guide/quick-use.html （推荐优先查看）
 - **GitHub 文档**: https://github.com/Moonofweisheng/wot-design-uni/tree/master/docs/component
 
-#### 13.1.2. 类型导入的正确方式
+#### 16.1.2. 类型导入的正确方式
 
 ⚠️ **重要**：本项目使用 pnpm 安装 wot-design-uni，而不是 uni_modules 插件方式。
 
@@ -785,7 +785,7 @@ import type { XXX } from 'wot-design-uni/components/wd-xxx/types'
 
 即：去掉 `@/uni_modules/` 前缀。
 
-#### 13.1.3. 常用组件的类型导入示例
+#### 16.1.3. 常用组件的类型导入示例
 
 |      组件      |                     导入路径                     |              常用类型              |
 | :------------: | :----------------------------------------------: | :--------------------------------: |
@@ -795,7 +795,7 @@ import type { XXX } from 'wot-design-uni/components/wd-xxx/types'
 | wd-picker-view | `wot-design-uni/components/wd-picker-view/types` |            `ColumnItem`            |
 |  wd-textarea   |  `wot-design-uni/components/wd-textarea/types`   |          `TextareaProps`           |
 
-#### 13.1.4. 获取文档的方式
+#### 16.1.4. 获取文档的方式
 
 你可以使用以下工具查找文档：
 
@@ -804,7 +804,7 @@ import type { XXX } from 'wot-design-uni/components/wd-xxx/types'
 
 **注意**：从 GitHub 获取的文档中的类型导入路径需要按照上述规则进行转换。
 
-### 13.2. claude code skill
+### 16.2. claude code skill
 
 - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
 - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
