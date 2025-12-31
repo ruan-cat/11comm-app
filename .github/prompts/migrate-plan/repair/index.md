@@ -588,6 +588,17 @@ invoker	@	vue.runtime.esm.js:10209
    - `.claude\skills\component-migration` 在组件迁移技能内，重点说明弹框交互式的组件选型，选型为 `wd-message-box` 而不是 `wd-popup` 组件。
    - `.claude\skills\beautiful-component-design` 在美观组件设计技能内，增加该内容。说明使用正确的组件选型。
 
+## 043 维修待办单 `src\pages-sub\repair\dispatch.vue`
+
+1. 针对 `src\pages-sub\repair\dispatch.vue` `维修待办单` 代码。
+
+### 001 补全对应 mock 列表查询接口的返回值
+
+1. 针对 `src\pages-sub\repair\dispatch.vue` `维修待办单` 代码。阅读全部的 `card-actions` 部分。可以得知这里有很多不同的按钮。
+2. 深刻阅读理解 `维修待办单` 页面的状态逻辑，找到对应的 mock 接口代码，并增加足够的 mock 数据，确保全部种类的 `card-actions` 按钮都能够显示出来，便于我测试。
+
+## 维修已办
+
 ## 043 <!-- TODO: --> 样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
