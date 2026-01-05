@@ -94,7 +94,7 @@ const { send: loadRepairStaffList } = useRequest(
   .onSuccess((event) => {
     const response = event.data
     total.value = response?.total || 0
-    pagingRef.value?.complete(response?.ownerRepairs || [], response?.total || 0)
+    pagingRef.value?.complete(response?.ownerRepairs || [])
   })
   .onError((error) => {
     console.error('加载列表失败:', error)
