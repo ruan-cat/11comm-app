@@ -639,7 +639,22 @@ invoker	@	vue.runtime.esm.js:10209
    - 现在的列表项其实很不美观，我要求你主动使用 gemini MCP，设计一个根据美观的，好看的列表页项目。
    - 充分使用 `wot-design-uni` 组件库提供的组件，设计出美观、好看、一致的列表页项目组件。 `repair-list-item` 。
 
-## 044 <!-- TODO: --> 维修已办
+## 044 维修已办单 维修已办列表页 `src\pages-sub\repair\finish.vue`
+
+### 01 <!-- TODO: --> 改造改写代码，并且同步列表页的代码写法
+
+1. 先阅读 `src\pages-sub\repair\finish.vue` `维修已办单` 列表页的代码。
+2. 这是一个列表页，我需要你同步相似的代码写法。我需要 `维修已办单` 的代码写法整体上与 `维修工单池` 和 `维修待办单` 保持相同。
+   - src\pages-sub\repair\order-list.vue 维修工单池
+   - src\pages-sub\repair\dispatch.vue 维修待办单
+3. 在你全面改造 `维修已办单` 的代码写法时，请注意务必，至少要遵循以下几个技能的要求：
+   - z-paging-integration
+   - api-migration
+   - code-migration
+   - component-migration
+   - route-migration
+   - api-error-handling
+4. 这是一个要求很细致的任务，认真做好任务规划和上下文管理。
 
 ## 045 维修工单评价页 `src\pages-sub\repair\appraise.vue`
 
