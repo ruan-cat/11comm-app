@@ -17,10 +17,10 @@
 import type { RepairOrder } from '@/types/repair'
 import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
-import { getRepairStaffList, getRepairStates, repairStart, repairStop } from '@/api/repair'
+import { getRepairStaffList, repairStart, repairStop } from '@/api/repair'
 import RepairListItem from '@/components/common/repair-list-item/index.vue'
+import RepairListSearchBar from '@/components/common/repair-list-search-bar/index.vue'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
-import { REPAIR_STATUSES } from '@/constants/repair'
 import { useGlobalMessage } from '@/hooks/useGlobalMessage'
 import { TypedRouter } from '@/router'
 import { getCurrentCommunity, getUserInfo } from '@/utils/user'
@@ -37,14 +37,6 @@ const message = useGlobalMessage()
 /** 搜索条件 */
 const searchName = ref('')
 const selectedState = ref<string>('')
-const defaultStateOptions: Array<{ label: string, value: string }> = [
-  { label: '全部状态', value: '' },
-  ...REPAIR_STATUSES.map(item => ({
-    label: item.label,
-    value: item.value as string,
-  })),
-]
-const stateOptions = ref<Array<{ label: string, value: string }>>([...defaultStateOptions])
 
 /** 列表数据 */
 const repairList = ref<RepairOrder[]>([])
@@ -58,27 +50,6 @@ const pagingRef = ref()
 /** 获取用户信息 */
 const userInfo = getUserInfo()
 const communityInfo = getCurrentCommunity()
-
-/** 加载维修状态字典 */
-const { send: loadStates } = useRequest(() => getRepairStates(), {
-  immediate: false,
-})
-  .onSuccess((event) => {
-    const result = event.data
-    if (result && result.length > 0) {
-      stateOptions.value = [
-        { label: '全部状态', value: '' },
-        ...result.map(item => ({
-          label: item.name || '',
-          value: item.statusCd || '',
-        })),
-      ]
-    }
-  })
-  .onError((error) => {
-    console.error('加载状态字典失败:', error)
-    stateOptions.value = [...defaultStateOptions]
-  })
 
 /** 查询维修工单列表请求（z-paging 集成） */
 const { send: loadRepairStaffList } = useRequest(
@@ -120,12 +91,6 @@ onMounted(() => {
 
 /** 搜索 */
 function handleSearch() {
-  pagingRef.value?.reload()
-}
-
-/** 状态选择器改变 */
-function handleStateChange({ value }: { value: string }) {
-  selectedState.value = value
   pagingRef.value?.reload()
 }
 
@@ -315,46 +280,14 @@ function canAppraise(item: RepairOrder): boolean {
     >
       <!-- 顶部吸顶工具栏 -->
       <template #top>
-        <view class="toolbar">
-          <view class="toolbar-controls">
-            <wd-search
-              v-model="searchName"
-              placeholder="输入报修人"
-              :maxlength="20"
-              hide-cancel
-              clearable
-              shape="round"
-              light
-              class="control-search"
-              @search="handleSearch"
-              @clear="handleSearch"
-            >
-              <template #prefix>
-                <wd-picker
-                  v-model="selectedState"
-                  :columns="stateOptions"
-                  label-key="label"
-                  value-key="value"
-                  @confirm="handleStateChange"
-                >
-                  <view class="prefix-filter">
-                    <text class="prefix-text">{{ stateOptions.find(item => item.value === selectedState)?.label || '状态' }}</text>
-                    <wd-icon name="" custom-class="i-carbon-chevron-down text-28rpx text-gray-500 ml-2rpx" />
-                  </view>
-                </wd-picker>
-              </template>
-            </wd-search>
-
-            <view class="control-item">
-              <wd-button type="success" size="small" class="control-btn" @click="handleSearch">
-                搜索
-              </wd-button>
-            </view>
-          </view>
-          <view v-if="total > 0" class="toolbar-total">
-            共 {{ total }} 条记录
-          </view>
-        </view>
+        <repair-list-search-bar
+          v-model="searchName"
+          v-model:selected-state="selectedState"
+          :total="total"
+          @search="handleSearch"
+          @clear="handleSearch"
+          @state-change="handleSearch"
+        />
       </template>
 
       <!-- 列表内容 -->
@@ -457,59 +390,6 @@ function canAppraise(item: RepairOrder): boolean {
 .repair-dispatch-page {
   min-height: 100vh;
   background-color: #f5f5f5;
-}
-
-.toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background-color: #f5f5f5;
-  padding: 12px 12px 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-}
-
-.toolbar-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.control-btn {
-  width: 100%;
-  height: 38px;
-}
-
-.control-item {
-  flex: 0 0 90px;
-}
-
-.control-search {
-  flex: 1;
-}
-
-.control-search :deep(.wd-search) {
-  height: 38px;
-}
-
-.prefix-filter {
-  display: flex;
-  align-items: center;
-  padding: 0 10rpx 0 6rpx;
-  height: 36px;
-  border-right: 1px solid #e0e0e0;
-  gap: 4rpx;
-}
-
-.prefix-text {
-  font-size: 12px;
-  color: #303133;
-}
-
-.toolbar-total {
-  margin-top: 6px;
-  text-align: right;
-  font-size: 12px;
-  color: #607d8b;
 }
 
 .repair-list {

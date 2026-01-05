@@ -117,6 +117,15 @@
 		// #endif
 		// #ifdef H5
 		{
+			"path": "pages/test-use/repair-list-search-bar",
+			"type": "page",
+			"style": {
+				"navigationBarTitleText": "repair-list-search-bar 组件演示"
+			}
+		},
+		// #endif
+		// #ifdef H5
+		{
 			"path": "pages/test-use/repair-status-tag",
 			"type": "page",
 			"style": {
