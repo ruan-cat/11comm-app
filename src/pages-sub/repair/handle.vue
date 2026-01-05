@@ -230,11 +230,10 @@ const formRules: FormRules = {
 /**
  * 加载维修师傅列表
  * 🔴 强制规范：必须设置 immediate: false
+ * 🔴 强制规范：使用链式回调写法
  */
 const {
   send: loadStaffs,
-  onSuccess: onLoadStaffsSuccess,
-  onError: onLoadStaffsError,
 } = useRequest(
   () =>
     getRepairStaffs({
@@ -243,55 +242,38 @@ const {
     }),
   { immediate: false },
 )
-
-/**
- * 加载维修师傅列表成功回调
- */
-onLoadStaffsSuccess((result) => {
-  staffOptions.value = [
-    { staffId: '', staffName: '请选择员工' },
-    ...result.data.staffs,
-  ]
-})
-
-/**
- * 加载维修师傅列表失败回调
- */
-onLoadStaffsError((error) => {
-  console.error('加载师傅列表失败:', error)
-  toast.error('加载维修师傅列表失败，请重试')
-})
+  .onSuccess((result) => {
+    staffOptions.value = [
+      { staffId: '', staffName: '请选择员工' },
+      ...result.data.staffs,
+    ]
+  })
+  .onError((error) => {
+    console.error('加载师傅列表失败:', error)
+    toast.error('加载维修师傅列表失败，请重试')
+  })
 
 /**
  * 加载支付方式列表
  * 🔴 强制规范：必须设置 immediate: false
+ * 🔴 强制规范：使用链式回调写法
  */
 const {
   send: loadPayTypes,
-  onSuccess: onLoadPayTypesSuccess,
-  onError: onLoadPayTypesError,
 } = useRequest(() => getRepairPayTypes(), { immediate: false })
-
-/**
- * 加载支付方式列表成功回调
- */
-onLoadPayTypesSuccess((result) => {
-  payTypeOptions.value = [
-    { statusCd: '', name: '请选择' },
-    ...result.data.map(item => ({
-      statusCd: item.statusCd as PaymentType,
-      name: item.name || '',
-    })),
-  ]
-})
-
-/**
- * 加载支付方式列表失败回调
- */
-onLoadPayTypesError((error) => {
-  console.error('加载支付方式失败:', error)
-  toast.error('加载支付方式列表失败，请重试')
-})
+  .onSuccess((result) => {
+    payTypeOptions.value = [
+      { statusCd: '', name: '请选择' },
+      ...result.data.map(item => ({
+        statusCd: item.statusCd as PaymentType,
+        name: item.name || '',
+      })),
+    ]
+  })
+  .onError((error) => {
+    console.error('加载支付方式失败:', error)
+    toast.error('加载支付方式列表失败，请重试')
+  })
 
 // ==================== 事件处理 ====================
 
@@ -437,12 +419,11 @@ function handleUploadFail(error: any) {
 /**
  * 提交派单/转单/退单请求
  * 🔴 强制规范：必须设置 immediate: false
+ * 🔴 强制规范：使用链式回调写法
  */
 const {
   send: submitDispatch,
   loading: isDispatchSubmitting,
-  onSuccess: onDispatchSuccess,
-  onError: onDispatchError,
 } = useRequest(
   (params: {
     repairId: string
@@ -457,57 +438,48 @@ const {
   }) => dispatchRepair(params),
   { immediate: false },
 )
-
-/**
- * 派单/转单/退单成功回调
- */
-onDispatchSuccess(() => {
-  const actionTextMap: Record<DispatchAction, string> = {
-    DISPATCH: '派单',
-    TRANSFER: '转单',
-    BACK: '回退',
-    RETURN: '退单',
-    FINISH: '办结',
-  }
-  const actionText = actionTextMap[model.action] || '操作'
-  toast.success(`${actionText}成功`)
-
-  // 延迟跳转，让用户看到成功提示
-  setTimeout(() => {
-    if (model.action === 'DISPATCH') {
-      TypedRouter.toRepairList()
+  .onSuccess(() => {
+    const actionTextMap: Record<DispatchAction, string> = {
+      DISPATCH: '派单',
+      TRANSFER: '转单',
+      BACK: '回退',
+      RETURN: '退单',
+      FINISH: '办结',
     }
-    else {
-      TypedRouter.toRepairDispatch()
-    }
-  }, 1500)
-})
+    const actionText = actionTextMap[model.action] || '操作'
+    toast.success(`${actionText}成功`)
 
-/**
- * 派单/转单/退单失败回调
- */
-onDispatchError((error) => {
-  console.error('派单/转单/退单失败:', error)
-  const actionTextMap: Record<DispatchAction, string> = {
-    DISPATCH: '派单',
-    TRANSFER: '转单',
-    BACK: '回退',
-    RETURN: '退单',
-    FINISH: '办结',
-  }
-  const actionText = actionTextMap[model.action] || '操作'
-  toast.error(`${actionText}失败，请重试`)
-})
+    // 延迟跳转，让用户看到成功提示
+    setTimeout(() => {
+      if (model.action === 'DISPATCH') {
+        TypedRouter.toRepairList()
+      }
+      else {
+        TypedRouter.toRepairDispatch()
+      }
+    }, 1500)
+  })
+  .onError((error) => {
+    console.error('派单/转单/退单失败:', error)
+    const actionTextMap: Record<DispatchAction, string> = {
+      DISPATCH: '派单',
+      TRANSFER: '转单',
+      BACK: '回退',
+      RETURN: '退单',
+      FINISH: '办结',
+    }
+    const actionText = actionTextMap[model.action] || '操作'
+    toast.error(`${actionText}失败，请重试`)
+  })
 
 /**
  * 提交办结请求
  * 🔴 强制规范：必须设置 immediate: false
+ * 🔴 强制规范：使用链式回调写法
  */
 const {
   send: submitFinish,
   loading: isFinishSubmitting,
-  onSuccess: onFinishSuccess,
-  onError: onFinishError,
 } = useRequest(
   (params: {
     repairId: string
@@ -527,29 +499,21 @@ const {
   }) => finishRepair(params),
   { immediate: false },
 )
+  .onSuccess(() => {
+    toast.success('办结成功')
+
+    setTimeout(() => {
+      TypedRouter.toRepairDispatch()
+    }, 1500)
+  })
+  .onError((error) => {
+    console.error('办结失败:', error)
+    toast.error('办结失败，请重试')
+  })
 
 /** 当前操作是否正在提交 */
 const isSubmitting = computed(() => {
   return model.action === 'FINISH' ? isFinishSubmitting.value : isDispatchSubmitting.value
-})
-
-/**
- * 办结成功回调
- */
-onFinishSuccess(() => {
-  toast.success('办结成功')
-
-  setTimeout(() => {
-    TypedRouter.toRepairDispatch()
-  }, 1500)
-})
-
-/**
- * 办结失败回调
- */
-onFinishError((error) => {
-  console.error('办结失败:', error)
-  toast.error('办结失败，请重试')
 })
 
 /**

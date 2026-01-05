@@ -50,34 +50,28 @@ const {
   loading,
   data: activitiesResponse,
   send: fetchActivities,
-  onSuccess,
-  onError,
 } = useRequest(
   (params: ActivityListParams) => getActivityList(params),
   {
     immediate: false,
   },
 )
+  .onSuccess((event) => {
+    const response = event.data as ActivityListResponse
+    if (response?.activitiess) {
+      processActivitiesData(response.activitiess, response)
+    }
+  })
+  .onError((event) => {
+    const err = event.error
+    console.error('获取活动列表失败:', err)
+    error.value = err?.message || '网络异常，请稍后重试'
+    showErrorToast('加载失败，请稍后重试')
+  })
 
 /** 计算属性 */
 const isEmpty = computed(() => !loading.value && activities.value.length === 0)
 const showLoadMore = computed(() => hasMore.value && !loading.value)
-
-/** 请求成功处理 */
-onSuccess((event) => {
-  const response = event.data as ActivityListResponse
-  if (response?.activitiess) {
-    processActivitiesData(response.activitiess, response)
-  }
-})
-
-/** 请求错误处理 */
-onError((event) => {
-  const err = event.error
-  console.error('获取活动列表失败:', err)
-  error.value = err?.message || '网络异常，请稍后重试'
-  showErrorToast('加载失败，请稍后重试')
-})
 
 /** 工具函数 */
 /**

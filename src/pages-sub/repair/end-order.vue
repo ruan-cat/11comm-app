@@ -63,38 +63,27 @@ const formRules: FormRules = {
 /**
  * 结束工单请求管理
  * 🔴 强制规范：必须设置 immediate: false
+ * 🔴 强制规范：使用链式回调写法
  */
 const {
   loading: submitting,
   send: submitEndRepair,
-  onSuccess: onEndSuccess,
-  onError: onEndError,
 } = useRequest(
   (params: { repairId: string, communityId: string, context: string }) => endRepair(params),
   { immediate: false },
 )
+  .onSuccess(() => {
+    console.log('工单结束成功')
+    toast.success({ msg: '工单已结束', duration: 1500 })
 
-/**
- * 结束成功回调
- * @description 显示成功提示并返回上一页
- */
-onEndSuccess(() => {
-  console.log('工单结束成功')
-  toast.success({ msg: '工单已结束', duration: 1500 })
-
-  setTimeout(() => {
-    uni.navigateBack()
-  }, 1500)
-})
-
-/**
- * 结束失败回调
- * @description 错误提示已在 Alova 响应拦截器中自动处理，这里只需记录日志
- */
-onEndError((error) => {
-  console.error('结束工单失败:', error)
-  // 不需要重复显示错误提示
-})
+    setTimeout(() => {
+      uni.navigateBack()
+    }, 1500)
+  })
+  .onError((error) => {
+    console.error('结束工单失败:', error)
+    // 错误提示已在 Alova 响应拦截器中自动处理
+  })
 
 // ==================== 表单校验与提交 ====================
 

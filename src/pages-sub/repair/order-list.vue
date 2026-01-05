@@ -153,31 +153,29 @@ function handleEndRepair(item: RepairOrder) {
 }
 
 /** 抢单 */
-const { send: robOrder, onSuccess: onRobSuccess, onError: onRobError } = useRequest(
+const { send: robOrder } = useRequest(
   (params: { repairId: string, staffId: string, staffName: string, communityId: string }) => robRepairOrder(params),
   { immediate: false },
 )
+  .onSuccess(() => {
+    uni.hideLoading()
+    uni.showToast({
+      title: '抢单成功',
+      icon: 'success',
+    })
 
-onRobSuccess(() => {
-  uni.hideLoading()
-  uni.showToast({
-    title: '抢单成功',
-    icon: 'success',
+    // 延迟刷新列表
+    setTimeout(() => {
+      pagingRef.value?.reload()
+    }, 1500)
   })
-
-  // 延迟刷新列表
-  setTimeout(() => {
-    pagingRef.value?.reload()
-  }, 1500)
-})
-
-onRobError((error) => {
-  uni.hideLoading()
-  uni.showToast({
-    title: error.error || '抢单失败',
-    icon: 'none',
+  .onError((error) => {
+    uni.hideLoading()
+    uni.showToast({
+      title: error.error || '抢单失败',
+      icon: 'none',
+    })
   })
-})
 
 async function handleRobOrder(item: RepairOrder) {
   uni.showLoading({ title: '请稍候...' })

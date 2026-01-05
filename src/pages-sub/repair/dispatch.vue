@@ -135,29 +135,27 @@ function handleViewDetail(item: RepairOrder) {
 }
 
 /** 启动维修 */
-const { send: startRepair, onSuccess: onStartSuccess, onError: onStartError } = useRequest(
+const { send: startRepair } = useRequest(
   (params: { repairId: string, communityId: string }) => repairStart(params),
   { immediate: false },
 )
+  .onSuccess(() => {
+    uni.showToast({
+      title: '启动成功',
+      icon: 'success',
+    })
 
-onStartSuccess(() => {
-  uni.showToast({
-    title: '启动成功',
-    icon: 'success',
+    // 刷新列表
+    setTimeout(() => {
+      pagingRef.value?.reload()
+    }, 1000)
   })
-
-  // 刷新列表
-  setTimeout(() => {
-    pagingRef.value?.reload()
-  }, 1000)
-})
-
-onStartError((error) => {
-  uni.showToast({
-    title: error.error || '启动失败',
-    icon: 'none',
+  .onError((error) => {
+    uni.showToast({
+      title: error.error || '启动失败',
+      icon: 'none',
+    })
   })
-})
 
 function handleStartRepair(item: RepairOrder) {
   message.confirm({
@@ -191,29 +189,27 @@ function handleTransfer(item: RepairOrder) {
 }
 
 /** 暂停维修 */
-const { send: stopRepair, onSuccess: onStopSuccess, onError: onStopError } = useRequest(
+const { send: stopRepair } = useRequest(
   (params: { repairId: string, communityId: string, remark: string }) => repairStop(params),
   { immediate: false },
 )
+  .onSuccess(() => {
+    uni.showToast({
+      title: '暂停成功',
+      icon: 'success',
+    })
 
-onStopSuccess(() => {
-  uni.showToast({
-    title: '暂停成功',
-    icon: 'success',
+    // 刷新列表
+    setTimeout(() => {
+      pagingRef.value?.reload()
+    }, 1000)
   })
-
-  // 刷新列表
-  setTimeout(() => {
-    pagingRef.value?.reload()
-  }, 1000)
-})
-
-onStopError((error) => {
-  uni.showToast({
-    title: error.error || '暂停失败',
-    icon: 'none',
+  .onError((error) => {
+    uni.showToast({
+      title: error.error || '暂停失败',
+      icon: 'none',
+    })
   })
-})
 
 function handleStopRepair(item: RepairOrder) {
   message.prompt({

@@ -76,12 +76,11 @@ const pageSize = ref(50)
 /**
  * 使用 useRequest 管理房屋列表请求
  * 🔴 强制规范：必须设置 immediate: false，由 z-paging 控制请求时机
+ * 🔴 强制规范：使用链式回调写法
  */
 const {
   loading,
   send: loadRoomData,
-  onSuccess,
-  onError,
 } = useRequest(
   (params: { page: number, row: number, roomNum?: string }) =>
     getRoomList({
@@ -94,24 +93,14 @@ const {
     immediate: false,
   },
 )
-
-/**
- * 成功回调 - 通知 z-paging 数据加载完成
- * @description 在回调中调用 complete 方法
- */
-onSuccess((event) => {
-  const result = event.data
-  pagingRef.value?.complete(result?.list || [])
-})
-
-/**
- * 失败回调 - 通知 z-paging 加载失败
- * @description 错误提示已由全局拦截器自动处理
- */
-onError((error) => {
-  console.error('获取房屋列表失败:', error)
-  pagingRef.value?.complete(false)
-})
+  .onSuccess((event) => {
+    const result = event.data
+    pagingRef.value?.complete(result?.list || [])
+  })
+  .onError((error) => {
+    console.error('获取房屋列表失败:', error)
+    pagingRef.value?.complete(false)
+  })
 
 /**
  * z-paging 的 @query 回调
