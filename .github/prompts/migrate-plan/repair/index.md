@@ -425,7 +425,9 @@ src\pages-sub\repair\handle.vue
    - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
    - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
 
-## 037 对齐代码写法，优化 `维修待办单` 的代码
+## 037 维修待办单 `src\pages-sub\repair\dispatch.vue`
+
+### 01 对齐代码写法，优化 `维修待办单` 的代码
 
 1. 阅读 src\pages-sub\repair\dispatch.vue 维修待办单 页面。`维修待办单` 页面是需要被优化的页面，里面的很多写法和最终的效果展示，很不好看。
 2. 阅读 src\pages-sub\repair\order-list.vue 维修工单池 页面。`维修工单池` 页面是正常的，美观的，好看的页面。是需要学习的页面。
@@ -433,6 +435,15 @@ src\pages-sub\repair\handle.vue
 4. 请注意需要同时遵守多项编码规范。请你也提前阅读清楚这些代码规范，确保在迁移改写代码时，符合全部的编码规范：
    - 全部的 `.claude\agents` 代码迁移与改写规范。
    - 全部的 `.claude\skills` 技能规范。
+
+### 02 协助理解按钮对应的业务流
+
+1. 针对 维修待办单 `src\pages-sub\repair\dispatch.vue` 。
+2. 阅读 `<template #action>` 部分的按钮处理逻辑，这里是根据维修单的状态做出不用情况的按钮行为。
+3. 我很疑惑这些按钮对应的真实业务逻辑是否合情合理，请你帮我拓展阅读 `gitee-example/pages/repairDispatch/repairDispatch.vue` 旧代码，通过旧代码逐步索引，帮我看看，在旧代码内，是怎么做根据订单状态决定按钮状态的？
+4. 我很疑惑 `退单按钮` 是不是都是无条件的？难道已完成的订单，也可以退单么？
+5. 我很疑惑 `回访按钮` ，待办维修单，不应该是专门罗列出正在待办，处理中的单子么？为什么可以看到已完成的状态呢？旧代码的处理逻辑本身就是这样的么？
+6. 那么 `src\pages-sub\repair\finish.vue` 维修已办单 列表页的逻辑是做什么的？`回访按钮`，回访这个动作，是一个需要待办，待处理的任务么？
 
 ## 038 优化 `选择维修物资` 页面
 
@@ -533,7 +544,7 @@ invoker	@	vue.runtime.esm.js:10209
 
 请处理该故障，确保选择完毕商品类型后，不会出现后续故障。
 
-## 07 优化改写组件使用，美化视觉效果
+### 07 优化改写组件使用，美化视觉效果
 
 1. 针对 `src\pages-sub\repair\select-resource.vue` `选择维修物资` 页面。
 2. 请你阅读以下 url 图片：
