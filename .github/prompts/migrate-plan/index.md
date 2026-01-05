@@ -1166,3 +1166,17 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 
 - src\pages 目录下全部的 vue 文件。
 - src\pages-sub 目录下全部的 vue 文件。
+
+## 072 <!-- TODO: --> 调整 `z-paging-integration` 和 `component-migration` 关于常用 props 和必配项 props 的写法
+
+1. 这些必填的 props 配置，已经改写成全局配置了，在 `src\main.ts` 内完成配置。
+2. 请更新 `z-paging-integration` 和 `component-migration` 技能文件，避免这些技能文件声明常用 props 和必填 props 必须要填写的情况。
+3. 重点说明这些常用配置现在都迁移到 `src\main.ts` 全局 `z-paging` 组件配置内了。
+4. 在 `z-paging-integration` 技能内增加专门的章节，说明现在这些常用 props 配置都在 `src\main.ts` 内以全局配置的形式完成。
+
+### 01 全面的修改代码，避免出现手写冗余重复全局 `z-paging` 组件配置
+
+1. `z-paging-integration` 和 `component-migration` 技能文件，已经将常用的 props 改换成全局 props 了，不需要在每个组件内声明清楚了。所以现在全部 `z-paging` 组件的 props 属性，有很大一部分都是全局配置好的，冗余的，需要你删除。
+2. 全局识别的文件夹目录范围：
+   - src\pages-sub 目录
+   - src\pages 目录
