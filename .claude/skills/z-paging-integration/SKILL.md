@@ -48,16 +48,102 @@ description: z-paging 分页组件与 api-migration 适配方案 - 提供 z-pagi
 
 当页面需要使用 `<z-paging>` 组件实现分页列表功能，同时需要遵循 `api-migration` 规范使用 `useRequest` 管理接口请求时，必须使用本 Skill 中的集成方案。
 
-## 2. 核心约束
+## 2. 全局配置说明（重要）
 
-### 2.1 api-migration 规范要求
+### 2.1 常用 props 已全局配置
+
+**⚠️ 重要变更**：以下常用 props 已在 `src/main.ts` 中通过 `uni.$zp.config` 进行全局配置，**无需在每个页面中重复配置**：
+
+|                 配置项                 | 全局默认值 |                      说明                      |
+| :------------------------------------: | :--------: | :--------------------------------------------: |
+|          `default-page-size`           |     10     |                  每页数据条数                  |
+| `auto-hide-loading-after-first-loaded` |   false    | 每次 reload 都显示 loading（便于用户感知刷新） |
+|          `refresher-enabled`           |    true    |                  启用下拉刷新                  |
+|         `loading-more-enabled`         |    true    |                启用上拉加载更多                |
+|            `show-scrollbar`            |   false    |                   隐藏滚动条                   |
+
+**全局配置代码**（`src/main.ts:16-38`）：
+
+```typescript
+uni.$zp = {
+	config: {
+		"default-page-size": 10,
+		"auto-hide-loading-after-first-loaded": false,
+		"refresher-enabled": true,
+		"loading-more-enabled": true,
+		"show-scrollbar": false,
+	},
+};
+```
+
+### 2.2 使用规范
+
+**✅ 正确做法**：在页面中**不需要**配置这些 props，直接使用即可：
+
+```vue
+<template>
+	<!-- ✅ 正确：全局配置自动生效，无需重复配置 -->
+	<z-paging ref="pagingRef" v-model="dataList" @query="handleQuery">
+		<!-- 列表内容 -->
+	</z-paging>
+</template>
+```
+
+**❌ 错误做法**：重复配置全局已配置的 props：
+
+```vue
+<template>
+	<!-- ❌ 错误：不要重复配置全局已配置的 props -->
+	<z-paging
+		ref="pagingRef"
+		v-model="dataList"
+		:default-page-size="10"
+		:refresher-enabled="true"
+		:loading-more-enabled="true"
+		:show-scrollbar="false"
+		@query="handleQuery"
+	>
+		<!-- 列表内容 -->
+	</z-paging>
+</template>
+```
+
+### 2.3 何时需要覆盖全局配置
+
+**仅在特殊场景下**，如果需要覆盖全局配置，可以显式指定 props：
+
+```vue
+<!-- 特殊场景：每页显示 20 条数据 -->
+<z-paging ref="pagingRef" v-model="dataList" :default-page-size="20" @query="handleQuery">
+	<!-- 列表内容 -->
+</z-paging>
+```
+
+**常见覆盖场景**：
+
+- 某个列表需要不同的 `default-page-size`
+- 需要禁用下拉刷新：`:refresher-enabled="false"`
+- 需要显示滚动条：`:show-scrollbar="true"`
+
+### 2.4 其他常用配置
+
+以下 props **未全局配置**，根据需要在页面中配置：
+
+|          配置项          |            说明            |              示例               |
+| :----------------------: | :------------------------: | :-----------------------------: |
+|         `:fixed`         | 使用固定高度的 scroll-view | `:fixed="false"`（H5 场景推荐） |
+| `safe-area-inset-bottom` |       底部安全区适配       |    `safe-area-inset-bottom`     |
+
+## 3. 核心约束
+
+### 3.1 api-migration 规范要求
 
 1. **必须使用 useRequest**：所有接口调用都必须通过 Alova 的 `useRequest` 管理状态
 2. **必须设置 immediate: false**：禁止自动执行请求，必须手动触发
 3. **必须使用回调钩子**：使用 `onSuccess`、`onError`、`onComplete` 处理请求结果
 4. **禁止使用 try/catch**：不允许使用 try/catch 包装 send 函数调用
 
-### 2.2 z-paging 核心机制
+### 3.2 z-paging 核心机制
 
 |     方法     |        用途        |                       调用时机                        |
 | :----------: | :----------------: | :---------------------------------------------------: |
@@ -65,13 +151,13 @@ description: z-paging 分页组件与 api-migration 适配方案 - 提供 z-pagi
 | `complete()` |  通知数据加载完成  |                 请求成功或失败后调用                  |
 |  `reload()`  |    重新加载数据    |      筛选条件变化、手动刷新时调用，重置到第 1 页      |
 
-## 3. 标准集成方案
+## 4. 标准集成方案
 
-### 3.1 核心代码模板
+### 4.1 核心代码模板
 
 ```vue
 <template>
-	<z-paging ref="pagingRef" v-model="dataList" :default-page-size="15" @query="handleQuery">
+	<z-paging ref="pagingRef" v-model="dataList" @query="handleQuery">
 		<view v-for="item in dataList" :key="item.id">
 			{{ item.name }}
 		</view>
@@ -133,7 +219,7 @@ function handleRefresh() {
 </script>
 ```
 
-### 3.2 带筛选条件的完整示例
+### 4.2 带筛选条件的完整示例
 
 ```vue
 <template>
@@ -145,7 +231,7 @@ function handleRefresh() {
 		</view>
 
 		<!-- 列表 -->
-		<z-paging ref="pagingRef" v-model="dataList" :default-page-size="15" @query="handleQuery">
+		<z-paging ref="pagingRef" v-model="dataList" @query="handleQuery">
 			<view v-for="item in dataList" :key="item.id" class="list-item">
 				{{ item.title }}
 			</view>
@@ -218,9 +304,9 @@ function handleFilterChange() {
 </script>
 ```
 
-## 4. 关键适配点
+## 5. 关键适配点
 
-### 4.1 不使用 await/try-catch
+### 5.1 不使用 await/try-catch
 
 ```typescript
 // 错误：使用 try-catch（违反 api-migration 规范）
@@ -240,7 +326,7 @@ function handleQuery(pageNo: number, pageSize: number) {
 }
 ```
 
-### 4.2 在回调中调用 complete
+### 5.2 在回调中调用 complete
 
 ```typescript
 // onSuccess 中处理成功
@@ -255,7 +341,7 @@ onError((error) => {
 });
 ```
 
-### 4.3 确保 pagingRef 可用性
+### 5.3 确保 pagingRef 可用性
 
 由于回调是异步执行的，需要使用可选链确保安全调用：
 
@@ -266,7 +352,7 @@ onSuccess((event) => {
 });
 ```
 
-## 5. complete 方法详解
+## 6. complete 方法详解
 
 |             调用方式             |                          说明                           |
 | :------------------------------: | :-----------------------------------------------------: |
@@ -275,7 +361,7 @@ onSuccess((event) => {
 |  `completeByTotal(list, total)`  |           传入数组和总数，更精确控制分页状态            |
 | `completeByNoMore(list, noMore)` |             传入数组和是否没有更多的布尔值              |
 
-## 6. 常见错误模式
+## 7. 常见错误模式
 
 |                  错误模式                   |                  原因                  |              正确做法               |
 | :-----------------------------------------: | :------------------------------------: | :---------------------------------: |
@@ -289,11 +375,11 @@ onSuccess((event) => {
 |        `complete()` 传入对象而非数组        |              参数类型错误              |         传入数组或 `false`          |
 |   `complete(list, total)` 传入 total 参数   |    z-paging 自动判断，无需传 total     |        `complete(list)` 即可        |
 
-## 6.5 危险模式与陷阱
+## 7.5 危险模式与陷阱
 
 > **警告**：以下模式会导致页面卡死或严重性能问题，务必避免。
 
-### 6.5.1 属性与事件混用禁忌
+### 7.5.1 属性与事件混用禁忌
 
 z-paging 提供两种查询绑定方式，**必须二选一**，不可混用：
 
@@ -307,7 +393,7 @@ z-paging 提供两种查询绑定方式，**必须二选一**，不可混用：
 <z-paging :query="queryList" @query="handleRefresh"></z-paging>
 ```
 
-### 6.5.2 无限循环陷阱
+### 7.5.2 无限循环陷阱
 
 在 `@query` 回调中调用 `refresh()` 或 `reload()` 会导致**无限循环**，页面完全卡死：
 
@@ -345,7 +431,7 @@ function handleQuery(pageNo: number, pageSize: number) {
 }
 ```
 
-### 6.5.3 `:auto="false"` 配合规则
+### 7.5.3 `:auto="false"` 配合规则
 
 使用 `@query` 事件时，**不要**设置 `:auto="false"`，否则 z-paging 不会自动触发首次加载：
 
@@ -354,7 +440,7 @@ function handleQuery(pageNo: number, pageSize: number) {
 <z-paging :auto="false" @query="handleQuery"></z-paging>
 ```
 
-## 7. immediate: false 必要性
+## 8. immediate: false 必要性
 
 由于 z-paging 会在组件挂载时自动触发 `@query` 事件，因此 `useRequest` 必须设置 `immediate: false`，避免重复请求：
 
@@ -365,7 +451,7 @@ const { send: loadList } = useRequest(
 );
 ```
 
-## 8. z-paging 的 auto 属性
+## 9. z-paging 的 auto 属性
 
 如果设置 `:auto="false"`，z-paging 不会在挂载时自动触发 `@query`，需要手动调用 `reload()`：
 
@@ -378,14 +464,14 @@ onMounted(() => {
 });
 ```
 
-## 9. 适配核心原则总结
+## 10. 适配核心原则总结
 
 1. **使用 useRequest 管理请求**：符合 api-migration 规范
 2. **在回调钩子中调用 complete**：将 z-paging 的完成通知放在 onSuccess/onError 中
 3. **不使用 try/catch**：遵循回调钩子模式
 4. **保持职责分离**：错误提示由全局拦截器处理，组件层仅负责日志和 UI 状态
 
-## 10. 代码审查检查点
+## 11. 代码审查检查点
 
 在代码审查时，针对 z-paging 组件应检查以下事项：
 
@@ -395,8 +481,9 @@ onMounted(() => {
 - [ ] 是否有不必要的 `:auto="false"` 配置？（使用 `@query` 时应移除）
 - [ ] `useRequest` 是否设置了 `immediate: false`？（必须设置）
 - [ ] 是否使用了 try/catch 包装请求？（违反 api-migration 规范）
+- [ ] **是否重复配置了全局已配置的 props**？（如 `default-page-size`、`refresher-enabled` 等，参见第 2 节）
 
-## 11. 相关事故案例
+## 12. 相关事故案例
 
 ### 2025-12-05 页面卡死事故
 
@@ -410,17 +497,17 @@ onMounted(() => {
 2. 在 `@query` 回调中调用 `refresh()` 导致无限循环
 3. 使用 `@query` 时设置了 `:auto="false"`
 
-## 12. 实战复用方法论（进页即自动加载）
+## 13. 实战复用方法论（进页即自动加载）
 
-### 12.1 核心步骤
+### 13.1 核心步骤
 
 1. **ref + reload 首屏加载**：定义 `pagingRef = ref()`，在 `onMounted(() => pagingRef.value?.reload())` 触发首屏请求。
 2. **useRequest 回调收口**：`immediate: false`，`onSuccess` 里调用 `pagingRef.value?.complete(list, total)`，`onError` 调用 `complete(false)`；不在 `@query` 中写 `await/try/catch`。
 3. **@query 只发请求**：`handleQuery(pageNo, pageSize)` 仅调用 `send({ page: pageNo, row: pageSize, ...filters })`，不触发 `reload/refresh`。
-4. **常用 props**：`:refresher-enabled="true"`, `:loading-more-enabled="true"`, `:show-scrollbar="false"`, `:default-page-size="xx"`，根据需要补 `:fixed`、安全区配置。
+4. **全局 props 自动生效**：`default-page-size`、`refresher-enabled`、`loading-more-enabled`、`show-scrollbar` 等常用 props 已全局配置（参见第 2 节），无需重复配置；仅在特殊场景下显式覆盖。根据需要补充 `:fixed`、`safe-area-inset-bottom` 等其他配置。
 5. **插槽补全**：提供 `#empty`、`#loading`，避免白屏无反馈。
 
-### 12.2 快速模板
+### 13.2 快速模板
 
 ```ts
 const pagingRef = ref<ZPagingRef>();
@@ -444,19 +531,19 @@ onMounted(() => {
 });
 ```
 
-### 12.3 必查清单
+### 13.3 必查清单
 
 - [ ] `immediate: false` 已设置
 - [ ] `onSuccess/onError` 调用 `complete/complete(false)` 或 `completeByTotal`
 - [ ] `@query` 未使用 `await/try/catch`，未调用 `reload/refresh`
 - [ ] `onMounted` 首屏 `reload()`
-- [ ] `refresher-enabled/loading-more-enabled/show-scrollbar` 等常用 props 已配置
+- [ ] **未重复配置全局已配置的 props**（`default-page-size`、`refresher-enabled`、`loading-more-enabled`、`show-scrollbar` 已全局配置，参见第 2 节）
 - [ ] 已使用 `<template #loading>` 插槽
 - [ ] 已在 `#loading` 插槽中使用 `z-paging-loading` 组件
 
-## 13. loading 加载状态插槽规范
+## 14. loading 加载状态插槽规范
 
-### 13.1 强制规范
+### 14.1 强制规范
 
 在项目中使用 z-paging 组件时，**必须**遵守以下规范：
 
@@ -469,7 +556,7 @@ onMounted(() => {
    - 不允许使用其他加载组件（如 `wd-loading`、自定义加载组件等）
    - 保持项目加载样式的统一性
 
-### 13.2 基础用法
+### 14.2 基础用法
 
 ```vue
 <template>
@@ -492,9 +579,9 @@ onMounted(() => {
 </template>
 ```
 
-### 13.3 常用配置场景
+### 14.3 常用配置场景
 
-#### 13.3.1 楼栋列表加载
+#### 14.3.1 楼栋列表加载
 
 ```vue
 <template #loading>
@@ -507,7 +594,7 @@ onMounted(() => {
 </template>
 ```
 
-#### 13.3.2 单元列表加载
+#### 14.3.2 单元列表加载
 
 ```vue
 <template #loading>
@@ -520,7 +607,7 @@ onMounted(() => {
 </template>
 ```
 
-#### 13.3.3 房屋列表加载
+#### 14.3.3 房屋列表加载
 
 ```vue
 <template #loading>
@@ -533,7 +620,7 @@ onMounted(() => {
 </template>
 ```
 
-#### 13.3.4 工单列表加载
+#### 14.3.4 工单列表加载
 
 ```vue
 <template #loading>
@@ -546,7 +633,7 @@ onMounted(() => {
 </template>
 ```
 
-#### 13.3.5 动态文案（支持搜索状态）
+#### 14.3.5 动态文案（支持搜索状态）
 
 ```vue
 <template #loading>
@@ -559,7 +646,7 @@ onMounted(() => {
 </template>
 ```
 
-### 13.4 组件属性说明
+### 14.4 组件属性说明
 
 |    参数名     |             类型              |                 默认值                  |      说明      |
 | :-----------: | :---------------------------: | :-------------------------------------: | :------------: |
@@ -571,7 +658,7 @@ onMounted(() => {
 |  primaryText  |            string             |            '正在加载数据...'            |    主要文案    |
 | secondaryText |            string             |              '请稍候片刻'               |    次要文案    |
 
-### 13.5 使用注意事项
+### 14.5 使用注意事项
 
 1. **图标选择建议**
    - 建议使用 Carbon 图标库的图标（`i-carbon-*`）保持视觉统一
@@ -593,7 +680,7 @@ onMounted(() => {
    - 组件已内置 `animate-pulse` 动画，无需额外配置
    - 加载器会自动旋转，图标会有脉冲效果
 
-### 13.6 完整示例参考
+### 14.6 完整示例参考
 
 详细的使用示例和各种配置效果，请查看：
 
@@ -602,7 +689,7 @@ onMounted(() => {
 - **选择器页面**: `src/pages-sub/selector/*.vue`
 - **维修工单页面**: `src/pages-sub/repair/order-list.vue`
 
-### 13.7 代码审查检查点
+### 14.7 代码审查检查点
 
 在代码审查时，针对 loading 插槽应检查以下事项：
 

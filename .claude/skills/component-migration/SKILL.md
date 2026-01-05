@@ -804,29 +804,26 @@ function handleInput() {
 
 ### 9. z-paging 分页组件
 
-**必配项**:
+**⚠️ 重要变更**：常用 props 已全局配置（`src/main.ts`），无需重复配置！
 
-- `ref="pagingRef"` - 组件引用
-- `v-model="list"` - 列表数据绑定
-- `@query="handleQuery"` - 请求触发
+**全局已配置的 props**（在 `src/main.ts` 中）:
+
 - `:default-page-size="10"` - 每页数量
 - `:refresher-enabled="true"` - 下拉刷新
 - `:loading-more-enabled="true"` - 上拉加载
 - `:show-scrollbar="false"` - 隐藏滚动条
 
+**必须配置的 props**:
+
+- `ref="pagingRef"` - 组件引用
+- `v-model="list"` - 列表数据绑定
+- `@query="handleQuery"` - 请求触发
+
 **基础用法**:
 
 ```vue
 <template>
-	<z-paging
-		ref="pagingRef"
-		v-model="list"
-		@query="handleQuery"
-		:default-page-size="10"
-		:refresher-enabled="true"
-		:loading-more-enabled="true"
-		:show-scrollbar="false"
-	>
+	<z-paging ref="pagingRef" v-model="list" @query="handleQuery">
 		<view v-for="item in list" :key="item.id">
 			<!-- 列表项 -->
 		</view>
@@ -854,7 +851,16 @@ onMounted(() => {
 </script>
 ```
 
-> **📚 详细规范**: 参阅 `.claude/skills/z-paging-integration/SKILL.md`
+**特殊场景覆盖全局配置**:
+
+```vue
+<!-- 只在需要覆盖全局配置时才显式指定 -->
+<z-paging ref="pagingRef" v-model="list" :default-page-size="20" @query="handleQuery">
+	<!-- 列表内容 -->
+</z-paging>
+```
+
+> **📚 详细规范**: 参阅 `.claude/skills/z-paging-integration/SKILL.md`（特别是第 2 节：全局配置说明）
 
 ## 迁移策略
 
