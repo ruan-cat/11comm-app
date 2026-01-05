@@ -445,6 +445,24 @@ src\pages-sub\repair\handle.vue
 5. 我很疑惑 `回访按钮` ，待办维修单，不应该是专门罗列出正在待办，处理中的单子么？为什么可以看到已完成的状态呢？旧代码的处理逻辑本身就是这样的么？
 6. 那么 `src\pages-sub\repair\finish.vue` 维修已办单 列表页的逻辑是做什么的？`回访按钮`，回访这个动作，是一个需要待办，待处理的任务么？
 
+### 03 补全搜索栏的状态下拉列表
+
+1. 阅读以下 url 图片：
+
+- 在 `/pages-sub/repair/order-list` 内，可以选择订单状态：
+
+![2026-01-05-14-34-56](https://s2.loli.net/2026/01/05/8Nwtdgu64VhRjnx.png)
+
+- 在 `/pages-sub/repair/dispatch` 内，无法选择有效的订单状态，无法做出有效的筛选：
+
+![2026-01-05-14-35-34](https://s2.loli.net/2026/01/05/iVUSeA49jR5fzYP.png)
+
+- 在 `/pages-sub/repair/finish` 内，可以选择有效的订单状态：
+
+![2026-01-05-14-37-46](https://s2.loli.net/2026/01/05/KtPE9h2oAWG7CYk.png)
+
+2. 针对 `src\pages-sub\repair\dispatch.vue` 的搜索栏，请补全关键的订单状态筛选能力。
+
 ## 038 优化 `选择维修物资` 页面
 
 1. 阅读 `src\pages-sub\repair\select-resource.vue` `选择维修物资` 页面。
