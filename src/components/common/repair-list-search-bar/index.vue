@@ -120,99 +120,190 @@ const currentStateLabel = computed(() => {
 </script>
 
 <template>
-  <view class="toolbar">
-    <view class="toolbar-controls">
-      <wd-search
-        v-model="internalSearchName"
-        :placeholder="placeholder"
-        :maxlength="maxlength"
-        hide-cancel
-        clearable
-        shape="round"
-        light
-        class="control-search"
-        @search="handleSearch"
-        @clear="handleClear"
-      >
-        <template v-if="isUseStateOptions" #prefix>
-          <wd-picker
-            v-model="internalSelectedState"
-            :columns="stateOptions"
-            label-key="label"
-            value-key="value"
-            @confirm="handleStateChange"
-          >
-            <view class="prefix-filter">
-              <text class="prefix-text">{{ currentStateLabel }}</text>
-              <wd-icon name="" custom-class="i-carbon-chevron-down text-28rpx text-gray-500 ml-2rpx" />
-            </view>
-          </wd-picker>
-        </template>
-      </wd-search>
+  <view class="search-header">
+    <view class="search-bar-row">
+      <!-- 搜索输入框主体 (包含筛选器) -->
+      <view class="search-input-box">
+        <!-- 筛选器 (嵌入在输入框左侧) -->
+        <wd-picker
+          v-if="isUseStateOptions"
+          v-model="internalSelectedState"
+          :columns="stateOptions"
+          label-key="label"
+          value-key="value"
+          @confirm="handleStateChange"
+        >
+          <view class="filter-trigger">
+            <text class="filter-label">{{ currentStateLabel }}</text>
+            <wd-icon name="" custom-class="i-carbon-caret-down text-gray-400 text-28rpx ml-4rpx" />
+            <!-- 垂直分割线 -->
+            <view class="filter-divider" />
+          </view>
+        </wd-picker>
 
-      <view class="control-item">
-        <wd-button type="success" size="small" class="control-btn" @click="handleSearch">
-          搜索
-        </wd-button>
+        <!-- 实际输入框 -->
+        <wd-search
+          v-model="internalSearchName"
+          :placeholder="placeholder"
+          :maxlength="maxlength"
+          hide-cancel
+          clearable
+          shape="round"
+          class="search-input flex-1"
+          @search="handleSearch"
+          @clear="handleClear"
+        />
+
+        <!-- 搜索按钮 (嵌入式) -->
+        <view class="search-btn" @click="handleSearch">
+          <wd-icon name="search" size="28rpx" color="#fff" custom-class="mr-8rpx" />
+          <text class="search-btn-text">搜索</text>
+        </view>
       </view>
     </view>
-    <view v-if="total > 0" class="toolbar-total">
-      共 {{ total }} 条记录
+
+    <!-- 底部辅助信息 (总记录数) - 极简风格 -->
+    <view v-if="total > 0" class="total-info">
+      <text>共 {{ total }} 条记录</text>
     </view>
   </view>
 </template>
 
 <style lang="scss" scoped>
-.toolbar {
+/** 1. 容器：纯白，底部细边框，吸顶 */
+.search-header {
   position: sticky;
   top: 0;
-  z-index: 10;
-  background-color: #f5f5f5;
-  padding: 12px 12px 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  z-index: 50;
+  background-color: #ffffff;
+  padding: 12rpx 24rpx;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.05);
 }
 
-.toolbar-controls {
+/** 2. 主行：Flex布局，对齐 */
+.search-bar-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 16rpx;
+  height: 72rpx;
 }
 
-.control-btn {
-  width: 100%;
-  height: 38px;
-}
-
-.control-item {
-  flex: 0 0 90px;
-}
-
-.control-search {
+/** 3. 搜索输入框主体：统一胶囊外壳 */
+.search-input-box {
   flex: 1;
-}
-
-.control-search :deep(.wd-search) {
-  height: 38px;
-}
-
-.prefix-filter {
   display: flex;
   align-items: center;
-  padding: 0 10rpx 0 6rpx;
-  height: 36px;
-  border-right: 1px solid #e0e0e0;
-  gap: 4rpx;
+  height: 84rpx;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  padding: 6rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+  overflow: hidden;
 }
 
-.prefix-text {
-  font-size: 12px;
-  color: #303133;
+/** 4. 筛选器触发区 */
+.filter-trigger {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding-left: 24rpx;
+  padding-right: 16rpx;
+  background-color: transparent;
+  border: none;
+  margin-right: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+
+  &:active {
+    opacity: 0.6;
+  }
 }
 
-.toolbar-total {
-  margin-top: 6px;
+.filter-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  max-width: 140rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filter-divider {
+  display: block;
+  width: 1px;
+  height: 32rpx;
+  background-color: #e5e7eb;
+  margin-left: 20rpx;
+}
+
+/** 5. 搜索输入框样式 */
+.search-input {
+  flex: 1;
+  height: 100%;
+}
+
+.search-input :deep(.wd-search) {
+  background-color: transparent;
+  height: 100%;
+}
+
+.search-input :deep(.wd-search__content) {
+  background-color: transparent;
+  padding-left: 0;
+  height: 100%;
+}
+
+.search-input :deep(.wd-search__input) {
+  font-size: 28rpx;
+}
+
+.search-input :deep(.wd-search__placeholder) {
+  font-size: 28rpx;
+}
+
+.search-input :deep(.wd-icon-search) {
+  color: #9ca3af;
+}
+
+/** 6. 嵌入式搜索按钮 */
+.search-btn {
+  height: 72rpx;
+  padding: 0 36rpx;
+  margin-left: 4rpx;
+  background-color: var(--wot-color-theme, #0957de);
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.search-btn-text {
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 1;
+}
+
+/** 7. 底部信息：极小字体，右对齐，灰色 */
+.total-info {
+  font-size: 20rpx;
+  color: #9ca3af;
   text-align: right;
-  font-size: 12px;
-  color: #607d8b;
+  margin-top: 8rpx;
+  padding: 0 8rpx;
+  font-variant-numeric: tabular-nums;
 }
 </style>
