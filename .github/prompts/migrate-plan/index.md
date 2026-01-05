@@ -1167,7 +1167,7 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 - src\pages 目录下全部的 vue 文件。
 - src\pages-sub 目录下全部的 vue 文件。
 
-## 072 <!-- TODO: --> 调整 `z-paging-integration` 和 `component-migration` 关于常用 props 和必配项 props 的写法
+## 072 调整 `z-paging-integration` 和 `component-migration` 关于常用 props 和必配项 props 的写法
 
 1. 这些必填的 props 配置，已经改写成全局配置了，在 `src\main.ts` 内完成配置。
 2. 请更新 `z-paging-integration` 和 `component-migration` 技能文件，避免这些技能文件声明常用 props 和必填 props 必须要填写的情况。
