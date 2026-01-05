@@ -89,7 +89,7 @@ import { ref } from "vue";
 import { getYourDataList } from "@/api/your-module";
 
 /** z-paging 组件引用 */
-const pagingRef = ref();
+const pagingRef = ref<ZPagingRef>();
 
 /** 列表数据 */
 const dataList = ref<YourDataType[]>([]);
@@ -177,7 +177,7 @@ import { ref } from "vue";
 import { getRepairOrderList } from "@/api/repair";
 
 /** z-paging 组件引用 */
-const pagingRef = ref();
+const pagingRef = ref<ZPagingRef>();
 
 /** 列表数据 */
 const dataList = ref<RepairOrder[]>([]);
@@ -307,6 +307,7 @@ onSuccess((event) => {
 | 在 @query 回调中调用 `refresh()`/`reload()` |              触发无限循环              |  仅调用 `complete()` 通知加载结果   |
 |     使用 @query 时设置 `:auto="false"`      |          阻止自动触发首次加载          |        移除 `:auto="false"`         |
 |        `complete()` 传入对象而非数组        |              参数类型错误              |         传入数组或 `false`          |
+|   `complete(list, total)` 传入 total 参数   |    z-paging 自动判断，无需传 total     |        `complete(list)` 即可        |
 
 ## 6.5 危险模式与陷阱
 
@@ -442,7 +443,7 @@ onMounted(() => {
 ### 12.2 快速模板
 
 ```ts
-const pagingRef = ref();
+const pagingRef = ref<ZPagingRef>();
 const dataList = ref<Item[]>([]);
 
 const { send: loadList } = useRequest((params) => api(params), { immediate: false })
