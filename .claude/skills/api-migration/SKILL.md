@@ -104,6 +104,203 @@ mockLog("apiName", params);
 
 > **📚 详细用法**: 关于标准请求、表单提交、分页加载、静默请求、错误处理等,参阅 `api-error-handling` Skill
 
+## useRequest 链式回调写法规范
+
+**🔴 强制要求**: 必须使用链式回调写法,禁止使用组合式解构写法。
+
+### 1. 核心原则
+
+链式回调写法将 `useRequest` 的回调处理直接链式调用,保持代码紧凑、可读性强,避免变量命名冲突和代码分散。
+
+### 2. 写法对比
+
+#### ✅ 推荐：链式回调写法（紧凑型）
+
+```typescript
+/** 加载维修状态字典 */
+const { send: loadStates } = useRequest(() => getRepairStates(), {
+	immediate: false,
+})
+	.onSuccess((event) => {
+		const result = event.data;
+		if (result && result.length > 0) {
+			stateOptions.value = [
+				{ label: "全部状态", value: "" },
+				...result.map((item) => ({
+					label: item.name || "",
+					value: item.statusCd || "",
+				})),
+			];
+		}
+	})
+	.onError((error) => {
+		console.error("加载状态字典失败:", error);
+		stateOptions.value = [...defaultStateOptions];
+	});
+```
+
+**优点**:
+
+- ✅ 代码紧凑,逻辑集中
+- ✅ 不需要重命名解构出来的变量
+- ✅ 回调与请求定义在同一代码块,关联性强
+- ✅ 符合函数式编程的链式调用风格
+- ✅ 减少变量污染,避免命名冲突
+
+#### ❌ 禁止：组合式解构写法（冗长型）
+
+```typescript
+/** 暂停维修 */
+const {
+	send: stopRepair,
+	onSuccess: onStopSuccess,
+	onError: onStopError,
+} = useRequest((params: { repairId: string; communityId: string; remark: string }) => repairStop(params), {
+	immediate: false,
+});
+
+onStopSuccess(() => {
+	uni.showToast({
+		title: "暂停成功",
+		icon: "success",
+	});
+
+	setTimeout(() => {
+		pagingRef.value?.reload();
+	}, 1000);
+});
+
+onStopError((error) => {
+	uni.showToast({
+		title: error.error || "暂停失败",
+		icon: "none",
+	});
+});
+```
+
+**缺点**:
+
+- ❌ 需要解构出 `onSuccess`, `onError`- ❌ 必须重命名为 `onStopSuccess`, `onStopError` 避免命名冲突
+- ❌ 回调逻辑与请求定义分离,代码分散
+- ❌ 变量命名冗长,降低代码可读性
+- ❌ 容易产生多个类似命名的变量污染作用域
+
+### 3. 链式写法的使用场景
+
+#### 场景 1：简单请求（加载数据字典）
+
+```typescript
+/** 加载维修状态字典 */
+const { send: loadStates } = useRequest(() => getRepairStates(), {
+	immediate: false,
+})
+	.onSuccess((event) => {
+		const result = event.data;
+		stateOptions.value = result || [];
+	})
+	.onError((error) => {
+		console.error("加载失败:", error);
+	});
+```
+
+#### 场景 2：z-paging 分页集成
+
+```typescript
+/** 查询维修工单列表请求（z-paging 集成） */
+const { send: loadRepairOrderList } = useRequest(
+	(params: { page: number; row: number; statusCd?: string }) =>
+		getRepairOrderList({
+			...params,
+			storeId: userInfo.storeId || "",
+			userId: userInfo.userId || "",
+			communityId: communityInfo.communityId || "",
+		}),
+	{ immediate: false },
+)
+	.onSuccess((event) => {
+		const response = event.data;
+		total.value = response?.total || 0;
+		pagingRef.value?.complete(response?.ownerRepairs || [], response?.total || 0);
+	})
+	.onError((error) => {
+		console.error("加载列表失败:", error);
+		pagingRef.value?.complete(false);
+	});
+```
+
+#### 场景 3：表单提交
+
+```typescript
+/** 提交维修工单 */
+const { send: submitRepair, loading: submitting } = useRequest(
+	(params: RepairCreateParams) => createRepairOrder(params),
+	{ immediate: false },
+)
+	.onSuccess(() => {
+		uni.showToast({
+			title: "提交成功",
+			icon: "success",
+		});
+
+		setTimeout(() => {
+			uni.navigateBack();
+		}, 1500);
+	})
+	.onError((error) => {
+		uni.showToast({
+			title: error.error || "提交失败",
+			icon: "none",
+		});
+	});
+```
+
+### 4. 链式写法的标准格式
+
+**基本格式模板**:
+
+```typescript
+const {
+	send: [functionName],
+	loading: [loadingName],
+} = useRequest(([params]) => [apiFunction]([params]), { immediate: false })
+	.onSuccess((event) => {
+		const result = event.data;
+		// 成功处理逻辑
+	})
+	.onError((error) => {
+		// 错误处理逻辑
+	});
+```
+
+**格式要点**:
+
+1. **缩进规则**: `.onSuccess()` 和 `.onError()` 与 `useRequest` 左对齐,视为链式调用
+2. **变量解构**: 只解构需要的变量（通常是 `send` 和 `loading`）
+3. **重命名规范**: `send` 重命名为具有业务语义的函数名（如 `loadStates`, `submitRepair`）
+4. **回调参数**: `onSuccess` 接收 `event` 参数,`onError` 接收 `error` 参数
+5. **immediate 配置**: 强制设置 `immediate: false`,禁止自动执行
+
+### 5. 与 api-error-handling 技能协同
+
+链式回调写法完美适配 `api-error-handling` 技能的错误处理规范:
+
+```typescript
+const { send: loadData } = useRequest(() => getData(), {
+	immediate: false,
+})
+	.onSuccess((event) => {
+		// 成功逻辑
+		dataList.value = event.data;
+	})
+	.onError((error) => {
+		// 统一错误提示（符合 api-error-handling 规范）
+		uni.showToast({
+			title: error.error || "操作失败",
+			icon: "none",
+		});
+	});
+```
+
 ## 技术栈对比
 
 ### Vue2 项目网络请求架构

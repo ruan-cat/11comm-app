@@ -533,8 +533,8 @@ const formRef = ref<FormInstance>();
 /** 巡检项标题列表（动态表单项） */
 const titleList = ref<InspectionItemTitle[]>([]);
 
-/** 加载巡检项标题 */
-const { send: sendLoadTitles, onSuccess: onLoadTitlesSuccess } = useRequest(
+/** 加载巡检项标题 - 链式回调写法 */
+const { send: sendLoadTitles } = useRequest(
 	() =>
 		getInspectionItemTitles({
 			itemId: itemId.value,
@@ -544,9 +544,7 @@ const { send: sendLoadTitles, onSuccess: onLoadTitlesSuccess } = useRequest(
 	{
 		immediate: false,
 	},
-);
-
-onLoadTitlesSuccess((data) => {
+).onSuccess((data) => {
 	titleList.value = data.data?.list || [];
 
 	// 初始化 radio 字段

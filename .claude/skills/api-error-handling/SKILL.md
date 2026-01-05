@@ -268,44 +268,24 @@ const queryParams = ref<RepairListParams>({
 });
 
 /**
- * 请求管理 - 使用 useRequest + 回调钩子
+ * 请求管理 - 使用 useRequest + 链式回调钩子
  * 🔴 强制规范：必须设置 immediate: false
  */
 const {
 	loading,
 	data: repairData,
 	send: loadRepairList,
-	onSuccess,
-	onError,
-	onComplete,
-} = useRequest(() => getRepairOrderList(queryParams.value), {
-	immediate: false,
-});
-
-/**
- * 成功回调 - 处理业务逻辑
- * @description 错误提示已在 Alova 响应拦截器中自动处理，这里只需处理成功逻辑
- */
-onSuccess((result) => {
-	console.log("维修工单列表加载成功:", result);
-});
-
-/**
- * 失败回调 - 日志记录和状态恢复
- * @description 错误提示已在 Alova 响应拦截器中自动处理，这里用于日志和状态恢复
- */
-onError((error) => {
-	console.error("维修工单列表加载失败:", error);
-	// 不需要重复显示错误提示
-});
-
-/**
- * 完成回调 - 无论成功失败都执行
- * @description 用于停止下拉刷新等通用操作
- */
-onComplete(() => {
-	uni.stopPullDownRefresh();
-});
+} = useRequest(() => getRepairOrderList(queryParams.value), { immediate: false })
+	.onSuccess((result) => {
+		console.log("维修工单列表加载成功:", result);
+	})
+	.onError((error) => {
+		console.error("维修工单列表加载失败:", error);
+		// 不需要重复显示错误提示
+	})
+	.onComplete(() => {
+		uni.stopPullDownRefresh();
+	});
 
 /** 刷新数据 */
 function handleRefresh() {
@@ -347,41 +327,26 @@ const formData = reactive<CreateRepairReq>({
 });
 
 /**
- * 表单提交请求管理
+ * 表单提交请求管理 - 链式回调写法
  * 🔴 强制规范：必须设置 immediate: false
  */
-const {
-	loading: submitting,
-	send: submitRepair,
-	onSuccess: onSubmitSuccess,
-	onError: onSubmitError,
-} = useRequest((data: CreateRepairReq) => createRepairOrder(data), {
+const { loading: submitting, send: submitRepair } = useRequest((data: CreateRepairReq) => createRepairOrder(data), {
 	immediate: false,
-});
+})
+	.onSuccess((result) => {
+		console.log("创建成功:", result);
+		toast.success("维修工单创建成功");
 
-/**
- * 提交成功回调
- * @description 显示成功提示并重置表单
- */
-onSubmitSuccess((result) => {
-	console.log("创建成功:", result);
-	toast.success("维修工单创建成功");
-
-	// 重置表单
-	Object.assign(formData, {
-		title: "",
-		description: "",
-		repairType: "其他维修",
+		// 重置表单
+		Object.assign(formData, {
+			title: "",
+			description: "",
+			repairType: "其他维修",
+		});
+	})
+	.onError((error) => {
+		console.error("创建失败:", error);
 	});
-});
-
-/**
- * 提交失败回调
- * @description 错误提示已自动处理，这里只需记录日志
- */
-onSubmitError((error) => {
-	console.error("创建失败:", error);
-});
 
 /** 表单提交处理 */
 function handleSubmit() {
@@ -414,40 +379,27 @@ import { getRepairDetail } from "@/api/repair";
 import { ApiErrorHandler, ErrorLevel } from "@/utils/api-error-handler";
 
 /**
- * 静默请求 - 禁用全局错误提示
+ * 静默请求 - 禁用全局错误提示 - 链式回调写法
  * @description 使用 meta.toast: false 禁用自动错误提示，在 onError 中自定义处理
  */
-const {
-	send: loadDetail,
-	onSuccess,
-	onError,
-} = useRequest((repairId: string) => getRepairDetail({ repairId }).setMeta({ toast: false }), {
+const { send: loadDetail } = useRequest((repairId: string) => getRepairDetail({ repairId }).setMeta({ toast: false }), {
 	immediate: false,
-});
+})
+	.onSuccess((result) => {
+		console.log("详情加载成功:", result);
+	})
+	.onError((error) => {
+		console.error("详情加载失败:", error);
 
-/**
- * 成功回调
- */
-onSuccess((result) => {
-	console.log("详情加载成功:", result);
-});
+		// 自定义错误处理逻辑
+		ApiErrorHandler.handle({
+			level: ErrorLevel.LIGHT,
+			message: "加载失败，将使用缓存数据",
+		});
 
-/**
- * 失败回调 - 自定义错误处理
- * @description 由于禁用了自动提示，需要在这里手动处理错误
- */
-onError((error) => {
-	console.error("详情加载失败:", error);
-
-	// 自定义错误处理逻辑
-	ApiErrorHandler.handle({
-		level: ErrorLevel.LIGHT,
-		message: "加载失败，将使用缓存数据",
+		// 或者使用静默处理，不显示任何提示
+		// 直接使用缓存数据等兜底逻辑
 	});
-
-	// 或者使用静默处理，不显示任何提示
-	// 直接使用缓存数据等兜底逻辑
-});
 
 /** 触发静默请求 */
 function handleSilentRequest() {
@@ -482,60 +434,42 @@ const hasMore = ref(true);
 const activityList = ref<Activity[]>([]);
 
 /**
- * 首次加载请求
+ * 首次加载请求 - 链式回调写法
  * 🔴 强制规范：必须设置 immediate: false
  */
-const {
-	loading,
-	send: loadList,
-	onSuccess: onListSuccess,
-	onError: onListError,
-} = useRequest((page: number) => getActivityList({ page, row: 10 }), {
+const { loading, send: loadList } = useRequest((page: number) => getActivityList({ page, row: 10 }), {
 	immediate: false,
-});
+})
+	.onSuccess((result) => {
+		activityList.value = result.activitiess || [];
+		currentPage.value = 1;
+		hasMore.value = result.activitiess?.length >= 10;
+	})
+	.onError((error) => {
+		console.error("加载失败:", error);
+		// 错误提示已自动处理
+	});
 
 /**
- * 加载更多请求
+ * 加载更多请求 - 链式回调写法
  * 🔴 强制规范：必须设置 immediate: false
  */
-const {
-	loading: loadingMore,
-	send: loadMore,
-	onSuccess: onLoadMoreSuccess,
-	onError: onLoadMoreError,
-} = useRequest((page: number) => getActivityList({ page, row: 10 }), {
+const { loading: loadingMore, send: loadMore } = useRequest((page: number) => getActivityList({ page, row: 10 }), {
 	immediate: false,
-});
-
-/** 列表加载成功 */
-onListSuccess((result) => {
-	activityList.value = result.activitiess || [];
-	currentPage.value = 1;
-	hasMore.value = result.activitiess?.length >= 10;
-});
-
-/** 列表加载失败 */
-onListError((error) => {
-	console.error("加载失败:", error);
-	// 错误提示已自动处理
-});
-
-/** 加载更多成功 */
-onLoadMoreSuccess((result) => {
-	if (result?.activitiess?.length) {
-		activityList.value.push(...result.activitiess);
-		currentPage.value++;
-		hasMore.value = result.activitiess.length >= 10;
-	} else {
-		hasMore.value = false;
-	}
-});
-
-/** 加载更多失败 */
-onLoadMoreError((error) => {
-	console.error("加载更多失败:", error);
-	// 错误提示已自动处理
-});
+})
+	.onSuccess((result) => {
+		if (result?.activitiess?.length) {
+			activityList.value.push(...result.activitiess);
+			currentPage.value++;
+			hasMore.value = result.activitiess.length >= 10;
+		} else {
+			hasMore.value = false;
+		}
+	})
+	.onError((error) => {
+		console.error("加载更多失败:", error);
+		// 错误提示已自动处理
+	});
 
 /** 下拉刷新 */
 function handleRefresh() {

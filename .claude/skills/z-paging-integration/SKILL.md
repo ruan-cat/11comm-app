@@ -95,37 +95,24 @@ const pagingRef = ref<ZPagingRef>();
 const dataList = ref<YourDataType[]>([]);
 
 /**
- * 使用 useRequest 管理请求状态
+ * 使用 useRequest 管理请求状态 - 链式回调写法
  * @description 必须设置 immediate: false，由 z-paging 控制请求时机
  */
-const {
-	loading,
-	send: loadList,
-	onSuccess,
-	onError,
-} = useRequest((params: YourListParams) => getYourDataList(params), { immediate: false });
+const { loading, send: loadList } = useRequest((params: YourListParams) => getYourDataList(params), {
+	immediate: false,
+})
+	.onSuccess((event) => {
+		const result = event.data;
+		// 方式一：传入列表，z-paging 自动判断是否有更多
+		pagingRef.value?.complete(result.list || []);
 
-/**
- * 成功回调 - 通知 z-paging 数据加载完成
- * @description 在回调中调用 complete 方法
- */
-onSuccess((event) => {
-	const result = event.data;
-	// 方式一：传入列表，z-paging 自动判断是否有更多
-	pagingRef.value?.complete(result.list || []);
-
-	// 方式二：精确控制（如果后端返回 total）
-	// pagingRef.value?.completeByTotal(result.list || [], result.total)
-});
-
-/**
- * 失败回调 - 通知 z-paging 加载失败
- * @description 错误提示已由全局拦截器自动处理
- */
-onError((error) => {
-	console.error("加载列表失败:", error);
-	pagingRef.value?.complete(false);
-});
+		// 方式二：精确控制（如果后端返回 total）
+		// pagingRef.value?.completeByTotal(result.list || [], result.total)
+	})
+	.onError((error) => {
+		console.error("加载列表失败:", error);
+		pagingRef.value?.complete(false);
+	});
 
 /**
  * z-paging 的 @query 回调
@@ -187,26 +174,19 @@ const searchKeyword = ref("");
 const selectedStatus = ref("");
 
 /**
- * 使用 useRequest 管理请求状态
+ * 使用 useRequest 管理请求状态 - 链式回调写法
  */
-const {
-	loading,
-	send: loadList,
-	onSuccess,
-	onError,
-} = useRequest((params: RepairListParams) => getRepairOrderList(params), { immediate: false });
-
-/** 成功回调 */
-onSuccess((event) => {
-	const result = event.data;
-	pagingRef.value?.complete(result.ownerRepairs || []);
-});
-
-/** 失败回调 */
-onError((error) => {
-	console.error("加载列表失败:", error);
-	pagingRef.value?.complete(false);
-});
+const { loading, send: loadList } = useRequest((params: RepairListParams) => getRepairOrderList(params), {
+	immediate: false,
+})
+	.onSuccess((event) => {
+		const result = event.data;
+		pagingRef.value?.complete(result.ownerRepairs || []);
+	})
+	.onError((error) => {
+		console.error("加载列表失败:", error);
+		pagingRef.value?.complete(false);
+	});
 
 /**
  * z-paging 的 @query 回调
