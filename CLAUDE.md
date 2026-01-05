@@ -804,6 +804,12 @@ import type { XXX } from 'wot-design-uni/components/wd-xxx/types'
 
 **注意**：从 GitHub 获取的文档中的类型导入路径需要按照上述规则进行转换。
 
+### 16.3. z-paging 分页组件
+
+- 仓库： https://github.com/SmileZXLee/uni-z-paging
+- 文档： https://z-paging.zxlee.cn/
+- 文档的仓库： https://github.com/SmileZXLee/uni-z-paging-doc
+
 ### 16.2. claude code skill
 
 - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
