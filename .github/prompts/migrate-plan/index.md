@@ -1093,7 +1093,7 @@ definePage({
 1. 全面阅读 `add-new-component` 技能的文档，确保其实例代码必定满足其 `route-migration` 技能的要求。
 2. `src\pages\test-use` 目录内的页面明显不满足 `route-migration` 技能的要求，请修改。
 
-## 068 <!-- TODO: --> 全面迭代更新 `z-paging-integration` 技能
+## 068 全面迭代更新 `z-paging-integration` 技能
 
 ### 对 pagingRef 的类型约束写法
 
