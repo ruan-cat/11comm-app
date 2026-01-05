@@ -1133,3 +1133,13 @@ pagingRef.value?.complete(response?.ownerRepairs || [], response?.total || 0);
 ```ts
 pagingRef.value?.complete(response?.ownerRepairs || []);
 ```
+
+## 069 <!-- TODO: --> 严格应用`z-paging-integration` 技能，改写并修复代码写法
+
+`z-paging-integration` 技能有更新，需要更新以下几个列表页的代码写法：
+
+- src\pages-sub\repair\order-list.vue
+- src\pages-sub\repair\dispatch.vue
+- src\pages-sub\repair\finish.vue
+- src\pages-sub\selector 目录内全部的列表页
+- src\pages\test-use\z-paging-loading.vue
