@@ -685,7 +685,7 @@ invoker	@	vue.runtime.esm.js:10209
    - api-error-handling
 4. 这是一个要求很细致的任务，认真做好任务规划和上下文管理。
 
-### 02 <!-- TODO: --> 处理列表页切换状态时，列表分页组件没有加载动效的情况
+### 02 处理列表页切换状态时，列表分页组件没有加载动效的情况
 
 1. 阅读以下列表页：
    - src\pages-sub\repair\order-list.vue
@@ -697,6 +697,10 @@ invoker	@	vue.runtime.esm.js:10209
    - 仓库： https://github.com/SmileZXLee/uni-z-paging
    - 文档： https://z-paging.zxlee.cn/
    - 文档的仓库： https://github.com/SmileZXLee/uni-z-paging-doc
+
+---
+
+全局设置 props `auto-hide-loading-after-first-loaded` 即可。
 
 ## 045 维修工单评价页 `src\pages-sub\repair\appraise.vue`
 
