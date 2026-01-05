@@ -268,10 +268,6 @@ function reloadData() {
         <z-paging
           ref="pagingRef"
           v-model="dataList"
-          :default-page-size="10"
-          :refresher-enabled="true"
-          :loading-more-enabled="true"
-          :show-scrollbar="false"
           :fixed="false"
           :safe-area-config="{ bottom: 0 }"
           class="flex-1"

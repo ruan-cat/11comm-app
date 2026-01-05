@@ -138,9 +138,6 @@ function handleViewDetail(item: RepairOrder) {
       ref="pagingRef"
       v-model="repairList"
       :default-page-size="pageSize"
-      :refresher-enabled="true"
-      :loading-more-enabled="true"
-      :show-scrollbar="false"
       @query="handleQuery"
     >
       <!-- 顶部吸顶工具栏 -->
