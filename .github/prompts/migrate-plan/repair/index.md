@@ -702,6 +702,18 @@ invoker	@	vue.runtime.esm.js:10209
 
 全局设置 props `auto-hide-loading-after-first-loaded` 即可。
 
+### 03 <!-- TODO: --> 抽象出专门维修列表页专项搜索栏组件
+
+1. 阅读报修模块的 3 列表页的 `<template #top>` 组件部分，我们可以得知，这些页面都有着共同的代码写法。都有公共的搜索栏功能。
+   - src\pages-sub\repair\order-list.vue
+   - src\pages-sub\repair\dispatch.vue
+   - src\pages-sub\repair\finish.vue
+2. 我需要你抽象出一个单独的，业务专用的 `search-bar` 组件。在 `src\components\common\repair-list-search-bar` 目录内新建搜索栏组件。目的是为了减少重复代码冗余的情况。
+3. 值得注意的是，我需要你多做一个 props 配置功能，配置是否开启基于状态栏的筛选能力。这些列表页的搜索栏有区分情况。就比如 src\pages-sub\repair\finish.vue 维修已办单 列表页，就不需要做任何工单筛选。只需要查询即可。至少设计一个特定的 props ，`isUseStateOptions` ，是否使用基于状态栏的筛选功能。默认值为 `true` 。
+4. 内部封装 `加载维修状态字典` 函数，将 `getRepairStates` 函数逻辑也整合到该组件内，也使用 `useRequest` 的方式完成请求。
+5. `isUseStateOptions` 不仅仅要实现组件显隐的渲染控制，还要控制使用 `useRequest` 的 `getRepairStates` 数据请求逻辑。如果 `isUseStateOptions` 为 `true`，那么请求的 `immediate` 就设置为 `true` 。需要下拉选项，就需要立刻做出接口请求。
+6. 严格按照 `.claude\skills\add-new-component\SKILL.md` 技能的要求来新建组件。
+
 ## 045 维修工单评价页 `src\pages-sub\repair\appraise.vue`
 
 1. 针对 `src\pages-sub\repair\appraise.vue` `维修工单评价页` 代码。
