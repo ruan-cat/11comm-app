@@ -1143,3 +1143,17 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 - src\pages-sub\repair\finish.vue
 - src\pages-sub\selector 目录内全部的列表页
 - src\pages\test-use\z-paging-loading.vue
+
+## 070 <!-- TODO: --> 改写技能文档的回调写法，从组合式写法改写成链式回调写法
+
+我希望在使用 `alova/client` 模块的 useRequest 函数时，使用紧凑的链式写法。而不是解构出来的 onSuccess 和 onError 函数。
+
+解构出来的 `onError` 和 `onSuccess` 函数，很容易导致代码臃肿，又需要对解构出来的变量做重命名，很容易让整个代码都不得不变的非常冗长。这很不好，很糟糕。
+
+1. 好的紧凑型写法例子： `src\pages-sub\repair\order-list.vue` 的 `加载维修状态字典` 和 `查询维修工单列表请求（z-paging 集成）` 例子。
+2. 坏的，冗长的解构并重命名的例子： `src\pages-sub\repair\dispatch.vue` 的 `暂停维修` 和 `启动维修` 例子。
+
+这是一个很严格的，大规模的改写任务。你目前的任务是改写文档，不是直接改写代码。先完成改写技能指导文档的代码写法任务，后续我会安排具体的代码写法改写任务。
+
+1. 首先对 `.claude\skills\api-migration` 技能，增加一个专门讲清楚如何使用 useRequest 函数的部分。
+2. 修改其他全部在 `.claude\skills` 目录内的技能文件，修改写法为链式回调写法，而不是组合式解构写法。
