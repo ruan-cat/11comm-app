@@ -1180,3 +1180,22 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 2. 全局识别的文件夹目录范围：
    - src\pages-sub 目录
    - src\pages 目录
+
+## 073 <!-- TODO: --> 优化组件 `repair-list-search-bar` 的视觉效果
+
+1. 请阅读以下 url 图片：
+
+![2026-01-06-02-55-03](https://s2.loli.net/2026/01/06/63eRqMQBOmK2Gv5.png)
+
+![2026-01-06-02-55-19](https://s2.loli.net/2026/01/06/DhX3ep1mK5lzFnE.png)
+
+![2026-01-06-02-55-27](https://s2.loli.net/2026/01/06/TkWoPYrHBZeFbdc.png)
+
+2. 我需要你优化，美化 `src\components\common\repair-list-search-bar\index.vue` `repair-list-search-bar` `维修列表搜索栏组件` 组件的视觉效果。
+3. 请你主动使用 gemini MCP，发挥 gemini MCP 出色精彩的前端设计能力。让 gemini 你给设计一个美观的，大方的界面，最后由你来实施落实。
+4. 你只负责实现页面美观程度优化，不涉及到代码层面的写法优化。
+5. 更多列表页完整截图页面如下：
+
+![2026-01-06-02-58-15](https://s2.loli.net/2026/01/06/QucxVJon1LYwU9A.png)
+
+![2026-01-06-02-58-22](https://s2.loli.net/2026/01/06/JGAZEkgIwtOnLXu.png)
