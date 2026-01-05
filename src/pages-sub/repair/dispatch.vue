@@ -285,14 +285,15 @@ function canStart(item: RepairOrder): boolean {
   return item.statusCd === '10002'
 }
 
-/** 是否显示转单/暂停/办结按钮（已派单或处理中） */
+/** 是否显示转单/暂停/办结按钮（已派单、处理中、暂停） */
 function canProcessing(item: RepairOrder): boolean {
-  return item.statusCd === '10002' || item.statusCd === '10003'
+  return item.statusCd === '10002' || item.statusCd === '10003' || item.statusCd === '10006'
 }
 
-/** 是否显示退单按钮 */
+/** 是否显示退单按钮（仅限已派单和处理中状态，不是初始派单） */
 function canReturn(item: RepairOrder): boolean {
   return item.preStaffId !== '-1'
+    && (item.statusCd === '10002' || item.statusCd === '10003')
 }
 
 /** 是否显示回访按钮（已完成且需回访） */

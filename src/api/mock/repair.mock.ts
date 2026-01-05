@@ -553,13 +553,13 @@ const mockRepairDatabase = {
     return false
   },
 
-  /** 获取待办单列表（ASSIGNED、IN_PROGRESS 和需要回访的 COMPLETED 状态） */
+  /** 获取待办单列表（ASSIGNED、IN_PROGRESS、PAUSED 和需要回访的 COMPLETED 状态） */
   getDispatchList(params: RepairListParams) {
     const result = this.getRepairList(params)
 
-    // 已派单/处理中 状态 + 需要回访的已完成状态
+    // 已派单/处理中/暂停 状态 + 需要回访的已完成状态
     // 回访按钮显示条件：statusCd === '10004' && returnVisitFlag === '003'
-    const allowedStatus = ['10002', '10003']
+    const allowedStatus = ['10002', '10003', '10006']
     result.list = result.list.filter((repair) => {
       const isAssignedOrProcessing = allowedStatus.includes(repair.statusCd || '')
       const isCompletedWithReturnVisit = repair.statusCd === '10004' && repair.returnVisitFlag === '003'
@@ -1401,8 +1401,8 @@ export default defineUniAppMock([
           return errorResponse('维修工单不存在', ResultEnumMap.NotFound)
         }
 
-        repair.statusCd = '10002'
-        repair.statusName = '已派单'
+        repair.statusCd = '10006'
+        repair.statusName = '暂停'
         repair.updateTime = formatDateTime()
 
         mockLog('repairStop', body.repairId, '→ 暂停维修')

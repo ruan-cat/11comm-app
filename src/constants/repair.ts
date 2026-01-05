@@ -7,6 +7,7 @@ export const REPAIR_STATUSES: ColumnItem[] = [
   { value: '10003', label: '处理中' },
   { value: '10004', label: '已完成' },
   { value: '10005', label: '已取消' },
+  { value: '10006', label: '暂停' },
 ]
 
 /** 维修流程状态（英文状态值） */
