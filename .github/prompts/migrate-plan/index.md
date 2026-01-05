@@ -1134,7 +1134,7 @@ pagingRef.value?.complete(response?.ownerRepairs || [], response?.total || 0);
 pagingRef.value?.complete(response?.ownerRepairs || []);
 ```
 
-## 069 <!-- TODO: --> 严格应用`z-paging-integration` 技能，改写并修复代码写法
+## 069 严格应用`z-paging-integration` 技能，改写并修复代码写法
 
 `z-paging-integration` 技能有更新，需要更新以下几个列表页的代码写法：
 
