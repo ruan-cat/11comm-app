@@ -99,10 +99,6 @@ const { send: loadRepairOrderList } = useRequest(
   .onError((error) => {
     console.error('加载列表失败:', error)
     pagingRef.value?.complete(false)
-    uni.showToast({
-      title: '加载失败',
-      icon: 'none',
-    })
   })
 
 /** z-paging 查询回调 */

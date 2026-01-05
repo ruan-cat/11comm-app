@@ -71,48 +71,55 @@ const pageSize = ref(50)
 
 /**
  * 使用 useRequest 管理楼栋列表请求
+ * 🔴 强制规范：必须设置 immediate: false，由 z-paging 控制请求时机
  */
 const {
   loading,
   send: loadFloorData,
+  onSuccess,
+  onError,
 } = useRequest(
-  () => getFloorList({
-    communityId: communityId.value,
-    page: currentPage.value,
-    row: pageSize.value,
-    floorNum: searchValue.value?.trim() || undefined,
-  }),
+  (params: { page: number, row: number, floorNum?: string }) =>
+    getFloorList({
+      communityId: communityId.value,
+      ...params,
+    }),
   {
-    immediate: false, // 🔴 强制要求：不自动执行
+    immediate: false,
   },
 )
 
-/** z-paging 查询回调 */
-async function handleQuery(pageNo: number, pageSizeValue: number) {
+/**
+ * 成功回调 - 通知 z-paging 数据加载完成
+ * @description 在回调中调用 complete 方法
+ */
+onSuccess((event) => {
+  const result = event.data
+  pagingRef.value?.complete(result?.list || [])
+})
+
+/**
+ * 失败回调 - 通知 z-paging 加载失败
+ * @description 错误提示已由全局拦截器自动处理
+ */
+onError((error) => {
+  console.error('获取楼栋列表失败:', error)
+  pagingRef.value?.complete(false)
+})
+
+/**
+ * z-paging 的 @query 回调
+ * @description 接收分页参数，触发请求（不使用 await/try-catch）
+ */
+function handleQuery(pageNo: number, pageSizeValue: number) {
   currentPage.value = pageNo
   pageSize.value = pageSizeValue
 
-  try {
-    const response = await loadFloorData()
-
-    if (response) {
-      // z-paging complete 接收数组
-      pagingRef.value?.complete(response.list || [])
-    }
-    else {
-      pagingRef.value?.complete([])
-    }
-  }
-  catch (error) {
-    console.error('获取楼栋列表失败:', error)
-    // 通知 z-paging 加载失败
-    pagingRef.value?.complete(false)
-
-    uni.showToast({
-      title: '加载楼栋列表失败',
-      icon: 'none',
-    })
-  }
+  loadFloorData({
+    page: pageNo,
+    row: pageSizeValue,
+    floorNum: searchValue.value?.trim() || undefined,
+  })
 }
 
 /** 选择楼栋 */
