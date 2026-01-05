@@ -685,6 +685,19 @@ invoker	@	vue.runtime.esm.js:10209
    - api-error-handling
 4. 这是一个要求很细致的任务，认真做好任务规划和上下文管理。
 
+### 02 <!-- TODO: --> 处理列表页切换状态时，列表分页组件没有加载动效的情况
+
+1. 阅读以下列表页：
+   - src\pages-sub\repair\order-list.vue
+   - src\pages-sub\repair\dispatch.vue
+   - src\pages-sub\repair\finish.vue
+2. 在这些列表页开始切换顶部的订单状态时，每个列表页的 `<template #loading>` 部分，都没有被及时的加载动效。请问是什么缘故？
+3. 请问在 `z-paging` 组件内，怎么去触发数据更新的动效？我在主动执行异步函数的时候，怎么触发已经在 `<template #loading>` 插槽内定义的动效组件？
+4. 以下是关于 `z-paging` 组件的上下文，请适当的阅读以下信息，看看在列表页请求时，应该怎么触发加载等待动效。
+   - 仓库： https://github.com/SmileZXLee/uni-z-paging
+   - 文档： https://z-paging.zxlee.cn/
+   - 文档的仓库： https://github.com/SmileZXLee/uni-z-paging-doc
+
 ## 045 维修工单评价页 `src\pages-sub\repair\appraise.vue`
 
 1. 针对 `src\pages-sub\repair\appraise.vue` `维修工单评价页` 代码。
