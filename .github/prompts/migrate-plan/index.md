@@ -1181,7 +1181,7 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
    - src\pages-sub 目录
    - src\pages 目录
 
-## 073 <!-- TODO: --> 优化组件 `repair-list-search-bar` 的视觉效果
+## 073 优化组件 `repair-list-search-bar` 的视觉效果
 
 1. 请阅读以下 url 图片：
 
@@ -1199,3 +1199,16 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 ![2026-01-06-02-58-15](https://s2.loli.net/2026/01/06/QucxVJon1LYwU9A.png)
 
 ![2026-01-06-02-58-22](https://s2.loli.net/2026/01/06/JGAZEkgIwtOnLXu.png)
+
+### 01 <!-- TODO: --> 优化组件 `repair-list-search-bar` 的视觉效果
+
+1. 我需要你优化，美化 `src\components\common\repair-list-search-bar\index.vue` `repair-list-search-bar` `维修列表搜索栏组件` 组件的视觉效果。
+2. 请你主动使用 gemini MCP，发挥 gemini MCP 出色精彩的前端设计能力。让 gemini 你给设计一个美观的，大方的界面，最后由你来实施落实。
+3. 你只负责实现页面美观程度优化，不涉及到代码层面的写法优化。
+4. 更多列表页完整截图页面如下：
+
+![2026-01-06-03-41-44](https://s2.loli.net/2026/01/06/mwu3MyDRT42NvpI.png)
+
+![2026-01-06-03-41-55](https://s2.loli.net/2026/01/06/sCW3zJFMy9BRNXh.png)
+
+![2026-01-06-03-42-03](https://s2.loli.net/2026/01/06/aio1xyMZYt2W6qf.png)
