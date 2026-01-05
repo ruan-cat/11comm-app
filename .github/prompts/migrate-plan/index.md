@@ -1144,7 +1144,7 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 - src\pages-sub\selector 目录内全部的列表页
 - src\pages\test-use\z-paging-loading.vue
 
-## 070 <!-- TODO: --> 改写技能文档的回调写法，从组合式写法改写成链式回调写法
+## 070 改写技能文档的回调写法，从组合式写法改写成链式回调写法
 
 我希望在使用 `alova/client` 模块的 useRequest 函数时，使用紧凑的链式写法。而不是解构出来的 onSuccess 和 onError 函数。
 
