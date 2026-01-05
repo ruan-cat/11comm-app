@@ -6,7 +6,7 @@
 -->
 
 <script setup lang="ts">
-import { useRequest } from 'alova/client'
+import type { ZPagingLoadingProps } from '@/components/common/z-paging-loading/types'
 import { ref } from 'vue'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 
@@ -22,53 +22,140 @@ const dataList = ref<any[]>([])
 /** z-paging 引用 */
 const pagingRef = ref()
 
+/** 当前展示的场景索引 */
+const currentSceneIndex = ref(0)
+
+/** 模拟搜索关键词 */
+const searchValue = ref('')
+
+/** 是否显示加载状态(用于演示) */
+const showLoading = ref(false)
+
 /**
- * 使用 useRequest 管理模拟数据请求
- * 🔴 强制规范：必须设置 immediate: false，由 z-paging 控制请求时机
+ * 加载场景配置列表
+ * 定义了各种不同的加载场景及其配置
  */
-const {
-  send: loadMockData,
-  onSuccess,
-  onError,
-} = useRequest(
-  (params: { pageNo: number, pageSize: number }) => {
-    // 模拟 API 请求，返回 Promise
-    return new Promise<{ list: any[] }>((resolve) => {
-      setTimeout(() => {
-        const mockData = Array.from({ length: 10 }, (_, index) => ({
-          id: `${params.pageNo}-${index}`,
-          title: `数据项 ${params.pageNo}-${index + 1}`,
-          content: `这是第 ${params.pageNo} 页的第 ${index + 1} 条数据`,
-        }))
-        resolve({ list: mockData })
-      }, 2000)
-    })
+const loadingScenes: Array<{
+  title: string
+  description: string
+  props: ZPagingLoadingProps
+}> = [
+  {
+    title: '场景 1: 默认加载',
+    description: '使用默认配置,适用于通用的数据加载场景',
+    props: {},
   },
-  { immediate: false },
-)
+  {
+    title: '场景 2: 楼栋加载',
+    description: '用于楼栋列表加载,使用建筑图标和蓝色主题',
+    props: {
+      icon: 'building',
+      iconClass: 'i-carbon-building text-blue-400 animate-pulse',
+      primaryText: '正在加载楼栋列表...',
+      secondaryText: '请稍候片刻',
+    },
+  },
+  {
+    title: '场景 3: 单元加载',
+    description: '用于单元列表加载,使用网格图标和绿色主题',
+    props: {
+      icon: 'grid',
+      iconClass: 'i-carbon-grid text-green-400 animate-pulse',
+      primaryText: '正在加载单元列表...',
+      secondaryText: '正在获取数据',
+    },
+  },
+  {
+    title: '场景 4: 房屋加载',
+    description: '用于房屋列表加载,使用房屋图标和紫色主题',
+    props: {
+      icon: 'home',
+      iconClass: 'i-carbon-home text-purple-400 animate-pulse',
+      primaryText: '正在加载房屋列表...',
+      secondaryText: '马上就好',
+    },
+  },
+  {
+    title: '场景 5: 工单加载',
+    description: '用于工单列表加载,使用文档图标和橙色主题',
+    props: {
+      icon: 'document',
+      iconClass: 'i-carbon-document text-orange-400 animate-pulse',
+      primaryText: '正在加载工单列表...',
+      secondaryText: '数据加载中',
+    },
+  },
+  {
+    title: '场景 6: 用户加载',
+    description: '用于用户列表加载,使用用户图标和青色主题',
+    props: {
+      icon: 'user',
+      iconClass: 'i-carbon-user text-cyan-400 animate-pulse',
+      primaryText: '正在加载用户列表...',
+      secondaryText: '请耐心等待',
+    },
+  },
+  {
+    title: '场景 7: 自定义加载器类型',
+    description: '使用 outline 类型的加载器',
+    props: {
+      icon: 'settings',
+      iconClass: 'i-carbon-settings text-indigo-400 animate-pulse',
+      loadingType: 'outline',
+      primaryText: '正在处理数据...',
+      secondaryText: '即将完成',
+    },
+  },
+  {
+    title: '场景 8: 大尺寸加载',
+    description: '使用更大的加载器和图标尺寸',
+    props: {
+      icon: 'data',
+      iconClass: 'i-carbon-data-1 text-pink-400 animate-pulse',
+      iconSize: '28px',
+      loadingSize: '48px',
+      primaryText: '正在加载大量数据...',
+      secondaryText: '这可能需要一些时间',
+    },
+  },
+]
 
-/**
- * 成功回调 - 通知 z-paging 数据加载完成
- */
-onSuccess((event) => {
-  const result = event.data
-  pagingRef.value?.complete(result?.list || [])
-})
+/** 获取当前场景的配置 */
+const currentScene = ref(loadingScenes[currentSceneIndex.value])
 
-/**
- * 失败回调 - 通知 z-paging 加载失败
- */
-onError((error) => {
-  console.error('加载数据失败:', error)
-  pagingRef.value?.complete(false)
-})
+/** 切换到上一个场景 */
+function prevScene() {
+  if (currentSceneIndex.value > 0) {
+    currentSceneIndex.value--
+    currentScene.value = loadingScenes[currentSceneIndex.value]
+  }
+}
+
+/** 切换到下一个场景 */
+function nextScene() {
+  if (currentSceneIndex.value < loadingScenes.length - 1) {
+    currentSceneIndex.value++
+    currentScene.value = loadingScenes[currentSceneIndex.value]
+  }
+}
 
 /**
  * z-paging 的 @query 回调
- * @description 接收分页参数，触发请求（不使用 await/try-catch）
+ * @description 模拟数据加载（测试页面不使用真实 API）
  */
 function handleQuery(pageNo: number, pageSize: number) {
-  loadMockData({ pageNo, pageSize })
+  // 模拟网络延迟
+  setTimeout(() => {
+    // 模拟数据
+    const mockData = Array.from({ length: 10 }, (_, index) => ({
+      id: `${pageNo}-${index}`,
+      title: `数据项 ${pageNo}-${index + 1}`,
+      content: `这是第 ${pageNo} 页的第 ${index + 1} 条数据`,
+    }))
+
+    // 通知 z-paging 数据加载完成
+    pagingRef.value?.complete(mockData)
+  }, 2000)
 }
 
 /** 手动触发显示加载状态 */
