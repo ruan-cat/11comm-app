@@ -1157,3 +1157,12 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 
 1. 首先对 `.claude\skills\api-migration` 技能，增加一个专门讲清楚如何使用 useRequest 函数的部分。
 2. 修改其他全部在 `.claude\skills` 目录内的技能文件，修改写法为链式回调写法，而不是组合式解构写法。
+
+## 071 <!-- TODO: --> 对全部代码应用 `.claude\skills\api-migration\SKILL.md` 的链式回调写法要求
+
+有大量的代码写法没有满足 `.claude\skills\api-migration\SKILL.md` 的链式回调写法要求，需要你帮忙改写。
+
+这些代码包括：
+
+- src\pages 目录下全部的 vue 文件。
+- src\pages-sub 目录下全部的 vue 文件。
