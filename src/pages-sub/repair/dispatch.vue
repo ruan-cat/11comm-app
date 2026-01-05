@@ -20,6 +20,7 @@ import { onMounted, ref } from 'vue'
 import { getRepairStaffList, getRepairStates, repairStart, repairStop } from '@/api/repair'
 import RepairListItem from '@/components/common/repair-list-item/index.vue'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
+import { REPAIR_STATUSES } from '@/constants/repair'
 import { useGlobalMessage } from '@/hooks/useGlobalMessage'
 import { TypedRouter } from '@/router'
 import { getCurrentCommunity, getUserInfo } from '@/utils/user'
@@ -36,9 +37,14 @@ const message = useGlobalMessage()
 /** 搜索条件 */
 const searchName = ref('')
 const selectedState = ref<string>('')
-const stateOptions = ref<Array<{ label: string, value: string }>>([
+const defaultStateOptions: Array<{ label: string, value: string }> = [
   { label: '全部状态', value: '' },
-])
+  ...REPAIR_STATUSES.map(item => ({
+    label: item.label,
+    value: item.value as string,
+  })),
+]
+const stateOptions = ref<Array<{ label: string, value: string }>>([...defaultStateOptions])
 
 /** 列表数据 */
 const repairList = ref<RepairOrder[]>([])
@@ -71,6 +77,7 @@ const { send: loadStates } = useRequest(() => getRepairStates(), {
   })
   .onError((error) => {
     console.error('加载状态字典失败:', error)
+    stateOptions.value = [...defaultStateOptions]
   })
 
 /** 查询维修工单列表请求（z-paging 集成） */
