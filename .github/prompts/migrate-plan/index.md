@@ -1092,3 +1092,44 @@ definePage({
 
 1. 全面阅读 `add-new-component` 技能的文档，确保其实例代码必定满足其 `route-migration` 技能的要求。
 2. `src\pages\test-use` 目录内的页面明显不满足 `route-migration` 技能的要求，请修改。
+
+## 068 <!-- TODO: --> 全面迭代更新 `z-paging-integration` 技能
+
+### 对 pagingRef 的类型约束写法
+
+技能文件的指导写法需要更新，避免出现错误的引导。针对 `z-paging` 组件使用其组件实例的引用时，写法改写成：
+
+1. 旧写法：
+
+没有引用来自全局的 `ZPagingRef` 类型。
+
+```ts
+const pagingRef = ref();
+```
+
+2. 新的写法：
+
+- https://z-paging.zxlee.cn/start/typescript-support.html
+- 应该按照 `typescript-support` 的要求，使用全局的 `ZPagingRef` 类型，来约束组件引用对象的类型。
+
+```ts
+const pagingRef = ref<ZPagingRef>();
+```
+
+请帮助我更新 `.claude\skills\z-paging-integration\SKILL.md` 技能文件的写法，避免出现错误的引导。
+
+### 增加完成请求时的错误案例
+
+请你在 `.claude\skills\z-paging-integration\SKILL.md` 的 `常见错误模式` 内，增加补全以下写法
+
+错误的请求完成写法： 不应该增加多余的 `response?.total || 0` 部分，该类型写法约束是错误的。
+
+```ts
+pagingRef.value?.complete(response?.ownerRepairs || [], response?.total || 0);
+```
+
+正确的写法： 不需要多余的 `response?.total || 0` 部分，complete 函数会自己判断是否成功。
+
+```ts
+pagingRef.value?.complete(response?.ownerRepairs || []);
+```
