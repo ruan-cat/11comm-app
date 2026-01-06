@@ -7,6 +7,7 @@
   建议携带参数: ?repairId=REP_001&repairType=水电维修&communityId=COMM_001
 
   完整示例: http://localhost:9000/#/pages-sub/repair/appraise?repairId=REP_001&repairType=水电维修&communityId=COMM_001
+  上级页面: http://localhost:9000/#/pages-sub/repair/dispatch
 
   旧代码：gitee-example/pages/appraiseRepair/appraiseRepair.vue
 -->
