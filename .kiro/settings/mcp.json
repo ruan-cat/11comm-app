@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "gemini": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/GuDaStudio/geminimcp.git",
+        "geminimcp"
+      ]
+    }
+  }
+}
