@@ -11,6 +11,8 @@
   旧代码：gitee-example/pages/repairOrder/repairEnd.vue
 -->
 
+<!-- 基本完成检查审核 -->
+
 <script setup lang="ts">
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import { onLoad } from '@dcloudio/uni-app'
