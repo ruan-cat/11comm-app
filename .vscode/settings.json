@@ -27,6 +27,8 @@
 
   // Auto fix
   "editor.codeActionsOnSave": {
+    // https://oxc.rs/docs/guide/usage/linter/editors.html#use-recommended-setup-for-teams
+    "source.fixAll.oxc": true,
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "never"
   },
