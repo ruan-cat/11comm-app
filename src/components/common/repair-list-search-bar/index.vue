@@ -135,7 +135,7 @@ const currentStateLabel = computed(() => {
         >
           <view class="filter-trigger">
             <text class="filter-label">{{ currentStateLabel }}</text>
-            <wd-icon name="" custom-class="i-carbon-caret-down text-gray-400 text-28rpx ml-4rpx" />
+            <wd-icon name="" custom-class="i-carbon-chevron-down text-gray-400 text-28rpx ml-4rpx" />
             <!-- 垂直分割线 -->
             <view class="filter-divider" />
           </view>
@@ -156,14 +156,14 @@ const currentStateLabel = computed(() => {
 
         <!-- 搜索按钮 (嵌入式) -->
         <view class="search-btn" @click="handleSearch">
-          <wd-icon name="search" size="28rpx" color="#fff" custom-class="mr-8rpx" />
+          <view class="i-carbon-search text-white mr-8rpx text-32rpx" />
           <text class="search-btn-text">搜索</text>
         </view>
       </view>
     </view>
 
     <!-- 底部辅助信息 (总记录数) - 极简风格 -->
-    <view v-if="total > 0" class="total-info">
+    <view v-if="total > 0" class="total-info text-gray-400">
       <text>共 {{ total }} 条记录</text>
     </view>
   </view>
@@ -194,12 +194,12 @@ const currentStateLabel = computed(() => {
   flex: 1;
   display: flex;
   align-items: center;
-  height: 84rpx;
+  height: 88rpx;
   background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #f3f4f6;
   border-radius: 999px;
-  padding: 6rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.03);
+  padding: 8rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
   overflow: hidden;
 }
@@ -225,7 +225,7 @@ const currentStateLabel = computed(() => {
 
 .filter-label {
   font-size: 28rpx;
-  font-weight: 600;
+  font-weight: 500;
   color: #333;
   max-width: 140rpx;
   overflow: hidden;
@@ -299,10 +299,9 @@ const currentStateLabel = computed(() => {
 
 /** 7. 底部信息：极小字体，右对齐，灰色 */
 .total-info {
-  font-size: 20rpx;
-  color: #9ca3af;
+  font-size: 22rpx;
   text-align: right;
-  margin-top: 8rpx;
+  margin-top: 12rpx;
   padding: 0 8rpx;
   font-variant-numeric: tabular-nums;
 }
