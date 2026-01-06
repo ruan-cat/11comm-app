@@ -1,5 +1,5 @@
 import uniHelper from '@uni-helper/eslint-config'
-
+import oxlint from 'eslint-plugin-oxlint'
 // FIXME: 开启 prettier 的规则之后， markdown 文件的顶部标题会报错 但是不知道为什么
 // import eslintConfigPrettier from 'eslint-config-prettier'
 // import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
@@ -70,6 +70,8 @@ export default uniHelper(
       'style/multiline-ternary': 'off',
     },
   },
+
+  ...oxlint.buildFromOxlintConfigFile('./.oxlintrc.json'),
 
   // FIXME: 开启 prettier 的规则之后， markdown 文件的顶部标题会报错 但是不知道为什么
   // {
