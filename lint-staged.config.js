@@ -13,6 +13,6 @@ export default {
    * eslint --fix 处理所有非 md 文件
    * prettier 只处理 md 文件
    */
-  '!(gitee-example)/**/*!(.md)': 'oxlint --fix && eslint --fix',
+  '!(gitee-example)/**/*!(.md)': 'pnpm run lint:fix',
   '!(gitee-example)/**/*.md': 'prettier --ignore-unknown --experimental-cli --write',
 }
