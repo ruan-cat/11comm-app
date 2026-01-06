@@ -792,6 +792,11 @@ invoker	@	vue.runtime.esm.js:10209
 2. 先阅读对应的旧代码 `gitee-example/pages/appraiseRepair/appraiseRepair.vue` ，了解被迁移的内容项目。
 3. 这是一个表单页，但是很多代码写法不满足 `.claude\skills\use-wd-form\SKILL.md` `使用 wd-form 表单组件编写表单页的实施规范` 技能，需要你按照技能文档，严格落实代码写法。统一并优化代码写法。
 
+### 02 <!-- TODO: --> 分析 `维修工单评价页` 的上级页面
+
+1. 针对 `src\pages-sub\repair\appraise.vue` `维修工单评价页` 代码。
+2. 我不清楚该页面的上级页面是那个，请结合路由配置，和对应的旧代码，分析出该页面的上级页面和进入的入口有那些。
+
 ## 046 维修工单流程模块 - 样式迁移任务
 
 样式写法一律使用 unocss 来完成
