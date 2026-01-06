@@ -182,12 +182,6 @@ const { send: loadParentTypes } = useRequest(
     console.error('加载商品类型失败:', error)
   })
 
-/** 页面加载 */
-onLoad(() => {
-  // 加载商品类型
-  loadParentTypes()
-})
-
 /** 加载商品子类型（二级分类） */
 const { send: loadSonTypes } = useRequest(
   (parentId: string) =>
@@ -232,7 +226,11 @@ const { send: loadResources } = useRequest(
 
 /** 页面加载 */
 onLoad((options) => {
+  // 接收页面参数
   feeFlag.value = (options?.feeFlag as string) || ''
+
+  // 加载商品类型
+  loadParentTypes()
 })
 
 /** 一级分类改变 */

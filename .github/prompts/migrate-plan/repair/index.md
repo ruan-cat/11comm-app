@@ -463,7 +463,7 @@ src\pages-sub\repair\handle.vue
 
 2. 针对 `src\pages-sub\repair\dispatch.vue` 的搜索栏，请补全关键的订单状态筛选能力。
 
-## 038 优化 `选择维修物资` 页面
+## 038 `选择维修物资` `src\pages-sub\repair\select-resource.vue` 页面
 
 1. 阅读 `src\pages-sub\repair\select-resource.vue` `选择维修物资` 页面。
 2. 这个页面应该是一个**表单页**。请你按照 `.claude\skills\use-wd-form` 技能来优化改造。
@@ -570,6 +570,11 @@ invoker	@	vue.runtime.esm.js:10209
 ![2025-12-28-03-04-49](https://s2.loli.net/2025/12/28/GNMYWmvIcbLH7Ej.png)
 
 3. 价格范围的显示效果很不好看，和其他页面看起来很不统一。请你让`价格范围`的显示效果，和`规格`的显示效果相同。使用相同的组件来渲染。
+
+### 08 整合重复的 onLoad 生命周期函数
+
+1. 针对 `src\pages-sub\repair\select-resource.vue` `选择维修物资` 页面。
+2. 把重复冗余的 onLoad 函数整合在一起，不要分开写逻辑。
 
 ## 039 迭代更新多个表单页对 `wd-cell` 组件的使用
 
