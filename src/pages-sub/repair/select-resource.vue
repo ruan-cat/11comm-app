@@ -30,6 +30,8 @@
 6. ✅ **表单验证**：各字段的校验规则（商品名、价格、数量）应正常工作
 -->
 
+<!-- 基本完成检查审核 -->
+
 <script setup lang="ts">
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import type { RepairResource } from '@/types/repair'
