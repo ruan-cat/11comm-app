@@ -272,6 +272,11 @@ src\pages-sub\repair\handle.vue
 4. 重点修改文本的响应式效果。避免出现文字一个大一个小的情况。
 5. 重点避免页面出现明显的滚动条。这是移动端页面，不应该出现任何形式的滚动条。
 
+### 02 业务理解，为什么 `维修工单池` 可以结束工单？
+
+1. 阅读 src\pages-sub\repair\order-list.vue 、src\pages-sub\repair\dispatch.vue 及其对应的旧代码。
+2. 我很疑惑的是，为什么 `维修工单池` 可以结束工单，而 `维修待办单` 却不允许结束工单？
+
 ## 030 优化 `添加维修记录` 表单页的代码写法
 
 针对 `src\pages-sub\repair\add-order.vue` `添加维修记录` 表单页。
