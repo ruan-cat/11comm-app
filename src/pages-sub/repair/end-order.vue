@@ -1,6 +1,7 @@
 <!--
   结束维修工单
   功能：输入结束原因并结束工单
+  表单页
 
   访问地址: http://localhost:9000/#/pages-sub/repair/end-order
   建议携带参数: ?repairId=REP_001&communityId=COMM_001
