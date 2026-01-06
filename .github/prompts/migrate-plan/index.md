@@ -1200,7 +1200,7 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 
 ![2026-01-06-02-58-22](https://s2.loli.net/2026/01/06/JGAZEkgIwtOnLXu.png)
 
-### 01 <!-- TODO: --> 优化组件 `repair-list-search-bar` 的视觉效果
+### 01 优化组件 `repair-list-search-bar` 的视觉效果
 
 1. 我需要你优化，美化 `src\components\common\repair-list-search-bar\index.vue` `repair-list-search-bar` `维修列表搜索栏组件` 组件的视觉效果。
 2. 请你主动使用 gemini MCP，发挥 gemini MCP 出色精彩的前端设计能力。让 gemini 你给设计一个美观的，大方的界面，最后由你来实施落实。
