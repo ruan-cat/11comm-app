@@ -49,10 +49,6 @@
 2. 阅读`旧项目`代码 `gitee-example/pages/repairDetail/repairDetail.vue` 。think hard 了解清楚旧项目如何使用图片预览的。
 3. 按照 `component-migration` 子代理的要求，修复 `src\pages-sub\repair\order-detail.vue` 组件错误使用不存在组件 `wd-image-preview` 的故障。
 
-#### 02 逐个复查组件并依次使用 `component-migration` 子代理完成修改
-
-<!-- TODO: 有很多 维修工单流程模块系列页面 的代码没有严格按照子代理的要求 更改替换组件 所以需要逐个检查 -->
-
 ### 05 迁移样式
 
 1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
@@ -359,6 +355,13 @@ src\pages-sub\repair\handle.vue
    - `route-migration`： 路由迁移子代理。位于 `.claude\agents` 目录内。
    - `style-migration`： 样式迁移子代理。位于 `.claude\agents` 目录内。
 4. 在改造时，务必要遵循 `api-error-handling` 和 `use-wd-form` 这两个技能文件的要求来修改。
+
+### 02 补全 结束维修工单` 表单页的表单标题组件
+
+1. 针对 `src\pages-sub\repair\end-order.vue` `结束维修工单` 表单页。
+2. 按照 `use-wd-form` 等技能的要求，重新优化、补全 `结束维修工单` 表单页的表单标题组件。
+3. 根据多款技能的要求，检查代码写法，是否还有继续被优化、缺省缺漏的地方。
+4. 补全 form-section-title 组件。
 
 ## 032 优化 `维修工单详情` 页
 

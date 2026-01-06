@@ -17,6 +17,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { reactive, ref } from 'vue'
 import { endRepair } from '@/api/repair'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 definePage({
@@ -129,10 +130,13 @@ onLoad((options) => {
   <view class="min-h-screen bg-gray-100 pt-3">
     <wd-form ref="formRef" :model="model" :rules="formRules">
       <!-- 结束原因 -->
-      <view class="section-title m-0 px-15px pb-10px pt-20px text-14px font-normal">
-        结束原因
-      </view>
       <wd-cell-group border>
+        <FormSectionTitle
+          title="结束原因"
+          icon="edit"
+          icon-class="i-carbon-edit text-blue-500"
+          required
+        />
         <wd-textarea
           v-model="model.context"
           label="结束原因"
@@ -168,15 +172,6 @@ onLoad((options) => {
 /**
  * 样式迁移说明：
  * - .end-repair-page: 已迁移到模板为原子类 `min-h-screen bg-gray-100 pt-3`
- * - .section-title: 仅保留 rgba() 复杂透明度，其他样式已拆解为原子类
- *   - margin: 0 → m-0
- *   - font-weight: 400 → font-normal
- *   - font-size: 14px → text-14px
- *   - padding: 20px 15px 10px → px-15px pt-20px pb-10px
+ * - .section-title: 已使用 FormSectionTitle 组件替代，不再需要自定义样式
  */
-
-/** 小节标题样式 - 仅保留 rgba() 复杂透明度 */
-.section-title {
-  color: rgba(69, 90, 100, 0.6);
-}
 </style>
