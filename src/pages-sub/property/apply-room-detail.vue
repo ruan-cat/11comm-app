@@ -40,12 +40,12 @@ const reviewStateRange = ref([
   { state: 4, name: '审批通过' },
   { state: 5, name: '审批不通过' },
 ])
-const checkState = ref<{ state: number, name: string } | {}>({})
-const reviewState = ref<{ state: number, name: string } | {}>({})
+const checkState = ref<{ state: number, name: string }>({ state: 0, name: '' })
+const reviewState = ref<{ state: number, name: string }>({ state: 0, name: '' })
 const checkRemark = ref('')
 const reviewRemark = ref('')
 const discountTypeRange = ref([{ id: '3003', name: '优惠(需要申请)' }])
-const discountType = ref<{ id: string, name: string } | {}>({})
+const discountType = ref<{ id: string, name: string }>({ id: '', name: '' })
 const discountIdRange = ref<any[]>([])
 const discountId = ref<any>({})
 const returnWays = ref([
