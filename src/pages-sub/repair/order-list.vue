@@ -15,6 +15,8 @@
 
 <script setup lang="ts">
 import type { RepairOrder } from '@/types/repair'
+import type { PageParams } from '@/types/routes'
+import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
 import { getRepairOrderList, robRepairOrder } from '@/api/repair'
@@ -34,6 +36,21 @@ definePage({
 /** 搜索条件 */
 const searchName = ref('')
 const selectedState = ref<string>('')
+
+/** 从 URL 参数初始化筛选条件 */
+onLoad((options: PageParams['/pages-sub/repair/order-list']) => {
+  // 从 URL 参数读取状态筛选条件
+  if (options?.statusCd) {
+    selectedState.value = options.statusCd
+    console.log('从 URL 参数初始化状态筛选:', options.statusCd)
+  }
+
+  // 从 URL 参数读取搜索关键词
+  if (options?.repairName) {
+    searchName.value = options.repairName
+    console.log('从 URL 参数初始化搜索关键词:', options.repairName)
+  }
+})
 
 /** 列表数据（由 z-paging 接管） */
 const repairList = ref<RepairOrder[]>([])

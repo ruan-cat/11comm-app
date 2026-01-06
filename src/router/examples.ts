@@ -7,8 +7,11 @@ import { navigateToTyped, redirectToTyped, switchTabTyped, TypedRouter } from '.
 
 /** 示例 1：使用 TypedRouter 类方法（推荐） */
 export function navigationExamples() {
-  // 跳转到维修工单列表
-  TypedRouter.toRepairList({ status: 'pending' })
+  // 跳转到维修工单列表（默认显示所有状态）
+  TypedRouter.toRepairList()
+
+  // 跳转到维修工单列表（仅显示待派单状态）
+  TypedRouter.toRepairList({ statusCd: '10001' })
 
   // 跳转到维修工单详情
   TypedRouter.toRepairDetail('repair123', 'processing')

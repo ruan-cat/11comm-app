@@ -69,17 +69,16 @@ export interface PageParams {
   }
   /** 维修管理模块参数 (10个页面) */
   '/pages-sub/repair/order-list': {
-    status?: string
+    statusCd?: string /** 工单状态代码（如 10001=待派单, 10002=已派单） */
     page?: number
     row?: number
     repairName?: string
-    state?: string
   }
   '/pages-sub/repair/dispatch': {
+    statusCd?: string /** 工单状态代码 */
     page?: number
     row?: number
     repairName?: string
-    state?: string
   }
   '/pages-sub/repair/finish': {
     page?: number

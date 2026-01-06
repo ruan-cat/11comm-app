@@ -277,6 +277,12 @@ src\pages-sub\repair\handle.vue
 1. 阅读 src\pages-sub\repair\order-list.vue 、src\pages-sub\repair\dispatch.vue 及其对应的旧代码。
 2. 我很疑惑的是，为什么 `维修工单池` 可以结束工单，而 `维修待办单` 却不允许结束工单？
 
+### 03 代码参数理解，url 参数 `statusCd` 的作用
+
+1. 阅读 src\pages-sub\repair\order-list.vue 及其对应的旧代码。
+2. 根据旧代码的路由跳转情况，为我解释一下，`维修工单池` 列表页的上级页面是那个？是什么逻辑传递了参数 `statusCd` ？
+3. 这个参数在 `维修工单池` 页面内，是怎么使用的？
+
 ## 030 优化 `添加维修记录` 表单页的代码写法
 
 针对 `src\pages-sub\repair\add-order.vue` `添加维修记录` 表单页。
