@@ -283,7 +283,54 @@ src\pages-sub\repair\handle.vue
 2. 根据旧代码的路由跳转情况，为我解释一下，`维修工单池` 列表页的上级页面是那个？是什么逻辑传递了参数 `statusCd` ？
 3. 这个参数在 `维修工单池` 页面内，是怎么使用的？
 
-## 030 优化 `添加维修记录` 表单页的代码写法
+## 029 维修工单流程模块 - 通用迁移任务
+
+### 01 处理类型故障
+
+阅读以下文件出现的类型故障，并修复。
+
+- src\api\repair.ts
+- src\pages-sub\repair\add-order.vue
+- src\pages-sub\repair\order-detail.vue
+- src\pages-sub\repair\order-list.vue
+- src\pages-sub\repair\select-resource.vue
+- src\pages-sub\repair\dispatch.vue
+- src\pages-sub\repair\handle.vue
+
+请你阅读 `api-migration` code-migration component-migration 这三个子代理文件，并按照子代理的要求，修复上述文件的类型报错。并在必要的时候改写代码写法，改换合适的组件。
+
+**绝对不要独立运行子代理**。现在的业务场景是混合上下文场景，不需要独立上下文，请你不要独立运行子代理。
+
+你敢未经我允许就独立运行子代理，消耗了过多的 token。下次 claude code 调查文件出来的时候，我就给你打差评。
+
+听懂了么？阅读子代理，而不是运行子代理。
+
+### 02 继续处理类型故障
+
+请继续处理以下文件出现的类型故障，请你通过运行类型检查命令的方式，统一处理这些类型报错：
+
+src\api\repair.ts
+src\api\mock\repair.mock.ts
+src\pages-sub\repair\add-order.vue
+src\pages-sub\repair\order-detail.vue
+src\pages-sub\repair\select-resource.vue
+src\pages-sub\repair\end-order.vue
+src\pages-sub\repair\finish.vue
+
+src\pages-sub\repair\add-order.vue
+src\pages-sub\repair\order-detail.vue
+src\pages-sub\repair\select-resource.vue
+src\pages-sub\repair\finish.vue
+src\pages-sub\repair\dispatch.vue
+src\pages-sub\repair\handle.vue
+
+请你在处理类型报错时，以 `src\types\repair.ts` 提供的类型为准，以 `src\api\repair.ts` 接口的字段为准，适当的修改上述 vue 组件的代码，确保满足类型约束。使得上述代码不出现类型报错。
+
+---
+
+请你以 ultrathink 的思考模式，认真阅读并思考文档要求。在思考上，请你大胆的多使用 token 做深度的，全面的，细致的推理思考。这是一个复杂的多步骤任务，请你认真的动态编排。执行每一个步骤时，都务必要主动使用尽可能多的 token 做充分详实完善完整的思考，允许你多花费时间做阅读，对比，思考。最后严格按照文档要求落实。
+
+## 030 按照 `api-migration` 的要求重构代码
 
 针对 `src\pages-sub\repair\add-order.vue` `添加维修记录` 表单页。
 
@@ -639,12 +686,12 @@ invoker	@	vue.runtime.esm.js:10209
 
 1. 针对 `src\pages-sub\repair\dispatch.vue` `维修待办单` 代码。
 
-### 001 补全对应 mock 列表查询接口的返回值
+### 01 补全对应 mock 列表查询接口的返回值
 
 1. 针对 `src\pages-sub\repair\dispatch.vue` `维修待办单` 代码。阅读全部的 `card-actions` 部分。可以得知这里有很多不同的按钮。
 2. 深刻阅读理解 `维修待办单` 页面的状态逻辑，找到对应的 mock 接口代码，并增加足够的 mock 数据，确保全部种类的 `card-actions` 按钮都能够显示出来，便于我测试。
 
-### 002 抽象状态 `RepairStatus` 专用的标签组件
+### 02 抽象状态 `RepairStatus` 专用的标签组件
 
 1. 阅读代码：
    - src\pages-sub\repair\dispatch.vue
@@ -670,7 +717,7 @@ invoker	@	vue.runtime.esm.js:10209
 6. 整体略微增加组件大小和文本大小，便于更好的展示动效背景和文本。
 7. 在代码结构上，适当的做向后拓展的抽象。该组件要做好随时增加美观动效的准备。未来我可能会要求你给其他状态增加不同形式的动效。
 
-### 003 设计报修的公共业务组件 `repair-list-item`，优化 `src\pages-sub\repair\dispatch.vue` 和 `src\pages-sub\repair\order-list.vue` 的代码写法
+### 03 设计报修的公共业务组件 `repair-list-item`，优化 `src\pages-sub\repair\dispatch.vue` 和 `src\pages-sub\repair\order-list.vue` 的代码写法
 
 1. 针对 `src\pages-sub\repair\dispatch.vue` 和 `src\pages-sub\repair\order-list.vue` 。
 2. 注意针对性阅读以下 class 选择器的部分：
@@ -742,7 +789,9 @@ invoker	@	vue.runtime.esm.js:10209
 2. 先阅读对应的旧代码 `gitee-example/pages/appraiseRepair/appraiseRepair.vue` ，了解被迁移的内容项目。
 3. 这是一个表单页，但是很多代码写法不满足 `.claude\skills\use-wd-form\SKILL.md` `使用 wd-form 表单组件编写表单页的实施规范` 技能，需要你按照技能文档，严格落实代码写法。统一并优化代码写法。
 
-## 043 <!-- TODO: --> 样式写法一律使用 unocss 来完成
+## 046 维修工单流程模块 - 样式迁移任务
+
+样式写法一律使用 unocss 来完成
 
 1. 阅读 `style-migration` 样式迁移子代理。
 2. 针对 `维修工单流程模块系列页面` 的 vue 组件，存在额外使用 scss 的情况。请你用 `style-migration` 来改造代码，使其满足子代理的要求。
