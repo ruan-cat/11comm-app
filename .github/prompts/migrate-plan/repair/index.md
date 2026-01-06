@@ -251,14 +251,14 @@ src\pages-sub\repair\handle.vue
 4. 单元/房屋字段取值：旧版 unitNum/roomNum 是纯编号，新版 Mock 里 unitNum 带了“单元”后缀，roomNum 也有构造规则。需要改成纯编号（与旧版一致）。需要补充 communityId 返回到单元/房屋项里。并且去对应使用 `unitNum/roomNum` 字段的前端页面内，加上基于 computed 的字段格式化，加上“单元”后缀。
 5. 维修状态/字典：旧版状态/字典字段是 statusCd/name。当前 API/Mock 已用 statusCd/name，但 RepairStatus 类型枚举是英文单词。需要把列表里的 status/state 完全切换为 statusCd 代码（与旧版一致）。
 
-## 028 重写 `维修工单池` 的前端代码
+## 028 `维修工单池` 列表页 `src\pages-sub\repair\order-list.vue`
 
 1. 针对 `src\pages-sub\repair\order-list.vue` 维修工单池 列表页的代码。
 2. 阅读其旧代码 `gitee-example/pages/repairOrder/repairOrder.vue` 。
 3. 维修工单池列表页，其 `z-paging` 组件的使用并没有按照 `z-paging 分页组件集成方案` 来做，请按照 `z-paging 分页组件集成方案` 的要求来修改。
 4. 维修工单池列表页，请按照 `组件迁移子代理` 的要求更改。
 
-## 029 优化 `维修工单池` 的 UI 前端界面
+### 01 优化 `维修工单池` 的 UI 前端界面
 
 如图：
 
@@ -286,7 +286,9 @@ src\pages-sub\repair\handle.vue
    - `style-migration`： 样式迁移子代理。位于 `.claude\agents` 目录内。
 4. 在改造时，务必要遵循 `api-error-handling` 和 `use-wd-form` 这两个技能文件的要求来修改。
 
-## 031 优化 `结束维修工单` 表单页的代码写法
+## 031 `结束维修工单` 表单页 `src\pages-sub\repair\end-order.vue`
+
+### 01 优化 `结束维修工单` 表单页的代码写法
 
 针对 `src\pages-sub\repair\end-order.vue` `结束维修工单` 表单页。
 
