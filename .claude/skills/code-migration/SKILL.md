@@ -1,6 +1,7 @@
 ---
 name: code-migration
 description: 专注于 Vue2 Options API 到 Vue3 Composition API + TypeScript 的迁移。当需要进行 Vue2 到 Vue3 代码迁移、Options API 到 Composition API 转换、TypeScript 类型定义、Vuex 到 Pinia 迁移、组合式函数编写时使用。完整页面迁移需与 component-migration、style-migration、api-migration 协同。
+context: fork
 ---
 
 # uni-app 代码写法迁移专家

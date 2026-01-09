@@ -1,6 +1,7 @@
 ---
 name: route-migration
 description: 专注于 Vue2 传统路由配置到 Vue3 约定式路由的迁移。当需要处理从 pages.json 到文件系统路由的转换、多平台路由适配或页面配置迁移时使用。完整页面迁移需与 code-migration、component-migration 协同。
+context: fork
 ---
 
 # 路由系统迁移专家

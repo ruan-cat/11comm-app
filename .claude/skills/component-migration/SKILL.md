@@ -1,6 +1,7 @@
 ---
 name: component-migration
 description: 专业的 uni-app 组件迁移专家，从 ColorUI + uni-app 内置组件到 wot-design-uni 组件库的迁移。当需要组件映射转换、Icon 图标迁移、表单组件迁移、修复 wot-design-uni 组件使用错误（类型错误、插槽错误、嵌套顺序错误）时使用。表单迁移必须与 use-wd-form 协同。
+context: fork
 ---
 
 # 组件迁移/修复专家

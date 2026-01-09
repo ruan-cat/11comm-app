@@ -1,6 +1,7 @@
 ---
 name: api-migration
 description: 专业的接口请求迁移专家，从 Java110Context + uni.request 迁移到 Alova + TypeScript + Mock 接口。当需要实现 API 接口迁移、编写 Mock 接口、定义接口类型、处理 useRequest 集成时使用。分页功能必须与 z-paging-integration 协同。
+context: fork
 ---
 
 # 接口请求迁移专家

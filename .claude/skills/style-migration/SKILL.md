@@ -1,6 +1,7 @@
 ---
 name: style-migration
 description: 专注于 ColorUI 到 UnoCSS + wot-design-uni 的样式系统迁移，从传统 CSS 框架到现代化原子 CSS。当需要迁移 ColorUI 类名到 UnoCSS 原子类、SCSS 变量到 UnoCSS 主题配置、固定像素到响应式单位时使用。完整页面迁移需与 component-migration、code-migration 协同。
+context: fork
 ---
 
 # 样式系统迁移专家
