@@ -488,7 +488,7 @@ src\pages-sub\repair\handle.vue
    - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
    - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
 
-## 037 维修待办单 `src\pages-sub\repair\dispatch.vue`
+## 037 `维修待办单` `src\pages-sub\repair\dispatch.vue`
 
 ### 01 对齐代码写法，优化 `维修待办单` 的代码
 
@@ -525,6 +525,16 @@ src\pages-sub\repair\handle.vue
 ![2026-01-05-14-37-46](https://s2.loli.net/2026/01/05/KtPE9h2oAWG7CYk.png)
 
 2. 针对 `src\pages-sub\repair\dispatch.vue` 的搜索栏，请补全关键的订单状态筛选能力。
+
+### 04 <!-- TODO: --> 回访按钮理解与`维修工单评价页`之间的关系
+
+我很疑惑 `src\pages-sub\repair\dispatch.vue` 的回访按钮所体现出来的业务设计。
+
+1. 在 `src\pages-sub\repair\dispatch.vue` 内，这是用来显示待处理的维修工单列表的页面，这是显示给谁看到？是维修师傅还是业主呢？维修师傅需要使用回访按钮么？
+2. 在 `src\pages-sub\repair\appraise.vue` 内，这是业主对维修服务进行评分和评价的页面。这个页面是给业主还是维修师傅用的？
+3. 回访按钮，这个名字设计的好么？
+4. 请问在旧项目内，回访按钮和 `维修工单评价页` 的关系是怎么样的？旧项目的业务逻辑是怎么样的？
+5. 请你对应的阅读上述两个页面对应的旧代码，理解业务走向，并为我解惑。为我提供分析报告。
 
 ## 038 `选择维修物资` `src\pages-sub\repair\select-resource.vue` 页面
 
