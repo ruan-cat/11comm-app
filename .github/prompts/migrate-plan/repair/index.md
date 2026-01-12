@@ -811,6 +811,12 @@ invoker	@	vue.runtime.esm.js:10209
 
 是 `src\pages-sub\repair\dispatch.vue` 页面
 
+### 03 应用全部的技能文件来优化 `维修工单评价页`
+
+1. 针对 `src\pages-sub\repair\appraise.vue` `维修工单评价页` 代码。
+2. 首先阅读全部的技能文件要求。检查清楚本页面是否在不满足技能文件的诸多要求。
+3. 列举具体的计划，按照技能文件的细致要求，优化代码。
+
 ## 046 维修工单流程模块 - 样式迁移任务
 
 样式写法一律使用 unocss 来完成
