@@ -54,6 +54,82 @@ context: fork
 |   **页面缺少 definePage 配置**   | **所有页面必须添加 definePage** |   **必须配置，否则标题显示错误**   |
 |  `definePage({ name: 'XXX' })`   |   `definePage({ style: {} })`   | **不要添加 name/meta，只用 style** |
 
+### 🚫 微信小程序 CSS 限制（Critical）
+
+**微信小程序 WXSS 不支持以下 CSS 语法，必须严格避免：**
+
+| ❌ 禁止使用              | ✅ 替代方案             | 说明                         |
+| :----------------------- | :---------------------- | :--------------------------- |
+| `* { ... }` 通配符选择器 | 使用具体组件选择器列表  | WXSS 不支持 `*` 选择器       |
+| `*, *::before, *::after` | `page, view, text, ...` | 列举需要的组件               |
+| `p { ... }` 标签选择器   | `class="text-class"`    | 小程序不支持 HTML 标签选择器 |
+
+**错误示例（会导致编译失败）：**
+
+```css
+/* ❌ 错误：微信小程序不支持 * 通配符 */
+* {
+	box-sizing: border-box;
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* ❌ 错误：微信小程序不支持 p 标签选择器 */
+p {
+	margin: 0;
+}
+```
+
+**正确示例：**
+
+```css
+/* ✅ 正确：使用具体的小程序组件选择器 */
+page,
+view,
+scroll-view,
+swiper,
+text,
+image,
+button {
+	box-sizing: border-box;
+}
+
+/* ✅ 正确：使用 page 替代 * */
+page {
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* ✅ 正确：使用 class 选择器 */
+.paragraph {
+	margin: 0;
+}
+```
+
+**UnoCSS preflights 配置注意事项：**
+
+在 `uno.config.ts` 的 `preflights` 中编写全局样式时，必须避免使用 `*` 选择器：
+
+```typescript
+// uno.config.ts
+preflights: [
+  {
+    getCSS: () => `
+      /* ❌ 错误：不要使用 * 选择器 */
+      /* * { box-sizing: border-box; } */
+
+      /* ✅ 正确：列举小程序组件 */
+      page, view, scroll-view, swiper, text, image, button, input, textarea {
+        box-sizing: border-box;
+      }
+
+      /* ✅ 正确：伪元素单独处理 */
+      ::before, ::after {
+        box-sizing: border-box;
+      }
+    `,
+  },
+],
+```
+
 ## 迁移概述
 
 ### 核心转变

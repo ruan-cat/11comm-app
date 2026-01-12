@@ -57,6 +57,170 @@ context: fork
 |    `20px` 固定像素     |           `20rpx` 响应式单位            |   使用 rpx 单位    |
 |   保留 ColorUI 类名    |             完全使用 UnoCSS             |      彻底迁移      |
 
+### 🚫 微信小程序 WXSS 限制（Critical）
+
+**⚠️ 微信小程序 WXSS 不支持 CSS 通配符选择器 `*`，使用会导致编译错误：**
+
+```log
+[ WXSS 文件编译错误] ./app.wxss(76:3231): unexpected token `*`
+```
+
+| ❌ 禁止使用                 | ✅ 替代方案             | 说明              |
+| :-------------------------- | :---------------------- | :---------------- |
+| `* { ... }`                 | 使用具体组件选择器      | WXSS 不支持通配符 |
+| `*, *::before, *::after`    | `page, view, text, ...` | 列举需要的组件    |
+| `p { ... }` HTML 标签选择器 | `.text-class { ... }`   | 使用 class 选择器 |
+
+**错误示例（导致小程序编译失败）：**
+
+```css
+/* ❌ 错误：微信小程序不支持 * 通配符选择器 */
+* {
+	box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+* {
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* ❌ 错误：@media 中也不能使用 * */
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation-duration: 0.01ms !important;
+	}
+}
+```
+
+**正确示例：**
+
+```css
+/* ✅ 正确：使用具体的小程序组件选择器列表 */
+page,
+view,
+scroll-view,
+swiper,
+swiper-item,
+movable-area,
+movable-view,
+cover-view,
+cover-image,
+icon,
+text,
+rich-text,
+progress,
+button,
+checkbox-group,
+checkbox,
+form,
+input,
+label,
+picker,
+picker-view,
+picker-view-column,
+radio-group,
+radio,
+slider,
+switch,
+textarea,
+navigator,
+audio,
+image,
+video,
+camera,
+live-player,
+live-pusher,
+map,
+canvas,
+open-data,
+web-view,
+ad {
+	box-sizing: border-box;
+}
+
+/* ✅ 正确：伪元素单独处理 */
+::before,
+::after {
+	box-sizing: border-box;
+}
+
+/* ✅ 正确：使用 page 替代 * 处理全局样式 */
+page {
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* ✅ 正确：@media 中使用具体选择器 */
+@media (prefers-reduced-motion: reduce) {
+	view,
+	text,
+	image,
+	button,
+	navigator {
+		animation-duration: 0.01ms !important;
+	}
+}
+```
+
+**UnoCSS preflights 配置规范：**
+
+在 `uno.config.ts` 的 `preflights` 配置中编写全局样式时，**必须避免使用 `*` 选择器**：
+
+```typescript
+// uno.config.ts
+preflights: [
+  {
+    getCSS: () => `
+      /* ❌ 错误写法 - 会导致微信小程序编译失败 */
+      /* *, *::before, *::after { box-sizing: border-box; } */
+      /* * { -webkit-tap-highlight-color: transparent; } */
+
+      /* ✅ 正确写法 - 兼容微信小程序 */
+      page, view, scroll-view, swiper, text, image, button, input, textarea {
+        box-sizing: border-box;
+      }
+
+      ::before, ::after {
+        box-sizing: border-box;
+      }
+
+      page {
+        -webkit-tap-highlight-color: transparent;
+      }
+    `,
+  },
+],
+```
+
+**Vue 组件 `<style>` 中的注意事项：**
+
+```vue
+<style lang="scss" scoped>
+/* ❌ 错误：不要在组件样式中使用 * 选择器 */
+/* @media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+  }
+} */
+
+/* ✅ 正确：使用具体的组件选择器 */
+@media (prefers-reduced-motion: reduce) {
+	view,
+	text,
+	image,
+	button,
+	navigator {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+</style>
+```
+
 ## 核心方针
 
 从 ColorUI 传统 CSS 框架迁移到 UnoCSS 原子化 CSS,实现样式文件体积从 **195KB 减少到 80KB,减少 60%**。
@@ -466,6 +630,14 @@ export default defineConfig({
 - [ ] 主题颜色已在 `theme.extend.colors` 中定义
 - [ ] 渐变色变量已正确配置
 - [ ] **未**滥用 shortcuts 功能
+- [ ] **preflights 中未使用 `*` 通配符选择器**（微信小程序兼容）
+
+### 微信小程序兼容性检查
+
+- [ ] 所有 CSS 中未使用 `*` 通配符选择器
+- [ ] 未使用 HTML 标签选择器（如 `p`、`div`、`span`）
+- [ ] `@media` 查询中未使用 `*` 选择器
+- [ ] Vue 组件 `<style>` 中未使用 `*` 选择器
 
 ## 6. 性能优化收益
 
@@ -496,7 +668,33 @@ export default defineConfig({
 - 增加团队成员的学习成本
 - 违背"就近原则"
 
-### 2. 如何处理复杂的样式组合?
+### 2. 为什么微信小程序不能使用 `*` 通配符选择器?
+
+**答**: 微信小程序的 WXSS 是 CSS 的子集，有以下限制：
+
+- **不支持 `*` 通配符选择器**：会导致编译错误 `unexpected token *`
+- **不支持 HTML 标签选择器**：如 `p`、`div`、`span` 等
+- **仅支持 class 选择器和小程序组件选择器**
+
+**解决方案**：
+
+```css
+/* ❌ 错误 */
+* {
+	box-sizing: border-box;
+}
+
+/* ✅ 正确：列举小程序组件 */
+page,
+view,
+text,
+image,
+button {
+	box-sizing: border-box;
+}
+```
+
+### 3. 如何处理复杂的样式组合?
 
 **答**: 直接在组件中使用原子类组合,例如:
 
@@ -511,7 +709,7 @@ export default defineConfig({
 <!-- shortcuts: { 'card-container': 'flex items-center justify-between p-30rpx bg-white rounded-12rpx shadow' } -->
 ```
 
-### 3. ColorUI 的动画如何迁移?
+### 4. ColorUI 的动画如何迁移?
 
 **答**: UnoCSS 支持内置的动画类,或使用 CSS transitions/animations:
 
@@ -523,7 +721,7 @@ export default defineConfig({
 <view class="transition-all duration-300 transform translate-x-0 hover:translate-x-10">内容</view>
 ```
 
-### 4. 如何查找 UnoCSS 对应的类名?
+### 5. 如何查找 UnoCSS 对应的类名?
 
 **答**:
 
