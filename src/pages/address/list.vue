@@ -480,9 +480,9 @@ const {
   }
 }
 
-// 减少动画偏好
+// 减少动画偏好 - 使用具体选择器替代 * 以兼容微信小程序
 @media (prefers-reduced-motion: reduce) {
-  * {
+  view, text, image, button, navigator {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

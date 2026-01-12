@@ -386,12 +386,21 @@ export default defineConfig({
           100% { background-position: 200% center; }
         }
 
-        /* 全局样式重置 */
-        *, *::before, *::after {
+        /* 全局样式重置 - 使用 page 替代 * 选择器，兼容微信小程序 */
+        page, view, scroll-view, swiper, swiper-item, movable-area, movable-view,
+        cover-view, cover-image, icon, text, rich-text, progress, button, checkbox-group,
+        checkbox, form, input, label, picker, picker-view, picker-view-column, radio-group,
+        radio, slider, switch, textarea, navigator, audio, image, video, camera, live-player,
+        live-pusher, map, canvas, open-data, web-view, ad {
           box-sizing: border-box;
         }
 
-        /* 滚动条样式 */
+        /* 伪元素样式 - 使用 :not(not) 技巧兼容小程序 */
+        ::before, ::after {
+          box-sizing: border-box;
+        }
+
+        /* 滚动条样式 - 仅 H5 生效 */
         ::-webkit-scrollbar {
           width: 6px;
           height: 6px;
@@ -411,8 +420,8 @@ export default defineConfig({
           background: #a8a8a8;
         }
 
-        /* 优化 tap 高亮 */
-        * {
+        /* 优化 tap 高亮 - 使用 page 替代 * 选择器，兼容微信小程序 */
+        page {
           -webkit-tap-highlight-color: transparent;
         }
       `,
