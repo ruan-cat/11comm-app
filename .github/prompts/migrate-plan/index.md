@@ -1222,3 +1222,12 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 请帮我检查相关的配置文件，并帮助我优化配置。
 
 请你编写适当的测试代码，测试提交 markdown 文档后能否触发 prettier 格式化？能否避开缓慢的 eslint 运行配置？
+
+## 075 处理微信小程序构建时出现的故障
+
+文件 `dist\dev\mp-weixin\app.wxss` 在微信小程序内，出现以下错误。请帮我看看是不是 unocss 或者是项目内那些样式写法导致错误了？
+
+```log
+[ WXSS 文件编译错误]
+./app.wxss(76:3231): unexpected token `*`(env: Windows,mp,1.06.2504060; lib: 3.13.0)
+```
