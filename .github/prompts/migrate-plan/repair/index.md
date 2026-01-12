@@ -796,7 +796,7 @@ invoker	@	vue.runtime.esm.js:10209
 
 1. 针对 `src\pages-sub\repair\appraise.vue` `维修工单评价页` 代码。
 
-### 01 <!-- TODO: --> 严格按照表单页的技能来修改优化代码
+### 01 严格按照表单页的技能来修改优化代码
 
 1. 针对 `src\pages-sub\repair\appraise.vue` `维修工单评价页` 代码。
 2. 先阅读对应的旧代码 `gitee-example/pages/appraiseRepair/appraiseRepair.vue` ，了解被迁移的内容项目。
