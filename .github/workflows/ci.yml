@@ -27,7 +27,7 @@ jobs:
         with:
           run_install: |
             - recursive: true
-            - args: [--global, "tsx", "turbo"]
+            - args: [--registry, https://registry.npmjs.org, --global, "tsx", "turbo"]
 
       - name: 安装node
         uses: actions/setup-node@v4
