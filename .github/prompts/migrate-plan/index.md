@@ -1212,3 +1212,13 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 ![2026-01-06-03-41-55](https://s2.loli.net/2026/01/06/sCW3zJFMy9BRNXh.png)
 
 ![2026-01-06-03-42-03](https://s2.loli.net/2026/01/06/aio1xyMZYt2W6qf.png)
+
+## 074 <!-- TODO: --> 优化调整提交后格式化的配置
+
+我在 git 提交过后，会使用 `lint-staged` 的 lint-staged.config.js 配置触发修改后提交。但是我已经使用了 oxlint，可是在修改 markdown 文件时，还是执行了 `!(gitee-example)/**/*!(.md)` 这一部分的逻辑，运行了后续的 eslint，导致每次提交 git 的时候都很慢。
+
+我期望在 `lint-staged.config.js` 内，实现对 md 文件使用 prettier 完成格式化，并且在 `eslint.config.mjs` 内，不对 markdown 做任何处理。
+
+请帮我检查相关的配置文件，并帮助我优化配置。
+
+请你编写适当的测试代码，测试提交 markdown 文档后能否触发 prettier 格式化？能否避开缓慢的 eslint 运行配置？
