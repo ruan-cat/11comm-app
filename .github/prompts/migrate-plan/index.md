@@ -1231,3 +1231,53 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 [ WXSS 文件编译错误]
 ./app.wxss(76:3231): unexpected token `*`(env: Windows,mp,1.06.2504060; lib: 3.13.0)
 ```
+
+### 01 更新文档
+
+请你更新对应的 `.claude\skills\code-migration` 和 `.claude\skills\style-migration` 技能文档，说明清楚再微信小程序内，不允许使用通配符语法。并确保以后不要再出现这样的样式写法错误。
+
+## 076 处理小程序找不到图片的错误
+
+在微信开发者工具内，运行项目时，进入到首页 `pages/index/index` 内时，控制台报错，称找不到静态资源。
+
+```log
+[渲染层网络层错误] Failed to load local image resource /static/image/index/i_complaint.png
+ the server responded with a status of 500 (HTTP/1.1 500 Internal Server Error)
+(env: Windows,mp,1.06.2504060; lib: 3.13.0)
+[渲染层网络层错误] Failed to load local image resource /static/image/index/i_inspection.png
+ the server responded with a status of 500 (HTTP/1.1 500 Internal Server Error)
+(env: Windows,mp,1.06.2504060; lib: 3.13.0)
+[渲染层网络层错误] Failed to load local image resource /static/image/index/i_repair.png
+ the server responded with a status of 500 (HTTP/1.1 500 Internal Server Error)
+(env: Windows,mp,1.06.2504060; lib: 3.13.0)
+[渲染层网络层错误] Failed to load local image resource /static/image/index/i_machine.png
+ the server responded with a status of 500 (HTTP/1.1 500 Internal Server Error)
+(env: Windows,mp,1.06.2504060; lib: 3.13.0)
+[渲染层网络层错误] Failed to load local image resource /static/image/index_apply_audit.png
+ the server responded with a status of 500 (HTTP/1.1 500 Internal Server Error)
+(env: Windows,mp,1.06.2504060; lib: 3.13.0)
+[渲染层网络层错误] Failed to load local image resource /static/image/index_itemout_audit.png
+ the server responded with a status of 500 (HTTP/1.1 500 Internal Server Error)
+(env: Windows,mp,1.06.2504060; lib: 3.13.0)
+[渲染层网络层错误] Failed to load local image resource /static/image/index_allocation.png
+ the server responded with a status of 500 (HTTP/1.1 500 Internal Server Error)
+(env: Windows,mp,1.06.2504060; lib: 3.13.0)
+[渲染层网络层错误] Failed to load local image resource /static/image/index_complaint.png
+ the server responded with a status of 500 (HTTP/1.1 500 Internal Server Error)
+(env: Windows,mp,1.06.2504060; lib: 3.13.0)
+[渲染层网络层错误] Failed to load local image resource /static/image/index_repair.png
+ the server responded with a status of 500 (HTTP/1.1 500 Internal Server Error)
+(env: Windows,mp,1.06.2504060; lib: 3.13.0)
+```
+
+## 077 处理微信小程序编译期间出现了警告日志
+
+在运行微信小程序的编译命令时，出现以下警告日志，请帮我看看是不是 unocss 哪里写错了？
+
+```log
+[unocss]​ ​failed to load icon "carbon-inbox"​
+​[unocss]​ ​failed to load icon "carbon-footprints"​
+​[unocss]​ ​failed to load icon "carbon-inspect"​
+​[unocss]​ ​failed to load icon "carbon-number"​
+​[unocss]​ ​failed to load icon "carbon-lock
+```

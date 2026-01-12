@@ -27,23 +27,23 @@ definePage({
     <view class="title-head">
       <view>
         <!-- 图片 -->
-        <img class="title-ico" src="/static/image/index/i_complaint.png" draggable="false">
+        <image class="title-ico" src="@/static/image/index/i_complaint.png" mode="aspectFit" />
         <view>投诉待办</view>
       </view>
 
       <view>
         <!-- 图片 -->
-        <img class="title-ico" src="/static/image/index/i_repair.png" draggable="false">
+        <image class="title-ico" src="@/static/image/index/i_repair.png" mode="aspectFit" />
         <view>报修待办</view>
       </view>
       <view>
         <!-- 图片 -->
-        <img class="title-ico" src="/static/image/index/i_inspection.png" draggable="false">
+        <image class="title-ico" src="@/static/image/index/i_inspection.png" mode="aspectFit" />
         <view>巡检打卡</view>
       </view>
       <view>
         <!-- 图片 -->
-        <img class="title-ico" src="/static/image/index/i_machine.png" draggable="false">
+        <image class="title-ico" src="@/static/image/index/i_machine.png" mode="aspectFit" />
         <view>设备保养</view>
       </view>
     </view>
@@ -57,31 +57,31 @@ definePage({
       <view class="work-item">
         <view class="work-item-content">
           <!-- 图片 -->
-          <img class="work-ico" src="/static/image/index_apply_audit.png" draggable="false">
+          <image class="work-ico" src="@/static/image/index_apply_audit.png" mode="aspectFit" />
           <view>采购待办</view>
         </view>
 
         <view class="work-item-content">
           <!-- 图片 -->
-          <img class="work-ico" src="/static/image/index_itemout_audit.png" draggable="false">
+          <image class="work-ico" src="@/static/image/index_itemout_audit.png" mode="aspectFit" />
           <view>领用待办</view>
         </view>
 
         <view class="work-item-content">
           <!-- 图片 -->
-          <img class="work-ico" src="/static/image/index_allocation.png" draggable="false">
+          <image class="work-ico" src="@/static/image/index_allocation.png" mode="aspectFit" />
           <view>调拨待办</view>
         </view>
 
         <view class="work-item-content">
           <!-- 图片 -->
-          <img class="work-ico" src="/static/image/index_complaint.png" draggable="false">
+          <image class="work-ico" src="@/static/image/index_complaint.png" mode="aspectFit" />
           <view>物品放行</view>
         </view>
 
         <view class="work-item-content">
           <!-- 图片 -->
-          <img class="work-ico" src="/static/image/index_repair.png" draggable="false">
+          <image class="work-ico" src="@/static/image/index_repair.png" mode="aspectFit" />
           <view>访客待办</view>
         </view>
       </view>
