@@ -13,11 +13,14 @@
 -->
 
 <script setup lang="ts">
+import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { appraiseRepair } from '@/api/repair'
-import { getUserInfo } from '@/utils/user'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
+import { useGlobalLoading } from '@/hooks/useGlobalLoading'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 definePage({
   style: {
@@ -26,24 +29,63 @@ definePage({
   },
 })
 
+// ==================== 常量定义 ====================
+
+/** 表单标签统一宽度 */
+const LABEL_WIDTH = '80px'
+
+// ==================== 依赖注入 ====================
+
+/** 全局 Toast */
+const toast = useGlobalToast()
+
+/** 全局 Loading */
+const loading = useGlobalLoading()
+
+// ==================== 页面参数 ====================
+
 /** 页面参数 */
-const repairId = ref('')
-const repairType = ref('')
-const repairChannel = ref('')
-const publicArea = ref('')
-const communityId = ref('')
+const pageParams = reactive({
+  repairId: '',
+  repairType: '',
+  repairChannel: '',
+  publicArea: '',
+  communityId: '',
+})
 
-/** 用户信息 */
-const userInfo = getUserInfo()
+// ==================== 表单状态 ====================
 
-/** 评分 */
-const rating = ref(5)
+/** 表单引用 */
+const formRef = ref()
 
-/** 评价内容 */
-const content = ref('')
+/** 表单数据模型 */
+const model = reactive({
+  /** 服务评分（1-5星） */
+  rating: 5,
+  /** 回访建议内容 */
+  content: '',
+})
 
-/** 提交评价请求 */
-const { send: submitAppraise, onSuccess: onAppraiseSuccess, onError: onAppraiseError } = useRequest(
+// ==================== 表单校验规则 ====================
+
+/** 表单校验规则 */
+const formRules: FormRules = {
+  content: [
+    { required: true, message: '请填写回访建议' },
+  ],
+}
+
+// ==================== 接口请求 ====================
+
+/**
+ * 提交评价请求
+ * @description 提交维修工单评价信息
+ */
+const {
+  send: submitAppraise,
+  onSuccess: onAppraiseSuccess,
+  onError: onAppraiseError,
+} = useRequest(
   (params: {
     repairId: string
     repairType: string
@@ -55,102 +97,123 @@ const { send: submitAppraise, onSuccess: onAppraiseSuccess, onError: onAppraiseE
   { immediate: false },
 )
 
+/** 提交评价成功回调 */
 onAppraiseSuccess(() => {
-  uni.hideLoading()
-  uni.showToast({
-    title: '评价成功',
-    icon: 'success',
-  })
+  loading.close()
+  toast.success('评价成功')
 
   setTimeout(() => {
     uni.navigateBack()
   }, 1500)
 })
 
+/** 提交评价失败回调 */
 onAppraiseError((error) => {
-  uni.hideLoading()
-  uni.showToast({
-    title: error.error || '提交失败',
-    icon: 'none',
-  })
+  loading.close()
+  console.error('提交评价失败:', error)
+  // 全局拦截器已自动显示错误提示，无需重复处理
 })
+
+// ==================== 生命周期钩子 ====================
 
 /** 页面加载 */
 onLoad((options) => {
-  repairId.value = (options?.repairId as string) || ''
-  repairType.value = (options?.repairType as string) || ''
-  repairChannel.value = (options?.repairChannel as string) || ''
-  publicArea.value = (options?.publicArea as string) || ''
-  communityId.value = (options?.communityId as string) || ''
+  pageParams.repairId = (options?.repairId as string) || ''
+  pageParams.repairType = (options?.repairType as string) || ''
+  pageParams.repairChannel = (options?.repairChannel as string) || ''
+  pageParams.publicArea = (options?.publicArea as string) || ''
+  pageParams.communityId = (options?.communityId as string) || ''
 })
 
-/** 提交评价 */
-async function handleSubmit() {
-  if (!content.value.trim()) {
-    uni.showToast({
-      title: '请填写回访建议',
-      icon: 'none',
+// ==================== 表单提交 ====================
+
+/**
+ * 提交评价
+ * @description 执行表单校验，校验通过后提交评价信息
+ */
+function handleSubmit() {
+  formRef.value
+    .validate()
+    .then(({ valid, errors }: { valid: boolean, errors: any[] }) => {
+      if (!valid) {
+        console.error('表单校验失败:', errors)
+        return
+      }
+
+      loading.loading('提交中...')
+
+      submitAppraise({
+        repairId: pageParams.repairId,
+        repairType: pageParams.repairType,
+        repairChannel: pageParams.repairChannel,
+        publicArea: pageParams.publicArea,
+        communityId: pageParams.communityId,
+        context: model.content,
+      })
     })
-    return
-  }
-
-  uni.showLoading({ title: '提交中...' })
-
-  await submitAppraise({
-    repairId: repairId.value,
-    repairType: repairType.value,
-    repairChannel: repairChannel.value,
-    publicArea: publicArea.value,
-    communityId: communityId.value,
-    context: content.value,
-  })
+    .catch((error: any) => {
+      console.error('表单校验异常:', error)
+    })
 }
 </script>
 
 <template>
-  <view class="appraise-page">
-    <!-- 服务评分 -->
-    <view class="mb-3 bg-white">
+  <view class="min-h-screen bg-gray-100">
+    <wd-form ref="formRef" :model="model" :rules="formRules">
+      <!-- 服务评分 -->
       <wd-cell-group border>
-        <wd-cell title="服务评分" center>
-          <wd-rate v-model="rating" />
+        <FormSectionTitle
+          title="服务评分"
+          icon="star"
+          icon-class="i-carbon-star text-yellow-500"
+        />
+        <wd-cell title="评分" :title-width="LABEL_WIDTH" center>
+          <wd-rate v-model="model.rating" />
         </wd-cell>
       </wd-cell-group>
-    </view>
 
-    <!-- 回访建议 -->
-    <view class="bg-white p-3">
-      <view class="mb-2 text-sm font-bold">
-        回访建议
+      <!-- 回访建议 -->
+      <wd-cell-group border class="mt-3">
+        <FormSectionTitle
+          title="回访建议"
+          icon="chat"
+          icon-class="i-carbon-chat text-blue-500"
+          required
+        />
+        <wd-textarea
+          v-model="model.content"
+          label="建议内容"
+          :label-width="LABEL_WIDTH"
+          prop="content"
+          placeholder="请填写您的回访建议"
+          :maxlength="200"
+          show-word-limit
+          :rows="6"
+          :rules="formRules.content"
+        />
+      </wd-cell-group>
+
+      <!-- 提交按钮 -->
+      <view class="mt-6 px-3 pb-6">
+        <wd-button
+          block
+          type="success"
+          size="large"
+          :disabled="!model.content.trim()"
+          @click="handleSubmit"
+        >
+          提交
+        </wd-button>
       </view>
-      <wd-textarea
-        v-model="content"
-        placeholder="请填写您的回访建议"
-        :maxlength="200"
-        show-word-limit
-        :rows="6"
-      />
-    </view>
-
-    <!-- 提交按钮 -->
-    <view class="mt-6 px-3">
-      <wd-button
-        block
-        type="success"
-        size="large"
-        :disabled="!content.trim()"
-        @click="handleSubmit"
-      >
-        提交
-      </wd-button>
-    </view>
+    </wd-form>
   </view>
 </template>
 
 <style lang="scss" scoped>
-.appraise-page {
-  min-height: 100vh;
-  background-color: #f5f5f5;
-  padding-top: 12px;
-}
+/**
+ * 样式说明：
+ * - 页面容器样式已迁移到模板的原子类 `min-h-screen bg-gray-100`
+ * - 分区标题已替换为 FormSectionTitle 组件
+ * - 无需额外的 scoped 样式
+ */
 </style>
