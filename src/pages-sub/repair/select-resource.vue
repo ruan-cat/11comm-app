@@ -511,7 +511,7 @@ function handleCancel() {
           <FormSectionTitle
             title="购买数量"
             icon="number"
-            icon-class="i-carbon-number text-orange-500"
+            icon-class="i-carbon-hashtag text-orange-500"
             required
           />
           <wd-cell title="数量" :title-width="LABEL_WIDTH" center>

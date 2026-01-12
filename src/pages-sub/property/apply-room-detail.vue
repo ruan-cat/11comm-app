@@ -560,7 +560,7 @@ onShow(() => {
       <!-- 申请备注 -->
       <view class="flex items-center p-4">
         <view class="flex flex-1 items-center">
-          <wd-icon name="" custom-class="i-carbon-footprints text-colorui-green" />
+          <wd-icon name="" custom-class="i-carbon-pedestrian text-colorui-green" />
           <text class="ml-2 text-gray-600">申请备注</text>
         </view>
         <view class="ml-auto">
@@ -571,7 +571,7 @@ onShow(() => {
       <!-- 验房备注（状态>1时显示） -->
       <view v-if="Number(applyRoomInfo.state) > 1" class="flex items-center p-4">
         <view class="flex flex-1 items-center">
-          <wd-icon name="" custom-class="i-carbon-footprints text-colorui-green" />
+          <wd-icon name="" custom-class="i-carbon-pedestrian text-colorui-green" />
           <text class="ml-2 text-gray-600">验房备注</text>
         </view>
         <view class="ml-auto">
@@ -582,7 +582,7 @@ onShow(() => {
       <!-- 审核备注（状态>3时显示） -->
       <view v-if="Number(applyRoomInfo.state) > 3" class="flex items-center p-4">
         <view class="flex flex-1 items-center">
-          <wd-icon name="" custom-class="i-carbon-footprints text-colorui-green" />
+          <wd-icon name="" custom-class="i-carbon-pedestrian text-colorui-green" />
           <text class="ml-2 text-gray-600">审核备注</text>
         </view>
         <view class="ml-auto">

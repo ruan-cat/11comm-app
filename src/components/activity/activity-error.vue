@@ -62,7 +62,7 @@ const errorConfig = computed(() => {
       title: '访问受限',
       description: '您没有权限查看此活动内容',
       color: 'red',
-      customClass: 'i-carbon-lock',
+      customClass: 'i-carbon-locked',
     },
     'server': {
       icon: 'warning',

@@ -297,7 +297,7 @@ function reloadData() {
           <template #empty>
             <view class="flex items-center justify-center p-8">
               <view class="text-center">
-                <wd-icon name="inbox" custom-class="i-carbon-inbox text-6xl text-gray-300" />
+                <wd-icon name="data-table" custom-class="i-carbon-no-image text-6xl text-gray-300" />
                 <text class="mt-3 block text-sm text-gray-500">暂无数据</text>
                 <text class="mt-1 block text-xs text-gray-400">下拉刷新加载数据</text>
               </view>

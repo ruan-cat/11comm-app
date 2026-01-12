@@ -302,7 +302,7 @@ async function handleSubmitInspection() {
 function getFormItemIcon(index: number): { icon: string, iconClass: string } {
   const iconConfigs = [
     { icon: 'task-view', iconClass: 'i-carbon-task-view text-blue-500' },
-    { icon: 'inspect', iconClass: 'i-carbon-inspect text-purple-500' },
+    { icon: 'view', iconClass: 'i-carbon-view text-purple-500' },
     { icon: 'warning-alt', iconClass: 'i-carbon-warning-alt text-orange-500' },
     { icon: 'edit', iconClass: 'i-carbon-edit text-green-500' },
     { icon: 'checkbox-checked', iconClass: 'i-carbon-checkbox-checked text-cyan-500' },
