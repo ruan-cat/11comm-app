@@ -6,13 +6,15 @@
  */
 export default {
   /**
-   * 排除gitee-example目录
+   * 排除 gitee-example 目录，对非 md 文件执行 lint:fix
    * @see https://github.com/lint-staged/lint-staged/blob/main/README.md#automatically-fix-code-style-with-prettier-for-any-format-prettier-supports
    * @description
-   * !(gitee-example) - 排除 gitee-example 文件夹
-   * eslint --fix 处理所有非 md 文件
-   * prettier 只处理 md 文件
+   * 使用明确的文件扩展名匹配，避免 glob 模式的歧义
+   * - 非 md 文件：执行 oxlint + eslint
+   * - md 文件：仅执行 prettier 格式化
    */
-  '!(gitee-example)/**/*!(.md)': 'pnpm run lint:fix',
-  '!(gitee-example)/**/*.md': 'prettier --ignore-unknown --experimental-cli --write',
+  '*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue,json,css,scss,html,yaml,yml}': 'pnpm run lint:fix',
+  '*.md': 'prettier --ignore-unknown --experimental-cli --write',
+  // gitee-example 目录下的文件不做任何处理
+  'gitee-example/**': () => [],
 }

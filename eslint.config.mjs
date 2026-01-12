@@ -25,6 +25,8 @@ export default uniHelper(
       'src/service/app/**',
       // 忽略掉 vitepress 文档的全部文件
       'docs/.vitepress/**',
+      // 完全忽略所有 markdown 文件，由 prettier 单独处理
+      '**/*.md',
     ],
     rules: {
       'style/no-tabs': 'off',
@@ -57,9 +59,7 @@ export default uniHelper(
        * By default uses Prettier
        */
       html: true,
-
-      /** 允许 markdown 文件使用 prettier 格式化 */
-      markdown: 'prettier',
+      // markdown 文件已在 ignores 中排除，由 lint-staged 单独调用 prettier 处理
     },
   },
 
