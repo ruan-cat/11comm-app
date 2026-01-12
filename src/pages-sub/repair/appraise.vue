@@ -19,7 +19,6 @@ import { useRequest } from 'alova/client'
 import { reactive, ref } from 'vue'
 import { appraiseRepair } from '@/api/repair'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
-import { useGlobalLoading } from '@/hooks/useGlobalLoading'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 definePage({
@@ -38,9 +37,6 @@ const LABEL_WIDTH = '80px'
 
 /** 全局 Toast */
 const toast = useGlobalToast()
-
-/** 全局 Loading */
-const loading = useGlobalLoading()
 
 // ==================== 页面参数 ====================
 
@@ -80,11 +76,11 @@ const formRules: FormRules = {
 /**
  * 提交评价请求
  * @description 提交维修工单评价信息
+ * 🔴 强制规范：必须设置 immediate: false，使用链式回调写法
  */
 const {
+  loading: submitting,
   send: submitAppraise,
-  onSuccess: onAppraiseSuccess,
-  onError: onAppraiseError,
 } = useRequest(
   (params: {
     repairId: string
@@ -96,23 +92,17 @@ const {
   }) => appraiseRepair(params),
   { immediate: false },
 )
+  .onSuccess(() => {
+    toast.success('评价成功')
 
-/** 提交评价成功回调 */
-onAppraiseSuccess(() => {
-  loading.close()
-  toast.success('评价成功')
-
-  setTimeout(() => {
-    uni.navigateBack()
-  }, 1500)
-})
-
-/** 提交评价失败回调 */
-onAppraiseError((error) => {
-  loading.close()
-  console.error('提交评价失败:', error)
-  // 全局拦截器已自动显示错误提示，无需重复处理
-})
+    setTimeout(() => {
+      uni.navigateBack()
+    }, 1500)
+  })
+  .onError((error) => {
+    console.error('提交评价失败:', error)
+    // 全局拦截器已自动显示错误提示，无需重复处理
+  })
 
 // ==================== 生命周期钩子 ====================
 
@@ -130,6 +120,7 @@ onLoad((options) => {
 /**
  * 提交评价
  * @description 执行表单校验，校验通过后提交评价信息
+ * 🔴 强制规范：不使用 await，直接调用 send 函数
  */
 function handleSubmit() {
   formRef.value
@@ -140,8 +131,7 @@ function handleSubmit() {
         return
       }
 
-      loading.loading('提交中...')
-
+      // 🔴 强制规范：不使用 await，直接调用 send 函数
       submitAppraise({
         repairId: pageParams.repairId,
         repairType: pageParams.repairType,
@@ -182,7 +172,6 @@ function handleSubmit() {
         />
         <wd-textarea
           v-model="model.content"
-          label="建议内容"
           :label-width="LABEL_WIDTH"
           prop="content"
           placeholder="请填写您的回访建议"
@@ -199,7 +188,8 @@ function handleSubmit() {
           block
           type="success"
           size="large"
-          :disabled="!model.content.trim()"
+          :loading="submitting"
+          :disabled="submitting || !model.content.trim()"
           @click="handleSubmit"
         >
           提交
