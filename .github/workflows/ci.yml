@@ -16,6 +16,10 @@ on:
 jobs:
   tester:
     runs-on: ubuntu-latest
+    env:
+      # 强制使用官方 npm 镜像源，避免淘宝镜像源版本滞后导致构建失败
+      # 必须在 job 级别设置，确保从 pnpm/action-setup 和 setup-node 阶段就开始使用官方源
+      NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
     steps:
       - name: 检出分支
         uses: actions/checkout@v4
@@ -27,6 +31,7 @@ jobs:
         with:
           run_install: |
             - recursive: true
+              args: [--registry, https://registry.npmjs.org]
             - args: [--registry, https://registry.npmjs.org, --global, "tsx", "turbo"]
 
       - name: 安装node
@@ -49,6 +54,9 @@ jobs:
 
       # - name: turbo link 链接远程项目
       #   run: turbo link --token=${{env.TURBO_TOKEN}} --scope=${{env.TURBO_TEAM}} --yes
+
+      - name: 安装项目依赖（使用官方源）
+        run: pnpm install --registry https://registry.npmjs.org/
 
       - name: turbo并发打包全部子项目
         run: pnpm run ci
