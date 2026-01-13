@@ -59,17 +59,121 @@ context: fork
 
 ### 🚫 微信小程序 WXSS 限制（Critical）
 
-**⚠️ 微信小程序 WXSS 不支持 CSS 通配符选择器 `*`，使用会导致编译错误：**
+**⚠️ 微信小程序 WXSS 是 CSS 的子集，有严格的选择器限制，使用不支持的选择器会导致编译错误：**
 
 ```log
 [ WXSS 文件编译错误] ./app.wxss(76:3231): unexpected token `*`
+[ WXSS 文件编译错误] ./pages-sub/xxx/xxx.wxss(27:30): error at token `:`
 ```
 
-| ❌ 禁止使用                 | ✅ 替代方案             | 说明              |
-| :-------------------------- | :---------------------- | :---------------- |
-| `* { ... }`                 | 使用具体组件选择器      | WXSS 不支持通配符 |
-| `*, *::before, *::after`    | `page, view, text, ...` | 列举需要的组件    |
-| `p { ... }` HTML 标签选择器 | `.text-class { ... }`   | 使用 class 选择器 |
+#### 🚫 禁止使用的 CSS 选择器
+
+|         ❌ 禁止使用         |       ✅ 替代方案       |             说明             |
+| :-------------------------: | :---------------------: | :--------------------------: |
+|         `* { ... }`         | 使用具体组件选择器列表  |      WXSS 不支持通配符       |
+|  `*, *::before, *::after`   | `page, view, text, ...` |        列举需要的组件        |
+| `p { ... }` HTML 标签选择器 |  `.text-class { ... }`  |      使用 class 选择器       |
+|      `:not([hidden])`       |     `.item + .item`     | 不支持属性选择器在 :not() 中 |
+|     `:not(:last-child)`     |     `.item + .item`     |    不支持复杂 :not() 伪类    |
+|      `:nth-child(n+2)`      |     `.item + .item`     |   不支持复杂 :nth-child()    |
+|     `:nth-child(3n+1)`      |   手动添加 class 区分   |   不支持复杂 :nth-child()    |
+|   `view:not(:last-child)`   |     `.item + .item`     |      不支持 :not() 伪类      |
+
+#### 🚫 禁止使用的 UnoCSS 类名
+
+**以下 UnoCSS 类名会生成不兼容微信小程序的 CSS，必须避免使用：**
+
+| ❌ 禁止使用的类名 |                   生成的 CSS                    |              ✅ 替代方案              |
+| :---------------: | :---------------------------------------------: | :-----------------------------------: |
+|    `space-y-*`    | `.space-y-* > :not([hidden]) ~ :not([hidden])`  | `.item + .item { margin-top: Xpx; }`  |
+|    `space-x-*`    | `.space-x-* > :not([hidden]) ~ :not([hidden])`  | `.item + .item { margin-left: Xpx; }` |
+|   `divide-y-*`    | `.divide-y-* > :not([hidden]) ~ :not([hidden])` |         手动添加 border 样式          |
+|   `divide-x-*`    | `.divide-x-* > :not([hidden]) ~ :not([hidden])` |         手动添加 border 样式          |
+
+**示例：space-y-2 的问题**
+
+```css
+/* ❌ UnoCSS 生成的 space-y-2 样式 - 微信小程序不支持 */
+.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+	margin-top: 8rpx;
+}
+
+/* ✅ 兼容微信小程序的替代写法 */
+.info-item + .info-item {
+	margin-top: 8rpx;
+}
+```
+
+**模板修改示例：**
+
+```vue
+<!-- ❌ 错误：使用 space-y-2 类 -->
+<view class="text-sm text-gray-600 space-y-2">
+  <view class="flex items-center">内容1</view>
+  <view class="flex items-center">内容2</view>
+</view>
+
+<!-- ✅ 正确：使用自定义类名 + 相邻兄弟选择器 -->
+<view class="text-sm text-gray-600">
+  <view class="info-item flex items-center">内容1</view>
+  <view class="info-item flex items-center">内容2</view>
+</view>
+
+<style scoped>
+.info-item + .info-item {
+  margin-top: 8rpx;
+}
+</style>
+```
+
+#### 🚫 禁止使用的复杂伪类选择器
+
+```css
+/* ❌ 错误：:nth-child(n+2) 在微信小程序中不支持 */
+.action-buttons > :nth-child(n + 2) {
+	margin-top: 12px;
+}
+
+/* ✅ 正确：使用简单的 class 选择器 */
+.action-btn {
+	margin-top: 12px;
+}
+
+/* 或使用相邻兄弟选择器 */
+.action-btn + .action-btn {
+	margin-top: 12px;
+}
+```
+
+#### ✅ 微信小程序支持的选择器
+
+|   选择器类型   |        示例         | 支持情况 |
+| :------------: | :-----------------: | :------: |
+|  class 选择器  |     `.my-class`     |    ✅    |
+|   id 选择器    |      `#my-id`       |    ✅    |
+|   元素选择器   |   `view`, `text`    |    ✅    |
+|   后代选择器   |       `.a .b`       |    ✅    |
+|    子选择器    |      `.a > .b`      |    ✅    |
+| 相邻兄弟选择器 |      `.a + .b`      |    ✅    |
+| 通用兄弟选择器 |      `.a ~ .b`      |    ✅    |
+| `:first-child` | `.item:first-child` |    ✅    |
+| `:last-child`  | `.item:last-child`  |    ✅    |
+|   `::before`   |   `.item::before`   |    ✅    |
+|   `::after`    |   `.item::after`    |    ✅    |
+|    `:hover`    |    `.btn:hover`     | ⚠️ 仅 H5 |
+|   `:active`    |    `.btn:active`    |    ✅    |
+
+#### ⚠️ 微信小程序样式兼容性检查清单
+
+在编写或迁移样式时，必须检查以下项目：
+
+- [ ] 未使用 `*` 通配符选择器
+- [ ] 未使用 `:not()` 伪类选择器（特别是带属性选择器的）
+- [ ] 未使用复杂的 `:nth-child()` 选择器（如 `n+2`, `3n+1`）
+- [ ] 未使用 UnoCSS 的 `space-y-*` / `space-x-*` 类
+- [ ] 未使用 UnoCSS 的 `divide-y-*` / `divide-x-*` 类
+- [ ] 未使用 HTML 标签选择器（如 `p`, `div`, `span`）
+- [ ] `@media` 查询中未使用不支持的选择器
 
 **错误示例（导致小程序编译失败）：**
 
@@ -638,6 +742,11 @@ export default defineConfig({
 - [ ] 未使用 HTML 标签选择器（如 `p`、`div`、`span`）
 - [ ] `@media` 查询中未使用 `*` 选择器
 - [ ] Vue 组件 `<style>` 中未使用 `*` 选择器
+- [ ] 未使用 `:not()` 伪类选择器（特别是 `:not([hidden])`）
+- [ ] 未使用复杂的 `:nth-child()` 选择器（如 `n+2`, `3n+1`）
+- [ ] 未使用 UnoCSS 的 `space-y-*` / `space-x-*` 类
+- [ ] 未使用 UnoCSS 的 `divide-y-*` / `divide-x-*` 类
+- [ ] 所有间距需求使用 `.item + .item` 相邻兄弟选择器实现
 
 ## 6. 性能优化收益
 
@@ -728,5 +837,63 @@ button {
 1. **官方文档**: https://unocss.dev/interactive/
 2. **VSCode 插件**: UnoCSS 插件提供智能提示
 3. **交互式工具**: UnoCSS Playground
+
+### 6. 为什么不能使用 UnoCSS 的 space-y-_ 和 space-x-_ 类？
+
+**答**: 这些类会生成包含 `:not([hidden])` 伪类选择器的 CSS，微信小程序不支持：
+
+```css
+/* UnoCSS 生成的 space-y-2 样式 */
+.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+	margin-top: 8rpx;
+}
+```
+
+**解决方案**：使用相邻兄弟选择器替代：
+
+```vue
+<!-- ❌ 错误 -->
+<view class="space-y-2">
+  <view>项目1</view>
+  <view>项目2</view>
+</view>
+
+<!-- ✅ 正确 -->
+<view>
+  <view class="list-item">项目1</view>
+  <view class="list-item">项目2</view>
+</view>
+
+<style scoped>
+.list-item + .list-item {
+  margin-top: 8rpx;
+}
+</style>
+```
+
+### 7. 如何实现列表项之间的间距？
+
+**答**: 使用相邻兄弟选择器 `+` 是最兼容的方式：
+
+```scss
+/* 垂直间距 */
+.item + .item {
+	margin-top: 8rpx;
+}
+
+/* 水平间距 */
+.item + .item {
+	margin-left: 8rpx;
+}
+```
+
+或者使用 Flex 布局的 `gap` 属性（微信小程序基础库 2.19.2+ 支持）：
+
+```vue
+<view class="flex flex-col gap-2">
+  <view>项目1</view>
+  <view>项目2</view>
+</view>
+```
 
 通过系统化的样式迁移,实现更小的体积、更好的性能和更佳的开发体验!
