@@ -49,16 +49,19 @@ export type PageRoute
     | '/pages-sub/selector/select-unit' // 选择单元 (需要 floorId 参数)
     | '/pages-sub/selector/select-room' // 选择房屋 (需要 floorId 和 unitId 参数)
 	/** 设备保养模块 (4个页面) */
-    | '/pages-sub/maintenance/index' // 设备保养列表
-    | '/pages-sub/maintenance/execute' // 保养执行页
-    | '/pages-sub/maintenance/execute-single' // 单项保养页
-    | '/pages-sub/maintenance/transfer' // 任务流转页
-	/** 工作单模块 (5个页面) */
-    | '/pages-sub/work/start' // 发工作单
-    | '/pages-sub/work/do' // 办工作单
-    | '/pages-sub/work/copy' // 抄送工作单
-    | '/pages-sub/work/detail' // 工作单详情
-    | '/pages-sub/work/audit' // 工作单审核
+    | '/pages-sub/maintenance/task-list' // 设备保养任务列表 ← gitee-example/pages/maintainance/maintainance.vue
+    | '/pages-sub/maintenance/execute' // 保养执行页 ← gitee-example/pages/maintainance/excuteMaintainance.vue
+    | '/pages-sub/maintenance/execute-single' // 单项保养页 ← gitee-example/pages/maintainance/excuteOneMaintainance.vue
+    | '/pages-sub/maintenance/transfer' // 任务流转页 ← gitee-example/pages/maintainance/maintainanceTransfer.vue
+	/** 工作单模块 (8个页面) */
+    | '/pages-sub/work/task-list' // 工作任务列表 ← gitee-example/pages/work/workTask.vue
+    | '/pages-sub/work/start-work' // 发工作单 ← gitee-example/pages/work/startWork.vue
+    | '/pages-sub/work/do-work' // 办工作单 ← gitee-example/pages/work/doWork.vue
+    | '/pages-sub/work/work-detail' // 工作单详情 ← gitee-example/pages/work/workDetail.vue
+    | '/pages-sub/work/edit-work' // 编辑工作单 ← gitee-example/pages/work/editWrok.vue
+    | '/pages-sub/work/copy-work' // 抄送工作单 ← gitee-example/pages/work/copyWork.vue
+    | '/pages-sub/work/do-copy-work' // 处理抄送工作单 ← gitee-example/pages/work/doCopyWork.vue
+    | '/pages-sub/work/audit-work' // 工作单审核 ← gitee-example/pages/work/doWorkAudit.vue
 
 /** Tab页面路由类型 */
 export type TabRoute = '/pages/index/index' | '/pages/work/index' | '/pages/address/list' | '/pages/me/me'
@@ -213,7 +216,7 @@ export interface PageParams {
     unitId: string // 单元ID，必填参数
   }
   /** 设备保养模块参数 (4个页面) */
-  '/pages-sub/maintenance/index': {
+  '/pages-sub/maintenance/task-list': {
     status?: string // 状态筛选
   }
   '/pages-sub/maintenance/execute': {
@@ -227,15 +230,22 @@ export interface PageParams {
   '/pages-sub/maintenance/transfer': {
     taskId: string // 任务ID
   }
-  /** 工作单模块参数 (5个页面) */
-  '/pages-sub/work/start': {} // 发工作单，无参数
-  '/pages-sub/work/do': {} // 办工作单，无参数
-  '/pages-sub/work/copy': {} // 抄送工作单，无参数
-  '/pages-sub/work/detail': {
+  /** 工作单模块参数 (8个页面) */
+  '/pages-sub/work/task-list': {} // 工作任务列表，无参数
+  '/pages-sub/work/start-work': {} // 发工作单，无参数
+  '/pages-sub/work/do-work': {} // 办工作单，无参数
+  '/pages-sub/work/work-detail': {
     orderId: string // 工作单ID
   }
-  '/pages-sub/work/audit': {
+  '/pages-sub/work/edit-work': {
     orderId: string // 工作单ID
+  }
+  '/pages-sub/work/copy-work': {} // 抄送工作单，无参数
+  '/pages-sub/work/do-copy-work': {
+    copyId: string // 抄送ID
+  }
+  '/pages-sub/work/audit-work': {
+    taskId: string // 任务ID
   }
 }
 

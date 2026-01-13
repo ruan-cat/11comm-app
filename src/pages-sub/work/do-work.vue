@@ -2,7 +2,7 @@
   办工作单页面
   功能：显示待办工作单列表，支持下拉刷新和上拉加载
 
-  访问地址: http://localhost:9000/#/pages-sub/work/do
+  访问地址: http://localhost:9000/#/pages-sub/work/do-work
 
   旧代码：gitee-example/pages/work/doWork.vue
 -->
@@ -86,7 +86,7 @@ function getPriorityType(priority: string): 'primary' | 'success' | 'warning' | 
 
 /** 跳转到工作单详情页 */
 function handleDetail(order: WorkOrder) {
-  TypedRouter.toWorkOrderDetail(order.orderId)
+  TypedRouter.toWorkDetail(order.orderId)
 }
 </script>
 

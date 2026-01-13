@@ -1,8 +1,8 @@
 <!--
-  设备保养列表页
+  设备保养任务列表页
   功能：显示设备保养任务列表，支持下拉刷新和上拉加载
 
-  访问地址: http://localhost:9000/#/pages-sub/maintenance/index
+  访问地址: http://localhost:9000/#/pages-sub/maintenance/task-list
 
   旧代码：gitee-example/pages/maintainance/maintainance.vue
 -->

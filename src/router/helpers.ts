@@ -275,51 +275,102 @@ export class TypedRouter {
 
   /** 设备保养模块导航 (4个页面) */
 
-  /** 跳转到设备保养列表页 */
-  static toMaintenanceList(params?: PageParams['/pages-sub/maintenance/index']) {
-    return navigateToTyped('/pages-sub/maintenance/index', params)
+  /**
+   * 跳转到设备保养任务列表页
+   * @description 对应旧代码 gitee-example/pages/maintainance/maintainance.vue
+   */
+  static toMaintenanceTaskList(params?: PageParams['/pages-sub/maintenance/task-list']) {
+    return navigateToTyped('/pages-sub/maintenance/task-list', params)
   }
 
-  /** 跳转到保养执行页 */
+  /**
+   * 跳转到保养执行页
+   * @description 对应旧代码 gitee-example/pages/maintainance/excuteMaintainance.vue
+   */
   static toMaintenanceExecute(taskId: string) {
     return navigateToTyped('/pages-sub/maintenance/execute', { taskId })
   }
 
-  /** 跳转到单项保养页 */
+  /**
+   * 跳转到单项保养页
+   * @description 对应旧代码 gitee-example/pages/maintainance/excuteOneMaintainance.vue
+   */
   static toMaintenanceExecuteSingle(taskDetailId: string, taskId: string, itemName: string) {
     return navigateToTyped('/pages-sub/maintenance/execute-single', { taskDetailId, taskId, itemName })
   }
 
-  /** 跳转到任务流转页 */
+  /**
+   * 跳转到保养任务流转页
+   * @description 对应旧代码 gitee-example/pages/maintainance/maintainanceTransfer.vue
+   */
   static toMaintenanceTransfer(taskId: string) {
     return navigateToTyped('/pages-sub/maintenance/transfer', { taskId })
   }
 
-  /** 工作单模块导航 (5个页面) */
+  /** 工作单模块导航 (8个页面) */
 
-  /** 跳转到发工作单页 */
-  static toWorkOrderStart() {
-    return navigateToTyped('/pages-sub/work/start', {})
+  /**
+   * 跳转到工作任务列表页
+   * @description 对应旧代码 gitee-example/pages/work/workTask.vue
+   */
+  static toWorkTaskList() {
+    return navigateToTyped('/pages-sub/work/task-list', {})
   }
 
-  /** 跳转到办工作单页 */
-  static toWorkOrderDo() {
-    return navigateToTyped('/pages-sub/work/do', {})
+  /**
+   * 跳转到发工作单页
+   * @description 对应旧代码 gitee-example/pages/work/startWork.vue
+   */
+  static toWorkStart() {
+    return navigateToTyped('/pages-sub/work/start-work', {})
   }
 
-  /** 跳转到抄送工作单页 */
-  static toWorkOrderCopy() {
-    return navigateToTyped('/pages-sub/work/copy', {})
+  /**
+   * 跳转到办工作单页
+   * @description 对应旧代码 gitee-example/pages/work/doWork.vue
+   */
+  static toWorkDo() {
+    return navigateToTyped('/pages-sub/work/do-work', {})
   }
 
-  /** 跳转到工作单详情页 */
-  static toWorkOrderDetail(orderId: string) {
-    return navigateToTyped('/pages-sub/work/detail', { orderId })
+  /**
+   * 跳转到工作单详情页
+   * @description 对应旧代码 gitee-example/pages/work/workDetail.vue
+   */
+  static toWorkDetail(orderId: string) {
+    return navigateToTyped('/pages-sub/work/work-detail', { orderId })
   }
 
-  /** 跳转到工作单审核页 */
-  static toWorkOrderAudit(orderId: string) {
-    return navigateToTyped('/pages-sub/work/audit', { orderId })
+  /**
+   * 跳转到编辑工作单页
+   * @description 对应旧代码 gitee-example/pages/work/editWrok.vue
+   */
+  static toWorkEdit(orderId: string) {
+    return navigateToTyped('/pages-sub/work/edit-work', { orderId })
+  }
+
+  /**
+   * 跳转到抄送工作单页
+   * @description 对应旧代码 gitee-example/pages/work/copyWork.vue
+   */
+  static toWorkCopy() {
+    return navigateToTyped('/pages-sub/work/copy-work', {})
+  }
+
+  /**
+   * 跳转到处理抄送工作单页
+   * @description 对应旧代码 gitee-example/pages/work/doCopyWork.vue
+   */
+  static toWorkDoCopy(copyId: string) {
+    return navigateToTyped('/pages-sub/work/do-copy-work', { copyId })
+  }
+
+  /**
+   * 跳转到工作单审核页
+   * @description 对应旧代码 gitee-example/pages/work/doWorkAudit.vue
+   */
+  static toWorkAudit(taskId: string) {
+    return navigateToTyped('/pages-sub/work/audit-work', { taskId })
   }
 }
 
@@ -393,16 +444,19 @@ export function isValidRoute(path: string): path is PageRoute {
     '/pages-sub/selector/select-unit',
     '/pages-sub/selector/select-room',
     // 设备保养模块
-    '/pages-sub/maintenance/index',
+    '/pages-sub/maintenance/task-list',
     '/pages-sub/maintenance/execute',
     '/pages-sub/maintenance/execute-single',
     '/pages-sub/maintenance/transfer',
     // 工作单模块
-    '/pages-sub/work/start',
-    '/pages-sub/work/do',
-    '/pages-sub/work/copy',
-    '/pages-sub/work/detail',
-    '/pages-sub/work/audit',
+    '/pages-sub/work/task-list',
+    '/pages-sub/work/start-work',
+    '/pages-sub/work/do-work',
+    '/pages-sub/work/work-detail',
+    '/pages-sub/work/edit-work',
+    '/pages-sub/work/copy-work',
+    '/pages-sub/work/do-copy-work',
+    '/pages-sub/work/audit-work',
   ]
 
   return validRoutes.includes(path as PageRoute)

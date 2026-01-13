@@ -2,7 +2,7 @@
   抄送工作单页面
   功能：显示抄送给我的工作单列表
 
-  访问地址: http://localhost:9000/#/pages-sub/work/copy
+  访问地址: http://localhost:9000/#/pages-sub/work/copy-work
 
   旧代码：gitee-example/pages/work/copyWork.vue
 -->
@@ -75,7 +75,7 @@ function getStatusType(status: string): 'primary' | 'success' | 'warning' | 'dan
 
 /** 跳转到工作单详情页 */
 function handleDetail(order: WorkOrder) {
-  TypedRouter.toWorkOrderDetail(order.orderId)
+  TypedRouter.toWorkDetail(order.orderId)
 }
 </script>
 
