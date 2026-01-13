@@ -3,6 +3,9 @@
   功能：创建新的工作单，填写工作单信息
 
   访问地址: http://localhost:9000/#/pages-sub/work/start
+
+  旧代码：gitee-example/pages/work/startWork.vue
+  旧代码：gitee-example/components/work/add-work.vue
 -->
 
 <script lang="ts" setup>

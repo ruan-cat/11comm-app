@@ -3,6 +3,8 @@
   功能：显示待办工作单列表，支持下拉刷新和上拉加载
 
   访问地址: http://localhost:9000/#/pages-sub/work/do
+
+  旧代码：gitee-example/pages/work/doWork.vue
 -->
 
 <script lang="ts" setup>

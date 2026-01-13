@@ -6,6 +6,8 @@
   建议携带参数: ?taskId=xxx
 
   示例: http://localhost:9000/#/pages-sub/maintenance/transfer?taskId=MT_001
+
+  旧代码：gitee-example/pages/maintainance/maintainanceTransfer.vue
 -->
 
 <script setup lang="ts">

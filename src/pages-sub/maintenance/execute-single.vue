@@ -6,6 +6,8 @@
   建议携带参数: ?taskDetailId=xxx&taskId=xxx&itemName=xxx
 
   示例: http://localhost:9000/#/pages-sub/maintenance/execute-single?taskDetailId=MTD_MT_001_01&taskId=MT_001&itemName=外观检查
+
+  旧代码：gitee-example/pages/maintainance/excuteOneMaintainance.vue
 -->
 
 <script setup lang="ts">

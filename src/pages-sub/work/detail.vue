@@ -6,6 +6,8 @@
   建议携带参数: ?orderId=xxx
 
   http://localhost:9000/#/pages-sub/work/detail?orderId=WO_001
+
+  旧代码：gitee-example/pages/work/workDetail.vue
 -->
 
 <script lang="ts" setup>

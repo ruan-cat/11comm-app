@@ -3,6 +3,8 @@
   功能：显示抄送给我的工作单列表
 
   访问地址: http://localhost:9000/#/pages-sub/work/copy
+
+  旧代码：gitee-example/pages/work/copyWork.vue
 -->
 
 <script lang="ts" setup>
