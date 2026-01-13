@@ -198,6 +198,11 @@ export class TypedRouter {
     return switchTabTyped('/pages/index/index')
   }
 
+  /** 跳转到工作台 */
+  static toWorkbench() {
+    return switchTabTyped('/pages/work/index')
+  }
+
   static toAddressList() {
     return switchTabTyped('/pages/address/list')
   }
@@ -267,6 +272,28 @@ export class TypedRouter {
   static toSelectRoom(floorId: string, unitId: string) {
     return navigateToTyped('/pages-sub/selector/select-room', { floorId, unitId })
   }
+
+  /** 设备保养模块导航 (4个页面) */
+
+  /** 跳转到设备保养列表页 */
+  static toMaintenanceList(params?: PageParams['/pages-sub/maintenance/index']) {
+    return navigateToTyped('/pages-sub/maintenance/index', params)
+  }
+
+  /** 跳转到保养执行页 */
+  static toMaintenanceExecute(taskId: string) {
+    return navigateToTyped('/pages-sub/maintenance/execute', { taskId })
+  }
+
+  /** 跳转到单项保养页 */
+  static toMaintenanceExecuteSingle(taskDetailId: string, taskId: string, itemName: string) {
+    return navigateToTyped('/pages-sub/maintenance/execute-single', { taskDetailId, taskId, itemName })
+  }
+
+  /** 跳转到任务流转页 */
+  static toMaintenanceTransfer(taskId: string) {
+    return navigateToTyped('/pages-sub/maintenance/transfer', { taskId })
+  }
 }
 
 /** 路由参数解析工具 */
@@ -297,6 +324,7 @@ export function parseRouteParams<T extends keyof PageParams>(url: string): { pat
 export function isValidRoute(path: string): path is PageRoute {
   const validRoutes: PageRoute[] = [
     '/pages/index/index',
+    '/pages/work/index',
     '/pages/about/about',
     '/pages/me/me',
     '/pages/login/login',
@@ -337,6 +365,11 @@ export function isValidRoute(path: string): path is PageRoute {
     '/pages-sub/selector/select-floor',
     '/pages-sub/selector/select-unit',
     '/pages-sub/selector/select-room',
+    // 设备保养模块
+    '/pages-sub/maintenance/index',
+    '/pages-sub/maintenance/execute',
+    '/pages-sub/maintenance/execute-single',
+    '/pages-sub/maintenance/transfer',
   ]
 
   return validRoutes.includes(path as PageRoute)
