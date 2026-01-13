@@ -73,12 +73,6 @@ function onChooseAvatar(e: any) {
   run()
 }
 // #endif
-// #ifdef MP-WEIXIN
-/** 微信小程序下设置用户名 */
-function getUserInfo(e: any) {
-  console.log(e.detail)
-}
-// #endif
 
 /** 退出登录 */
 function handleLogout() {
