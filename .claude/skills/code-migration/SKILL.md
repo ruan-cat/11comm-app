@@ -542,7 +542,57 @@ export function debounce<T extends (...args: any[]) => any>(func: T, wait: numbe
 
 > **📚 完整指南**: 参阅 [工具函数迁移.md](工具函数迁移.md)
 
-### 7. 数据字典常量使用规范
+### 7. 静态资源导入规范
+
+**核心原则**:
+
+在 uni-app + Vite 项目中，静态图片资源必须通过 `import` 导入，不能在模板中直接使用 `@/` 路径别名字符串。
+
+**❌ 错误写法**:
+
+```vue
+<script setup>
+const entries = [{ name: "投诉待办", icon: "@/static/image/index/i_complaint.png" }];
+</script>
+
+<template>
+	<!-- ❌ @/ 别名在模板动态绑定中不会被解析 -->
+	<image v-for="entry in entries" :key="entry.name" :src="entry.icon" />
+</template>
+```
+
+**✅ 正确写法**:
+
+```vue
+<script setup>
+/** 导入静态图片资源 */
+import iComplaint from "@/static/image/index/i_complaint.png";
+import iRepair from "@/static/image/index/i_repair.png";
+
+const entries = [
+	{ name: "投诉待办", icon: iComplaint },
+	{ name: "报修待办", icon: iRepair },
+];
+</script>
+
+<template>
+	<!-- ✅ 使用导入的变量 -->
+	<image v-for="entry in entries" :key="entry.name" :src="entry.icon" />
+</template>
+```
+
+**替代方案**:
+
+```vue
+<script setup>
+/** 使用 /static 绝对路径（无需 import） */
+const entries = [{ name: "投诉待办", icon: "/static/image/index/i_complaint.png" }];
+</script>
+```
+
+> **📚 详细规范**: 参阅 [静态资源导入.md](静态资源导入.md)
+
+### 8. 数据字典常量使用规范
 
 **核心原则**:
 
@@ -577,7 +627,7 @@ const statusName = statusItem.label; // 展示名称
 
 > **📚 详细规范**: 参阅 [数据字典常量规范.md](数据字典常量规范.md)
 
-### 8. 组件显隐状态封装规范
+### 9. 组件显隐状态封装规范
 
 **核心原则**:
 
