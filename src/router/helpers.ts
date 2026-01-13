@@ -198,9 +198,12 @@ export class TypedRouter {
     return switchTabTyped('/pages/index/index')
   }
 
-  /** 跳转到工作台 */
+  /**
+   * 跳转到工作台
+   * @description 对应旧代码 gitee-example/pages/index/work.vue
+   */
   static toWorkbench() {
-    return switchTabTyped('/pages/work/index')
+    return switchTabTyped('/pages/work-dashboard/index')
   }
 
   static toAddressList() {
@@ -402,7 +405,7 @@ export function parseRouteParams<T extends keyof PageParams>(url: string): { pat
 export function isValidRoute(path: string): path is PageRoute {
   const validRoutes: PageRoute[] = [
     '/pages/index/index',
-    '/pages/work/index',
+    '/pages/work-dashboard/index', // 工作台
     '/pages/about/about',
     '/pages/me/me',
     '/pages/login/login',

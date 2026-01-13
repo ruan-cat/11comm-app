@@ -133,7 +133,7 @@
 			}
 		},
 		{
-			"path": "pages/work/index",
+			"path": "pages/work-dashboard/index",
 			"type": "page",
 			"style": {
 				"navigationBarTitleText": "工作台",

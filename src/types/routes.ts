@@ -7,7 +7,7 @@
 export type PageRoute
 /** 主包页面 */
   = | '/pages/index/index'
-    | '/pages/work/index'
+    | '/pages/work-dashboard/index' // 工作台 ← gitee-example/pages/index/work.vue
     | '/pages/about/about'
     | '/pages/me/me'
     | '/pages/login/login'
@@ -64,12 +64,12 @@ export type PageRoute
     | '/pages-sub/work/audit-work' // 工作单审核 ← gitee-example/pages/work/doWorkAudit.vue
 
 /** Tab页面路由类型 */
-export type TabRoute = '/pages/index/index' | '/pages/work/index' | '/pages/address/list' | '/pages/me/me'
+export type TabRoute = '/pages/index/index' | '/pages/work-dashboard/index' | '/pages/address/list' | '/pages/me/me'
 
 /** 页面参数类型映射（强类型约束） */
 export interface PageParams {
   '/pages/index/index': {}
-  '/pages/work/index': {}
+  '/pages/work-dashboard/index': {} // 工作台
   '/pages/about/about': {}
   '/pages/me/me': {}
   '/pages/login/login': {
