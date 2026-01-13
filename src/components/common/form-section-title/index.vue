@@ -6,11 +6,13 @@
   - 提供统一的标题样式
   - 支持呼吸动效
   - 支持图标和必填标记
+  - 支持 wot-design-uni 内置图标和 UnoCSS Iconify 图标
   - 淡灰色背景与白色表单项形成对比
 -->
 
 <script setup lang="ts">
 import type { FormSectionTitleProps } from './types'
+import { computed } from 'vue'
 
 const props = withDefaults(defineProps<FormSectionTitleProps>(), {
   required: false,
@@ -19,6 +21,9 @@ const props = withDefaults(defineProps<FormSectionTitleProps>(), {
   iconClass: '',
   subtitle: '',
 })
+
+/** 判断是否为 Iconify 图标（以 'i-' 开头） */
+const isIconifyIcon = computed(() => props.icon.startsWith('i-'))
 </script>
 
 <template>
@@ -32,8 +37,15 @@ const props = withDefaults(defineProps<FormSectionTitleProps>(), {
         />
 
         <!-- 图标（可选） -->
+        <!-- Iconify 图标（以 'i-' 开头） -->
+        <view
+          v-if="icon && isIconifyIcon"
+          :class="[icon, iconClass || 'text-blue-500']"
+          class="flex-shrink-0 text-lg"
+        />
+        <!-- wot-design-uni 内置图标 -->
         <wd-icon
-          v-if="icon"
+          v-else-if="icon"
           :name="icon"
           :custom-class="iconClass || 'text-blue-500'"
           size="18px"
