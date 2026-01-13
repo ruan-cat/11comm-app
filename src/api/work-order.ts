@@ -11,6 +11,8 @@ import type {
   UpdateWorkOrderParams,
   WorkOrder,
   WorkOrderDetail,
+  WorkTask,
+  WorkTaskItem,
 } from '@/types/work-order'
 import { http } from '@/http/alova'
 
@@ -112,4 +114,48 @@ export function auditWorkOrder(data: AuditWorkOrderParams) {
  */
 export function cancelWorkOrder(data: { orderId: string, reason?: string }) {
   return http.Post<{ success: boolean }>('/app/workorder/cancel', data)
+}
+
+/**
+ * 获取工作任务列表
+ * @param params 查询参数
+ * @returns 任务列表
+ */
+export function getWorkTaskList(params: {
+  workId: string
+  page: number
+  row: number
+}) {
+  return http.Get<PaginationResponse<WorkTask>>('/app/workorder/task/list', {
+    params,
+  })
+}
+
+/**
+ * 获取工作任务项列表
+ * @param params 查询参数
+ * @returns 任务项列表
+ */
+export function getWorkTaskItems(params: {
+  workId: string
+  states?: string
+}) {
+  return http.Get<PaginationResponse<WorkTaskItem>>('/app/workorder/task/items', {
+    params,
+  })
+}
+
+/**
+ * 完成抄送工作单处理
+ * @param data 处理参数
+ * @returns 操作结果
+ */
+export function finishWorkCopy(data: {
+  copyId: string
+  itemId: string
+  score: number
+  deductionMoney: number
+  deductionReason: string
+}) {
+  return http.Post<{ success: boolean }>('/app/workorder/copy/finish', data)
 }

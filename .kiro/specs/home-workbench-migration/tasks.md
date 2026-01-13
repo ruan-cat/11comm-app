@@ -94,7 +94,7 @@
     - **Property 6: TypedRouter Navigation Consistency**
     - **Validates: Requirements 18.2, 18.3, 18.4, 18.5**
 
-- [ ] 5. 工作单模块迁移
+- [x] 5. 工作单模块迁移
   - [x] 5.1 创建工作单类型定义
     - 创建 `src/types/work-order.ts`
     - 定义 WorkOrder、WorkTask 等类型
@@ -104,30 +104,32 @@
     - 创建 `src/api/mock/work-order.mock.ts` Mock 数据
     - _Requirements: 17.1, 17.2, 17.3, 17.5, 17.6_
   - [x] 5.3 创建发工作单页
-    - 创建 `src/pages-sub/work/start.vue`
+    - 创建 `src/pages-sub/work/start-work.vue`
     - 使用 wd-form 实现工作单创建表单
     - 使用 FormSectionTitle 组件作为表单分区标题
     - 使用 wd-picker 实现选择功能
     - _Requirements: 4.1, 4.2, 4.3, 24.1, 24.2, 24.3, 24.6_
   - [x] 5.4 创建办工作单页
-    - 创建 `src/pages-sub/work/do.vue`
+    - 创建 `src/pages-sub/work/do-work.vue`
     - 使用 z-paging 实现待办列表
     - 在 #loading 插槽中使用 z-paging-loading 组件
     - _Requirements: 4.4, 23.4, 23.5_
   - [x] 5.5 创建抄送工作单页
-    - 创建 `src/pages-sub/work/copy.vue`
+    - 创建 `src/pages-sub/work/copy-work.vue`
     - 显示抄送给我的工作单列表
     - _Requirements: 4.5_
   - [x] 5.6 创建工作单详情页
-    - 创建 `src/pages-sub/work/detail.vue`
+    - 创建 `src/pages-sub/work/work-detail.vue`
     - 使用 FormSectionTitle 组件和色彩编码系统
     - _Requirements: 4.6, 25.3, 25.4_
   - [x] 5.7 创建工作单审核页
-    - 创建 `src/pages-sub/work/audit.vue`
+    - 创建 `src/pages-sub/work/audit-work.vue`
     - 使用 wd-message-box.prompt() 实现输入弹框
     - _Requirements: 4.7, 4.8, 20.9, 25.6_
-  - [ ] 5.8 创建其他工作单页面
-    - 创建 edit.vue、task-list.vue、do-copy.vue
+  - [x] 5.8 创建其他工作单页面
+    - 创建 `src/pages-sub/work/edit-work.vue` ← gitee-example/pages/work/editWrok.vue
+    - 创建 `src/pages-sub/work/task-list.vue` ← gitee-example/pages/work/workTask.vue
+    - 创建 `src/pages-sub/work/do-copy-work.vue` ← gitee-example/pages/work/doCopyWork.vue
     - _Requirements: 4.6, 4.7_
   - [x] 5.9 添加工作单路由类型定义
     - 在 routes.ts 中添加所有工作单页面路由

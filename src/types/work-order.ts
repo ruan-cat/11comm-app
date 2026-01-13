@@ -240,3 +240,51 @@ export interface AuditWorkOrderParams {
   /** 审核意见 */
   opinion?: string
 }
+
+/**
+ * 工作任务接口
+ * @description 工作单的处理人任务信息
+ */
+export interface WorkTask {
+  /** 任务ID */
+  taskId: string
+  /** 工作单ID */
+  workId: string
+  /** 员工ID */
+  staffId: string
+  /** 员工姓名 */
+  staffName: string
+  /** 任务状态 */
+  state: string
+  /** 创建时间 */
+  createTime: string
+}
+
+/**
+ * 工作任务项接口
+ * @description 工作单任务的具体执行项
+ */
+export interface WorkTaskItem {
+  /** 任务项ID */
+  itemId: string
+  /** 工作单ID */
+  workId: string
+  /** 任务ID */
+  taskId: string
+  /** 内容 */
+  content: string
+  /** 员工ID */
+  staffId?: string
+  /** 员工姓名 */
+  staffName?: string
+  /** 状态：W-未办理，C-已完成，P-处理中 */
+  state: string
+  /** 备注 */
+  remark?: string
+  /** 完成时间 */
+  finishTime?: string
+  /** 附件URL列表 */
+  pathUrls?: string[]
+  /** 创建时间 */
+  createTime: string
+}

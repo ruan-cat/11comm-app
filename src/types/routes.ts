@@ -231,7 +231,9 @@ export interface PageParams {
     taskId: string // 任务ID
   }
   /** 工作单模块参数 (8个页面) */
-  '/pages-sub/work/task-list': {} // 工作任务列表，无参数
+  '/pages-sub/work/task-list': {
+    workId: string // 工作单ID
+  }
   '/pages-sub/work/start-work': {} // 发工作单，无参数
   '/pages-sub/work/do-work': {} // 办工作单，无参数
   '/pages-sub/work/work-detail': {
@@ -243,6 +245,7 @@ export interface PageParams {
   '/pages-sub/work/copy-work': {} // 抄送工作单，无参数
   '/pages-sub/work/do-copy-work': {
     copyId: string // 抄送ID
+    workId?: string // 工作单ID
   }
   '/pages-sub/work/audit-work': {
     taskId: string // 任务ID

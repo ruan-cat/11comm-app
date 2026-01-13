@@ -480,10 +480,28 @@
 					}
 				},
 				{
+					"path": "work/edit-work",
+					"type": "page",
+					"style": {
+						"navigationBarTitleText": "编辑工作单",
+						"navigationBarBackgroundColor": "#368bff",
+						"navigationBarTextStyle": "white"
+					}
+				},
+				{
 					"path": "work/start-work",
 					"type": "page",
 					"style": {
 						"navigationBarTitleText": "发工作单",
+						"navigationBarBackgroundColor": "#368bff",
+						"navigationBarTextStyle": "white"
+					}
+				},
+				{
+					"path": "work/task-list",
+					"type": "page",
+					"style": {
+						"navigationBarTitleText": "选择处理人",
 						"navigationBarBackgroundColor": "#368bff",
 						"navigationBarTextStyle": "white"
 					}

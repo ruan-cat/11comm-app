@@ -313,8 +313,8 @@ export class TypedRouter {
    * 跳转到工作任务列表页
    * @description 对应旧代码 gitee-example/pages/work/workTask.vue
    */
-  static toWorkTaskList() {
-    return navigateToTyped('/pages-sub/work/task-list', {})
+  static toWorkTaskList(workId: string) {
+    return navigateToTyped('/pages-sub/work/task-list', { workId })
   }
 
   /**
