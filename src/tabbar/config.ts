@@ -73,7 +73,7 @@ export const customTabbarList: CustomTabBarItem[] = [
   },
   {
     text: '工作台',
-    pagePath: 'pages/work/index',
+    pagePath: 'pages/work-dashboard/index',
     iconType: 'unocss',
     icon: 'i-carbon-grid',
   },

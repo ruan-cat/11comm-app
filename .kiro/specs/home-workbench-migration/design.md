@@ -49,7 +49,7 @@ graph TB
 
     subgraph MainPages["主包页面"]
         IndexPage["src/pages/index/index.vue"]
-        WorkPage["src/pages/work/index.vue"]
+        WorkPage["src/pages/work-dashboard/index.vue"]
         ProfilePages["src/pages/profile/*.vue"]
     end
 
@@ -144,7 +144,7 @@ src/
 ### 1. 工作台页面组件
 
 ```typescript
-// src/pages/work/index.vue
+// src/pages/work-dashboard/index.vue
 interface WorkbenchMenu {
 	id: string;
 	name: string;

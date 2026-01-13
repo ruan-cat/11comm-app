@@ -3,7 +3,7 @@
 ## Phase 0: 基础框架（P0 优先级）
 
 - [x] 1. 创建工作台页面
-  - [x] 1.1 创建工作台页面文件 `src/pages/work/index.vue`
+  - [x] 1.1 创建工作台页面文件 `src/pages/work-dashboard/index.vue`
     - 使用 wot-design-uni 组件实现功能菜单网格布局
     - 添加 definePage 配置，设置页面标题为"工作台"
     - 实现按分类组织的功能入口（常用功能、工单业务、停车业务、核销业务、报表业务）
@@ -17,7 +17,7 @@
     - _Requirements: 1.1_
 
   - [ ] 1.3 添加工作台路由类型定义
-    - 在 `src/types/routes.ts` 中添加 `/pages/work/index` 路由
+    - 在 `src/types/routes.ts` 中添加 `/pages/work-dashboard/index` 路由
 
     - 在 `src/router/helpers.ts` 中添加 `toWorkbench()` 方法
 
