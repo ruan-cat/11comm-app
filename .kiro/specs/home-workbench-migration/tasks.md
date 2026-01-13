@@ -2,28 +2,35 @@
 
 ## Phase 0: 基础框架（P0 优先级）
 
-- [ ] 1. 创建工作台页面
-  - [ ] 1.1 创建工作台页面文件 `src/pages/work/index.vue`
+- [x] 1. 创建工作台页面
+  - [x] 1.1 创建工作台页面文件 `src/pages/work/index.vue`
     - 使用 wot-design-uni 组件实现功能菜单网格布局
     - 添加 definePage 配置，设置页面标题为"工作台"
     - 实现按分类组织的功能入口（常用功能、工单业务、停车业务、核销业务、报表业务）
     - 使用 wd-icon 组件配合 i-carbon-\* 图标类名
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 20.3_
+
   - [ ] 1.2 更新 TabBar 配置
     - 在 `src/tabbar/config.ts` 中添加工作台入口
     - 配置工作台图标和路由
+
     - _Requirements: 1.1_
+
   - [ ] 1.3 添加工作台路由类型定义
     - 在 `src/types/routes.ts` 中添加 `/pages/work/index` 路由
+
     - 在 `src/router/helpers.ts` 中添加 `toWorkbench()` 方法
+
     - _Requirements: 18.2, 18.3, 1.6_
 
-- [ ] 2. 完善首页入口跳转功能
+- [x] 2. 完善首页入口跳转功能
   - [ ] 2.1 实现首页顶部入口跳转
     - 为投诉待办、报修待办、巡检打卡、设备保养入口添加点击事件
     - 已迁移模块使用 TypedRouter 跳转到对应页面
+
     - 未迁移模块显示"功能开发中"提示
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.7_
+
   - [ ] 2.2 实现工作待办区域入口跳转
     - 为采购待办、领用待办、调拨待办、物品放行、访客待办入口添加点击事件
     - 使用 TypedRouter 强类型路由方法
@@ -32,6 +39,7 @@
     - 为发工作单、办工作单、抄送工作单入口添加点击事件
     - 使用 TypedRouter 强类型路由方法
     - _Requirements: 2.6, 2.7_
+
   - [ ]\* 2.4 Write property test for navigation entry click behavior
     - **Property 1: Navigation Entry Click Behavior**
     - **Validates: Requirements 1.3, 2.5, 2.6, 2.7**

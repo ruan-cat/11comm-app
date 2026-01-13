@@ -278,6 +278,7 @@
 5. WHEN 迁移任意页面 THEN THE 系统 SHALL 移除所有 this 引用
 6. WHEN 迁移任意页面 THEN THE 系统 SHALL 为所有变量和函数添加 TypeScript 类型注解
 7. WHEN 迁移任意页面 THEN THE 系统 SHALL 禁止使用 any 类型（除非必要）
+8. WHEN 迁移任意页面 THEN THE 系统 SHALL 禁止使用多余的 defineOptions 宏（仅在需要设置组件 name 且有特殊用途时才使用）
 
 ### Requirement 20: 组件迁移规范
 
