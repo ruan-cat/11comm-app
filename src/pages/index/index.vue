@@ -8,43 +8,145 @@
 -->
 
 <script lang="ts" setup>
+import { TypedRouter } from '@/router/helpers'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
+
+/** 导入顶部入口图标 */
+import iComplaint from '@/static/image/index/i_complaint.png'
+import iRepair from '@/static/image/index/i_repair.png'
+import iInspection from '@/static/image/index/i_inspection.png'
+import iMachine from '@/static/image/index/i_machine.png'
+
+/** 导入工作待办图标 */
+import indexApplyAudit from '@/static/image/index_apply_audit.png'
+import indexItemoutAudit from '@/static/image/index_itemout_audit.png'
+import indexAllocation from '@/static/image/index_allocation.png'
+import indexComplaint from '@/static/image/index_complaint.png'
+import indexRepair from '@/static/image/index_repair.png'
+
 defineOptions({
   name: 'Home',
 })
+
 definePage({
-  // 使用 type: "home" 属性设置首页，其他页面不需要设置，默认为page
   type: 'home',
   style: {
-    // 'custom' 表示开启自定义导航栏，默认 'default'
     navigationStyle: 'custom',
     navigationBarTitleText: '首页',
   },
 })
+
+const toast = useGlobalToast()
+
+/** 顶部入口配置 */
+interface HeaderEntry {
+  id: string
+  name: string
+  icon: string
+  route?: string
+  disabled?: boolean
+}
+
+/** 待办入口配置 */
+interface TodoEntry {
+  id: string
+  name: string
+  icon?: string
+  route?: string
+  disabled?: boolean
+}
+
+/** 工作单入口配置 */
+interface WorkOrderEntry {
+  id: string
+  name: string
+  label: string
+  route?: string
+  disabled?: boolean
+}
+
+/** 顶部入口列表 */
+const headerEntries: HeaderEntry[] = [
+  { id: 'complaint', name: '投诉待办', icon: iComplaint, route: '/pages-sub/complaint/list' },
+  { id: 'repair', name: '报修待办', icon: iRepair, route: '/pages-sub/repair/dispatch' },
+  { id: 'inspection', name: '巡检打卡', icon: iInspection, route: '/pages-sub/inspection/task-list' },
+  { id: 'maintenance', name: '设备保养', icon: iMachine, disabled: true },
+]
+
+/** 工作待办入口列表 */
+const todoEntries: TodoEntry[] = [
+  { id: 'purchase-audit', name: '采购待办', icon: indexApplyAudit, disabled: true },
+  { id: 'item-out-audit', name: '领用待办', icon: indexItemoutAudit, disabled: true },
+  { id: 'allocation-audit', name: '调拨待办', icon: indexAllocation, disabled: true },
+  { id: 'release', name: '物品放行', icon: indexComplaint, disabled: true },
+  { id: 'visit', name: '访客待办', icon: indexRepair, disabled: true },
+]
+
+/** 工作单入口列表 */
+const workOrderEntries: WorkOrderEntry[] = [
+  { id: 'work-start', name: '工作单', label: '发', disabled: true },
+  { id: 'work-do', name: '工作单', label: '办', disabled: true },
+  { id: 'work-copy', name: '抄送', label: '抄', disabled: true },
+]
+
+/** 处理顶部入口点击 */
+function handleHeaderClick(entry: HeaderEntry) {
+  if (entry.disabled) {
+    toast.info('功能开发中')
+    return
+  }
+
+  switch (entry.id) {
+    case 'complaint':
+      TypedRouter.toComplaintList()
+      break
+    case 'repair':
+      TypedRouter.toRepairDispatch()
+      break
+    case 'inspection':
+      TypedRouter.toInspectionTaskList()
+      break
+    default:
+      toast.info('功能开发中')
+  }
+}
+
+/** 处理工作待办入口点击 */
+function handleTodoClick(entry: TodoEntry) {
+  if (entry.disabled) {
+    toast.info('功能开发中')
+    return
+  }
+
+  // 根据 id 跳转到对应页面
+  toast.info('功能开发中')
+}
+
+/** 处理工作单入口点击 */
+function handleWorkOrderClick(entry: WorkOrderEntry) {
+  if (entry.disabled) {
+    toast.info('功能开发中')
+    return
+  }
+
+  // 根据 id 跳转到对应页面
+  toast.info('功能开发中')
+}
 </script>
 
 <template>
   <view class="home-contant">
+    <!-- 顶部入口区域 -->
     <view class="title-head">
-      <view>
-        <!-- 图片 -->
-        <image class="title-ico" src="@/static/image/index/i_complaint.png" mode="aspectFit" />
-        <view>投诉待办</view>
-      </view>
-
-      <view>
-        <!-- 图片 -->
-        <image class="title-ico" src="@/static/image/index/i_repair.png" mode="aspectFit" />
-        <view>报修待办</view>
-      </view>
-      <view>
-        <!-- 图片 -->
-        <image class="title-ico" src="@/static/image/index/i_inspection.png" mode="aspectFit" />
-        <view>巡检打卡</view>
-      </view>
-      <view>
-        <!-- 图片 -->
-        <image class="title-ico" src="@/static/image/index/i_machine.png" mode="aspectFit" />
-        <view>设备保养</view>
+      <view
+        v-for="entry in headerEntries"
+        :key="entry.id"
+        class="header-entry"
+        :class="{ 'opacity-60': entry.disabled }"
+        @click="handleHeaderClick(entry)"
+      >
+        <image class="title-ico" :src="entry.icon" mode="aspectFit" />
+        <view>{{ entry.name }}</view>
       </view>
     </view>
 
@@ -55,34 +157,15 @@ definePage({
       </view>
 
       <view class="work-item">
-        <view class="work-item-content">
-          <!-- 图片 -->
-          <image class="work-ico" src="@/static/image/index_apply_audit.png" mode="aspectFit" />
-          <view>采购待办</view>
-        </view>
-
-        <view class="work-item-content">
-          <!-- 图片 -->
-          <image class="work-ico" src="@/static/image/index_itemout_audit.png" mode="aspectFit" />
-          <view>领用待办</view>
-        </view>
-
-        <view class="work-item-content">
-          <!-- 图片 -->
-          <image class="work-ico" src="@/static/image/index_allocation.png" mode="aspectFit" />
-          <view>调拨待办</view>
-        </view>
-
-        <view class="work-item-content">
-          <!-- 图片 -->
-          <image class="work-ico" src="@/static/image/index_complaint.png" mode="aspectFit" />
-          <view>物品放行</view>
-        </view>
-
-        <view class="work-item-content">
-          <!-- 图片 -->
-          <image class="work-ico" src="@/static/image/index_repair.png" mode="aspectFit" />
-          <view>访客待办</view>
+        <view
+          v-for="entry in todoEntries"
+          :key="entry.id"
+          class="work-item-content"
+          :class="{ 'opacity-60': entry.disabled }"
+          @click="handleTodoClick(entry)"
+        >
+          <image class="work-ico" :src="entry.icon" mode="aspectFit" />
+          <view>{{ entry.name }}</view>
         </view>
       </view>
     </view>
@@ -94,40 +177,30 @@ definePage({
       </view>
 
       <view class="work-item">
-        <view class="work-item-content">
-          <!-- 图片 -->
+        <view
+          v-for="entry in workOrderEntries"
+          :key="entry.id"
+          class="work-item-content"
+          :class="{ 'opacity-60': entry.disabled }"
+          @click="handleWorkOrderClick(entry)"
+        >
           <view class="work-font">
-            发
+            {{ entry.label }}
           </view>
-          <view>工作单</view>
-        </view>
-
-        <view class="work-item-content">
-          <!-- 图片 -->
-          <view class="work-font">
-            办
-          </view>
-          <view>工作单</view>
-        </view>
-
-        <view class="work-item-content">
-          <!-- 图片 -->
-          <view class="work-font">
-            抄
-          </view>
-          <view>抄送</view>
+          <view>{{ entry.name }}</view>
         </view>
       </view>
     </view>
   </view>
 </template>
 
-<style scoped ts="scss">
+<style scoped lang="scss">
 .home-contant {
   height: 100vh;
   width: 100vw;
   background-color: #f1f1f1;
 }
+
 .title-head {
   background-color: #368bff;
   padding-top: 40px;
@@ -139,6 +212,18 @@ definePage({
   color: #fff;
   font-size: 12px;
 }
+
+.header-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
 .title-ico {
   height: 45px;
   width: 45px;
@@ -172,6 +257,11 @@ definePage({
 .work-item-content {
   padding: 20px;
   border: 1px solid #f1f1f1;
+  cursor: pointer;
+
+  &:active {
+    background-color: #f5f5f5;
+  }
 }
 
 .work-font {
