@@ -19,7 +19,11 @@
   },
   // Disable the default formatter, use eslint instead
   // 需要使用prettier来便捷的格式化
-  "prettier.enable": false,
+  "prettier.enable": true,
+  // markdown文件目前使用prettier来格式化
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true,
   // Auto fix
