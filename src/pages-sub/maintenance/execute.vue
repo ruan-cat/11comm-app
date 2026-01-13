@@ -10,13 +10,13 @@
 
 <script setup lang="ts">
 import type { MaintenanceTask, MaintenanceTaskDetail } from '@/types/maintenance'
-import { completeMaintenanceTask, getMaintenanceDetail, getMaintenanceDetailItems, startMaintenanceTask } from '@/api/maintenance'
-import FormSectionTitle from '@/components/common/form-section-title/index.vue'
-import { TypedRouter } from '@/router/helpers'
-import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { computed, ref } from 'vue'
+import { completeMaintenanceTask, getMaintenanceDetail, getMaintenanceDetailItems, startMaintenanceTask } from '@/api/maintenance'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
+import { TypedRouter } from '@/router/helpers'
 
 definePage({
   style: {

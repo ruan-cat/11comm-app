@@ -10,10 +10,15 @@
 
 <script lang="ts" setup>
 import type { WorkOrderDetail } from '@/types/work-order'
-import { auditWorkOrder, getWorkOrderDetail } from '@/api/work-order'
-import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
+import { auditWorkOrder, getWorkOrderDetail } from '@/api/work-order'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
+
+/** 路由参数 */
+const props = defineProps<{
+  orderId?: string
+}>()
 
 definePage({
   style: {
@@ -22,11 +27,6 @@ definePage({
     navigationBarTextStyle: 'white',
   },
 })
-
-/** 路由参数 */
-const props = defineProps<{
-  orderId?: string
-}>()
 
 /** 工作单详情 */
 const orderDetail = ref<WorkOrderDetail | null>(null)
@@ -125,7 +125,7 @@ function handleReject() {
 <template>
   <view class="min-h-screen bg-gray-50 pb-safe">
     <!-- 加载状态 -->
-    <view v-if="loading" class="flex h-60 items-center justify-center">
+    <view v-if="loading" class="h-60 flex items-center justify-center">
       <wd-loading />
     </view>
 
@@ -190,17 +190,17 @@ function handleReject() {
     </view>
 
     <!-- 空状态 -->
-    <view v-else class="flex h-60 items-center justify-center">
+    <view v-else class="h-60 flex items-center justify-center">
       <wd-status-tip image="error" tip="工作单不存在" />
     </view>
 
     <!-- 底部操作按钮 -->
-    <view v-if="orderDetail" class="fixed bottom-0 left-0 right-0 bg-white p-4 pb-safe shadow-top">
+    <view v-if="orderDetail" class="shadow-top fixed bottom-0 left-0 right-0 bg-white p-4 pb-safe">
       <view class="flex gap-3">
         <wd-button
           type="danger"
-          block
-          plain
+
+          plain block
           :loading="auditLoading"
           @click="handleReject"
         >

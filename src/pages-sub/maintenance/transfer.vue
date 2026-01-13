@@ -11,13 +11,13 @@
 <script setup lang="ts">
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import type { MaintenanceTask } from '@/types/maintenance'
-import { getMaintenanceDetail, transferMaintenanceTask } from '@/api/maintenance'
-import { getStaffList } from '@/api/inspection'
-import FormSectionTitle from '@/components/common/form-section-title/index.vue'
-import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
+import { getStaffList } from '@/api/inspection'
+import { getMaintenanceDetail, transferMaintenanceTask } from '@/api/maintenance'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 definePage({
   style: {

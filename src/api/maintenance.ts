@@ -3,6 +3,7 @@
  * 对应业务：设备保养任务管理
  */
 
+import type { PaginationResponse } from '@/types/api'
 import type {
   MaintenanceQueryParams,
   MaintenanceSingleSubmitParams,
@@ -10,7 +11,6 @@ import type {
   MaintenanceTaskDetail,
   MaintenanceTransferParams,
 } from '@/types/maintenance'
-import type { PaginationResponse } from '@/types/api'
 import { http } from '@/http/alova'
 
 /** ==================== 查询接口 ==================== */

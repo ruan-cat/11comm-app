@@ -8,20 +8,20 @@
 -->
 
 <script lang="ts" setup>
-import { TypedRouter } from '@/router/helpers'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
+import { TypedRouter } from '@/router/helpers'
 
 /** 导入顶部入口图标 */
 import iComplaint from '@/static/image/index/i_complaint.png'
-import iRepair from '@/static/image/index/i_repair.png'
 import iInspection from '@/static/image/index/i_inspection.png'
 import iMachine from '@/static/image/index/i_machine.png'
+import iRepair from '@/static/image/index/i_repair.png'
 
+import indexAllocation from '@/static/image/index_allocation.png'
 /** 导入工作待办图标 */
 import indexApplyAudit from '@/static/image/index_apply_audit.png'
-import indexItemoutAudit from '@/static/image/index_itemout_audit.png'
-import indexAllocation from '@/static/image/index_allocation.png'
 import indexComplaint from '@/static/image/index_complaint.png'
+import indexItemoutAudit from '@/static/image/index_itemout_audit.png'
 import indexRepair from '@/static/image/index_repair.png'
 
 defineOptions({

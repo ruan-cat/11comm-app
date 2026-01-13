@@ -3,6 +3,7 @@
  * @description 工作单相关的接口定义
  */
 
+import type { PaginationResponse } from '@/types/api'
 import type {
   AuditWorkOrderParams,
   CompleteWorkOrderParams,
@@ -11,7 +12,6 @@ import type {
   WorkOrder,
   WorkOrderDetail,
 } from '@/types/work-order'
-import type { PaginationResponse } from '@/types/api'
 import { http } from '@/http/alova'
 
 /**

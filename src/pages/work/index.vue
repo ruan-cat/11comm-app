@@ -6,8 +6,8 @@
 -->
 
 <script lang="ts" setup>
-import { TypedRouter } from '@/router/helpers'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
+import { TypedRouter } from '@/router/helpers'
 
 defineOptions({
   name: 'Workbench',
@@ -136,9 +136,9 @@ function handleMenuClick(menu: WorkbenchMenu) {
 <template>
   <view class="workbench-page bg-colorui-bg min-h-screen">
     <!-- 功能分类列表 -->
-    <view v-for="category in categories" :key="category.title" class="category-section bg-white mb-3">
+    <view v-for="category in categories" :key="category.title" class="category-section mb-3 bg-white">
       <!-- 分类标题 -->
-      <view class="category-title px-4 py-3 text-base font-medium border-b border-colorui-line">
+      <view class="category-title border-colorui-line border-b px-4 py-3 text-base font-medium">
         {{ category.title }}
       </view>
 
@@ -147,23 +147,23 @@ function handleMenuClick(menu: WorkbenchMenu) {
         <view
           v-for="menu in category.menus"
           :key="menu.id"
-          class="menu-item flex flex-col items-center justify-center py-4 active:bg-colorui-bg"
+          class="menu-item active:bg-colorui-bg flex flex-col items-center justify-center py-4"
           :class="{ 'opacity-50': menu.disabled }"
           @click="handleMenuClick(menu)"
         >
           <!-- 图标 -->
-          <view class="menu-icon mb-2 relative">
+          <view class="menu-icon relative mb-2">
             <wd-icon name="" :custom-class="`text-32px ${menu.icon} ${menu.iconClass}`" />
             <!-- 角标 -->
             <view
               v-if="menu.badge"
-              class="badge absolute -top-1 -right-2 min-w-18px h-18px px-1 bg-colorui-red text-white text-10px rounded-full flex items-center justify-center"
+              class="badge absolute h-18px min-w-18px flex items-center justify-center rounded-full bg-colorui-red px-1 text-10px text-white -right-2 -top-1"
             >
               {{ menu.badge > 99 ? '99+' : menu.badge }}
             </view>
           </view>
           <!-- 名称 -->
-          <text class="menu-name text-12px text-colorui-grey">{{ menu.name }}</text>
+          <text class="menu-name text-colorui-grey text-12px">{{ menu.name }}</text>
         </view>
       </view>
     </view>

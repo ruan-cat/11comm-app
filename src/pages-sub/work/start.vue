@@ -8,12 +8,12 @@
 <script lang="ts" setup>
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import type { CreateWorkOrderParams } from '@/types/work-order'
+import { useRequest } from 'alova/client'
+import { ref } from 'vue'
 import { createWorkOrder } from '@/api/work-order'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { WorkOrderPriorityName, WorkOrderTypeName } from '@/types/work-order'
 import { getCurrentCommunity } from '@/utils/user'
-import { useRequest } from 'alova/client'
-import { ref } from 'vue'
 
 definePage({
   style: {
@@ -175,7 +175,7 @@ async function handleSubmit() {
     </wd-form>
 
     <!-- 提交按钮 -->
-    <view class="fixed bottom-0 left-0 right-0 bg-white p-4 pb-safe shadow-top">
+    <view class="shadow-top fixed bottom-0 left-0 right-0 bg-white p-4 pb-safe">
       <wd-button type="primary" block :loading="loading" @click="handleSubmit">
         提交工作单
       </wd-button>

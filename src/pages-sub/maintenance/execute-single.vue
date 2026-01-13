@@ -10,12 +10,12 @@
 
 <script setup lang="ts">
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
-import { submitMaintenanceSingle } from '@/api/maintenance'
-import FormSectionTitle from '@/components/common/form-section-title/index.vue'
-import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { ref } from 'vue'
+import { submitMaintenanceSingle } from '@/api/maintenance'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 definePage({
   style: {

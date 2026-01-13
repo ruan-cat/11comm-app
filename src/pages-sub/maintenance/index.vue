@@ -7,12 +7,12 @@
 
 <script lang="ts" setup>
 import type { MaintenanceTask } from '@/types/maintenance'
+import { useRequest } from 'alova/client'
+import { onMounted, ref } from 'vue'
 import { getMaintenanceList } from '@/api/maintenance'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { TypedRouter } from '@/router/helpers'
 import { getCurrentCommunity } from '@/utils/user'
-import { useRequest } from 'alova/client'
-import { onMounted, ref } from 'vue'
 
 definePage({
   style: {
@@ -115,7 +115,7 @@ function handleTransfer(task: MaintenanceTask) {
         </view>
 
         <!-- 任务信息 -->
-        <view class="mb-3 space-y-2 text-sm text-gray-600">
+        <view class="mb-3 text-sm text-gray-600 space-y-2">
           <view class="flex items-center gap-2">
             <wd-icon name="" custom-class="i-carbon-machine-learning text-gray-400 text-16px" />
             <text>设备：{{ item.machineName }}</text>

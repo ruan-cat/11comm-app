@@ -7,12 +7,12 @@
 
 <script lang="ts" setup>
 import type { WorkOrder } from '@/types/work-order'
+import { useRequest } from 'alova/client'
+import { onMounted, ref } from 'vue'
 import { getWorkOrderTodoList } from '@/api/work-order'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { TypedRouter } from '@/router/helpers'
 import { getCurrentCommunity } from '@/utils/user'
-import { useRequest } from 'alova/client'
-import { onMounted, ref } from 'vue'
 
 definePage({
   style: {
@@ -124,7 +124,7 @@ function handleDetail(order: WorkOrder) {
         </view>
 
         <!-- 工作单信息 -->
-        <view class="mb-3 space-y-2 text-sm text-gray-600">
+        <view class="mb-3 text-sm text-gray-600 space-y-2">
           <view class="flex items-center gap-2">
             <wd-icon name="" custom-class="i-carbon-category text-gray-400 text-16px" />
             <text>类型：{{ item.typeName }}</text>
@@ -147,7 +147,7 @@ function handleDetail(order: WorkOrder) {
         </view>
 
         <!-- 工作内容预览 -->
-        <view class="mb-3 line-clamp-2 text-sm text-gray-500">
+        <view class="line-clamp-2 mb-3 text-sm text-gray-500">
           {{ item.content }}
         </view>
 

@@ -10,11 +10,16 @@
 
 <script lang="ts" setup>
 import type { WorkOrderDetail } from '@/types/work-order'
+import { useRequest } from 'alova/client'
+import { computed, onMounted, ref } from 'vue'
 import { completeWorkOrder, getWorkOrderDetail, startWorkOrder } from '@/api/work-order'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { TypedRouter } from '@/router/helpers'
-import { useRequest } from 'alova/client'
-import { computed, onMounted, ref } from 'vue'
+
+/** 路由参数 */
+const props = defineProps<{
+  orderId?: string
+}>()
 
 definePage({
   style: {
@@ -23,11 +28,6 @@ definePage({
     navigationBarTextStyle: 'white',
   },
 })
-
-/** 路由参数 */
-const props = defineProps<{
-  orderId?: string
-}>()
 
 /** 工作单详情 */
 const orderDetail = ref<WorkOrderDetail | null>(null)
@@ -145,7 +145,7 @@ function handleAudit() {
 <template>
   <view class="min-h-screen bg-gray-50 pb-safe">
     <!-- 加载状态 -->
-    <view v-if="loading" class="flex h-60 items-center justify-center">
+    <view v-if="loading" class="h-60 flex items-center justify-center">
       <wd-loading />
     </view>
 
@@ -220,7 +220,7 @@ function handleAudit() {
             class="border-b border-gray-100 bg-white p-4 last:border-b-0"
           >
             <view class="flex items-center justify-between">
-              <text class="font-medium text-gray-800">{{ log.operationTypeName }}</text>
+              <text class="text-gray-800 font-medium">{{ log.operationTypeName }}</text>
               <text class="text-xs text-gray-400">{{ log.operationTime }}</text>
             </view>
             <view class="mt-1 text-sm text-gray-600">
@@ -235,12 +235,12 @@ function handleAudit() {
     </view>
 
     <!-- 空状态 -->
-    <view v-else class="flex h-60 items-center justify-center">
+    <view v-else class="h-60 flex items-center justify-center">
       <wd-status-tip image="error" tip="工作单不存在" />
     </view>
 
     <!-- 底部操作按钮 -->
-    <view v-if="showActions" class="fixed bottom-0 left-0 right-0 bg-white p-4 pb-safe shadow-top">
+    <view v-if="showActions" class="shadow-top fixed bottom-0 left-0 right-0 bg-white p-4 pb-safe">
       <view class="flex gap-3">
         <wd-button
           v-if="orderDetail?.status === '10001'"
@@ -260,7 +260,7 @@ function handleAudit() {
         >
           完成工作单
         </wd-button>
-        <wd-button type="warning" block plain @click="handleAudit">
+        <wd-button type="warning" plain block @click="handleAudit">
           提交审核
         </wd-button>
       </view>
