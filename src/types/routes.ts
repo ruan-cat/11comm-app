@@ -7,6 +7,7 @@
 export type PageRoute
 /** 主包页面 */
   = | '/pages/index/index'
+    | '/pages/work/index'
     | '/pages/about/about'
     | '/pages/me/me'
     | '/pages/login/login'
@@ -47,13 +48,25 @@ export type PageRoute
     | '/pages-sub/selector/select-floor' // 选择楼栋 (无参数)
     | '/pages-sub/selector/select-unit' // 选择单元 (需要 floorId 参数)
     | '/pages-sub/selector/select-room' // 选择房屋 (需要 floorId 和 unitId 参数)
+	/** 设备保养模块 (4个页面) */
+    | '/pages-sub/maintenance/index' // 设备保养列表
+    | '/pages-sub/maintenance/execute' // 保养执行页
+    | '/pages-sub/maintenance/execute-single' // 单项保养页
+    | '/pages-sub/maintenance/transfer' // 任务流转页
+	/** 工作单模块 (5个页面) */
+    | '/pages-sub/work/start' // 发工作单
+    | '/pages-sub/work/do' // 办工作单
+    | '/pages-sub/work/copy' // 抄送工作单
+    | '/pages-sub/work/detail' // 工作单详情
+    | '/pages-sub/work/audit' // 工作单审核
 
 /** Tab页面路由类型 */
-export type TabRoute = '/pages/index/index' | '/pages/address/list' | '/pages/me/me'
+export type TabRoute = '/pages/index/index' | '/pages/work/index' | '/pages/address/list' | '/pages/me/me'
 
 /** 页面参数类型映射（强类型约束） */
 export interface PageParams {
   '/pages/index/index': {}
+  '/pages/work/index': {}
   '/pages/about/about': {}
   '/pages/me/me': {}
   '/pages/login/login': {
@@ -198,6 +211,31 @@ export interface PageParams {
   '/pages-sub/selector/select-room': {
     floorId: string // 楼栋ID，必填参数
     unitId: string // 单元ID，必填参数
+  }
+  /** 设备保养模块参数 (4个页面) */
+  '/pages-sub/maintenance/index': {
+    status?: string // 状态筛选
+  }
+  '/pages-sub/maintenance/execute': {
+    taskId: string // 任务ID
+  }
+  '/pages-sub/maintenance/execute-single': {
+    taskDetailId: string // 详情ID
+    taskId: string // 任务ID
+    itemName: string // 保养项名称
+  }
+  '/pages-sub/maintenance/transfer': {
+    taskId: string // 任务ID
+  }
+  /** 工作单模块参数 (5个页面) */
+  '/pages-sub/work/start': {} // 发工作单，无参数
+  '/pages-sub/work/do': {} // 办工作单，无参数
+  '/pages-sub/work/copy': {} // 抄送工作单，无参数
+  '/pages-sub/work/detail': {
+    orderId: string // 工作单ID
+  }
+  '/pages-sub/work/audit': {
+    orderId: string // 工作单ID
   }
 }
 
