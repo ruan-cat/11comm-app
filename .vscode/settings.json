@@ -22,10 +22,12 @@
   "prettier.enable": true,
   // markdown文件目前使用prettier来格式化
   "[markdown]": {
+    "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "editor.defaultFormatter": "oxc.oxc-vscode",
-  "editor.formatOnSave": true,
+  // "editor.defaultFormatter": "oxc.oxc-vscode",
+  // "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnSave": false,
   // Auto fix
   "editor.codeActionsOnSave": {
     // https://oxc.rs/docs/guide/usage/linter/editors.html#use-recommended-setup-for-teams
