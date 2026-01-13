@@ -13,7 +13,7 @@ export default {
    * - 非 md 文件：执行 oxlint + eslint
    * - md 文件：仅执行 prettier 格式化
    */
-  '*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue,json,css,scss,html,yaml,yml}': 'pnpm run lint:oxlint',
+  '*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue,json,css,scss,html,yaml,yml}': 'pnpm run lint:fix',
   '*.md': 'prettier --ignore-unknown --experimental-cli --write',
   // gitee-example 目录下的文件不做任何处理
   'gitee-example/**': () => [],
