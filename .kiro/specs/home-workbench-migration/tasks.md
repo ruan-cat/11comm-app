@@ -1,0 +1,416 @@
+# Implementation Plan
+
+## Phase 0: 基础框架（P0 优先级）
+
+- [ ] 1. 创建工作台页面
+  - [ ] 1.1 创建工作台页面文件 `src/pages/work/index.vue`
+    - 使用 wot-design-uni 组件实现功能菜单网格布局
+    - 添加 definePage 配置，设置页面标题为"工作台"
+    - 实现按分类组织的功能入口（常用功能、工单业务、停车业务、核销业务、报表业务）
+    - 使用 wd-icon 组件配合 i-carbon-\* 图标类名
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 20.3_
+  - [ ] 1.2 更新 TabBar 配置
+    - 在 `src/tabbar/config.ts` 中添加工作台入口
+    - 配置工作台图标和路由
+    - _Requirements: 1.1_
+  - [ ] 1.3 添加工作台路由类型定义
+    - 在 `src/types/routes.ts` 中添加 `/pages/work/index` 路由
+    - 在 `src/router/helpers.ts` 中添加 `toWorkbench()` 方法
+    - _Requirements: 18.2, 18.3, 1.6_
+
+- [ ] 2. 完善首页入口跳转功能
+  - [ ] 2.1 实现首页顶部入口跳转
+    - 为投诉待办、报修待办、巡检打卡、设备保养入口添加点击事件
+    - 已迁移模块使用 TypedRouter 跳转到对应页面
+    - 未迁移模块显示"功能开发中"提示
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.7_
+  - [ ] 2.2 实现工作待办区域入口跳转
+    - 为采购待办、领用待办、调拨待办、物品放行、访客待办入口添加点击事件
+    - 使用 TypedRouter 强类型路由方法
+    - _Requirements: 2.5, 2.7_
+  - [ ] 2.3 实现工作单区域入口跳转
+    - 为发工作单、办工作单、抄送工作单入口添加点击事件
+    - 使用 TypedRouter 强类型路由方法
+    - _Requirements: 2.6, 2.7_
+  - [ ]\* 2.4 Write property test for navigation entry click behavior
+    - **Property 1: Navigation Entry Click Behavior**
+    - **Validates: Requirements 1.3, 2.5, 2.6, 2.7**
+
+- [ ] 3. Checkpoint - 确保所有测试通过
+  - Ensure all tests pass, ask the user if questions arise.
+
+## Phase 1: 核心功能模块（P1 优先级）
+
+- [ ] 4. 设备保养模块迁移
+  - [ ] 4.1 创建设备保养类型定义
+    - 创建 `src/types/maintenance.ts`
+    - 定义 MaintenanceTask、MaintenanceTaskDetail 等类型
+    - _Requirements: 3.1, 19.6_
+  - [ ] 4.2 创建设备保养 API 和 Mock
+    - 创建 `src/api/maintenance.ts` API 定义
+    - 创建 `src/api/mock/maintenance.mock.ts` Mock 数据
+    - 使用 successResponse/errorResponse/mockLog 统一响应格式
+    - _Requirements: 17.1, 17.2, 17.3, 17.5, 17.6_
+  - [ ]\* 4.3 Write property test for API response format
+    - **Property 2: API Response Format Conformance**
+    - **Validates: Requirements 17.2**
+  - [ ] 4.4 创建设备保养列表页
+    - 创建 `src/pages-sub/maintenance/index.vue`
+    - 使用 z-paging 实现分页列表
+    - 在 #loading 插槽中使用 z-paging-loading 组件
+    - 在 #empty 插槽中使用 wd-status-tip 组件
+    - 添加 definePage 配置
+    - _Requirements: 3.1, 3.2, 3.3, 3.7, 23.4, 23.5_
+  - [ ]\* 4.5 Write property test for z-paging complete callback
+    - **Property 4: z-paging Complete Callback Behavior**
+    - **Validates: Requirements 23.2, 23.3**
+  - [ ] 4.6 创建保养执行页
+    - 创建 `src/pages-sub/maintenance/execute.vue`
+    - 显示保养任务详情和执行项列表
+    - 使用 FormSectionTitle 组件和色彩编码系统
+    - _Requirements: 3.4, 25.3, 25.4_
+  - [ ] 4.7 创建单项保养页
+    - 创建 `src/pages-sub/maintenance/execute-single.vue`
+    - 使用 wd-form 实现单项保养表单
+    - 使用 FormSectionTitle 组件作为表单分区标题
+    - _Requirements: 3.6, 24.1, 24.2, 24.3_
+  - [ ] 4.8 创建任务流转页
+    - 创建 `src/pages-sub/maintenance/transfer.vue`
+    - 使用 wd-form 实现任务流转表单
+    - _Requirements: 3.5, 24.1, 24.2_
+  - [ ] 4.9 添加设备保养路由类型定义
+    - 在 routes.ts 中添加所有设备保养页面路由
+    - 在 helpers.ts 中添加对应的 TypedRouter 方法
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+  - [ ]\* 4.10 Write property test for TypedRouter navigation
+    - **Property 6: TypedRouter Navigation Consistency**
+    - **Validates: Requirements 18.2, 18.3, 18.4, 18.5**
+
+- [ ] 5. 工作单模块迁移
+  - [ ] 5.1 创建工作单类型定义
+    - 创建 `src/types/work-order.ts`
+    - 定义 WorkOrder、WorkTask 等类型
+    - _Requirements: 4.1, 19.6_
+  - [ ] 5.2 创建工作单 API 和 Mock
+    - 创建 `src/api/work-order.ts` API 定义
+    - 创建 `src/api/mock/work-order.mock.ts` Mock 数据
+    - _Requirements: 17.1, 17.2, 17.3, 17.5, 17.6_
+  - [ ] 5.3 创建发工作单页
+    - 创建 `src/pages-sub/work/start.vue`
+    - 使用 wd-form 实现工作单创建表单
+    - 使用 FormSectionTitle 组件作为表单分区标题
+    - 使用 wd-picker 实现选择功能
+    - _Requirements: 4.1, 4.2, 4.3, 24.1, 24.2, 24.3, 24.6_
+  - [ ] 5.4 创建办工作单页
+    - 创建 `src/pages-sub/work/do.vue`
+    - 使用 z-paging 实现待办列表
+    - 在 #loading 插槽中使用 z-paging-loading 组件
+    - _Requirements: 4.4, 23.4, 23.5_
+  - [ ] 5.5 创建抄送工作单页
+    - 创建 `src/pages-sub/work/copy.vue`
+    - 显示抄送给我的工作单列表
+    - _Requirements: 4.5_
+  - [ ] 5.6 创建工作单详情页
+    - 创建 `src/pages-sub/work/detail.vue`
+    - 使用 FormSectionTitle 组件和色彩编码系统
+    - _Requirements: 4.6, 25.3, 25.4_
+  - [ ] 5.7 创建工作单审核页
+    - 创建 `src/pages-sub/work/audit.vue`
+    - 使用 wd-message-box.prompt() 实现输入弹框
+    - _Requirements: 4.7, 4.8, 20.9, 25.6_
+  - [ ] 5.8 创建其他工作单页面
+    - 创建 edit.vue、task-list.vue、do-copy.vue
+    - _Requirements: 4.6, 4.7_
+  - [ ] 5.9 添加工作单路由类型定义
+    - 在 routes.ts 中添加所有工作单页面路由
+    - 在 helpers.ts 中添加对应的 TypedRouter 方法
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+
+- [ ] 6. 资源采购管理模块迁移
+  - [ ] 6.1 创建资源采购类型定义
+    - 创建 `src/types/resource.ts`
+    - 定义 PurchaseApply、ItemOut、AllocationApply 等类型
+    - _Requirements: 5.1, 19.6_
+  - [ ] 6.2 创建资源采购 API 和 Mock
+    - 创建 `src/api/resource.ts` API 定义
+    - 创建 `src/api/mock/resource.mock.ts` Mock 数据
+    - _Requirements: 17.1, 17.2, 17.3, 17.5, 17.6_
+  - [ ]\* 6.3 Write property test for pagination response format
+    - **Property 3: Pagination Response Format Conformance**
+    - **Validates: Requirements 17.3**
+  - [ ] 6.4 创建采购待办页
+    - 创建 `src/pages-sub/resource/purchase-audit.vue`
+    - 使用 z-paging 实现分页列表
+    - _Requirements: 5.1, 23.4, 23.5_
+  - [ ] 6.5 创建领用待办页
+    - 创建 `src/pages-sub/resource/item-out-audit.vue`
+    - _Requirements: 5.2_
+  - [ ] 6.6 创建调拨待办页
+    - 创建 `src/pages-sub/resource/allocation-audit.vue`
+    - _Requirements: 5.3_
+  - [ ] 6.7 创建采购申请管理页
+    - 创建 `src/pages-sub/resource/purchase-manage.vue`
+    - 支持新增、修改、查看详情
+    - _Requirements: 5.4_
+  - [ ] 6.8 创建采购申请相关页面
+    - 创建 add-purchase.vue、edit-purchase.vue、purchase-detail.vue
+    - 使用 wd-form 和 FormSectionTitle 组件
+    - _Requirements: 5.4, 5.5, 24.1, 24.2, 24.3_
+  - [ ] 6.9 创建物品领用管理页
+    - 创建 `src/pages-sub/resource/item-out-manage.vue`
+    - _Requirements: 5.6_
+  - [ ] 6.10 创建物品领用相关页面
+    - 创建 add-item-out.vue、item-out-do.vue、item-enter-do.vue
+    - _Requirements: 5.6_
+  - [ ] 6.11 创建调拨管理页
+    - 创建 `src/pages-sub/resource/allocation-manage.vue`
+    - _Requirements: 5.7_
+  - [ ] 6.12 创建调拨相关页面
+    - 创建 allocation-apply.vue、allocation-detail.vue、allocation-enter.vue
+    - _Requirements: 5.7_
+  - [ ] 6.13 创建我的物品页
+    - 创建 `src/pages-sub/resource/my-items.vue`
+    - 支持退还、损耗、转赠操作
+    - _Requirements: 5.8_
+  - [ ] 6.14 创建物品操作页面
+    - 创建 store-return.vue、store-scrap.vue、store-transfer.vue
+    - _Requirements: 5.8_
+  - [ ] 6.15 添加资源采购路由类型定义
+    - 在 routes.ts 中添加所有资源采购页面路由
+    - 在 helpers.ts 中添加对应的 TypedRouter 方法
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+
+- [ ] 7. Checkpoint - 确保所有测试通过
+  - Ensure all tests pass, ask the user if questions arise.
+
+## Phase 2: 扩展功能模块（P2 优先级）
+
+- [ ] 8. OA 工作流模块迁移
+  - [ ] 8.1 创建 OA 工作流类型定义和 API
+    - 创建 `src/types/oa.ts` 和 `src/api/oa.ts`
+    - 创建 `src/api/mock/oa.mock.ts`
+    - _Requirements: 6.1, 17.1, 17.5, 17.6_
+  - [ ] 8.2 创建 OA 流程页
+    - 创建 `src/pages-sub/oa/workflow.vue`
+    - _Requirements: 6.1_
+  - [ ] 8.3 创建流程待办页
+    - 创建 `src/pages-sub/oa/undo.vue`
+    - 使用 z-paging 实现分页列表
+    - _Requirements: 6.2, 23.4, 23.5_
+  - [ ] 8.4 创建流程处理页
+    - 创建 `src/pages-sub/oa/detail.vue`
+    - _Requirements: 6.3_
+  - [ ] 8.5 创建流程审核页
+    - 创建 `src/pages-sub/oa/audit.vue`
+    - 使用 wd-form 和 FormSectionTitle 组件
+    - _Requirements: 6.4, 6.5, 24.1, 24.2_
+  - [ ] 8.6 创建其他 OA 页面
+    - 创建 form.vue、form-edit.vue、finish.vue
+    - _Requirements: 6.1_
+  - [ ] 8.7 添加 OA 路由类型定义
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+
+- [ ] 9. 装修管理模块迁移
+  - [ ] 9.1 创建装修管理类型定义和 API
+    - 创建 `src/types/renovation.ts` 和 `src/api/renovation.ts`
+    - 创建 `src/api/mock/renovation.mock.ts`
+    - _Requirements: 7.1, 17.1, 17.5, 17.6_
+  - [ ] 9.2 创建装修记录列表页
+    - 创建 `src/pages-sub/renovation/list.vue`
+    - 使用 z-paging 实现分页列表
+    - _Requirements: 7.1, 23.4, 23.5_
+  - [ ] 9.3 创建装修详情页
+    - 创建 `src/pages-sub/renovation/detail.vue`
+    - 使用 FormSectionTitle 组件和色彩编码系统
+    - _Requirements: 7.2, 7.3, 25.3, 25.4_
+  - [ ] 9.4 创建跟踪记录列表页
+    - 创建 `src/pages-sub/renovation/record.vue`
+    - _Requirements: 7.4_
+  - [ ] 9.5 创建添加跟踪记录页
+    - 创建 `src/pages-sub/renovation/record-handle.vue`
+    - 使用 wd-form 和 FormSectionTitle 组件
+    - _Requirements: 7.5, 24.1, 24.2_
+  - [ ] 9.6 添加装修管理路由类型定义
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+
+- [ ] 10. 费用管理模块迁移
+  - [ ] 10.1 创建费用管理类型定义和 API
+    - 创建 `src/types/fee.ts` 和 `src/api/fee.ts`
+    - 创建 `src/api/mock/fee.mock.ts`
+    - _Requirements: 8.1, 17.1, 17.5, 17.6_
+  - [ ] 10.2 创建收银台页
+    - 创建 `src/pages-sub/fee/pay.vue`
+    - _Requirements: 8.1_
+  - [ ] 10.3 创建费用详情页
+    - 创建 `src/pages-sub/fee/detail.vue`
+    - _Requirements: 8.2_
+  - [ ] 10.4 创建催缴登记列表页
+    - 创建 `src/pages-sub/fee/owe-callable.vue`
+    - 使用 z-paging 实现分页列表
+    - _Requirements: 8.3, 23.4, 23.5_
+  - [ ] 10.5 创建添加催缴登记页
+    - 创建 `src/pages-sub/fee/write-owe-callable.vue`
+    - 使用 wd-form 和 FormSectionTitle 组件
+    - _Requirements: 8.4, 8.5, 24.1, 24.2_
+  - [ ] 10.6 添加费用管理路由类型定义
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+
+- [ ] 11. 抄表管理模块迁移
+  - [ ] 11.1 创建抄表管理类型定义和 API
+    - 创建 `src/types/meter.ts` 和 `src/api/meter.ts`
+    - 创建 `src/api/mock/meter.mock.ts`
+    - _Requirements: 9.1, 17.1, 17.5, 17.6_
+  - [ ] 11.2 创建水电抄表列表页
+    - 创建 `src/pages-sub/meter/reading.vue`
+    - 使用 z-paging 实现分页列表
+    - _Requirements: 9.1, 23.4, 23.5_
+  - [ ] 11.3 创建手工抄表页
+    - 创建 `src/pages-sub/meter/add-meter.vue`
+    - 使用 wd-form 和 FormSectionTitle 组件
+    - _Requirements: 9.2, 9.5, 24.1, 24.2_
+  - [ ] 11.4 创建二维码抄表页
+    - 创建 `src/pages-sub/meter/qrcode-meter.vue`
+    - _Requirements: 9.3_
+  - [ ] 11.5 创建公摊抄表页
+    - 创建 `src/pages-sub/meter/share-meter.vue`
+    - _Requirements: 9.4_
+  - [ ] 11.6 添加抄表管理路由类型定义
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+
+- [ ] 12. Checkpoint - 确保所有测试通过
+  - Ensure all tests pass, ask the user if questions arise.
+
+## Phase 3: 辅助功能模块（P3 优先级）
+
+- [ ] 13. 业主管理模块迁移
+  - [ ] 13.1 创建业主管理类型定义和 API
+    - 创建 `src/types/owner.ts` 和 `src/api/owner.ts`
+    - 创建 `src/api/mock/owner.mock.ts`
+    - _Requirements: 10.1, 17.1, 17.5, 17.6_
+  - [ ] 13.2 创建业主列表页
+    - 创建 `src/pages-sub/owner/list.vue`
+    - 使用 z-paging 实现分页和搜索
+    - _Requirements: 10.1, 23.4, 23.5_
+  - [ ] 13.3 创建新增/编辑业主页
+    - 创建 add-owner.vue、edit-owner.vue
+    - 使用 wd-form 和 FormSectionTitle 组件
+    - _Requirements: 10.2, 10.3, 10.4, 24.1, 24.2_
+  - [ ] 13.4 添加业主管理路由类型定义
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+
+- [ ] 14. 车辆管理模块迁移
+  - [ ] 14.1 创建车辆管理类型定义和 API
+    - 创建 `src/types/car.ts` 和 `src/api/car.ts`
+    - 创建 `src/api/mock/car.mock.ts`
+    - _Requirements: 11.1, 17.1, 17.5, 17.6_
+  - [ ] 14.2 创建业主车辆页
+    - 创建 `src/pages-sub/car/owner-car.vue`
+    - 使用 z-paging 实现分页列表
+    - _Requirements: 11.1, 23.4, 23.5_
+  - [ ] 14.3 创建道闸管理页
+    - 创建 `src/pages-sub/car/barrier-gate.vue`
+    - _Requirements: 11.2_
+  - [ ] 14.4 创建手工进出场页
+    - 创建 car-in.vue、car-out.vue
+    - _Requirements: 11.3, 11.4_
+  - [ ] 14.5 添加车辆管理路由类型定义
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+
+- [ ] 15. 核销模块迁移
+  - [ ] 15.1 创建核销类型定义和 API
+    - 创建 `src/types/coupon.ts` 和 `src/api/coupon.ts`
+    - 创建 `src/api/mock/coupon.mock.ts`
+    - _Requirements: 12.1, 17.1, 17.5, 17.6_
+  - [ ] 15.2 创建预约核销页
+    - 创建 `src/pages-sub/coupon/appointment.vue`
+    - _Requirements: 12.1_
+  - [ ] 15.3 创建核销优惠券页
+    - 创建 `src/pages-sub/coupon/write-off.vue`
+    - _Requirements: 12.2_
+  - [ ] 15.4 创建核销预约页
+    - 创建 `src/pages-sub/coupon/reserve.vue`
+    - _Requirements: 12.3_
+  - [ ] 15.5 添加核销路由类型定义
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+
+- [ ] 16. 报表统计模块迁移
+  - [ ] 16.1 创建报表统计类型定义和 API
+    - 创建 `src/types/report.ts` 和 `src/api/report.ts`
+    - 创建 `src/api/mock/report.mock.ts`
+    - _Requirements: 13.1, 17.1, 17.5, 17.6_
+  - [ ] 16.2 创建数据统计页
+    - 创建 `src/pages-sub/report/data.vue`
+    - _Requirements: 13.1_
+  - [ ] 16.3 创建缴费明细表页
+    - 创建 `src/pages-sub/report/pay-fee-detail.vue`
+    - 使用 z-paging 实现分页列表
+    - _Requirements: 13.2, 23.4, 23.5_
+  - [ ] 16.4 创建房屋费用明细页
+    - 创建 `src/pages-sub/report/room-fee.vue`
+    - _Requirements: 13.3_
+  - [ ] 16.5 创建费用汇总表页
+    - 创建 `src/pages-sub/report/fee-summary.vue`
+    - _Requirements: 13.4_
+  - [ ] 16.6 创建开门记录页
+    - 创建 `src/pages-sub/report/open-door-log.vue`
+    - _Requirements: 13.5_
+  - [ ] 16.7 创建充电桩订单页
+    - 创建 `src/pages-sub/report/charge-order.vue`
+    - _Requirements: 13.6_
+  - [ ] 16.8 添加报表统计路由类型定义
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+
+- [ ] 17. 访客/物品放行模块迁移
+  - [ ] 17.1 创建访客/物品放行类型定义和 API
+    - 创建 `src/types/visit.ts` 和 `src/api/visit.ts`
+    - 创建 `src/api/mock/visit.mock.ts`
+    - _Requirements: 14.1, 17.1, 17.5, 17.6_
+  - [ ] 17.2 创建访客待办页
+    - 创建 `src/pages-sub/visit/list.vue`
+    - 使用 z-paging 实现分页列表
+    - _Requirements: 14.1, 23.4, 23.5_
+  - [ ] 17.3 创建访客详情页
+    - 创建 `src/pages-sub/visit/detail.vue`
+    - _Requirements: 14.2_
+  - [ ] 17.4 创建物品放行页
+    - 创建 `src/pages-sub/release/list.vue`
+    - _Requirements: 14.3_
+  - [ ] 17.5 创建物品放行详情页
+    - 创建 `src/pages-sub/release/detail.vue`
+    - _Requirements: 14.4_
+  - [ ] 17.6 添加访客/物品放行路由类型定义
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+
+- [ ] 18. 公告管理模块迁移
+  - [ ] 18.1 创建公告管理类型定义和 API
+    - 创建 `src/types/notice.ts` 和 `src/api/notice.ts`
+    - 创建 `src/api/mock/notice.mock.ts`
+    - _Requirements: 15.1, 17.1, 17.5, 17.6_
+  - [ ] 18.2 创建公告列表页
+    - 创建 `src/pages-sub/notice/list.vue`
+    - 使用 z-paging 实现分页列表
+    - _Requirements: 15.1, 23.4, 23.5_
+  - [ ] 18.3 创建公告详情页
+    - 创建 `src/pages-sub/notice/detail.vue`
+    - _Requirements: 15.2_
+  - [ ] 18.4 添加公告管理路由类型定义
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+
+- [ ] 19. 个人中心相关页面迁移
+  - [ ] 19.1 创建切换小区页
+    - 创建 `src/pages/profile/change-community.vue`
+    - _Requirements: 16.1, 16.2_
+  - [ ] 19.2 创建修改密码页
+    - 创建 `src/pages/profile/change-password.vue`
+    - 使用 wd-form 组件
+    - _Requirements: 16.3, 16.4, 24.1, 24.5_
+  - [ ] 19.3 添加个人中心路由类型定义
+    - _Requirements: 18.2, 18.3, 18.4, 18.5_
+
+- [ ] 20. 动态页面标题功能验证
+  - [ ]\* 20.1 Write property test for dynamic page title
+    - **Property 5: Dynamic Page Title Setting**
+    - **Validates: Requirements 26.1, 26.2, 26.3**
+
+- [ ] 21. Final Checkpoint - 确保所有测试通过
+  - Ensure all tests pass, ask the user if questions arise.
