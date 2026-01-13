@@ -22,13 +22,16 @@ context: fork
 
 必读文件：
 
+- `gitee-example/constant/url.js` - **旧项目接口地址常量文件（迁移时必须参考）**
 - `src/api/mock/repair.mock.ts` - 最完整、最标准的参考实现
+- `.claude/skills/api-migration/接口地址迁移.md` - **接口地址迁移规范（新增）**
 - `.claude/skills/api-migration/mock-实现指南.md`
 - `.claude/skills/api-migration/mock-规范.md`
 - `.claude/skills/api-migration/mock-响应格式.md`
 
 关键要求：
 
+- **迁移前必须查阅** `gitee-example/constant/url.js` 获取正确的接口地址
 - 使用 `{ query, body }` 解构参数
 - method 必须是数组：`['GET', 'POST']`
 - 必须设置 `delay: [300, 800]`
@@ -479,6 +482,7 @@ src/api/
 
 ## 相关文档
 
+- [接口地址迁移.md](接口地址迁移.md) - **旧项目 URL 常量迁移规范（重要）**
 - [mock-规范.md](mock-规范.md) - Mock 数据字典、日期格式、URL 前缀等详细规范
 - [mock-响应格式.md](mock-响应格式.md) - successResponse、errorResponse、mockLog 详细用法
 - [类型定义规范.md](类型定义规范.md) - 业务模块类型定义标准和示例
