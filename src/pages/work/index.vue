@@ -52,6 +52,14 @@ const categories: WorkbenchCategory[] = [
     ],
   },
   {
+    title: '维修报修',
+    menus: [
+      { id: 'repair-order', name: '维修工单池', icon: 'i-carbon-document', iconClass: 'text-colorui-orange', route: '/pages-sub/repair/order-list' },
+      { id: 'repair-dispatch', name: '维修待办单', icon: 'i-carbon-tools', iconClass: 'text-colorui-blue', route: '/pages-sub/repair/dispatch' },
+      { id: 'repair-finish', name: '维修已办', icon: 'i-carbon-task-complete', iconClass: 'text-colorui-green', route: '/pages-sub/repair/finish' },
+    ],
+  },
+  {
     title: '工单业务',
     menus: [
       { id: 'work-start', name: '发工作单', icon: 'i-carbon-document-add', iconClass: 'text-colorui-blue', disabled: true },
@@ -122,7 +130,14 @@ function handleMenuClick(menu: WorkbenchMenu) {
       TypedRouter.toComplaintList()
       break
     case 'repair':
+    case 'repair-dispatch':
       TypedRouter.toRepairDispatch()
+      break
+    case 'repair-order':
+      TypedRouter.toRepairList()
+      break
+    case 'repair-finish':
+      TypedRouter.toRepairFinish()
       break
     case 'inspection':
       TypedRouter.toInspectionTaskList()

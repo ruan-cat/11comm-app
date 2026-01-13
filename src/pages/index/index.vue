@@ -89,6 +89,22 @@ const workOrderEntries: WorkOrderEntry[] = [
   { id: 'work-copy', name: '抄送', label: '抄', disabled: true },
 ]
 
+/** 维修报修入口配置 */
+interface RepairEntry {
+  id: string
+  name: string
+  icon?: string
+  route?: string
+  disabled?: boolean
+}
+
+/** 维修报修入口列表 */
+const repairEntries: RepairEntry[] = [
+  { id: 'repair-order', name: '维修工单池', icon: indexRepair, route: '/pages-sub/repair/order-list' },
+  { id: 'repair-dispatch', name: '维修待办单', icon: iRepair, route: '/pages-sub/repair/dispatch' },
+  { id: 'repair-finish', name: '维修已办', icon: indexComplaint, route: '/pages-sub/repair/finish' },
+]
+
 /** 处理顶部入口点击 */
 function handleHeaderClick(entry: HeaderEntry) {
   if (entry.disabled) {
@@ -131,6 +147,28 @@ function handleWorkOrderClick(entry: WorkOrderEntry) {
 
   // 根据 id 跳转到对应页面
   toast.info('功能开发中')
+}
+
+/** 处理维修报修入口点击 */
+function handleRepairClick(entry: RepairEntry) {
+  if (entry.disabled) {
+    toast.info('功能开发中')
+    return
+  }
+
+  switch (entry.id) {
+    case 'repair-order':
+      TypedRouter.toRepairList()
+      break
+    case 'repair-dispatch':
+      TypedRouter.toRepairDispatch()
+      break
+    case 'repair-finish':
+      TypedRouter.toRepairFinish()
+      break
+    default:
+      toast.info('功能开发中')
+  }
 }
 </script>
 
@@ -187,6 +225,26 @@ function handleWorkOrderClick(entry: WorkOrderEntry) {
           <view class="work-font">
             {{ entry.label }}
           </view>
+          <view>{{ entry.name }}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 维修报修 -->
+    <view class="work-todo">
+      <view class="work-todo-title">
+        维修报修
+      </view>
+
+      <view class="work-item">
+        <view
+          v-for="entry in repairEntries"
+          :key="entry.id"
+          class="work-item-content"
+          :class="{ 'opacity-60': entry.disabled }"
+          @click="handleRepairClick(entry)"
+        >
+          <image class="work-ico" :src="entry.icon" mode="aspectFit" />
           <view>{{ entry.name }}</view>
         </view>
       </view>

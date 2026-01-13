@@ -11,6 +11,7 @@
 import type { IUploadSuccessInfo } from '@/api/types/login'
 import { storeToRefs } from 'pinia'
 import { LOGIN_PAGE } from '@/router/config'
+import { TypedRouter } from '@/router/helpers'
 import { useUserStore } from '@/store'
 import { useTokenStore } from '@/store/token'
 import { useUpload } from '@/utils/uploadFile'
@@ -105,6 +106,19 @@ function handleLogout() {
     },
   })
 }
+
+/** 跳转到维修已办 */
+function handleRepairFinish() {
+  TypedRouter.toRepairFinish()
+}
+
+/** 跳转到投诉已办（暂未实现） */
+function handleComplaintFinish() {
+  uni.showToast({
+    title: '功能开发中',
+    icon: 'none',
+  })
+}
 </script>
 
 <template>
@@ -141,8 +155,28 @@ function handleLogout() {
       </view>
     </view>
 
-    <view class="mt-3 break-all px-3">
-      {{ JSON.stringify(userInfo, null, 2) }}
+    <!-- 功能菜单区域 -->
+    <view class="menu-section">
+      <wd-cell-group border>
+        <wd-cell
+          title="维修已办"
+          is-link
+          @click="handleRepairFinish"
+        >
+          <template #icon>
+            <wd-icon name="" custom-class="i-carbon-task-complete text-colorui-blue mr-2" />
+          </template>
+        </wd-cell>
+        <wd-cell
+          title="投诉已办"
+          is-link
+          @click="handleComplaintFinish"
+        >
+          <template #icon>
+            <wd-icon name="" custom-class="i-carbon-checkmark-outline text-colorui-green mr-2" />
+          </template>
+        </wd-cell>
+      </wd-cell-group>
     </view>
 
     <view class="mt-20 px-3">
@@ -217,5 +251,13 @@ function handleLogout() {
   margin-top: 8rpx;
   font-size: 24rpx;
   color: #999;
+}
+
+/* 功能菜单区域 */
+.menu-section {
+  margin: 20rpx 30rpx;
+  background-color: #fff;
+  border-radius: 24rpx;
+  overflow: hidden;
 }
 </style>
