@@ -9,8 +9,10 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router/helpers'
+
 import { useUserStore } from '@/store'
 
 definePage({
@@ -41,6 +43,8 @@ interface WorkbenchMenu {
 /** 功能分类 */
 interface WorkbenchCategory {
   title: string
+  icon: string
+  iconClass: string
   menus: WorkbenchMenu[]
 }
 
@@ -48,6 +52,8 @@ interface WorkbenchCategory {
 const categories: WorkbenchCategory[] = [
   {
     title: '常用功能',
+    icon: 'i-carbon-star-filled',
+    iconClass: 'text-colorui-orange',
     menus: [
       { id: 'complaint', name: '投诉待办', icon: 'i-carbon-warning-alt', iconClass: 'text-colorui-red', bgClass: 'bg-colorui-red/10', route: '/pages-sub/complaint/list' },
       { id: 'repair', name: '报修待办', icon: 'i-carbon-tools', iconClass: 'text-colorui-blue', bgClass: 'bg-colorui-blue/10', route: '/pages-sub/repair/dispatch' },
@@ -57,6 +63,8 @@ const categories: WorkbenchCategory[] = [
   },
   {
     title: '维修报修',
+    icon: 'i-carbon-tools',
+    iconClass: 'text-colorui-blue',
     menus: [
       { id: 'repair-order', name: '维修工单池', icon: 'i-carbon-document', iconClass: 'text-colorui-orange', bgClass: 'bg-colorui-orange/10', route: '/pages-sub/repair/order-list' },
       { id: 'repair-dispatch', name: '维修待办单', icon: 'i-carbon-tools', iconClass: 'text-colorui-blue', bgClass: 'bg-colorui-blue/10', route: '/pages-sub/repair/dispatch' },
@@ -65,6 +73,8 @@ const categories: WorkbenchCategory[] = [
   },
   {
     title: '工单业务',
+    icon: 'i-carbon-document',
+    iconClass: 'text-colorui-cyan',
     menus: [
       { id: 'work-start', name: '发工作单', icon: 'i-carbon-document-add', iconClass: 'text-colorui-blue', bgClass: 'bg-colorui-blue/10', disabled: true },
       { id: 'work-do', name: '办工作单', icon: 'i-carbon-task', iconClass: 'text-colorui-green', bgClass: 'bg-colorui-green/10', disabled: true },
@@ -74,6 +84,8 @@ const categories: WorkbenchCategory[] = [
   },
   {
     title: '资源管理',
+    icon: 'i-carbon-cube',
+    iconClass: 'text-colorui-green',
     menus: [
       { id: 'purchase-audit', name: '采购待办', icon: 'i-carbon-shopping-cart', iconClass: 'text-colorui-blue', bgClass: 'bg-colorui-blue/10', disabled: true },
       { id: 'item-out-audit', name: '领用待办', icon: 'i-carbon-delivery', iconClass: 'text-colorui-green', bgClass: 'bg-colorui-green/10', disabled: true },
@@ -83,6 +95,8 @@ const categories: WorkbenchCategory[] = [
   },
   {
     title: '物业服务',
+    icon: 'i-carbon-home',
+    iconClass: 'text-colorui-purple',
     menus: [
       { id: 'renovation', name: '装修管理', icon: 'i-carbon-paint-brush', iconClass: 'text-colorui-orange', bgClass: 'bg-colorui-orange/10', disabled: true },
       { id: 'fee', name: '费用管理', icon: 'i-carbon-currency', iconClass: 'text-colorui-green', bgClass: 'bg-colorui-green/10', disabled: true },
@@ -92,6 +106,8 @@ const categories: WorkbenchCategory[] = [
   },
   {
     title: '停车业务',
+    icon: 'i-carbon-car',
+    iconClass: 'text-colorui-blue',
     menus: [
       { id: 'owner-car', name: '业主车辆', icon: 'i-carbon-car', iconClass: 'text-colorui-blue', bgClass: 'bg-colorui-blue/10', disabled: true },
       { id: 'barrier-gate', name: '道闸管理', icon: 'i-carbon-gate', iconClass: 'text-colorui-orange', bgClass: 'bg-colorui-orange/10', disabled: true },
@@ -99,6 +115,8 @@ const categories: WorkbenchCategory[] = [
   },
   {
     title: '核销业务',
+    icon: 'i-carbon-checkmark-outline',
+    iconClass: 'text-colorui-red',
     menus: [
       { id: 'coupon', name: '核销优惠券', icon: 'i-carbon-ticket', iconClass: 'text-colorui-red', bgClass: 'bg-colorui-red/10', disabled: true },
       { id: 'appointment', name: '预约核销', icon: 'i-carbon-calendar', iconClass: 'text-colorui-green', bgClass: 'bg-colorui-green/10', disabled: true },
@@ -106,6 +124,8 @@ const categories: WorkbenchCategory[] = [
   },
   {
     title: '访客放行',
+    icon: 'i-carbon-user-avatar',
+    iconClass: 'text-colorui-cyan',
     menus: [
       { id: 'visit', name: '访客待办', icon: 'i-carbon-user-avatar', iconClass: 'text-colorui-blue', bgClass: 'bg-colorui-blue/10', disabled: true },
       { id: 'release', name: '物品放行', icon: 'i-carbon-package', iconClass: 'text-colorui-orange', bgClass: 'bg-colorui-orange/10', disabled: true },
@@ -113,6 +133,8 @@ const categories: WorkbenchCategory[] = [
   },
   {
     title: '报表统计',
+    icon: 'i-carbon-chart-bar',
+    iconClass: 'text-colorui-orange',
     menus: [
       { id: 'data-report', name: '数据统计', icon: 'i-carbon-chart-bar', iconClass: 'text-colorui-blue', bgClass: 'bg-colorui-blue/10', disabled: true },
       { id: 'pay-fee-detail', name: '缴费明细', icon: 'i-carbon-receipt', iconClass: 'text-colorui-green', bgClass: 'bg-colorui-green/10', disabled: true },
@@ -186,11 +208,13 @@ function handleMenuClick(menu: WorkbenchMenu) {
         :key="category.title"
         class="category-card mb-3"
       >
-        <!-- 分类标题 -->
-        <view class="category-header">
-          <view class="title-indicator" />
-          <text class="text-sm text-gray-800 font-bold">{{ category.title }}</text>
-        </view>
+        <!-- 分类标题 - 使用 FormSectionTitle 组件 -->
+        <FormSectionTitle
+          :title="category.title"
+          :icon="category.icon"
+          :icon-class="category.iconClass"
+          :animated="true"
+        />
 
         <!-- 功能网格 -->
         <view class="menu-grid">
@@ -266,20 +290,10 @@ function handleMenuClick(menu: WorkbenchMenu) {
   box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
 }
 
-/* 分类标题 */
-.category-header {
-  display: flex;
-  align-items: center;
-  padding: 24rpx 32rpx;
-  border-bottom: 1rpx solid #f5f5f5;
-}
-
-.title-indicator {
-  width: 8rpx;
-  height: 28rpx;
-  margin-right: 16rpx;
-  background: #0081ff;
-  border-radius: 4rpx;
+/* 自定义 FormSectionTitle 样式以适配卡片 */
+:deep(.form-section-title-cell) {
+  border-radius: 24rpx 24rpx 0 0 !important;
+  margin-bottom: 0 !important;
 }
 
 /* 功能网格 */
