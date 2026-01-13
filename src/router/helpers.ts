@@ -294,6 +294,33 @@ export class TypedRouter {
   static toMaintenanceTransfer(taskId: string) {
     return navigateToTyped('/pages-sub/maintenance/transfer', { taskId })
   }
+
+  /** 工作单模块导航 (5个页面) */
+
+  /** 跳转到发工作单页 */
+  static toWorkOrderStart() {
+    return navigateToTyped('/pages-sub/work/start', {})
+  }
+
+  /** 跳转到办工作单页 */
+  static toWorkOrderDo() {
+    return navigateToTyped('/pages-sub/work/do', {})
+  }
+
+  /** 跳转到抄送工作单页 */
+  static toWorkOrderCopy() {
+    return navigateToTyped('/pages-sub/work/copy', {})
+  }
+
+  /** 跳转到工作单详情页 */
+  static toWorkOrderDetail(orderId: string) {
+    return navigateToTyped('/pages-sub/work/detail', { orderId })
+  }
+
+  /** 跳转到工作单审核页 */
+  static toWorkOrderAudit(orderId: string) {
+    return navigateToTyped('/pages-sub/work/audit', { orderId })
+  }
 }
 
 /** 路由参数解析工具 */
@@ -370,6 +397,12 @@ export function isValidRoute(path: string): path is PageRoute {
     '/pages-sub/maintenance/execute',
     '/pages-sub/maintenance/execute-single',
     '/pages-sub/maintenance/transfer',
+    // 工作单模块
+    '/pages-sub/work/start',
+    '/pages-sub/work/do',
+    '/pages-sub/work/copy',
+    '/pages-sub/work/detail',
+    '/pages-sub/work/audit',
   ]
 
   return validRoutes.includes(path as PageRoute)
