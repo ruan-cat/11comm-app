@@ -137,8 +137,9 @@
 			"type": "page",
 			"style": {
 				"navigationBarTitleText": "工作台",
-				"navigationBarBackgroundColor": "#368bff",
-				"navigationBarTextStyle": "white"
+				"navigationBarBackgroundColor": "#0081FF",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#F3F4F6"
 			}
 		}
 	],
