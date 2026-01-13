@@ -1281,3 +1281,9 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 ​[unocss]​ ​failed to load icon "carbon-number"​
 ​[unocss]​ ​failed to load icon "carbon-lock
 ```
+
+## 078 首页/工作台的提供的全部页面入口
+
+1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档。
+2. 阅读`旧项目`的首页和工作台相关的代码。
+3. 告诉我首页和工作台，应该补全那些入口文件？那些路由是需要能够从首页进入的？
