@@ -72,14 +72,16 @@ export const customTabbarList: CustomTabBarItem[] = [
     // badge: 'dot',
   },
   {
-    text: '关于',
-    pagePath: 'pages/about/about',
-    // 注意 unocss 图标需要如下处理：（二选一）
-    // 1）在fg-tabbar.vue页面上引入一下并注释掉（见tabbar/index.vue代码第2行）
-    // 2）配置到 unocss.config.ts 的 safelist 中
+    text: '工作台',
+    pagePath: 'pages/work/index',
     iconType: 'unocss',
-    icon: 'i-carbon-code',
-    // badge: 10,
+    icon: 'i-carbon-grid',
+  },
+  {
+    text: '通讯录',
+    pagePath: 'pages/address/list',
+    iconType: 'uniUi',
+    icon: 'person',
   },
   {
     pagePath: 'pages/me/me',
