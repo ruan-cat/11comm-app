@@ -4,12 +4,10 @@
     "pages.json": "jsonc", // pages.json 可以写注释
     "manifest.json": "jsonc" // manifest.json 可以写注释
   },
-
   "stylelint.enable": false, // 禁用 stylelint
   "css.validate": false, // 禁用 CSS 内置验证
   "scss.validate": false, // 禁用 SCSS 内置验证
   "less.validate": false, // 禁用 LESS 内置验证
-
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
@@ -19,12 +17,11 @@
     "package.json": "tsconfig.json,pnpm-lock.yaml,pnpm-workspace.yaml,LICENSE,.gitattributes,.gitignore,.gitpod.yml,CNAME,.npmrc,.browserslistrc",
     "eslint.config.mjs": ".commitlintrc.*,.prettier*,.editorconfig,.commitlint.cjs,.eslint*"
   },
-
   // Disable the default formatter, use eslint instead
   // 需要使用prettier来便捷的格式化
-  "prettier.enable": true,
-  "editor.formatOnSave": false,
-
+  "prettier.enable": false,
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
   // Auto fix
   "editor.codeActionsOnSave": {
     // https://oxc.rs/docs/guide/usage/linter/editors.html#use-recommended-setup-for-teams
@@ -32,21 +29,59 @@
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "never"
   },
-
   // Silent the stylistic rules in you IDE, but still auto fix them
   "eslint.rules.customizations": [
-    { "rule": "style/*", "severity": "off", "fixable": true },
-    { "rule": "format/*", "severity": "off", "fixable": true },
-    { "rule": "*-indent", "severity": "off", "fixable": true },
-    { "rule": "*-spacing", "severity": "off", "fixable": true },
-    { "rule": "*-spaces", "severity": "off", "fixable": true },
-    { "rule": "*-order", "severity": "off", "fixable": true },
-    { "rule": "*-dangle", "severity": "off", "fixable": true },
-    { "rule": "*-newline", "severity": "off", "fixable": true },
-    { "rule": "*quotes", "severity": "off", "fixable": true },
-    { "rule": "*semi", "severity": "off", "fixable": true }
+    {
+      "rule": "style/*",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "format/*",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-indent",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-spacing",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-spaces",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-order",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-dangle",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-newline",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*quotes",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*semi",
+      "severity": "off",
+      "fixable": true
+    }
   ],
-
   // Enable eslint for all supported languages
   "eslint.validate": [
     "javascript",
