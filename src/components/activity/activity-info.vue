@@ -108,7 +108,7 @@ function handleTimeClick() {
     </view>
 
     <!-- 元信息区域 -->
-    <view class="space-y-0">
+    <view class="meta-info-area">
       <!-- 发布者信息 -->
       <view
         class="group flex cursor-pointer items-center border-b border-gray-50 py-3 transition-all duration-200 hover:bg-gray-50"
@@ -212,6 +212,11 @@ function handleTimeClick() {
 </template>
 
 <style scoped>
+/** 元信息区域 - 无间距 */
+.meta-info-area {
+  /* 无额外间距 */
+}
+
 /** 卡片阴影效果 */
 .activity-info-card {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);

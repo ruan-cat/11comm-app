@@ -216,7 +216,7 @@ if (props.showError && props.retryCount > 0) {
         </view>
 
         <!-- 操作按钮 -->
-        <view class="space-y-3">
+        <view class="action-buttons">
           <!-- 重试按钮 -->
           <wd-button
             v-if="canRetryAction"
@@ -238,6 +238,7 @@ if (props.showError && props.retryCount > 0) {
             size="large"
             round
             block
+            class="action-btn"
             @click="handleRefresh"
           >
             <view class="flex items-center justify-center">
@@ -251,7 +252,8 @@ if (props.showError && props.retryCount > 0) {
             size="large"
             round
             block
-            custom-class="bg-white text-gray-700 border border-gray-300 font-medium hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+            class="action-btn"
+            custom-class="bg-white text-gray-700 border border-gray-300 font-medium"
             @click="handleContactSupport"
           >
             <view class="flex items-center justify-center">
@@ -265,7 +267,8 @@ if (props.showError && props.retryCount > 0) {
             size="large"
             round
             block
-            custom-class="bg-white text-gray-600 font-medium hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+            class="action-btn"
+            custom-class="bg-white text-gray-600 font-medium"
             @click="handleBack"
           >
             <view class="flex items-center justify-center">
@@ -327,6 +330,11 @@ if (props.showError && props.retryCount > 0) {
  * 只保留必须用 CSS 编写的动画 keyframes
  * 其他样式已迁移至 UnoCSS 原子类
  */
+
+/** 操作按钮区域间距 - 兼容微信小程序 */
+.action-btn {
+  margin-top: 12px;
+}
 
 /** 淡入上移动画 */
 @keyframes fadeInUp {

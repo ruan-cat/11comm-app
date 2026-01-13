@@ -126,23 +126,23 @@ function handleDetail(order: WorkOrder) {
         </view>
 
         <!-- 工作单信息 -->
-        <view class="mb-3 text-sm text-gray-600 space-y-2">
-          <view class="flex items-center gap-2">
+        <view class="mb-3 text-sm text-gray-600">
+          <view class="info-item flex items-center gap-2">
             <wd-icon name="" custom-class="i-carbon-category text-gray-400 text-16px" />
             <text>类型：{{ item.typeName }}</text>
             <wd-tag :type="getPriorityType(item.priority)" size="small" class="ml-2">
               {{ item.priorityName }}
             </wd-tag>
           </view>
-          <view class="flex items-center gap-2">
+          <view class="info-item flex items-center gap-2">
             <wd-icon name="" custom-class="i-carbon-time text-gray-400 text-16px" />
             <text>创建时间：{{ item.createTime }}</text>
           </view>
-          <view v-if="item.staffName" class="flex items-center gap-2">
+          <view v-if="item.staffName" class="info-item flex items-center gap-2">
             <wd-icon name="" custom-class="i-carbon-user text-gray-400 text-16px" />
             <text>执行人：{{ item.staffName }}</text>
           </view>
-          <view class="flex items-center gap-2">
+          <view class="info-item flex items-center gap-2">
             <wd-icon name="" custom-class="i-carbon-user-avatar text-gray-400 text-16px" />
             <text>创建人：{{ item.creatorName }}</text>
           </view>
@@ -169,7 +169,8 @@ function handleDetail(order: WorkOrder) {
 </template>
 
 <style scoped lang="scss">
-.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+/* 信息行间距 - 兼容微信小程序 */
+.info-item + .info-item {
   margin-top: 8rpx;
 }
 

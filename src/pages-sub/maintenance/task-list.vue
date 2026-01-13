@@ -117,16 +117,16 @@ function handleTransfer(task: MaintenanceTask) {
         </view>
 
         <!-- 任务信息 -->
-        <view class="mb-3 text-sm text-gray-600 space-y-2">
-          <view class="flex items-center gap-2">
+        <view class="mb-3 text-sm text-gray-600">
+          <view class="task-info-item flex items-center gap-2">
             <wd-icon name="" custom-class="i-carbon-machine-learning text-gray-400 text-16px" />
             <text>设备：{{ item.machineName }}</text>
           </view>
-          <view class="flex items-center gap-2">
+          <view class="task-info-item flex items-center gap-2">
             <wd-icon name="" custom-class="i-carbon-time text-gray-400 text-16px" />
             <text>计划时间：{{ item.planTime }}</text>
           </view>
-          <view v-if="item.staffName" class="flex items-center gap-2">
+          <view v-if="item.staffName" class="task-info-item flex items-center gap-2">
             <wd-icon name="" custom-class="i-carbon-user text-gray-400 text-16px" />
             <text>执行人：{{ item.staffName }}</text>
           </view>
@@ -172,7 +172,8 @@ function handleTransfer(task: MaintenanceTask) {
 </template>
 
 <style scoped lang="scss">
-.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+/* 任务信息行间距 - 使用兼容微信小程序的写法 */
+.task-info-item + .task-info-item {
   margin-top: 8rpx;
 }
 </style>

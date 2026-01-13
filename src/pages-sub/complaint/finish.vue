@@ -116,28 +116,28 @@ function handleDetail(complaint: Complaint) {
         </view>
 
         <!-- 投诉信息 -->
-        <view class="mt-2 space-y-1">
-          <view class="flex items-center justify-between text-sm">
+        <view class="mt-2">
+          <view class="info-row flex items-center justify-between text-sm">
             <text class="text-gray-500">投诉类型</text>
             <text class="text-gray-700">{{ item.typeName }}</text>
           </view>
 
-          <view class="flex items-center justify-between text-sm">
+          <view class="info-row flex items-center justify-between text-sm">
             <text class="text-gray-500">投诉人</text>
             <text class="text-gray-700">{{ item.complaintName }}</text>
           </view>
 
-          <view class="flex items-center justify-between text-sm">
+          <view class="info-row flex items-center justify-between text-sm">
             <text class="text-gray-500">房间</text>
             <text class="text-gray-700">{{ item.roomName }}</text>
           </view>
 
-          <view class="flex items-center justify-between text-sm">
+          <view class="info-row flex items-center justify-between text-sm">
             <text class="text-gray-500">投诉时间</text>
             <text class="text-gray-700">{{ item.createTime }}</text>
           </view>
 
-          <view class="flex items-center justify-between text-sm">
+          <view class="info-row flex items-center justify-between text-sm">
             <text class="text-gray-500">投诉内容</text>
             <text class="line-clamp-2 text-gray-700">{{ item.context }}</text>
           </view>
@@ -170,8 +170,9 @@ function handleDetail(complaint: Complaint) {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.space-y-1 > view:not(:last-child) {
-  margin-bottom: 0.5rem;
+/* 信息行间距 - 兼容微信小程序 */
+.info-row + .info-row {
+  margin-top: 0.5rem;
 }
 
 .line-clamp-2 {

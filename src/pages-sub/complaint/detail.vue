@@ -283,18 +283,18 @@ function getEventColor(eventType: string): string {
             </wd-button>
           </view>
 
-          <view class="text-sm space-y-2">
-            <view class="flex items-start gap-2">
+          <view class="text-sm">
+            <view class="appraise-row flex items-start gap-2">
               <text class="flex-shrink-0 text-gray-500">评价内容：</text>
               <text class="flex-1 text-gray-700">{{ appraise.context }}</text>
             </view>
 
-            <view class="flex items-center gap-2">
+            <view class="appraise-row flex items-center gap-2">
               <text class="text-gray-500">评价分数：</text>
               <text class="text-gray-700">{{ appraise.score }}</text>
             </view>
 
-            <view v-if="appraise.state === ComplaintAppraiseState.COMPLETED && appraise.replyContext" class="flex items-start gap-2">
+            <view v-if="appraise.state === ComplaintAppraiseState.COMPLETED && appraise.replyContext" class="appraise-row flex items-start gap-2">
               <text class="flex-shrink-0 text-gray-500">回复内容：</text>
               <text class="flex-1 text-gray-700">{{ appraise.replyContext }}</text>
             </view>
@@ -378,7 +378,8 @@ function getEventColor(eventType: string): string {
   }
 }
 
-.space-y-2 > view:not(:last-child) {
-  margin-bottom: 0.5rem;
+/* 评价行间距 - 兼容微信小程序 */
+.appraise-row + .appraise-row {
+  margin-top: 0.5rem;
 }
 </style>
