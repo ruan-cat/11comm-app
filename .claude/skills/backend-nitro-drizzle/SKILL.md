@@ -1,3 +1,8 @@
+---
+name: backend-nitro-drizzle
+description: Nitro v3 + Neon + Drizzle 后端开发技能。指导如何使用 Nitro v3 构建独立后端服务，配合 Neon Postgres 和 Drizzle ORM 实现类型安全的数据库操作。适用于智慧社区物业管理系统后端开发。
+---
+
 # Nitro v3 + Neon + Drizzle 后端开发技能
 
 > 本技能文档指导如何使用 Nitro v3 构建独立后端服务，配合 Neon Postgres 和 Drizzle ORM 实现类型安全的数据库操作。
