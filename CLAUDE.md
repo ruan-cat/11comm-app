@@ -702,18 +702,18 @@ src/
 
 ## 13. <!-- https://github.com/GuDaStudio/geminimcp --> Core Instruction for Gemini MCP
 
-在任何时刻，你必须思考当前过程可以如何与 gemini 进行协作，如何调用 gemini 为你提供的MCP工具作为你**客观全面分析**的保障。
+在任何时刻，你必须思考当前过程可以如何与 gemini 进行协作，如何调用 gemini 为你提供的 MCP 工具作为你**客观全面分析**的保障。
 
 其中你**务必执行**以下几个步骤：
 
 **1** 在你对用户需求**形成初步分析后**，
-（1）首先将用户**原始需求（一字不差，严禁转述）**、以及你的初始思路告知gemini；
-（2）与gemini进行**充分讨论、辩驳**，以完善需求分析和实施计划。这一步的结束标志为，**必须**确保对用户需求的透彻理解，并**生成切实可行的行动计划**。
+（1）首先将用户**原始需求（一字不差，严禁转述）**、以及你的初始思路告知 gemini；
+（2）与 gemini 进行**充分讨论、辩驳**，以完善需求分析和实施计划。这一步的结束标志为，**必须**确保对用户需求的透彻理解，并**生成切实可行的行动计划**。
 
-**2** 在实施具体编码任务前，你**必须向gemini索要代码实现原型**（要求gemini仅给出unified diff patch，严禁对代码做任何真实修改）。在获取代码原型后，你**只能以此为逻辑参考，再次对代码修改进行重写**，形成企业生产级别、可读性极高、可维护性极高的代码后，才能实施具体编程修改任务。
+**2** 在实施具体编码任务前，你**必须向 gemini 索要代码实现原型**（要求 gemini 仅给出 unified diff patch，严禁对代码做任何真实修改）。在获取代码原型后，你**只能以此为逻辑参考，再次对代码修改进行重写**，形成企业生产级别、可读性极高、可维护性极高的代码后，才能实施具体编程修改任务。
 
-- **注意：** Gemini 十分擅长前端代码，并精通样式、UI组件设计。在涉及前端代码时，你必须向其索要代码原型（CSS/React/Vue/HTML等前端代码），任何时刻，你**必须以gemini的前端设计（原型代码）为最终的前端代码基点**。
-- 例如，当你识别到用户给出了前端设计需求，你的首要行为必须自动调整为，将用户需求原封不动转发给gemini，并让其出具代码示例（此阶段严禁对用户需求进行任何改动、简写等等）。即你必须从gemini获取代码基点，才可以进行接下来的各种行为。
+- **注意：** Gemini 十分擅长前端代码，并精通样式、UI 组件设计。在涉及前端代码时，你必须向其索要代码原型（CSS/React/Vue/HTML 等前端代码），任何时刻，你**必须以 gemini 的前端设计（原型代码）为最终的前端代码基点**。
+- 例如，当你识别到用户给出了前端设计需求，你的首要行为必须自动调整为，将用户需求原封不动转发给 gemini，并让其出具代码示例（此阶段严禁对用户需求进行任何改动、简写等等）。即你必须从 gemini 获取代码基点，才可以进行接下来的各种行为。
 
 ## 14. <!-- https://github.com/GuDaStudio/geminimcp --> Gemini Tool Invocation Specification
 
@@ -736,7 +736,7 @@ gemini MCP 提供了一个工具 `gemini`，用于调用 Google Gemini 模型执
 
 ## 15. 使用 `gemini MCP` 或直接使用 `gemini` 时需要额外主动获取上下文
 
-1. 在使用 `gemini MCP` 或直接使用 `gemini` 时，由于传递信息的关系，gemini是不会主动的先阅读来自claude code的配置文件的，因此你必须要告诉gemini，并约束gemini的上下文读取行为，**必须要求**gemini首先要无条件的阅读claude code的上下文。
+1. 在使用 `gemini MCP` 或直接使用 `gemini` 时，由于传递信息的关系，gemini 是不会主动的先阅读来自 claude code 的配置文件的，因此你必须要告诉 gemini，并约束 gemini 的上下文读取行为，**必须要求**gemini 首先要无条件的阅读 claude code 的上下文。
 2. 请务必先主动阅读 `CLAUDE.md` 和 `.claude` 目录内的全部的指导文件。
 3. 不需要你阅读以下文件：
    - .claude\settings.json
@@ -762,11 +762,11 @@ gemini MCP 提供了一个工具 `gemini`，用于调用 Google Gemini 模型执
 
 ```typescript
 // ✅ 正确 - 本项目使用方式
-import type { FormRules } from 'wot-design-uni/components/wd-form/types'
-import type { UploadBeforeUpload, UploadFile } from 'wot-design-uni/components/wd-upload/types'
+import type { FormRules } from "wot-design-uni/components/wd-form/types";
+import type { UploadBeforeUpload, UploadFile } from "wot-design-uni/components/wd-upload/types";
 
 // ❌ 错误 - GitHub 文档示例（仅适用于 uni_modules 安装方式）
-import type { FormRules } from '@/uni_modules/wot-design-uni/components/wd-form/types'
+import type { FormRules } from "@/uni_modules/wot-design-uni/components/wd-form/types";
 ```
 
 **路径转换规则**：
@@ -774,13 +774,13 @@ import type { FormRules } from '@/uni_modules/wot-design-uni/components/wd-form/
 如果从 GitHub 文档中看到的导入路径是：
 
 ```typescript
-import type { XXX } from '@/uni_modules/wot-design-uni/components/wd-xxx/types'
+import type { XXX } from "@/uni_modules/wot-design-uni/components/wd-xxx/types";
 ```
 
 在本项目中应该转换为：
 
 ```typescript
-import type { XXX } from 'wot-design-uni/components/wd-xxx/types'
+import type { XXX } from "wot-design-uni/components/wd-xxx/types";
 ```
 
 即：去掉 `@/uni_modules/` 前缀。
@@ -814,3 +814,4 @@ import type { XXX } from 'wot-design-uni/components/wd-xxx/types'
 
 - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
 - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
+- 规范文档： https://agentskills.io/home
