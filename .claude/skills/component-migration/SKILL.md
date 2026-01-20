@@ -31,7 +31,7 @@ context: fork
 
 在修改 wot-design-uni 组件前，必须阅读：
 
-- **[EXECUTION-CHECKLIST.md](./EXECUTION-CHECKLIST.md)** - 完整执行检查清单
+- **[references/EXECUTION-CHECKLIST.md](./references/EXECUTION-CHECKLIST.md)** - 完整执行检查清单
 
 关键要求：
 
@@ -41,15 +41,15 @@ context: fork
 
 ---
 
-## ⚠️ 迁移前必读（Critical）
+## ⚠️ 迁移前必读 (Critical)
 
 **🚨 禁止直接编写代码！必须先完成：**
 
 1. ✅ **第一步：阅读参考文件**
    - 推荐：`src/pages-sub/repair/*.vue`（完整的 wot-design-uni 组件使用示例）
    - 推荐：`src/components/activity/*.vue`（组件封装示例）
-   - 必读：`.claude/skills/component-migration/Icon图标迁移.md`
-   - 必读：`.claude/skills/component-migration/全局反馈组件.md`
+   - 必读：`.claude/skills/component-migration/references/Icon图标迁移.md`
+   - 必读：`.claude/skills/component-migration/references/全局反馈组件.md`
 
 2. ✅ **第二步：查阅 wot-design-uni 文档**
    - 官方文档：https://wot-ui.cn/guide/quick-use.html
@@ -210,7 +210,7 @@ context: fork
 | `cuIcon-user`         | `i-carbon-user-avatar`  |
 | `cuIcon-time`         | `i-carbon-time`         |
 
-> **📚 完整映射**: 参阅 [Icon 图标迁移.md](Icon图标迁移.md)
+> **📚 完整映射**: 参阅 [references/Icon 图标迁移.md](references/Icon图标迁移.md)
 
 ### 4. 表单组件迁移
 
@@ -268,7 +268,7 @@ import FormSectionTitle from "@/components/common/form-section-title/index.vue";
 </wd-cell>
 ```
 
-> **📚 详细规范**: 参阅 [wd-picker 使用规范.md](wd-picker使用规范.md)
+> **📚 详细规范**: 参阅 [references/wd-picker 使用规范.md](references/wd-picker使用规范.md)
 
 **单选和多选组件选型**: 严格遵循统一的组件选型原则!
 
@@ -531,7 +531,7 @@ loading.show("加载中...");
 loading.hide();
 ```
 
-> **📚 详细文档**: 参阅 [全局反馈组件.md](全局反馈组件.md)
+> **📚 详细文档**: 参阅 [references/全局反馈组件.md](references/全局反馈组件.md)
 
 ### 8. 弹框交互组件选型
 

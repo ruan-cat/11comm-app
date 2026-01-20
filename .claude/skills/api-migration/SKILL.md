@@ -24,10 +24,10 @@ context: fork
 
 - `gitee-example/constant/url.js` - **旧项目接口地址常量文件（迁移时必须参考）**
 - `src/api/mock/repair.mock.ts` - 最完整、最标准的参考实现
-- `.claude/skills/api-migration/接口地址迁移.md` - **接口地址迁移规范（新增）**
-- `.claude/skills/api-migration/mock-实现指南.md`
-- `.claude/skills/api-migration/mock-规范.md`
-- `.claude/skills/api-migration/mock-响应格式.md`
+- `.claude/skills/api-migration/references/接口地址迁移.md` - **接口地址迁移规范（新增）**
+- `.claude/skills/api-migration/references/mock-实现指南.md`
+- `.claude/skills/api-migration/references/mock-规范.md`
+- `.claude/skills/api-migration/references/mock-响应格式.md`
 
 关键要求：
 
@@ -66,7 +66,7 @@ context: fork
 3. **🎯 业务类型使用**: 强制使用 `src/types` 文件夹内拆分后的业务类型
 4. **🌐 URL 前缀规范**: Mock 接口的 URL 必须**移除** `/api` 前缀,直接使用 `/app` 等路径
 
-> **💡 详细规范**: 关于 Mock 数据字典、日期格式、URL 前缀等详细规范,参阅 [mock-规范.md](mock-规范.md)
+> **💡 详细规范**: 关于 Mock 数据字典、日期格式、URL 前缀等详细规范,参阅 [references/mock-规范.md](references/mock-规范.md)
 
 ## Mock 接口返回值格式规范
 
@@ -87,7 +87,7 @@ mockLog("apiName", params);
 
 **⚠️ 禁止使用 ResultEnum 枚举**: 在 `*.mock.ts` 文件内,**禁止**直接以路径别名方式导入 ResultEnum,必须使用 ResultEnumMap。
 
-> **📖 响应格式详解**: 关于 successResponse、errorResponse、mockLog 的详细用法,参阅 [mock-响应格式.md](mock-响应格式.md)
+> **📖 响应格式详解**: 关于 successResponse、errorResponse、mockLog 的详细用法,参阅 [references/mock-响应格式.md](references/mock-响应格式.md)
 
 ## useRequest 组合式 API 使用规范
 
@@ -352,7 +352,7 @@ export interface PaginationResponse<T> {
 }
 ```
 
-> **📝 业务模块类型**: 关于如何定义业务模块的类型接口,参阅 [类型定义规范.md](类型定义规范.md)
+> **📝 业务模块类型**: 关于如何定义业务模块的类型接口,参阅 [references/类型定义规范.md](references/类型定义规范.md)
 
 ## API 接口定义标准
 
@@ -380,7 +380,7 @@ export function get[Entity]Detail(params: { [entity]Id: string }) {
 }
 ```
 
-> **💡 完整示例**: 参阅 [api-定义示例.md](api-定义示例.md) 查看维修模块的完整接口定义
+> **💡 完整示例**: 参阅 [references/api-定义示例.md](references/api-定义示例.md) 查看维修模块的完整接口定义
 
 ## Mock 文件结构要求
 
@@ -405,7 +405,7 @@ src/api/
 └── activity.ts                    # 活动相关接口定义
 ```
 
-> **📦 Mock 实现**: 关于 Mock 数据库对象、接口定义、高级特性的完整说明,参阅 [mock-实现指南.md](mock-实现指南.md)
+> **📦 Mock 实现**: 关于 Mock 数据库对象、接口定义、高级特性的完整说明,参阅 [references/mock-实现指南.md](references/mock-实现指南.md)
 
 ## z-paging 分页组件适配
 
@@ -427,7 +427,7 @@ src/api/
 2. **修改** 任何现有 `*.mock.ts` 文件时
 3. **修改** mock 数据内容时
 
-> **🔧 重启流程**: 关于检测、停止、启动、验证的完整流程,参阅 [mock-重启流程.md](mock-重启流程.md)
+> **🔧 重启流程**: 关于检测、停止、启动、验证的完整流程,参阅 [references/mock-重启流程.md](references/mock-重启流程.md)
 
 ## 迁移实施标准
 
@@ -482,10 +482,10 @@ src/api/
 
 ## 相关文档
 
-- [接口地址迁移.md](接口地址迁移.md) - **旧项目 URL 常量迁移规范（重要）**
-- [mock-规范.md](mock-规范.md) - Mock 数据字典、日期格式、URL 前缀等详细规范
-- [mock-响应格式.md](mock-响应格式.md) - successResponse、errorResponse、mockLog 详细用法
-- [类型定义规范.md](类型定义规范.md) - 业务模块类型定义标准和示例
-- [api-定义示例.md](api-定义示例.md) - 完整的 API 接口定义示例
-- [mock-实现指南.md](mock-实现指南.md) - Mock 数据库对象、接口定义、高级特性
-- [mock-重启流程.md](mock-重启流程.md) - Mock 文件修改后的自动重启完整流程
+- [references/接口地址迁移.md](references/接口地址迁移.md) - **旧项目 URL 常量迁移规范（重要）**
+- [references/mock-规范.md](references/mock-规范.md) - Mock 数据字典、日期格式、URL 前缀等详细规范
+- [references/mock-响应格式.md](references/mock-响应格式.md) - successResponse、errorResponse、mockLog 详细用法
+- [references/类型定义规范.md](references/类型定义规范.md) - 业务模块类型定义标准和示例
+- [references/api-定义示例.md](references/api-定义示例.md) - 完整的 API 接口定义示例
+- [references/mock-实现指南.md](references/mock-实现指南.md) - Mock 数据库对象、接口定义、高级特性
+- [references/mock-重启流程.md](references/mock-重启流程.md) - Mock 文件修改后的自动重启完整流程

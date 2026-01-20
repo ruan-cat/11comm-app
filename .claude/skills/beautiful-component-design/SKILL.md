@@ -28,10 +28,10 @@ color: pink
 
 使用本技能前必须阅读：
 
-- [icon-usage.md](icon-usage.md) - 图标使用规范
-- [text-alignment.md](text-alignment.md) - 文本样式规范
-- [responsive-design.md](responsive-design.md) - 响应式设计规范
-- [form-section-title.md](form-section-title.md) - 表单分区标题组件（表单页面必读）
+- [references/icon-usage.md](references/icon-usage.md) - 图标使用规范
+- [references/text-alignment.md](references/text-alignment.md) - 文本样式规范
+- [references/responsive-design.md](references/responsive-design.md) - 响应式设计规范
+- [references/form-section-title.md](references/form-section-title.md) - 表单分区标题组件（表单页面必读）
 
 参考示例：
 
@@ -64,7 +64,7 @@ color: pink
 </template>
 ```
 
-图标规范详见 [icon-usage.md](icon-usage.md)
+图标规范详见 [references/icon-usage.md](references/icon-usage.md)
 
 ### 2.2 文本样式统一
 
@@ -75,7 +75,7 @@ color: pink
 </template>
 ```
 
-文本规范详见 [text-alignment.md](text-alignment.md)
+文本规范详见 [references/text-alignment.md](references/text-alignment.md)
 
 ### 2.3 响应式图片网格
 
@@ -94,7 +94,7 @@ color: pink
 </template>
 ```
 
-响应式规范详见 [responsive-design.md](responsive-design.md)
+响应式规范详见 [references/responsive-design.md](references/responsive-design.md)
 
 ## 3. 设计原则
 
@@ -129,11 +129,11 @@ color: pink
 
 ## 5. 目录
 
-| 文件                                         | 内容                                      |
-| :------------------------------------------- | :---------------------------------------- |
-| [icon-usage.md](icon-usage.md)               | 图标使用规范、UnoCSS 图标类名、尺寸、间距 |
-| [text-alignment.md](text-alignment.md)       | 文本字号、行高、颜色、加粗、对齐方式      |
-| [responsive-design.md](responsive-design.md) | rpx 单位、图片网格、圆角、深度选择器      |
+| 文件                                                               | 内容                                      |
+| :----------------------------------------------------------------- | :---------------------------------------- |
+| [references/icon-usage.md](references/icon-usage.md)               | 图标使用规范、UnoCSS 图标类名、尺寸、间距 |
+| [references/text-alignment.md](references/text-alignment.md)       | 文本字号、行高、颜色、加粗、对齐方式      |
+| [references/responsive-design.md](references/responsive-design.md) | rpx 单位、图片网格、圆角、深度选择器      |
 
 ## 6. 选择器组件美观规范（⚠️ 重要）
 

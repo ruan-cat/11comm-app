@@ -26,8 +26,8 @@ context: fork
 
 1. ✅ **第一步：阅读参考文件**
    - 推荐：`src/pages-sub/repair/*.vue`（维修模块，最完整的 Vue3 代码示例）
-   - 必读：`.claude/skills/code-migration/Vue2到Vue3写法对比.md`
-   - 必读：`.claude/skills/code-migration/组合式函数规范.md`
+   - 必读：`.claude/skills/code-migration/references/Vue2到Vue3写法对比.md`
+   - 必读：`.claude/skills/code-migration/references/组合式函数规范.md`
 
 2. ✅ **第二步：理解核心差异**
    - Options API → Composition API（`<script setup>`）
@@ -233,7 +233,7 @@ onMounted(() => {
 </script>
 ```
 
-> **📚 详细对比**: 参阅 [Vue2 到 Vue3 写法对比.md](Vue2到Vue3写法对比.md)
+> **📚 详细对比**: 参阅 [references/Vue2 到 Vue3 写法对比.md](references/Vue2到Vue3写法对比.md)
 
 ### 2. definePage 页面配置（⚠️ 必须执行）
 
@@ -353,7 +353,7 @@ export const useTaskStore = defineStore(
 );
 ```
 
-> **📚 详细指南**: 参阅 [状态管理迁移.md](状态管理迁移.md)
+> **📚 详细指南**: 参阅 [references/状态管理迁移.md](references/状态管理迁移.md)
 
 ### 3. 组合式函数 (Composables)
 
@@ -404,7 +404,7 @@ onMounted(() => {
 </script>
 ```
 
-> **📚 详细规范**: 参阅 [组合式函数规范.md](组合式函数规范.md)
+> **📚 详细规范**: 参阅 [references/组合式函数规范.md](references/组合式函数规范.md)
 
 ### 4. 生命周期迁移
 
@@ -443,7 +443,7 @@ onShow(() => {
 });
 ```
 
-> **📚 完整对照**: 参阅 [生命周期迁移.md](生命周期迁移.md)
+> **📚 完整对照**: 参阅 [references/生命周期迁移.md](references/生命周期迁移.md)
 
 ### 5. TypeScript 类型定义规范
 
@@ -490,7 +490,7 @@ const emit = defineEmits<Emits>()
 </script>
 ```
 
-> **📚 类型规范**: 参阅 [TypeScript 类型规范.md](TypeScript类型规范.md)
+> **📚 类型规范**: 参阅 [references/TypeScript 类型规范.md](references/TypeScript类型规范.md)
 
 ### 6. 工具函数迁移
 
@@ -540,7 +540,7 @@ export function debounce<T extends (...args: any[]) => any>(func: T, wait: numbe
 }
 ```
 
-> **📚 完整指南**: 参阅 [工具函数迁移.md](工具函数迁移.md)
+> **📚 完整指南**: 参阅 [references/工具函数迁移.md](references/工具函数迁移.md)
 
 ### 7. 静态资源导入规范
 
@@ -590,7 +590,7 @@ const entries = [{ name: "投诉待办", icon: "/static/image/index/i_complaint.
 </script>
 ```
 
-> **📚 详细规范**: 参阅 [静态资源导入.md](静态资源导入.md)
+> **📚 详细规范**: 参阅 [references/静态资源导入.md](references/静态资源导入.md)
 
 ### 8. 数据字典常量使用规范
 
@@ -625,7 +625,7 @@ const statusCd = statusItem.value; // 字段值
 const statusName = statusItem.label; // 展示名称
 ```
 
-> **📚 详细规范**: 参阅 [数据字典常量规范.md](数据字典常量规范.md)
+> **📚 详细规范**: 参阅 [references/数据字典常量规范.md](references/数据字典常量规范.md)
 
 ### 9. 组件显隐状态封装规范
 

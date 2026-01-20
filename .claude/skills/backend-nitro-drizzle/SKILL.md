@@ -54,15 +54,15 @@
 
 ## 2. 文档目录
 
-| 序号 | 文档                                                   | 内容                           |
-| :--: | :----------------------------------------------------- | :----------------------------- |
-|  1   | [01-nitro-setup.md](./01-nitro-setup.md)               | Nitro v3 项目初始化和配置      |
-|  2   | [02-env-config.md](./02-env-config.md)                 | 环境变量和运行时配置           |
-|  3   | [03-neon-drizzle.md](./03-neon-drizzle.md)             | Neon 数据库 + Drizzle ORM 设置 |
-|  4   | [04-drizzle-operations.md](./04-drizzle-operations.md) | Drizzle CRUD 数据库操作        |
-|  5   | [05-nitro-routes.md](./05-nitro-routes.md)             | Nitro 文件路由系统             |
-|  6   | [06-integration.md](./06-integration.md)               | uni-app 前后端集成             |
-|  7   | [07-deployment.md](./07-deployment.md)                 | 部署指南                       |
+| 序号 | 文档                                                                       | 内容                           |
+| :--: | :------------------------------------------------------------------------- | :----------------------------- |
+|  1   | [references/01-nitro-setup.md](references/01-nitro-setup.md)               | Nitro v3 项目初始化和配置      |
+|  2   | [references/02-env-config.md](references/02-env-config.md)                 | 环境变量和运行时配置           |
+|  3   | [references/03-neon-drizzle.md](references/03-neon-drizzle.md)             | Neon 数据库 + Drizzle ORM 设置 |
+|  4   | [references/04-drizzle-operations.md](references/04-drizzle-operations.md) | Drizzle CRUD 数据库操作        |
+|  5   | [references/05-nitro-routes.md](references/05-nitro-routes.md)             | Nitro 文件路由系统             |
+|  6   | [references/06-integration.md](references/06-integration.md)               | uni-app 前后端集成             |
+|  7   | [references/07-deployment.md](references/07-deployment.md)                 | 部署指南                       |
 
 ---
 
