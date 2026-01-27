@@ -4,7 +4,7 @@
 
 请深度思考。
 
-请你更改接口迁移计划文档。 `.github\prompts\migrate-plan\api-migration.md` 。
+请你更改接口迁移计划文档。 `docs\prompts\migrate-plan\api-migration.md` 。
 
 1. 不需要做任何鉴权功能。我不需要你增加 token 检查和鉴权的功能。全部的接口默认直接请求就能获取到数据。
 2. 在你迁移接口时，请你生成合适的 typescript 类型。
@@ -18,10 +18,10 @@
 
 我需要你将这些迁移计划，改造成能够被 claude code 识别使用的本地 agent 文件。
 
-1. 阅读 `.github\prompts\migrate-plan` 的迁移计划文件。
+1. 阅读 `docs\prompts\migrate-plan` 的迁移计划文件。
 2. 将 `api-migration.md` `code-migration.md` 和 `style-migration.md` 新建为 claude code 的子代理。
 3. 删除掉这三个文件，以后的迁移计划一律以 claude code 子代理的形式展示出来。
-4. 恰当的更新 .github\prompts\migrate-plan\README.md 文件。
+4. 恰当的更新 docs\prompts\migrate-plan\README.md 文件。
 
 ## 003 补全代理文件的 description 描述项
 
@@ -33,8 +33,8 @@
 
 请你为我制作路由迁移功能的子代理。
 
-1. 请先阅读 .github\prompts\make-migrate-plan.md 文档。但是你不阅读 `其他内容` 栏目下的内容。
-2. 阅读 .github\prompts\migrate-plan\README.md 文档。
+1. 请先阅读 docs\prompts\make-migrate-plan.md 文档。但是你不阅读 `其他内容` 栏目下的内容。
+2. 阅读 docs\prompts\migrate-plan\README.md 文档。
 3. 粗略地阅读 `.claude\agents` 文件夹下面的子代理，了解子代理的格式写法。你稍后将模仿这些子代理的写法。
 4. 搞清楚 `本项目` 和 `旧项目` 的路由差异，指定合适的路由迁移计划，并在 `.claude\agents` 下面制作子代理。
 
@@ -156,7 +156,7 @@
 4. 在 `component-migration` 子代理内，请绘制一个 markdown 格式的 table 表格，罗列出预期被迁移改造的`旧组件`，和改造替换后的`新组件`。制作一个总览性质的表格，便于我整体性的阅读。
 5. `component-migration` 子代理是具体实现组件迁移的子代理，不应该包含任何迁移进度的报告。
 6. 预期新建一个 `.claude\agents\component-migration.md` 文件。和其他子代理保持相同的文件目录。
-7. 在 `.github\prompts\migrate-plan\README.md` 内同步补充说明 `component-migration` 代理的相关信息。
+7. 在 `docs\prompts\migrate-plan\README.md` 内同步补充说明 `component-migration` 代理的相关信息。
 
 ## 016 美化 `component-migration` 文档格式
 
@@ -710,10 +710,10 @@
 
 以文件 `src\pages-sub\repair\order-list.vue` 为例子。
 
-1. 根据 `.github\prompts\route-migration-map.yml` 的说明，新代码 `src\pages-sub\repair\order-list.vue` 对应的旧代码为 `gitee-example/pages/repairOrder/repairOrder.vue` 。
+1. 根据 `docs\prompts\route-migration-map.yml` 的说明，新代码 `src\pages-sub\repair\order-list.vue` 对应的旧代码为 `gitee-example/pages/repairOrder/repairOrder.vue` 。
 2. 在 `src\pages-sub\repair\order-list.vue` 的文件注释内，增加一行 `旧代码：` 。
 
-请你以上述文件为例子，根据 `.github\prompts\route-migration-map.yml` 的说明，对以下全部的 vue 组件增加旧代码映射地址，便于阅读。
+请你以上述文件为例子，根据 `docs\prompts\route-migration-map.yml` 的说明，对以下全部的 vue 组件增加旧代码映射地址，便于阅读。
 
 - `src\pages\**\*.vue`
 - `src\pages-sub\**\*.vue`

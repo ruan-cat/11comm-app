@@ -3,10 +3,10 @@
 ## 001 开始大批量的完成巡检模块的初步迁移
 
 1. 阅读 `docs\reports\vue2-route-navigation-map.md` 的 `巡检管理流程模块` 部分，了解清楚该模块有那些页面需要迁移，以及各个页面的关系。
-2. 阅读 `.github\prompts\route-migration-map.yml` 的 `inspection_modules` 部分，明确清楚新页面和旧页面之间的映射关系。
+2. 阅读 `docs\prompts\route-migration-map.yml` 的 `inspection_modules` 部分，明确清楚新页面和旧页面之间的映射关系。
 3. 适当的阅读 `.claude\skills` 技能文件，在迁移时，务必遵守这些技能文件的要求。
 4. 新建任务清单：
-   - 为了避免你丢失任务信息和上下文，我要求你在 `.github\prompts\migrate-plan\inspection` 目录内，新建一个迁移目标，迁移任务清单的文件。避免你因为上下文合并或者是其他意外情况，导致丢失任务进度信息。
+   - 为了避免你丢失任务信息和上下文，我要求你在 `docs\prompts\migrate-plan\inspection` 目录内，新建一个迁移目标，迁移任务清单的文件。避免你因为上下文合并或者是其他意外情况，导致丢失任务进度信息。
    - 请你先完成这样的清单文件新建。然后再开始下一步的迁移任务。
 
 ## 002 初始化强类型路由
@@ -19,7 +19,7 @@
 
 ## 003 补全旧代码说明入口
 
-1. 阅读 `.github\prompts\route-migration-map.yml` 的 `inspection_modules` 部分。
+1. 阅读 `docs\prompts\route-migration-map.yml` 的 `inspection_modules` 部分。
 2. 阅读全部的 `src\pages-sub\inspection` vue 组件代码，确保这部分的页面都补全和其他模块代码一样的 `旧代码` 注释。便于我追踪旧代码。
 
 ## 004 移动 `src\pages-sub\inspection\types.ts` 类型文件到正确的位置
@@ -28,7 +28,7 @@
 
 ## 005 初始化业务类型、mock 接口、与 api
 
-1. 阅读 `.github\prompts\route-migration-map.yml` 的 `inspection_modules` 部分。
+1. 阅读 `docs\prompts\route-migration-map.yml` 的 `inspection_modules` 部分。
 2. 阅读全部的 `src\pages-sub\inspection` vue 组件代码，反向追踪旧代码。
 3. 按照 `api-migration` api 迁移技能，完整地迁移 inspection 巡检业务的业务类型、mock 接口、和使用的 api 接口函数。
 
@@ -113,6 +113,6 @@
 ### 009 统一补全 definePage 宏设置
 
 1. 阅读 `docs\reports\vue2-route-navigation-map.md` 的 `巡检管理流程模块` 。
-2. 阅读 `.github\prompts\route-migration-map.yml` 巡检管理模块 inspection_modules 的路径。
+2. 阅读 `docs\prompts\route-migration-map.yml` 巡检管理模块 inspection_modules 的路径。
 3. 反向阅读旧代码。读取旧代码内这些巡检模块页面正确的标题。
 4. 按照 `.claude\skills\route-migration\SKILL.md` 技能要求，去补全全部 `src\pages-sub\inspection` 目录内的 vue 页面，补全 definePage 的使用。

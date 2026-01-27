@@ -11,24 +11,24 @@
 ### 01 按照路由要求，新建简单占位符页面
 
 1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确清楚要处理的页面。
-2. 阅读 `.github\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容。
+2. 阅读 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容。
 3. 我们一共需要新建 13 个页面。按照 `维修工单流程模块` 的说明。需要新建 13 个页面。
 4. 阅读 `route-migration` 子代理文档。
 5. 开始新建我需要的这 13 个页面。按照上述文档的要求，新增满足正确路径的页面文件。
 6. 每个页面文件的最顶上，必须包括文本注释，注释说明
-7. 在 `.github\prompts\route-migration-map.yml` 标记 `3. 维修管理模块 (10个页面)` 都迁移完成了。
+7. 在 `docs\prompts\route-migration-map.yml` 标记 `3. 维修管理模块 (10个页面)` 都迁移完成了。
 
 ### 02 新建路由跳转函数并在页面内使用
 
 1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确清楚跳路由时需要传递的参数。
-2. 通过 `.github\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，针对性的阅读关于路由跳转的函数，针对性的用 `uni.navigateTo` 函数在 `旧项目` 的 vue 组件内查询清楚跳路由时的传参。
+2. 通过 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，针对性的阅读关于路由跳转的函数，针对性的用 `uni.navigateTo` 函数在 `旧项目` 的 vue 组件内查询清楚跳路由时的传参。
 3. 按照 `route-migration` 子代理的要求，新建整个 `维修工单流程模块` 所需要的强类型路由跳转函数。
 4. 在 `维修工单流程模块系列页面` 内，每一个 vue 组件顶部都补全说明跳转路由的地址、并且提供一个临时性质的按钮，和临时性质的，写死的假数据，实现点击按钮即可跳路由的功能，我需要尽早在 `维修工单流程模块系列页面` 内模拟整个跳路由的业务流程。
 
 ### 03 新建接口
 
 1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
-2. 通过 `.github\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，理清楚这 13 个页面的接口。
+2. 通过 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，理清楚这 13 个页面的接口。
 3. 按照 `api-migration` 子代理的要求，完成接口迁移。
 4. 在 `src\types\repair.ts` 内补全业务类型。
 5. 允许在页面内以简陋的方式，输出全部的数据。本阶段不考虑任何美观，只考虑接口迁移，和数据展示。
@@ -37,7 +37,7 @@
 ### 04 迁移组件
 
 1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
-2. 通过 `.github\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，准备实现组件迁移。
+2. 通过 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，准备实现组件迁移。
 3. 按照 `component-migration` 子代理的要求，完成全部 `维修工单流程模块系列页面` 的组件迁移。
 4. 这个阶段只负责实现组件迁移，不考虑样式迁移。
 
@@ -52,19 +52,19 @@
 ### 05 迁移样式
 
 1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
-2. 通过 `.github\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，准备实现样式迁移。
+2. 通过 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，准备实现样式迁移。
 3. 按照 `style-migration` 子代理的要求，完成全部 `维修工单流程模块系列页面` 的样式迁移。
 
 ### 06 代码写法迁移
 
 1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
-2. 通过 `.github\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，准备实现代码迁移。
+2. 通过 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，准备实现代码迁移。
 3. 按照 `code-migration` 子代理的要求，完成全部 `维修工单流程模块系列页面` 的代码迁移。
 
 ### 07 整体性检查
 
 1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
-2. 通过 `.github\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件。
+2. 通过 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件。
 3. 对全部的 `维修工单流程模块系列页面` 组件，使用全部的迁移子代理，做全面的检查，最后输出一个查漏补缺的文档。
 
 ### 08 整体性修复
@@ -144,7 +144,7 @@ src\pages-sub\repair\handle.vue
 1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确清楚该模块的引用关系。
 2. 重点阅读 `选择房屋相关页面` 和其他模块的关联关系。
 3. 从 `维修工单流程模块` 的 `选择房屋相关页面` 内，得知 `旧项目` 的代码，搞清楚这三个页面在旧项目的 `维修工单流程模块` 内，是如何使用的。
-4. 阅读 `.github\prompts\route-migration-map.yml` 关于 `选择器页面 (3个)` 的内容。明确清楚这三个旧页面在新项目内如何新建页面，如何新建路由。
+4. 阅读 `docs\prompts\route-migration-map.yml` 关于 `选择器页面 (3个)` 的内容。明确清楚这三个旧页面在新项目内如何新建页面，如何新建路由。
 5. 安排任务，依次按照子代理的要求，对这三个 `选择器页面` 实现代码迁移改造。
    - `api-migration`： api 迁移子代理。位于 `.claude\agents` 目录内。
    - `code-migration`： 代码写法迁移子代理。位于 `.claude\agents` 目录内。
@@ -159,8 +159,8 @@ src\pages-sub\repair\handle.vue
 
 ### 01
 
-1. 生成你的迁移计划 markdown 文档，生成在 `.github\prompts\migrate-plan` 目录内。
-2. 不要更新 `docs\reports\vue2-route-navigation-map.md` 文档，你应该更新 `.github\prompts\route-migration-map.yml` 的 `选择器页面 (3个)` 部分，来标记你已完成迁移任务。
+1. 生成你的迁移计划 markdown 文档，生成在 `docs\prompts\migrate-plan` 目录内。
+2. 不要更新 `docs\reports\vue2-route-navigation-map.md` 文档，你应该更新 `docs\prompts\route-migration-map.yml` 的 `选择器页面 (3个)` 部分，来标记你已完成迁移任务。
 
 ## 022 补全完善接口
 
@@ -180,8 +180,8 @@ src\pages-sub\repair\handle.vue
 
 ## 023 处理代码报错
 
-1. 阅读 `.github\prompts\migrate-plan\2025-11-17-select-floor-unit-room-migration-plan.md` 迁移报告。
-2. 阅读 `.github\prompts\route-migration-map.yml` `选择器页面 (3个)` 部分的路由迁移映射。
+1. 阅读 `docs\prompts\migrate-plan\2025-11-17-select-floor-unit-room-migration-plan.md` 迁移报告。
+2. 阅读 `docs\prompts\route-migration-map.yml` `选择器页面 (3个)` 部分的路由迁移映射。
 3. 反向阅读旧项目内对应的代码。
 4. 针对 `src\pages-sub\selector` 目录下的几个选择用途的页面。
 5. 这几个页面出现明显的故障，请对这三个页面，安排任务，依次按照子代理的要求，对这三个 `选择器页面` 实现代码迁移改造。
@@ -207,8 +207,8 @@ src\pages-sub\repair\handle.vue
 
 ## 025 处理代码的组件使用错误
 
-1. 阅读 `.github\prompts\migrate-plan\2025-11-17-select-floor-unit-room-migration-plan.md` 迁移报告。
-2. 阅读 `.github\prompts\route-migration-map.yml` `选择器页面 (3个)` 部分的路由迁移映射。
+1. 阅读 `docs\prompts\migrate-plan\2025-11-17-select-floor-unit-room-migration-plan.md` 迁移报告。
+2. 阅读 `docs\prompts\route-migration-map.yml` `选择器页面 (3个)` 部分的路由迁移映射。
 3. 反向阅读旧项目内对应的代码。
 4. 针对 `src\pages-sub\selector` 目录下的几个选择用途的页面。
 5. 这几个页面出现明显的故障，请对这三个页面，安排任务，依次按照子代理的要求，对这三个 `选择器页面` 实现代码迁移改造。
@@ -228,9 +228,9 @@ src\pages-sub\repair\handle.vue
 ## 027 反向检查业务字段是否准确
 
 1. 请你阅读 `docs\reports\vue2-route-navigation-map.md` 的 `维修工单流程模块` 。
-2. 根据 `.github\prompts\route-migration-map.yml` ，反向的阅读旧代码对应的 vue2 代码，确定在旧代码内，已经有的业务类型。
+2. 根据 `docs\prompts\route-migration-map.yml` ，反向的阅读旧代码对应的 vue2 代码，确定在旧代码内，已经有的业务类型。
 3. 检查 `src\pages-sub\repair` 和 `src\pages-sub\selector` 的 vue 组件，确保这些组件内的代码均满足旧代码的业务类型。
-4. 按照 `.github\prompts\migrate-plan\2025-11-17-select-floor-unit-room-migration-plan.md` 文档的要求，修改对应的迁移后的代码。
+4. 按照 `docs\prompts\migrate-plan\2025-11-17-select-floor-unit-room-migration-plan.md` 文档的要求，修改对应的迁移后的代码。
 5. 修改以下几个接口文件，确保这些接口文件所对应的业务类型都是准确的：
    - src\api\floor.ts
    - src\api\room.ts

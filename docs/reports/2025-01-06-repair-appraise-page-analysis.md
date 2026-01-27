@@ -213,7 +213,7 @@ static toAppraiseRepair(params: PageParams['/pages-sub/repair/appraise']) {
 
 ### 4.3. 路由映射表
 
-**文件路径**：`.github/prompts/route-migration-map.yml`
+**文件路径**：`docs/prompts/route-migration-map.yml`
 
 ```yaml
 repair_modules:
@@ -357,7 +357,7 @@ grepSearch: pattern="pages/appraiseRepair" includePattern="gitee-example/**/*.vu
 | 维修待办单（旧） | `gitee-example/pages/repairDispatch/repairDispatch.vue` |
 |   路由类型定义   |                  `src/types/routes.ts`                  |
 |   路由辅助方法   |                 `src/router/helpers.ts`                 |
-|    路由映射表    |        `.github/prompts/route-migration-map.yml`        |
+|    路由映射表    |         `docs/prompts/route-migration-map.yml`          |
 
 ### 8.2. 相关 API 接口
 

@@ -44,7 +44,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `本项目`： 即 `vue3项目` 。
 - `vue2项目`： `gitee-example` 目录下的 uniapp 项目。
 - `旧项目`： 即 `vue2项目` 。
-- `Vue2 到 Vue3 uni-app 路由迁移映射表`： `.github\prompts\route-migration-map.yml` 文件。
+- `Vue2 到 Vue3 uni-app 路由迁移映射表`： `docs\prompts\route-migration-map.yml` 文件。
 - `api-migration`： api 迁移技能。即 `.claude\skills\api-migration\SKILL.md` 文件。
 - `code-migration`： 代码写法迁移技能。即 `.claude\skills\code-migration\SKILL.md` 文件。
 - `component-migration`： 组件迁移技能。即 `.claude\skills\component-migration\SKILL.md` 文件。

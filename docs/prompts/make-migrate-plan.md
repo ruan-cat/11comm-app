@@ -23,4 +23,4 @@
 
 ## 编写迁移计划
 
-将你的迁移计划写在 `.github\prompts\migrate-plan` 目录内。
+将你的迁移计划写在 `docs\prompts\migrate-plan` 目录内。

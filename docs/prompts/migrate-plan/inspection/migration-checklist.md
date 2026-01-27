@@ -514,7 +514,7 @@ graph TB
 ### 8.1 项目文档
 
 - Vue2 路由跳转关系脑图: `docs\reports\vue2-route-navigation-map.md`
-- Vue2 到 Vue3 路由映射表: `.github\prompts\route-migration-map.yml`
+- Vue2 到 Vue3 路由映射表: `docs\prompts\route-migration-map.yml`
 
 ### 8.2 技能文件
 

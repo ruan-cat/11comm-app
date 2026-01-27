@@ -83,7 +83,7 @@
 
 1. **前置准备**
    - 阅读 `docs\reports\vue2-route-navigation-map.md` 的维修工单流程模块
-   - 阅读 `.github\prompts\route-migration-map.yml` 关于维修管理模块的映射
+   - 阅读 `docs\prompts\route-migration-map.yml` 关于维修管理模块的映射
 
 2. **创建页面文件**
    - 使用 `route-migration` 子代理
@@ -96,7 +96,7 @@
    <!--
      业务名称: 维修工单池
      功能说明: 显示维修工单列表，支持搜索和筛选
-
+   
      访问地址: http://localhost:9000/#/pages-sub/repair/order-list
      建议携带参数: ?status=PENDING&page=1
    -->
@@ -120,7 +120,7 @@
    ```
 
 4. **完成标记**
-   - 在 `.github\prompts\route-migration-map.yml` 标记 `3. 维修管理模块 (10个页面)` ✅
+   - 在 `docs\prompts\route-migration-map.yml` 标记 `3. 维修管理模块 (10个页面)` ✅
 
 #### 验收标准
 
@@ -309,10 +309,10 @@ src/pages-sub/repair/
    <!--
      维修工单池页面
      功能：显示维修工单列表，支持搜索和筛选
-
+   
      访问地址: http://localhost:9000/#/pages-sub/repair/order-list
      参数示例: ?status=PENDING&page=1&row=10
-
+   
      完整示例: http://localhost:9000/#/pages-sub/repair/order-list?status=PENDING&page=1&row=10
    -->
    ```
@@ -1322,7 +1322,7 @@ src/pages-sub/repair/
 
 #### 1. 严格按映射表执行
 
-- 以 `.github\prompts\route-migration-map.yml` 为唯一权威路径来源
+- 以 `docs\prompts\route-migration-map.yml` 为唯一权威路径来源
 - 不自行决定文件路径
 - 完成后及时在映射表标记进度
 
@@ -1403,7 +1403,7 @@ src/pages-sub/repair/
 
 ## 📚 相关文档引用
 
-- **路由映射表**: `.github\prompts\route-migration-map.yml`
+- **路由映射表**: `docs\prompts\route-migration-map.yml`
 - **业务流程图**: `docs\reports\vue2-route-navigation-map.md`
 - **类型定义**: `src\types\repair.ts`
 - **项目规范**: `CLAUDE.md`

@@ -22,7 +22,7 @@ context: fork
 
 必读文件：
 
-- `.github/prompts/route-migration-map.yml` - 路由映射表（强制查阅）
+- `docs/prompts/route-migration-map.yml` - 路由映射表（强制查阅）
 - `src/router/index.ts` - 强类型路由工具函数
 
 关键要求：
@@ -50,7 +50,7 @@ context: fork
 ### 映射表文件位置
 
 ```plain
-.github\prompts\route-migration-map.yml
+docs\prompts\route-migration-map.yml
 ```
 
 ### 工作流程
@@ -65,7 +65,7 @@ context: fork
 
 ```bash
 # 1. 首先读取映射表文件
-Read: .github\prompts\route-migration-map.yml
+Read: docs\prompts\route-migration-map.yml
 
 # 2. 在 route_mappings 中查找对应的路径映射
 # 例如：gitee-example/pages/repairOrder/repairOrder.vue → src/pages-sub/repair/order-list.vue
@@ -214,7 +214,7 @@ src/pages-sub/                    # 自动识别为分包目录
 
 ```bash
 # 必须首先执行
-Read: .github\prompts\route-migration-map.yml
+Read: docs\prompts\route-migration-map.yml
 ```
 
 #### 1.2 确认迁移目标
