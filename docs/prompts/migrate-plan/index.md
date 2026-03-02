@@ -1288,7 +1288,7 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 2. 阅读`旧项目`的首页和工作台相关的代码。
 3. 告诉我首页和工作台，应该补全那些入口文件？那些路由是需要能够从首页进入的？
 
-## 079 <!-- TODO: --> 检查 `api-migration` 技能是否清楚如何使用旧代码的 url 常量文件
+## 079 检查 `api-migration` 技能是否清楚如何使用旧代码的 url 常量文件
 
 1. 全面阅读 `.claude\skills\api-migration` 技能的全部文件。
 2. 请问 api 迁移技能是否说明清楚要如何使用并迁移来自旧代码的 `gitee-example\constant\url.js` url 地址常量文件？迁移技能是否清楚被迁移的 api 接口地址从哪里获取？
