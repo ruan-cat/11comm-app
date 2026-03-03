@@ -1313,6 +1313,8 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 
 每一个被检查的文件，你都应该要新建一个独立的，专项检查的子代理，逐项的对比检查是否严格按照每一个项目级别的 skills 文档要求来编写。不要出现任何缺漏。
 
-这是一个非常艰巨的任务。我需要你先新建一个 openspec 任务，以 openspec 任务为一个大任务的执行清单，然后逐步的生成一份巨大的检查报告。
+这是一个非常艰巨的任务。我需要你先新建一个 openspec 任务，即 `check-migration-progress` 任务。以 openspec 任务为一个大任务的执行清单，然后逐步的生成一份巨大的检查报告。
 
 将报告内容编写到 `docs\reports\2026-03-03-migration-progress-report.md` 内。
+
+### 01 执行 `check-migration-progress` 任务
