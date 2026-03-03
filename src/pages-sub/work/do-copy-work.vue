@@ -151,30 +151,29 @@ onLoad(() => {
     <!-- 任务项列表 -->
     <FormSectionTitle title="任务项列表" icon="i-carbon-list" />
     <wd-cell-group border>
-      <wd-radio-group v-model="selectedItemId">
-        <view
-          v-for="item in taskItems"
-          :key="item.itemId"
-          class="task-item border-b border-gray-100 p-20rpx"
-        >
-          <view class="flex items-start justify-between">
-            <view class="flex-1">
-              <view class="text-gray-800 text-28rpx">
-                {{ item.content }}
-              </view>
-              <view class="text-gray-500 mt-10rpx text-24rpx">
-                {{ item.staffName || '-' }} · {{ item.createTime }}
-              </view>
+      <view
+        v-for="item in taskItems"
+        :key="item.itemId"
+        class="task-item border-b border-gray-100 p-20rpx"
+        @click="selectedItemId = item.itemId"
+      >
+        <view class="flex items-start justify-between">
+          <view class="flex-1">
+            <view class="text-gray-800 text-28rpx">
+              {{ item.content }}
             </view>
-            <view v-if="item.state === 'C'" class="ml-20rpx">
-              <wd-radio :value="item.itemId" />
-            </view>
-            <view v-else class="text-gray-400 ml-20rpx text-24rpx">
-              {{ getStateText(item.state) }}
+            <view class="text-gray-500 mt-10rpx text-24rpx">
+              {{ item.staffName || '-' }} · {{ item.createTime }}
             </view>
           </view>
+          <view v-if="item.state === 'C'" class="ml-20rpx">
+            <wd-radio :model-value="selectedItemId === item.itemId" />
+          </view>
+          <view v-else class="text-gray-400 ml-20rpx text-24rpx">
+            {{ getStateText(item.state) }}
+          </view>
         </view>
-      </wd-radio-group>
+      </view>
     </wd-cell-group>
 
     <!-- 选中任务项详情 -->

@@ -32,11 +32,7 @@ const applyState = ref<string>('')
 const roomName = ref<string>('')
 
 /** 加载申请状态字典 - 使用 useRequest */
-const {
-  send: loadApplyStateRequest,
-  onSuccess: onApplyStateSuccess,
-  onError: onApplyStateError,
-} = useRequest(
+const { send: loadApplyStateRequest } = useRequest(
   () => queryDictInfo({
     name: 'apply_room_discount',
     type: 'state',
@@ -45,31 +41,22 @@ const {
     immediate: false,
   },
 )
-
-onApplyStateSuccess((res) => {
-  console.log('字典接口返回数据：', res)
-  if (res) {
-    applyStates.value = [{ name: '请选择' }, ...res.data]
-  }
-})
-
-onApplyStateError((error) => {
-  console.error('加载申请状态失败', error)
-  uni.showToast({
-    title: '加载状态失败',
-    icon: 'none',
+  .onSuccess((res) => {
+    console.log('字典接口返回数据：', res)
+    if (res) {
+      applyStates.value = [{ name: '请选择' }, ...res.data]
+    }
   })
-})
+  .onError((error) => {
+    console.error('加载申请状态失败', error)
+    uni.showToast({
+      title: '加载状态失败',
+      icon: 'none',
+    })
+  })
 
 /** 加载申请列表 - 使用 useRequest */
-const {
-  loading: applyListLoading,
-
-  send: loadApplyListRequest,
-  onSuccess: onApplyListSuccess,
-  onError: onApplyListError,
-  onComplete: onApplyListFinally,
-} = useRequest(
+const { loading: applyListLoading, send: loadApplyListRequest } = useRequest(
   (pageNum: number) => getPropertyApplicationList({
     page: pageNum,
     row: 10,
@@ -81,40 +68,36 @@ const {
     immediate: false,
   },
 )
+  .onSuccess((res) => {
+    console.log('列表接口返回数据：', res)
 
-onApplyListSuccess((res) => {
-  console.log('列表接口返回数据：', res)
-
-  if (res && res.data) {
-    applyRoomList.value = applyRoomList.value.concat(res.data.list)
-    page.value++
-  }
-})
-
-onApplyListError((error) => {
-  console.error('加载申请列表失败', error)
-  loadingState.value = 'error'
-  uni.showToast({
-    title: '加载列表失败',
-    icon: 'none',
+    if (res && res.data) {
+      applyRoomList.value = applyRoomList.value.concat(res.data.list)
+      page.value++
+    }
   })
-})
+  .onError((error) => {
+    console.error('加载申请列表失败', error)
+    loadingState.value = 'error'
+    uni.showToast({
+      title: '加载列表失败',
+      icon: 'none',
+    })
+  })
+  .onComplete((event) => {
+    // 只有在成功的情况下才判断是否设置 finished 状态
+    if (event.error) {
+      // 错误情况已在 onError 中处理
+      return
+    }
 
-/** 统一处理 finished 状态 */
-onApplyListFinally((event) => {
-  // 只有在成功的情况下才判断是否设置 finished 状态
-  if (event.error) {
-    // 错误情况已在 onError 中处理
-    return
-  }
-
-  const res = event.data
-  // 判断是否已加载完所有数据：使用响应式数组长度与 total 比较
-  if (!res || applyRoomList.value.length >= res.total) {
-    loadingState.value = 'finished'
-  }
-  // 注意：loading 状态由 watch 自动管理，这里不需要设置
-})
+    const res = event.data
+    // 判断是否已加载完所有数据：使用响应式数组长度与 total 比较
+    if (!res || applyRoomList.value.length >= res.total) {
+      loadingState.value = 'finished'
+    }
+    // 注意：loading 状态由 watch 自动管理，这里不需要设置
+  })
 
 /** 监听 loading 状态，自动设置 loadingState */
 watch(applyListLoading, (isLoading) => {

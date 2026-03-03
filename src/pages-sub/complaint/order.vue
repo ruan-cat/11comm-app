@@ -17,6 +17,7 @@ import dayjs from 'dayjs'
 import { computed, ref } from 'vue'
 import { getUserComplaintHistory, saveComplaint } from '@/api/complaint'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
+import { navigateToTyped, TypedRouter } from '@/router'
 import { ComplaintTypeCode } from '@/types/complaint'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -206,9 +207,7 @@ function handleTabChange(tab: 'submit' | 'history') {
  * @example handleSelectFloor()
  */
 function handleSelectFloor() {
-  uni.navigateTo({
-    url: `/pages-sub/selector/floor-list?communityId=${communityInfo.communityId}`,
-  })
+  navigateToTyped('/pages-sub/selector/floor-list', { communityId: communityInfo.communityId })
 }
 
 /**
@@ -221,8 +220,10 @@ function handleSelectUnit() {
     return
   }
 
-  uni.navigateTo({
-    url: `/pages-sub/selector/unit-list?communityId=${communityInfo.communityId}&floorId=${floorId.value}&floorNum=${floorNum.value}`,
+  navigateToTyped('/pages-sub/selector/unit-list', {
+    communityId: communityInfo.communityId,
+    floorId: floorId.value,
+    floorNum: floorNum.value,
   })
 }
 
@@ -241,8 +242,12 @@ function handleSelectRoom() {
     return
   }
 
-  uni.navigateTo({
-    url: `/pages-sub/selector/room-list?communityId=${communityInfo.communityId}&floorId=${floorId.value}&floorNum=${floorNum.value}&unitId=${unitId.value}&unitNum=${unitNum.value}`,
+  navigateToTyped('/pages-sub/selector/room-list', {
+    communityId: communityInfo.communityId,
+    floorId: floorId.value,
+    floorNum: floorNum.value,
+    unitId: unitId.value,
+    unitNum: unitNum.value,
   })
 }
 
@@ -374,9 +379,7 @@ function handleViewDetail(complaint: Complaint) {
   // 存储到 storage 供详情页读取
   uni.setStorageSync(`_complaintOrderDetail_${complaint.complaintId}`, complaint)
 
-  uni.navigateTo({
-    url: `/pages-sub/complaint/detail?complaintId=${complaint.complaintId}`,
-  })
+  TypedRouter.toComplaintDetail(complaint.complaintId)
 }
 </script>
 

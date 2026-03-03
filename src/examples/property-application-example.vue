@@ -25,6 +25,7 @@ import {
   saveApplicationRecord,
   submitCheckUpdate,
 } from '@/api/property-application'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 
 // 页面数据
 const currentCommunityId = ref('COMM_001')
@@ -341,7 +342,7 @@ onMounted(() => {
 
     <!-- 申请列表 -->
     <view class="list-section">
-      <text class="section-title">申请列表</text>
+      <FormSectionTitle title="申请列表" />
       <view v-if="listLoading" class="loading">
         加载中...
       </view>
@@ -363,7 +364,7 @@ onMounted(() => {
 
     <!-- 申请详情 -->
     <view v-if="showDetail && selectedApplication" class="detail-section">
-      <text class="section-title">申请详情</text>
+      <FormSectionTitle title="申请详情" />
       <view class="detail-content">
         <text>申请ID: {{ selectedApplication.ardId }}</text>
         <text>房间名称: {{ selectedApplication.roomName }}</text>
@@ -390,7 +391,7 @@ onMounted(() => {
 
     <!-- 字典数据 -->
     <view v-if="dictData?.length" class="dict-section">
-      <text class="section-title">字典数据</text>
+      <FormSectionTitle title="字典数据" />
       <view class="dict-list">
         <text v-for="item in dictData" :key="item.statusCd" class="dict-item">
           {{ item.name }} ({{ item.statusCd }})
@@ -400,7 +401,7 @@ onMounted(() => {
 
     <!-- 费用折扣 -->
     <view v-if="feeDiscountList?.length" class="discount-section">
-      <text class="section-title">费用折扣</text>
+      <FormSectionTitle title="费用折扣" />
       <view class="discount-list">
         <text v-for="item in feeDiscountList" :key="item.discountId" class="discount-item">
           {{ item.discountName }} - ¥{{ item.discountAmount }}
@@ -410,7 +411,7 @@ onMounted(() => {
 
     <!-- 费用详情 -->
     <view v-if="feeDetailList?.feeDetails?.length" class="fee-section">
-      <text class="section-title">费用详情</text>
+      <FormSectionTitle title="费用详情" />
       <view class="fee-list">
         <text v-for="item in feeDetailList.feeDetails" :key="item.detailId" class="fee-item">
           {{ item.feeName }} - ¥{{ item.receivedAmount }}
@@ -420,7 +421,7 @@ onMounted(() => {
 
     <!-- 跟踪记录 -->
     <view v-if="recordList?.data?.length" class="record-section">
-      <text class="section-title">跟踪记录</text>
+      <FormSectionTitle title="跟踪记录" />
       <view class="record-list">
         <text v-for="item in recordList.data" :key="item.ardrId" class="record-item">
           {{ item.createUserName }} - {{ item.remark }} ({{ item.createTime }})
@@ -476,14 +477,6 @@ onMounted(() => {
   padding: 30rpx;
   background-color: #f8f8f8;
   border-radius: 15rpx;
-}
-
-.section-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20rpx;
-  display: block;
 }
 
 .loading {

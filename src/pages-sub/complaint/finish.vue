@@ -17,6 +17,7 @@ import dayjs from 'dayjs'
 import { ref } from 'vue'
 import { getFinishComplaintList } from '@/api/complaint'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
+import { TypedRouter } from '@/router'
 import { getCurrentCommunity } from '@/utils/user'
 
 /** 全局 Toast 提示 */
@@ -89,9 +90,7 @@ onShow(() => {
  * @example handleDetail(complaint)
  */
 function handleDetail(complaint: Complaint) {
-  uni.navigateTo({
-    url: `/pages-sub/complaint/detail?complaintId=${complaint.complaintId}`,
-  })
+  TypedRouter.toComplaintDetail(complaint.complaintId)
 }
 </script>
 

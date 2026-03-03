@@ -22,7 +22,7 @@ import {
   submitReviewUpdate,
 } from '@/api/property-application'
 import { extractApplyRecordParams } from '@/hooks/property/use-property-apply-room'
-import { TypedRouter } from '@/router'
+import { goBack, TypedRouter } from '@/router'
 
 definePage({
   style: {
@@ -216,7 +216,7 @@ onCheckSuccess(() => {
     title: '保存成功',
   })
   setTimeout(() => {
-    uni.navigateBack({})
+    goBack()
   }, 1000)
 })
 

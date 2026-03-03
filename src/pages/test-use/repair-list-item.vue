@@ -7,6 +7,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import RepairListItem from '@/components/common/repair-list-item/index.vue'
 
 definePage({
@@ -47,9 +48,7 @@ const mockItem2 = ref({
   <wd-navbar title="列表项演示" placeholder fixed />
 
   <view class="page-container">
-    <view class="section-title">
-      基础用法
-    </view>
+    <FormSectionTitle title="基础用法" />
     <repair-list-item :item="mockItem1">
       <template #action>
         <wd-button size="small" plain>
@@ -61,9 +60,7 @@ const mockItem2 = ref({
       </template>
     </repair-list-item>
 
-    <view class="section-title">
-      复杂状态
-    </view>
+    <FormSectionTitle title="复杂状态" />
     <repair-list-item :item="mockItem2">
       <template #action>
         <wd-button size="small" plain>
@@ -85,13 +82,5 @@ const mockItem2 = ref({
   padding: 20rpx;
   background-color: #f5f5f5;
   min-height: 100vh;
-}
-
-.section-title {
-  font-size: 28rpx;
-  color: #909399;
-  margin: 20rpx 0 10rpx;
-  padding-left: 10rpx;
-  border-left: 6rpx solid #409eff;
 }
 </style>

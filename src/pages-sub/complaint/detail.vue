@@ -17,6 +17,7 @@ import { useRequest } from 'alova/client'
 import { ref } from 'vue'
 import { getComplaintAppraises, getComplaintEvents } from '@/api/complaint'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
+import { navigateToTyped } from '@/router'
 import { ComplaintAppraiseState, ComplaintEventType } from '@/types/complaint'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -138,8 +139,9 @@ function handleReplyAppraise(appraise: ComplaintAppraise) {
     toast.error('缺少评价ID')
     return
   }
-  uni.navigateTo({
-    url: `/pages-sub/complaint/appraise-reply?appraiseId=${appraise.appraiseId}&communityId=${communityInfo.communityId}`,
+  navigateToTyped('/pages-sub/complaint/appraise-reply', {
+    appraiseId: appraise.appraiseId,
+    communityId: communityInfo.communityId,
   })
 }
 
