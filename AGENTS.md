@@ -814,3 +814,4 @@ import type { XXX } from "wot-design-uni/components/wd-xxx/types";
 
 - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
 - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
+- 规范文档： https://agentskills.io/home
