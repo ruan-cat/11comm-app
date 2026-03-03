@@ -15,15 +15,71 @@ context: fork
 - 组件嵌套顺序错误
 - 插槽使用错误
 
-## ⚠️ 多技能协同
+## 1.1 技能组合矩阵
 
-常见组合场景：
+根据任务特征快速识别需要使用的技能：
 
-- 表单迁移：`use-wd-form` + `beautiful-component-design` + `style-migration`
-- 列表迁移：`z-paging-integration` + `api-migration` + `style-migration`
-- Vue2 迁移：`code-migration` + `style-migration`
+|        任务特征        |                                                         必须使用的技能                                                         |                              说明                              |
+| :--------------------: | :----------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------: |
+|    包含 `<wd-form>`    |                                          `use-wd-form` + `beautiful-component-design`                                          |                  表单页面必须同时使用两个技能                  |
+|      需要选择功能      |                                              `use-wd-form`（第 3.2 节 wd-picker）                                              |            必须使用 wd-picker，禁止 wd-radio-group             |
+|    需要表单分区标题    |                                     `beautiful-component-design`（form-section-title.md）                                      | 必须使用 FormSectionTitle，禁止 `<view class="section-title">` |
+|      需要美化组件      |                                                  `beautiful-component-design`                                                  |                 添加图标、调整样式、响应式设计                 |
+|    ColorUI 组件迁移    |                                                     `component-migration`                                                      |            ColorUI / uni-app 组件 → wot-design-uni             |
+|    ColorUI 样式迁移    |                                                       `style-migration`                                                        |                  ColorUI 类名 → UnoCSS 原子类                  |
+|      API 接口迁移      |                                                        `api-migration`                                                         |       Java110Context + uni.request → Alova + TypeScript        |
+| Vue2 到 Vue3 代码迁移  |                                                        `code-migration`                                                        |           Options API → Composition API + TypeScript           |
+|        路由迁移        |                                                       `route-migration`                                                        |                    pages.json → 约定式路由                     |
+|      需要分页功能      |                                `z-paging-integration` + `api-migration` + `api-error-handling`                                 |                 z-paging 几乎总是需要 3 个技能                 |
+|    需要接口错误提示    |                                                      `api-error-handling`                                                      |                 所有 API 调用都应该有错误提示                  |
+|    需要动态页面标题    |                                                `use-uniapp-dynamic-page-title`                                                 |      根据参数/状态动态设置标题（如派单/转单显示不同标题）      |
+|      新建公共组件      |                                                      `add-new-component`                                                       |          src/components/common 目录下新建公共组件规范          |
+| 从 Vue2 完整迁移表单页 | `code-migration` + `component-migration` + `style-migration` + `use-wd-form` + `api-migration` + `beautiful-component-design`  |                       需要 6 个技能协同                        |
+| 从 Vue2 完整迁移列表页 | `code-migration` + `component-migration` + `style-migration` + `api-migration` + `z-paging-integration` + `api-error-handling` |                       需要 6 个技能协同                        |
 
-参阅 `.claude/skills/check-trigger.md` 了解完整的技能触发检查流程。
+## 1.2 多技能协同原则
+
+**⚠️ 重要：大多数实际任务都需要多个技能协同，禁止单一技能思维！**
+
+### 1.2.1 表单页面的技能组合
+
+```plaintext
+表单页面（创建/修改）：
+  - use-wd-form（必须）- 表单结构、wd-picker、校验规则
+  - beautiful-component-design（必须）- FormSectionTitle、图标、美化
+  - api-migration（如果有接口）- API 调用
+  - api-error-handling（如果有接口）- 错误提示
+```
+
+**检查清单**：
+
+- [ ] 包含 `<wd-form>` → 必须使用 `use-wd-form`
+- [ ] 需要分区标题 → 必须使用 `beautiful-component-design`（FormSectionTitle）
+- [ ] 有选择功能 → 必须使用 `wd-picker`（禁止 wd-radio-group）
+- [ ] 需要调用 API → 必须使用 `api-migration` + `api-error-handling`
+
+### 1.2.2 列表页面的技能组合
+
+```plaintext
+列表页面（分页列表）：
+  - z-paging-integration（必须）- 分页组件
+  - api-migration（必须）- API 接口
+  - api-error-handling（必须）- 错误提示
+  - beautiful-component-design（可选）- 美化
+```
+
+### 1.2.3 从 Vue2 迁移的技能组合
+
+```plaintext
+从 Vue2 迁移单个页面：
+  - code-migration（必须）- Vue2 → Vue3 代码写法
+  - component-migration（必须）- ColorUI → wot-design-uni
+  - style-migration（必须）- 样式类名迁移
+  - route-migration（必须）- 路由配置迁移
+  - 根据页面类型添加：
+    - 表单页：+ use-wd-form + beautiful-component-design
+    - 列表页：+ z-paging-integration + api-migration + api-error-handling
+```
 
 ---
 
@@ -128,11 +184,13 @@ context: fork
 **示例**:
 
 ```vue
-<!-- 旧代码 -->
-<button class="cu-btn bg-blue lg" @tap="doLogin()">登录</button>
+<template>
+	<!-- 旧代码 -->
+	<button class="cu-btn bg-blue lg" @tap="doLogin()">登录</button>
 
-<!-- 新代码 -->
-<wd-button type="primary" size="large" @click="doLogin">登录</wd-button>
+	<!-- 新代码 -->
+	<wd-button type="primary" size="large" @click="doLogin">登录</wd-button>
+</template>
 ```
 
 ### 2. 列表组件映射
@@ -148,27 +206,29 @@ context: fork
 **示例**:
 
 ```vue
-<!-- 旧代码 -->
-<view class="cu-list menu">
-  <view class="cu-item arrow" @click="gotoDetail">
-    <view class="content">
-      <text class="cuIcon-notification text-green"></text>
-      <view class="text-cut">{{ notice.title }}</view>
-    </view>
-  </view>
-</view>
+<template>
+	<!-- 旧代码 -->
+	<view class="cu-list menu">
+		<view class="cu-item arrow" @click="gotoDetail">
+			<view class="content">
+				<text class="cuIcon-notification text-green"></text>
+				<view class="text-cut">{{ notice.title }}</view>
+			</view>
+		</view>
+	</view>
 
-<!-- 新代码 -->
-<wd-cell-group>
-  <wd-cell is-link @click="gotoDetail">
-    <template #icon>
-      <wd-icon name="" custom-class="i-carbon-notification text-green-500 mr-2" />
-    </template>
-    <template #title>
-      <view class="truncate">{{ notice.title }}</view>
-    </template>
-  </wd-cell>
-</wd-cell-group>
+	<!-- 新代码 -->
+	<wd-cell-group>
+		<wd-cell is-link @click="gotoDetail">
+			<template #icon>
+				<wd-icon name="" custom-class="i-carbon-notification text-green-500 mr-2" />
+			</template>
+			<template #title>
+				<view class="truncate">{{ notice.title }}</view>
+			</template>
+		</wd-cell>
+	</wd-cell-group>
+</template>
 ```
 
 > **📚 完整映射表**: 参阅 [组件映射表.md](组件映射表.md)
@@ -187,13 +247,15 @@ context: fork
 **迁移示例**:
 
 ```vue
-<!-- 旧代码: ColorUI 图标 -->
-<text class="cuIcon-notification"></text>
-<text class="cuIcon-notification text-green"></text>
+<template>
+	<!-- 旧代码: ColorUI 图标 -->
+	<text class="cuIcon-notification"></text>
+	<text class="cuIcon-notification text-green"></text>
 
-<!-- 新代码: wd-icon + Carbon 图标 -->
-<wd-icon name="" custom-class="i-carbon-notification" />
-<wd-icon name="" custom-class="i-carbon-notification text-colorui-green" />
+	<!-- 新代码: wd-icon + Carbon 图标 -->
+	<wd-icon name="" custom-class="i-carbon-notification" />
+	<wd-icon name="" custom-class="i-carbon-notification text-colorui-green" />
+</template>
 ```
 
 **常用图标映射**:
@@ -490,11 +552,11 @@ onLoadTitlesSuccess((data) => {
 
 **常见属性**:
 
-| 属性         | 说明                         | 类型                 | 默认值    |
-| ------------ | ---------------------------- | -------------------- | --------- |
-| `image`      | 预设图片类型或自定义图片 URL | string               | 'network' |
-| `tip`        | 提示文案                     | string               | -         |
-| `image-size` | 图片尺寸                     | string/number/object | -         |
+|     属性     |             说明             |         类型         |  默认值   |
+| :----------: | :--------------------------: | :------------------: | :-------: |
+|   `image`    | 预设图片类型或自定义图片 URL |        string        | 'network' |
+|    `tip`     |           提示文案           |        string        |     -     |
+| `image-size` |           图片尺寸           | string/number/object |     -     |
 
 > **📚 完整文档**: https://github.com/Moonofweisheng/wot-design-uni/blob/master/docs/component/status-tip.md
 

@@ -68,16 +68,16 @@ context: fork
 
 #### 🚫 禁止使用的 CSS 选择器
 
-|         ❌ 禁止使用         |       ✅ 替代方案       |             说明             |
-| :-------------------------: | :---------------------: | :--------------------------: |
-|         `* { ... }`         | 使用具体组件选择器列表  |      WXSS 不支持通配符       |
-|  `*, *::before, *::after`   | `page, view, text, ...` |        列举需要的组件        |
-| `p { ... }` HTML 标签选择器 |  `.text-class { ... }`  |      使用 class 选择器       |
-|      `:not([hidden])`       |     `.item + .item`     | 不支持属性选择器在 :not() 中 |
-|     `:not(:last-child)`     |     `.item + .item`     |    不支持复杂 :not() 伪类    |
-|      `:nth-child(n+2)`      |     `.item + .item`     |   不支持复杂 :nth-child()    |
-|     `:nth-child(3n+1)`      |   手动添加 class 区分   |   不支持复杂 :nth-child()    |
-|   `view:not(:last-child)`   |     `.item + .item`     |      不支持 :not() 伪类      |
+|         ❌ 禁止使用         |       ✅ 替代方案       |            说明            |
+| :-------------------------: | :---------------------: | :------------------------: |
+|         `* { ... }`         | 使用具体组件选择器列表  |     WXSS 不支持通配符      |
+|  `*, *::before, *::after`   | `page, view, text, ...` |       列举需要的组件       |
+| `p { ... }` HTML 标签选择器 |  `.text-class { ... }`  |     使用 class 选择器      |
+|      `:not([hidden])`       |     `.item + .item`     | 不支持属性选择器 :not() 中 |
+|     `:not(:last-child)`     |     `.item + .item`     |   不支持复杂 :not() 伪类   |
+|      `:nth-child(n+2)`      |     `.item + .item`     |  不支持复杂 :nth-child()   |
+|     `:nth-child(3n+1)`      |   手动添加 class 区分   |  不支持复杂 :nth-child()   |
+|   `view:not(:last-child)`   |     `.item + .item`     |     不支持 :not() 伪类     |
 
 #### 🚫 禁止使用的 UnoCSS 类名
 

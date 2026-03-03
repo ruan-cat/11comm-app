@@ -84,6 +84,7 @@
 - [ ] **需要实现列表分页功能吗？**
   - ✅ 是 → **必须使用** `.claude/skills/z-paging-integration/SKILL.md`
   - ✅ 是 → **必须配合** `.claude/skills/api-migration/SKILL.md`（z-paging 需要与 useRequest 集成）
+  - ✅ 是 → **必须配合** `.claude/skills/api-error-handling/SKILL.md`（所有 API 调用都应该有错误提示）
 
 ### 1.8. 页面标题相关
 
@@ -285,20 +286,20 @@ Grep: pattern="___" path="src/" output_mode="files_with_matches"
 
 ## 快速参考：技能触发矩阵
 
-|     任务特征      |                        必须使用的技能                        |
-| :---------------: | :----------------------------------------------------------: |
-| 包含 `<wd-form>`  |                 `use-wd-form` + `beautiful`                  |
-|   需要选择功能    |             `use-wd-form`（第 3.2 节 wd-picker）             |
-| 需要表单分区标题  |             `beautiful`（form-section-title.md）             |
-|   需要美化组件    |                 `beautiful-component-design`                 |
-| ColorUI 组件迁移  |                    `component-migration`                     |
-| ColorUI 样式迁移  |                      `style-migration`                       |
-|   API 接口迁移    |                       `api-migration`                        |
-| Vue2 到 Vue3 迁移 | `code-migration` + `component-migration` + `style-migration` |
-|   需要分页功能    |           `z-paging-integration` + `api-migration`           |
-| 需要错误提示功能  |                     `api-error-handling`                     |
-| 需要动态页面标题  |               `use-uniapp-dynamic-page-title`                |
-|   新建公共组件    |                     `add-new-component`                      |
+|     任务特征      |                         必须使用的技能                          |
+| :---------------: | :-------------------------------------------------------------: |
+| 包含 `<wd-form>`  |          `use-wd-form` + `beautiful-component-design`           |
+|   需要选择功能    |              `use-wd-form`（第 3.2 节 wd-picker）               |
+| 需要表单分区标题  |      `beautiful-component-design`（form-section-title.md）      |
+|   需要美化组件    |                  `beautiful-component-design`                   |
+| ColorUI 组件迁移  |                      `component-migration`                      |
+| ColorUI 样式迁移  |                        `style-migration`                        |
+|   API 接口迁移    |                         `api-migration`                         |
+| Vue2 到 Vue3 迁移 |  `code-migration` + `component-migration` + `style-migration`   |
+|   需要分页功能    | `z-paging-integration` + `api-migration` + `api-error-handling` |
+| 需要错误提示功能  |                      `api-error-handling`                       |
+| 需要动态页面标题  |                 `use-uniapp-dynamic-page-title`                 |
+|   新建公共组件    |                       `add-new-component`                       |
 
 ---
 
