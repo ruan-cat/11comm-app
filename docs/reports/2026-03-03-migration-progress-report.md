@@ -1,4 +1,9 @@
-# 项目迁移进度检查报告
+<!--
+重要的报告 用于生成一个全面迁移代码写法的任务
+一旦代码全面的完成迁移，就删除该报告
+-->
+
+# 2026-03-03 项目迁移进度检查报告
 
 **检查日期**: 2026-03-03
 
@@ -28,78 +33,6 @@
 | work_modules (工作管理)        |     8      |    8     |  100%  |
 | maintenance_modules (维护管理) |     4      |    4     |  100%  |
 
-#### 已迁移文件详细清单
-
-**src/pages-sub/repair/ (10 个)**
-
-```plain
-✅ order-list.vue         - 维修工单列表
-✅ add-order.vue         - 新增维修工单
-✅ order-detail.vue      - 维修工单详情
-✅ dispatch.vue          - 维修派单
-✅ handle.vue           - 维修处理
-✅ select-resource.vue   - 选择资源
-✅ finish.vue           - 维修完成
-✅ end-order.vue        - 结束工单
-✅ appraise-reply.vue   - 评价回复
-✅ appraise.vue         - 维修评价
-```
-
-**src/pages-sub/complaint/ (7 个)**
-
-```plain
-✅ list.vue             - 投诉列表
-✅ order.vue            - 投诉工单
-✅ detail.vue           - 投诉详情
-✅ handle.vue           - 投诉处理
-✅ finish.vue           - 投诉完成
-✅ audit.vue            - 投诉审核
-✅ appraise-reply.vue   - 投诉评价回复
-```
-
-**src/pages-sub/inspection/ (8 个)**
-
-```plain
-✅ task-list.vue        - 巡检任务列表
-✅ today-report.vue     - 今日巡检报告
-✅ staff-no-task.vue   - 员工无任务
-✅ execute.vue          - 执行巡检
-✅ execute-single.vue   - 执行单个巡检
-✅ execute-qrcode.vue   - 二维码巡检
-✅ transfer.vue         - 巡检转移
-✅ reexamine.vue        - 巡检复查
-```
-
-**src/pages-sub/selector/ (3 个)**
-
-```plain
-✅ select-floor.vue    - 选择楼层
-✅ select-unit.vue     - 选择单元
-✅ select-room.vue     - 选择房间
-```
-
-**src/pages-sub/work/ (8 个)**
-
-```plain
-✅ task-list.vue       - 工作任务列表
-✅ start-work.vue      - 开始工作
-✅ do-work.vue         - 执行工作
-✅ work-detail.vue     - 工作详情
-✅ edit-work.vue      - 编辑工作
-✅ copy-work.vue      - 复制工作
-✅ do-copy-work.vue   - 执行复制工作
-✅ audit-work.vue     - 工作审核
-```
-
-**src/pages-sub/maintenance/ (4 个)**
-
-```plain
-✅ task-list.vue       - 维护任务列表
-✅ execute.vue         - 执行维护
-✅ execute-single.vue - 执行单个维护
-✅ transfer.vue        - 维护转移
-```
-
 ---
 
 ### 2.2 部分完成模块 🔶 (4 个模块，31 个页面)
@@ -108,8 +41,32 @@
 | :-------------------------- | :--------: | :------: | :----: |
 | property_modules (房屋管理) |     16     |    5     |  31%   |
 | notice_modules (公告管理)   |     4      |    2     |  50%   |
-| basic_modules (基础模块)    |     8      |    2     |  25%   |
+| basic_modules (基础模块)    |     8      |    3     |  38%   |
 | address_modules (通讯录)    |     1      |    1     |  100%  |
+
+#### basic_modules 详细状态
+
+**已完成迁移（3 个）**：
+
+```plain
+✅ src/pages/
+    ├── index/index.vue         - 首页
+    └── work-dashboard/index.vue - 工作台
+
+✅ src/pages/login/
+    └── login.vue              - 登录页
+```
+
+**未完成迁移（5 个）**：
+
+```plain
+❌ src/pages/profile/
+    - index.vue             (我的页面)
+    - attendance.vue         (员工考勤)
+    - user-info.vue          (用户信息)
+    - change-password.vue    (修改密码)
+    - change-community.vue   (切换小区)
+```
 
 #### property_modules 详细状态
 
@@ -164,36 +121,13 @@
    - src/pages/notice/detail.vue (公告详情页)
 ```
 
-#### basic_modules 详细状态
-
-**已完成迁移（2 个）**：
-
-```plain
-✅ src/pages/
-    ├── index/index.vue         - 首页
-    └── work-dashboard/index.vue - 工作台
-
-✅ src/pages/login/
-    └── login.vue              - 登录页（存在但可能是不同文件）
-```
-
-**未完成迁移（6 个）**：
-
-```plain
-❌ src/pages/profile/
-    - attendance.vue         (员工考勤)
-    - user-info.vue          (用户信息)
-    - change-password.vue    (修改密码)
-    - change-community.vue   (切换小区)
-    - index.vue             (我的页面)
-```
-
 #### address_modules 详细状态
 
 **已完成迁移（1 个）**：
 
 ```plain
-✅ src/pages/address/list.vue - 通讯录列表页
+✅ src/pages/address/
+    └── list.vue - 通讯录列表页
 ```
 
 ---
@@ -260,7 +194,7 @@
    - write-owe-callable.vue (填写欠费催缴)
    - room-pay.vue           (房间缴费)
    - pay-qrcode.vue        (二维码缴费)
-   - detail.vue             (费用详情)
+   - detail.vue            (费用详情)
 
 ❌ 充值管理 (2个)
    - charge.vue           (充值)
@@ -283,11 +217,11 @@
    - workflow.vue            (OA工作流)
    - workflow-form.vue      (新建工作流表单)
    - workflow-form-edit.vue (编辑工作流表单)
-   - workflow-todo.vue     (工作流待办)
-   - workflow-audit.vue    (工作流审核)
-   - workflow-finish.vue   (工作流已完成)
-   - workflow-detail.vue   (工作流详情)
-   - audit-todo.vue       (审核待办)
+   - workflow-todo.vue      (工作流待办)
+   - workflow-audit.vue     (工作流审核)
+   - workflow-finish.vue    (工作流已完成)
+   - workflow-detail.vue    (工作流详情)
+   - audit-todo.vue        (审核待办)
 ```
 
 #### parking_modules 未迁移详情（5 个）
@@ -315,8 +249,8 @@
    src/pages-sub/meter/
    - reading.vue           (抄表)
    - add-meter.vue        (新增水表)
-   - qrcode-meter.vue     (二维码水表)
-   - share-meter.vue      (共享水表)
+   - qrcode-meter.vue    (二维码水表)
+   - share-meter.vue     (共享水表)
    - add-share-reading.vue (新增共享抄表)
    - audit-share-reading.vue (审核共享抄表)
 
@@ -348,196 +282,157 @@
 
 ---
 
-## 三、Skills 技能合规性检查（已完成全面检查）
+## 三、Skills 技能合规性检查（已更新 2026-03-03）
 
 ### 3.1 总体检查结果
 
 | 模块                  | 检查文件数 | 通过数 | 需修复数 | 通过率  |
 | :-------------------- | :--------: | :----: | :------: | :-----: |
-| repair_modules        |     10     |   9    |    1     |   90%   |
+| repair_modules        |     11     |   10   |    1     |   91%   |
 | complaint_modules     |     7      |   1    |    6     |   14%   |
 | inspection_modules    |     8      |   0    |    8     |   0%    |
-| selector_modules      |     3      |   0    |    3     |   0%    |
-| work_modules          |     8      |   0    |    8     |   0%    |
+| selector_modules      |     3      |   3    |    0     |  100%   |
+| work_modules          |     8      |   8    |    0     |  100%   |
 | property (apply-room) |     5      |   3    |    2     |   60%   |
 | maintenance_modules   |     4      |   4    |    0     |  100%   |
 | notice (activity)     |     2      |   1    |    1     |   50%   |
-| basic (部分)          |     3      |   1    |    2     |   33%   |
-| address_modules       |     1      |   0    |    1     |   0%    |
-| **总计**              |   **51**   | **19** |  **32**  | **37%** |
+| basic (部分)          |     3      |   3    |    0     |  100%   |
+| address_modules       |     1      |   1    |    0     |  100%   |
+| **总计**              |   **52**   | **32** |  **20**  | **62%** |
 
 ### 3.2 各模块详细检查结果
 
-#### repair_modules (10 个文件)
+#### repair_modules (11 个文件)
 
-| 文件                | code-migration | component-migration | style-migration | api-migration | z-paging | api-error-handling | use-wd-form |
-| :------------------ | :------------: | :-----------------: | :-------------: | :-----------: | :------: | :----------------: | :---------: |
-| order-list.vue      |       ✅       |         ✅          |       ✅        |      ✅       |    ✅    |         ✅         |     N/A     |
-| add-order.vue       |       ✅       |         ✅          |       ✅        |      ✅       |   N/A    |         ✅         |     ✅      |
-| order-detail.vue    |       ✅       |         ✅          |       ✅        |      ✅       |   N/A    |         ✅         |     N/A     |
-| dispatch.vue        |       ✅       |         ✅          |       ✅        |      ✅       |    ✅    |         ✅         |     N/A     |
-| handle.vue          |       ✅       |         ✅          |       ✅        |      ✅       |   N/A    |         ✅         |     ✅      |
-| select-resource.vue |       ✅       |         ✅          |       ✅        |      ✅       |   N/A    |         ✅         |     ✅      |
-| finish.vue          |       ✅       |         ✅          |       ✅        |      ✅       |    ✅    |         ✅         |     N/A     |
-| end-order.vue       |       ✅       |         ✅          |       ✅        |      ✅       |   N/A    |         ✅         |     ✅      |
-| appraise-reply.vue  |       ✅       |         ✅          |       ✅        |      ✅       |   N/A    |         ✅         |     ❌      |
-| appraise.vue        |       ✅       |         ✅          |       ✅        |      ✅       |   N/A    |         ✅         |     ✅      |
-
-**问题**：appraise-reply.vue 未使用 wd-form 组件
+| 文件                | api-error-handling | z-paging | use-wd-form | FormSectionTitle | 备注         |
+| :------------------ | :----------------: | :------: | :---------: | :--------------: | :----------- |
+| order-list.vue      |         ✅         |    ✅    |     N/A     |       N/A        |              |
+| add-order.vue       |         ✅         |   N/A    |     ✅      |        ✅        |              |
+| order-detail.vue    |         ✅         |   N/A    |     N/A     |        ✅        |              |
+| dispatch.vue        |         ✅         |    ✅    |     N/A     |       N/A        |              |
+| handle.vue          |         ✅         |   N/A    |     ✅      |        ✅        |              |
+| select-resource.vue |         ✅         |   N/A    |     ✅      |        ✅        |              |
+| finish.vue          |         ✅         |    ✅    |     N/A     |       N/A        |              |
+| end-order.vue       |         ✅         |   N/A    |     ✅      |        ✅        |              |
+| appraise-reply.vue  |         ✅         |   N/A    |     ❌      |       N/A        | 缺少 wd-form |
+| appraise.vue        |         ✅         |   N/A    |     ✅      |        ✅        |              |
+| repair-add.vue      |         ✅         |   N/A    |     ✅      |       N/A        |              |
 
 #### complaint_modules (7 个文件)
 
-| 文件               | 主要问题         |
-| :----------------- | :--------------- |
-| list.vue           | ❌ 缺少 z-paging |
-| order.vue          | ❌ 缺少 wd-form  |
-| detail.vue         | ✅               |
-| handle.vue         | ❌ 缺少 wd-form  |
-| finish.vue         | ❌ 缺少 z-paging |
-| audit.vue          | ❌ 缺少 wd-form  |
-| appraise-reply.vue | ❌ 缺少 wd-form  |
-
-**问题**：4 个文件缺少 wd-form，2 个文件缺少 z-paging
+| 文件               | api-error-handling | z-paging | use-wd-form | 备注          |
+| :----------------- | :----------------: | :------: | :---------: | :------------ |
+| list.vue           |         ✅         |    ❌    |     N/A     | 缺少 z-paging |
+| order.vue          |         ✅         |   N/A    |     ❌      | 缺少 wd-form  |
+| detail.vue         |         ✅         |   N/A    |     N/A     |               |
+| handle.vue         |         ✅         |   N/A    |     ❌      | 缺少 wd-form  |
+| finish.vue         |         ✅         |    ❌    |     N/A     | 缺少 z-paging |
+| audit.vue          |         ✅         |   N/A    |     ❌      | 缺少 wd-form  |
+| appraise-reply.vue |         ✅         |   N/A    |     ❌      | 缺少 wd-form  |
 
 #### inspection_modules (8 个文件)
 
-| 文件               | 主要问题                                      |
-| :----------------- | :-------------------------------------------- |
-| task-list.vue      | ❌ 缺少 onError 回调                          |
-| today-report.vue   | ❌ wd-datetime-picker 嵌套错误 + 缺少 onError |
-| staff-no-task.vue  | ❌ 缺少 onError                               |
-| execute.vue        | ❌ 缺少 onError                               |
-| execute-single.vue | ❌ 表单校验方式错误 + 缺少 onError            |
-| execute-qrcode.vue | ❌ 缺少 onError                               |
-| transfer.vue       | ❌ 表单校验方式错误 + 缺少 onError            |
-| reexamine.vue      | ❌ wd-datetime-picker 嵌套错误 + 缺少 onError |
+| 文件               | api-error-handling | z-paging | use-wd-form | 备注              |
+| :----------------- | :----------------: | :------: | :---------: | :---------------- |
+| task-list.vue      |         ❌         |    ✅    |     N/A     | 缺少 onError 回调 |
+| today-report.vue   |         ❌         |   N/A    |     N/A     | 缺少 onError 回调 |
+| staff-no-task.vue  |         ❌         |   N/A    |     N/A     | 缺少 onError 回调 |
+| execute.vue        |         ❌         |   N/A    |     N/A     | 缺少 onError 回调 |
+| execute-single.vue |         ❌         |   N/A    |     ✅      | 缺少 onError 回调 |
+| execute-qrcode.vue |         ❌         |   N/A    |     N/A     | 缺少 onError 回调 |
+| transfer.vue       |         ❌         |   N/A    |     ✅      | 缺少 onError 回调 |
+| reexamine.vue      |         ❌         |   N/A    |     N/A     | 缺少 onError 回调 |
 
-**问题**：所有文件缺少 onError 回调，3 个文件存在组件嵌套错误
+**问题**：所有文件缺少 onError 回调
 
 #### selector_modules (3 个文件)
 
-| 文件             | 主要问题            |
-| :--------------- | :------------------ |
-| select-floor.vue | ❌ 缺少 toast.error |
-| select-unit.vue  | ❌ 缺少 toast.error |
-| select-room.vue  | ❌ 缺少 toast.error |
-
-**问题**：所有文件 api-error-handling 不规范
+| 文件             | api-error-handling | 备注 |
+| :--------------- | :----------------: | :--- |
+| select-floor.vue |         ✅         |      |
+| select-unit.vue  |         ✅         |      |
+| select-room.vue  |         ✅         |      |
 
 #### work_modules (8 个文件)
 
-| 文件             | 主要问题            |
-| :--------------- | :------------------ |
-| task-list.vue    | ❌ 缺少 toast.error |
-| start-work.vue   | ❌ 缺少 toast.error |
-| do-work.vue      | ❌ 缺少 toast.error |
-| work-detail.vue  | ❌ 缺少 toast.error |
-| edit-work.vue    | ❌ 缺少 toast.error |
-| copy-work.vue    | ❌ 缺少 toast.error |
-| do-copy-work.vue | ❌ 缺少 toast.error |
-| audit-work.vue   | ❌ 缺少 toast.error |
-
-**问题**：所有文件 api-error-handling 不规范
+| 文件             | api-error-handling | z-paging | use-wd-form | 备注 |
+| :--------------- | :----------------: | :------: | :---------: | :--- |
+| task-list.vue    |         ✅         |    ✅    |     N/A     |      |
+| start-work.vue   |         ✅         |   N/A    |     ✅      |      |
+| do-work.vue      |         ✅         |   N/A    |     N/A     |      |
+| work-detail.vue  |         ✅         |   N/A    |     N/A     |      |
+| edit-work.vue    |         ✅         |   N/A    |     ✅      |      |
+| copy-work.vue    |         ✅         |   N/A    |     ✅      |      |
+| do-copy-work.vue |         ✅         |   N/A    |     ✅      |      |
+| audit-work.vue   |         ✅         |   N/A    |     ✅      |      |
 
 #### property (apply-room 系列)
 
-| 文件                  | 主要问题         |
-| :-------------------- | :--------------- |
-| apply-room.vue        | ❌ 缺少 z-paging |
-| apply-room-record.vue | ❌ 缺少 z-paging |
-| 其他 3 个             | ✅               |
+| 文件                  | z-paging | 备注          |
+| :-------------------- | :------: | :------------ |
+| apply-room.vue        |    ❌    | 缺少 z-paging |
+| apply-room-record.vue |    ❌    | 缺少 z-paging |
+| 其他 3 个             |   N/A    |               |
 
 #### maintenance_modules
 
-**全部通过**
+| 文件               | api-error-handling | 备注 |
+| :----------------- | :----------------: | :--- |
+| task-list.vue      |         ✅         |      |
+| execute.vue        |         ✅         |      |
+| execute-single.vue |         ✅         |      |
+| transfer.vue       |         ✅         |      |
 
 #### notice (activity)
 
-| 文件       | 主要问题         |
-| :--------- | :--------------- |
-| index.vue  | ❌ 缺少 z-paging |
-| detail.vue | ✅               |
+| 文件       | z-paging | 备注          |
+| :--------- | :------: | :------------ |
+| index.vue  |    ❌    | 缺少 z-paging |
+| detail.vue |   N/A    |               |
 
 #### basic + address
 
-| 文件                     | 主要问题                                            |
-| :----------------------- | :-------------------------------------------------- |
-| index/index.vue          | ❌ 未使用 wot-design-uni + 使用 SCSS                |
-| work-dashboard/index.vue | ✅                                                  |
-| login/login.vue          | ❌ 未使用 wot-design-uni + 使用 SCSS + 缺少 wd-form |
-| address/list.vue         | ❌ 缺少 z-paging                                    |
+| 文件                     | component-migration | style-migration | 备注 |
+| :----------------------- | :-----------------: | :-------------: | :--- |
+| index/index.vue          |         ✅          |       ✅        |      |
+| work-dashboard/index.vue |         ✅          |       ✅        |      |
+| login/login.vue          |         ✅          |       ✅        |      |
+| address/list.vue         |         ✅          |       N/A       |      |
+
+---
 
 ### 3.3 不合规问题汇总（按严重程度排序）
 
-#### 🔴 Fail 级别（必须修复）- 共 32 个问题
+#### 🔴 Fail 级别（必须修复）- 共 20 个问题
 
-| 序号 | 模块       | 文件                  | 问题类型            | 问题描述                           |
-| :--: | :--------- | :-------------------- | :------------------ | :--------------------------------- |
-|  1   | repair     | appraise-reply.vue    | use-wd-form         | 表单页面未使用 wd-form 组件        |
-|  2   | complaint  | list.vue              | z-paging            | 列表页未使用 z-paging 组件         |
-|  3   | complaint  | order.vue             | use-wd-form         | 表单未使用 wd-form                 |
-|  4   | complaint  | handle.vue            | use-wd-form         | 表单未使用 wd-form                 |
-|  5   | complaint  | finish.vue            | z-paging            | 列表页未使用 z-paging              |
-|  6   | complaint  | audit.vue             | use-wd-form         | 表单未使用 wd-form                 |
-|  7   | complaint  | appraise-reply.vue    | use-wd-form         | 表单未使用 wd-form                 |
-|  8   | inspection | task-list.vue         | api-error-handling  | 缺少 onError 回调                  |
-|  9   | inspection | today-report.vue      | component-migration | wd-datetime-picker 嵌套错误        |
-|  10  | inspection | today-report.vue      | api-error-handling  | 缺少 onError 回调                  |
-|  11  | inspection | staff-no-task.vue     | api-error-handling  | 缺少 onError 回调                  |
-|  12  | inspection | execute.vue           | api-error-handling  | 缺少 onError 回调                  |
-|  13  | inspection | execute-single.vue    | use-wd-form         | 表单校验方式错误                   |
-|  14  | inspection | execute-single.vue    | api-error-handling  | 缺少 onError 回调                  |
-|  15  | inspection | execute-qrcode.vue    | api-error-handling  | 缺少 onError 回调                  |
-|  16  | inspection | transfer.vue          | use-wd-form         | 表单校验方式错误                   |
-|  17  | inspection | transfer.vue          | api-error-handling  | 缺少 onError 回调                  |
-|  18  | inspection | reexamine.vue         | component-migration | wd-datetime-picker 嵌套错误        |
-|  19  | inspection | reexamine.vue         | api-error-handling  | 缺少 onError 回调                  |
-|  20  | selector   | select-floor.vue      | api-error-handling  | 仅 console.error，缺少 toast.error |
-|  21  | selector   | select-unit.vue       | api-error-handling  | 仅 console.error，缺少 toast.error |
-|  22  | selector   | select-room.vue       | api-error-handling  | 仅 console.error，缺少 toast.error |
-|  23  | work       | task-list.vue         | api-error-handling  | 仅 console.error，缺少 toast.error |
-|  24  | work       | start-work.vue        | api-error-handling  | 缺少 toast.error                   |
-|  25  | work       | do-work.vue           | api-error-handling  | 缺少 toast.error                   |
-|  26  | work       | work-detail.vue       | api-error-handling  | 缺少 toast.error                   |
-|  27  | work       | edit-work.vue         | api-error-handling  | 缺少 toast.error                   |
-|  28  | work       | copy-work.vue         | api-error-handling  | 缺少 toast.error                   |
-|  29  | work       | do-copy-work.vue      | api-error-handling  | 缺少 toast.error                   |
-|  30  | work       | audit-work.vue        | api-error-handling  | 缺少 toast.error                   |
-|  31  | property   | apply-room.vue        | z-paging            | 手动分页，需改为 z-paging          |
-|  32  | property   | apply-room-record.vue | z-paging            | 手动分页，需改为 z-paging          |
+| 序号 | 模块       | 文件                  | 问题类型           | 问题描述                    |
+| :--: | :--------- | :-------------------- | :----------------- | :-------------------------- |
+|  1   | repair     | appraise-reply.vue    | use-wd-form        | 表单页面未使用 wd-form 组件 |
+|  2   | complaint  | list.vue              | z-paging           | 列表页未使用 z-paging 组件  |
+|  3   | complaint  | order.vue             | use-wd-form        | 表单未使用 wd-form          |
+|  4   | complaint  | handle.vue            | use-wd-form        | 表单未使用 wd-form          |
+|  5   | complaint  | finish.vue            | z-paging           | 列表页未使用 z-paging       |
+|  6   | complaint  | audit.vue             | use-wd-form        | 表单未使用 wd-form          |
+|  7   | complaint  | appraise-reply.vue    | use-wd-form        | 表单未使用 wd-form          |
+|  8   | inspection | task-list.vue         | api-error-handling | 缺少 onError 回调           |
+|  9   | inspection | today-report.vue      | api-error-handling | 缺少 onError 回调           |
+|  10  | inspection | staff-no-task.vue     | api-error-handling | 缺少 onError 回调           |
+|  11  | inspection | execute.vue           | api-error-handling | 缺少 onError 回调           |
+|  12  | inspection | execute-single.vue    | api-error-handling | 缺少 onError 回调           |
+|  13  | inspection | execute-qrcode.vue    | api-error-handling | 缺少 onError 回调           |
+|  14  | inspection | transfer.vue          | api-error-handling | 缺少 onError 回调           |
+|  15  | inspection | reexamine.vue         | api-error-handling | 缺少 onError 回调           |
+|  16  | property   | apply-room.vue        | z-paging           | 手动分页，需改为 z-paging   |
+|  17  | property   | apply-room-record.vue | z-paging           | 手动分页，需改为 z-paging   |
+|  18  | notice     | activity/index.vue    | z-paging           | 手动分页，需改为 z-paging   |
 
-#### 🟡 Warn 级别（建议修复）- 共 5 个问题
+### 3.4 检查方法说明
 
-| 序号 | 模块    | 文件               | 问题类型            | 问题描述                    |
-| :--: | :------ | :----------------- | :------------------ | :-------------------------- |
-|  1   | notice  | activity/index.vue | z-paging            | 手动分页，建议改用 z-paging |
-|  2   | basic   | index/index.vue    | component-migration | 未使用 wot-design-uni       |
-|  3   | basic   | index/index.vue    | style-migration     | 使用 SCSS，建议改用 UnoCSS  |
-|  4   | basic   | login/login.vue    | component-migration | 未使用 wot-design-uni       |
-|  5   | basic   | login/login.vue    | style-migration     | 使用 SCSS，建议改用 UnoCSS  |
-|  6   | address | address/list.vue   | z-paging            | 未使用 z-paging             |
+本报告通过以下工具和方式进行验证：
 
-### 3.4 修复建议
-
-#### 优先级 P0（必须修复）
-
-1. **api-error-handling 问题**（27 个文件）
-   - 所有 API 请求添加 `.onError` 回调
-   - 使用 `toast.error()` 统一错误提示
-
-2. **z-paging 问题**（7 个文件）
-   - 将手动分页改为 z-paging 组件
-
-3. **wd-form 问题**（6 个文件）
-   - 表单页面使用 wd-form 组件包裹
-
-#### 优先级 P1（建议修复）
-
-1. **组件嵌套错误**（2 个文件）
-   - 修复 wd-datetime-picker 嵌套在 wd-cell 内的问题
-
-2. **SCSS 迁移**（2 个文件）
-   - index.vue 和 login.vue 使用 SCSS，建议改用 UnoCSS
+- **Glob**: 列出所有迁移文件
+- **Grep**: 搜索关键词确认 Skills 规范使用
+- **Read**: 读取关键文件验证代码结构
 
 ---
 
@@ -545,38 +440,35 @@
 
 ### 4.1 迁移优先级排序
 
-**高优先级**（业务核心，29+14=43 个页面）：
+**高优先级**（业务核心，43 个页面）：
 
 1. resource_modules (资源采购) - 29 个页面
 2. fee_modules (费用管理) - 14 个页面
 
-**中优先级**（业务流程，8+11+5=24 个页面）：3. oa_modules (OA 工作流) - 8 个页面4. property_modules (房屋管理) - 11 个页面（剩余）5. parking_modules (车辆管理) - 5 个页面
+**中优先级**（业务流程，24 个页面）：3. oa_modules (OA 工作流) - 8 个页面4. property_modules (房屋管理) - 11 个页面（剩余）5. parking_modules (车辆管理) - 5 个页面
 
-**低优先级**（辅助功能，2+2+2+2+2+2+1=13 个页面）：6. notice_modules (公告管理) - 2 个页面（剩余）7. other_modules (其他功能) - 11 个页面
+**低优先级**（辅助功能，13 个页面）：6. notice_modules (公告管理) - 2 个页面（剩余）7. other_modules (其他功能) - 11 个页面
 
 ### 4.2 已迁移文件的合规性修复计划
 
 #### 第一阶段：修复 P0 问题（约 2 小时）
 
-1. **api-error-handling 问题修复**（27 个文件）
+1. **api-error-handling 问题修复**（8 个文件 - inspection 模块）
    - 在所有 useRequest 调用中添加 `.onError` 回调
-   - 使用 `toast.error()` 统一错误提示
 
-2. **z-paging 问题修复**（7 个文件）
-   - apply-room.vue
-   - apply-room-record.vue
-   - list.vue / finish.vue (complaint)
+2. **z-paging 问题修复**（5 个文件）
+   - complaint/list.vue
+   - complaint/finish.vue
+   - property/apply-room.vue
+   - property/apply-room-record.vue
    - activity/index.vue
-   - address/list.vue
 
 3. **wd-form 问题修复**（6 个文件）
-   - appraise-reply.vue (repair)
-   - order.vue / handle.vue / audit.vue / appraise-reply.vue (complaint)
-
-#### 第二阶段：修复 P1 问题（约 1 小时）
-
-1. 修复 inspection 模块中的 wd-datetime-picker 嵌套错误
-2. 修复 login/index.vue 的组件和样式迁移
+   - repair/appraise-reply.vue
+   - complaint/order.vue
+   - complaint/handle.vue
+   - complaint/audit.vue
+   - complaint/appraise-reply.vue
 
 ### 4.3 Skills 合规性检查建议
 
@@ -589,6 +481,7 @@
 - `use-wd-form`: 表单组件规范
 - `z-paging-integration`: 分页组件集成
 - `api-error-handling`: 接口错误处理
+- `beautiful-component-design`: 美化设计规范
 
 ---
 
@@ -600,7 +493,7 @@
 
 ### 5.2 已验证的迁移文件清单
 
-基于 Glob 工具扫描，已确认以下 48 个迁移文件存在：
+基于 Glob 工具扫描，已确认以下 52 个迁移文件存在：
 
 ```plain
 src/pages-sub/
@@ -623,5 +516,5 @@ src/pages/
 ---
 
 _报告生成时间: 2026-03-03_
-_检查工具: Claude Code + Explore Agents + Glob_
-_合规性检查: 已完成 51 个文件的全面检查_
+_检查工具: Claude Code + Glob + Grep_
+_合规性检查: 已完成 52 个文件的全面检查_
