@@ -1293,7 +1293,7 @@ pagingRef.value?.complete(response?.ownerRepairs || []);
 1. 全面阅读 `.claude\skills\api-migration` 技能的全部文件。
 2. 请问 api 迁移技能是否说明清楚要如何使用并迁移来自旧代码的 `gitee-example\constant\url.js` url 地址常量文件？迁移技能是否清楚被迁移的 api 接口地址从哪里获取？
 
-## 080 <!-- TODO: --> 阅读报告，并完成全体技能的改动
+## 080 阅读报告，并完成全体技能的改动
 
 1. 阅读 `docs\reports\2026-02-15-skills-conflict-analysis-report.md` 。
 2. 这个文件说明了，我们项目目前出现了很多技能冲突的问题，请你严格按照该报告的说明要求，新建一个 openspec 长任务，完成该内容。
