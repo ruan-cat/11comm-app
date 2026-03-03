@@ -97,14 +97,14 @@ mockLog("apiName", params);
 
 **核心状态说明**:
 
-| 状态名      | 类型                      | 说明                  |
-| ----------- | ------------------------- | --------------------- |
-| `loading`   | `Ref<boolean>`            | 请求加载状态,自动管理 |
-| `data`      | `Ref<T \| undefined>`     | 响应数据,类型安全     |
-| `error`     | `Ref<Error \| undefined>` | 错误信息              |
-| `send`      | `(...args) => Promise<T>` | 手动触发请求函数      |
-| `onSuccess` | `(callback) => void`      | 成功回调钩子          |
-| `onError`   | `(callback) => void`      | 失败回调钩子          |
+|   状态名    |           类型            |         说明          |
+| :---------: | :-----------------------: | :-------------------: |
+|  `loading`  |      `Ref<boolean>`       | 请求加载状态,自动管理 |
+|   `data`    |   `Ref<T \| undefined>`   |   响应数据,类型安全   |
+|   `error`   | `Ref<Error \| undefined>` |       错误信息        |
+|   `send`    | `(...args) => Promise<T>` |   手动触发请求函数    |
+| `onSuccess` |   `(callback) => void`    |     成功回调钩子      |
+|  `onError`  |   `(callback) => void`    |     失败回调钩子      |
 
 > **📚 详细用法**: 关于标准请求、表单提交、分页加载、静默请求、错误处理等,参阅 `api-error-handling` Skill
 
