@@ -1,38 +1,38 @@
 ## 1. 准备阶段
 
-- [ ] 1.1 验证所有 Skills 文档完整且最新
-- [ ] 1.2 确认路由映射表（route-migration-map.yml）准确无误
-- [ ] 1.3 创建迁移进度追踪系统
-- [ ] 1.4 初始化 140 个页面的状态为"未开始"
+- [x] 1.1 验证所有 Skills 文档完整且最新
+- [x] 1.2 确认路由映射表（route-migration-map.yml）准确无误
+- [x] 1.3 创建迁移进度追踪系统
+- [x] 1.4 初始化 140 个页面的状态为"未开始"
 
 ## 2. 阶段 1：合规性修复（P0 问题）
 
 ### 2.1 修复 api-error-handling 问题（inspection 模块 - 8 个文件）
 
-- [ ] 2.1.1 修复 src/pages-sub/inspection/task-list.vue - 添加 onError 回调
-- [ ] 2.1.2 修复 src/pages-sub/inspection/today-report.vue - 添加 onError 回调
-- [ ] 2.1.3 修复 src/pages-sub/inspection/staff-no-task.vue - 添加 onError 回调
-- [ ] 2.1.4 修复 src/pages-sub/inspection/execute.vue - 添加 onError 回调
-- [ ] 2.1.5 修复 src/pages-sub/inspection/execute-single.vue - 添加 onError 回调
-- [ ] 2.1.6 修复 src/pages-sub/inspection/execute-qrcode.vue - 添加 onError 回调
-- [ ] 2.1.7 修复 src/pages-sub/inspection/transfer.vue - 添加 onError 回调
-- [ ] 2.1.8 修复 src/pages-sub/inspection/reexamine.vue - 添加 onError 回调
+- [x] 2.1.1 修复 src/pages-sub/inspection/task-list.vue - 添加 onError 回调
+- [x] 2.1.2 修复 src/pages-sub/inspection/today-report.vue - 添加 onError 回调
+- [x] 2.1.3 修复 src/pages-sub/inspection/staff-no-task.vue - 添加 onError 回调
+- [x] 2.1.4 修复 src/pages-sub/inspection/execute.vue - 添加 onError 回调
+- [x] 2.1.5 修复 src/pages-sub/inspection/execute-single.vue - 添加 onError 回调
+- [x] 2.1.6 修复 src/pages-sub/inspection/execute-qrcode.vue - 添加 onError 回调
+- [x] 2.1.7 修复 src/pages-sub/inspection/transfer.vue - 添加 onError 回调
+- [x] 2.1.8 修复 src/pages-sub/inspection/reexamine.vue - 添加 onError 回调
 
 ### 2.2 修复 z-paging 问题（5 个文件）
 
-- [ ] 2.2.1 修复 src/pages-sub/complaint/list.vue - 添加 z-paging 组件
-- [ ] 2.2.2 修复 src/pages-sub/complaint/finish.vue - 添加 z-paging 组件
-- [ ] 2.2.3 修复 src/pages-sub/property/apply-room.vue - 添加 z-paging 组件
-- [ ] 2.2.4 修复 src/pages-sub/property/apply-room-record.vue - 添加 z-paging 组件
-- [ ] 2.2.5 修复 src/pages/activity/index.vue - 添加 z-paging 组件
+- [x] 2.2.1 修复 src/pages-sub/complaint/list.vue - 添加 z-paging 组件
+- [x] 2.2.2 修复 src/pages-sub/complaint/finish.vue - 添加 z-paging 组件
+- [x] 2.2.3 修复 src/pages-sub/property/apply-room.vue - 添加 z-paging 组件
+- [x] 2.2.4 修复 src/pages-sub/property/apply-room-record.vue - 添加 z-paging 组件
+- [x] 2.2.5 修复 src/pages/activity/index.vue - 添加 z-paging 组件
 
 ### 2.3 修复 use-wd-form 问题（7 个文件）
 
-- [ ] 2.3.1 修复 src/pages-sub/repair/appraise-reply.vue - 添加 wd-form 组件
-- [ ] 2.3.2 修复 src/pages-sub/complaint/order.vue - 添加 wd-form 组件
-- [ ] 2.3.3 修复 src/pages-sub/complaint/handle.vue - 添加 wd-form 组件
-- [ ] 2.3.4 修复 src/pages-sub/complaint/audit.vue - 添加 wd-form 组件
-- [ ] 2.3.5 修复 src/pages-sub/complaint/appraise-reply.vue - 添加 wd-form 组件
+- [x] 2.3.1 修复 src/pages-sub/repair/appraise-reply.vue - 添加 wd-form 组件
+- [x] 2.3.2 修复 src/pages-sub/complaint/order.vue - 添加 wd-form 组件
+- [x] 2.3.3 修复 src/pages-sub/complaint/handle.vue - 添加 wd-form 组件
+- [x] 2.3.4 修复 src/pages-sub/complaint/audit.vue - 添加 wd-form 组件
+- [x] 2.3.5 修复 src/pages-sub/complaint/appraise-reply.vue - 添加 wd-form 组件
 
 ### 2.4 合规性修复验收
 
@@ -44,7 +44,7 @@
 
 ### 3.1 resource_modules - 采购申请流程（5 个页面）
 
-- [ ] 3.1.1 迁移 src/pages-sub/purchase/request.vue（采购申请）
+- [x] 3.1.1 迁移 src/pages-sub/purchase/request.vue（采购申请）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/purchaseRequest/purchaseRequest.vue`
@@ -96,7 +96,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -132,7 +131,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -165,7 +163,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.1.2 迁移 src/pages-sub/purchase/review.vue（采购审核）
+- [x] 3.1.2 迁移 src/pages-sub/purchase/review.vue（采购审核）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/purchaseReview/purchaseReview.vue`
@@ -217,7 +215,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -253,7 +250,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -286,7 +282,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.1.3 迁移 src/pages-sub/purchase/list.vue（采购列表）
+- [x] 3.1.3 迁移 src/pages-sub/purchase/list.vue（采购列表）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/purchaseList/purchaseList.vue`
@@ -336,7 +332,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -372,7 +367,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -408,7 +402,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.1.4 迁移 src/pages-sub/purchase/schedule.vue（采购进度）
+- [x] 3.1.4 迁移 src/pages-sub/purchase/schedule.vue（采购进度）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/purchasingSchedule/purchasingSchedule.vue`
@@ -458,7 +452,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -494,7 +487,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -530,7 +522,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.1.5 迁移 src/pages-sub/purchase/urgent-apply.vue（紧急采购申请）
+- [x] 3.1.5 迁移 src/pages-sub/purchase/urgent-apply.vue（紧急采购申请）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/urgentPurchaseApplyStep/urgentPurchaseApplyStep.vue`
@@ -582,7 +574,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -618,7 +609,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -651,10 +641,9 @@
 
   **预计耗时**：2-3 小时
 
-
 ### 3.2 resource_modules - 资源管理（5 个页面）
 
-- [ ] 3.2.1 迁移 src/pages-sub/resource/add-purchase-apply.vue（新增采购申请）
+- [x] 3.2.1 迁移 src/pages-sub/resource/add-purchase-apply.vue（新增采购申请）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/addPurchaseApply.vue`
@@ -706,7 +695,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -742,7 +730,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -775,7 +762,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.2.2 迁移 src/pages-sub/resource/edit-purchase-apply.vue（编辑采购申请）
+- [x] 3.2.2 迁移 src/pages-sub/resource/edit-purchase-apply.vue（编辑采购申请）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/editPurchaseApply.vue`
@@ -827,7 +814,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -863,7 +849,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -896,7 +881,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.2.3 迁移 src/pages-sub/resource/purchase-apply-detail.vue（采购申请详情）
+- [x] 3.2.3 迁移 src/pages-sub/resource/purchase-apply-detail.vue（采购申请详情）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/purchaseApplyDetail.vue`
@@ -941,7 +926,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -977,7 +961,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -1006,7 +989,7 @@
 
   **预计耗时**：1.5-2 小时
 
-- [ ] 3.2.4 迁移 src/pages-sub/resource/purchase-apply-manage.vue（采购申请管理）
+- [x] 3.2.4 迁移 src/pages-sub/resource/purchase-apply-manage.vue（采购申请管理）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/purchaseApplyManage.vue`
@@ -1058,7 +1041,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -1094,7 +1076,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -1127,7 +1108,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.2.5 迁移 src/pages-sub/resource/purchase-apply-audit.vue（采购申请审核）
+- [x] 3.2.5 迁移 src/pages-sub/resource/purchase-apply-audit.vue（采购申请审核）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/purchaseApplyAuditOrders.vue`
@@ -1179,7 +1160,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -1215,7 +1195,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -1248,10 +1227,9 @@
 
   **预计耗时**：2-3 小时
 
-
 ### 3.3 resource_modules - 物品管理（5 个页面）
 
-- [ ] 3.3.1 迁移 src/pages-sub/resource/add-item-out.vue（新增物品出库）
+- [x] 3.3.1 迁移 src/pages-sub/resource/add-item-out.vue（新增物品出库）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/addItemOut.vue`
@@ -1303,7 +1281,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -1339,7 +1316,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -1372,7 +1348,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.3.2 迁移 src/pages-sub/resource/item-enter.vue（物品入库）
+- [x] 3.3.2 迁移 src/pages-sub/resource/item-enter.vue（物品入库）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/itemEnterDo.vue`
@@ -1417,7 +1393,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -1453,7 +1428,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -1482,7 +1456,7 @@
 
   **预计耗时**：1.5-2 小时
 
-- [ ] 3.3.3 迁移 src/pages-sub/resource/item-out.vue（物品出库）
+- [x] 3.3.3 迁移 src/pages-sub/resource/item-out.vue（物品出库）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/itemOutDo.vue`
@@ -1532,7 +1506,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -1568,7 +1541,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -1604,7 +1576,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.3.4 迁移 src/pages-sub/resource/item-out-manage.vue（物品出库管理）
+- [x] 3.3.4 迁移 src/pages-sub/resource/item-out-manage.vue（物品出库管理）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/itemOutManage.vue`
@@ -1654,7 +1626,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -1690,7 +1661,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -1726,7 +1696,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.3.5 迁移 src/pages-sub/resource/item-out-audit.vue（物品出库审核）
+- [x] 3.3.5 迁移 src/pages-sub/resource/item-out-audit.vue（物品出库审核）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/itemOutAuditOrders.vue`
@@ -1778,7 +1748,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -1814,7 +1783,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -1847,10 +1815,9 @@
 
   **预计耗时**：2-3 小时
 
-
 ### 3.4 resource_modules - 调拨管理（5 个页面）
 
-- [ ] 3.4.1 迁移 src/pages-sub/resource/allocation-apply.vue（调拨申请）
+- [x] 3.4.1 迁移 src/pages-sub/resource/allocation-apply.vue（调拨申请）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/allocationStorehouseApply.vue`
@@ -1902,7 +1869,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -1938,7 +1904,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -1971,7 +1936,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.4.2 迁移 src/pages-sub/resource/allocation-detail.vue（调拨详情）
+- [x] 3.4.2 迁移 src/pages-sub/resource/allocation-detail.vue（调拨详情）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/allocationStorehouseApplyDetail.vue`
@@ -2016,7 +1981,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -2052,7 +2016,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -2081,7 +2044,7 @@
 
   **预计耗时**：1.5-2 小时
 
-- [ ] 3.4.3 迁移 src/pages-sub/resource/allocation-manage.vue（调拨管理）
+- [x] 3.4.3 迁移 src/pages-sub/resource/allocation-manage.vue（调拨管理）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/allocationStorehouseManage.vue`
@@ -2131,7 +2094,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -2167,7 +2129,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -2203,7 +2164,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.4.4 迁移 src/pages-sub/resource/allocation-audit.vue（调拨审核）
+- [x] 3.4.4 迁移 src/pages-sub/resource/allocation-audit.vue（调拨审核）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/allocationStorehouseAuditOrders.vue`
@@ -2255,7 +2216,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -2291,7 +2251,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -2324,7 +2283,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.4.5 迁移 src/pages-sub/resource/allocation-enter.vue（调拨入库）
+- [x] 3.4.5 迁移 src/pages-sub/resource/allocation-enter.vue（调拨入库）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resource/allocationEnterDo.vue`
@@ -2374,7 +2333,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -2410,7 +2368,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -2446,10 +2403,9 @@
 
   **预计耗时**：2-3 小时
 
-
 ### 3.5 resource_modules - 库存管理（4 个页面）
 
-- [ ] 3.5.1 迁移 src/pages-sub/resource/store-manage.vue（库存管理）
+- [x] 3.5.1 迁移 src/pages-sub/resource/store-manage.vue（库存管理）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resourceStoreManage/resourceStoreManage.vue`
@@ -2499,7 +2455,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -2535,7 +2490,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -2571,7 +2525,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.5.2 迁移 src/pages-sub/resource/store-return.vue（库存退货）
+- [x] 3.5.2 迁移 src/pages-sub/resource/store-return.vue（库存退货）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resourceStoreReturn/resourceStoreReturn.vue`
@@ -2621,7 +2575,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -2657,7 +2610,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -2693,7 +2645,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.5.3 迁移 src/pages-sub/resource/store-scrap.vue（库存报废）
+- [x] 3.5.3 迁移 src/pages-sub/resource/store-scrap.vue（库存报废）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resourceStoreScrap/resourceStoreScrap.vue`
@@ -2743,7 +2695,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -2779,7 +2730,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -2815,7 +2765,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.5.4 迁移 src/pages-sub/resource/store-transfer.vue（库存调拨）
+- [x] 3.5.4 迁移 src/pages-sub/resource/store-transfer.vue（库存调拨）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/resourceStoreTransfer/resourceStoreTransfer.vue`
@@ -2865,7 +2815,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -2901,7 +2850,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -2937,10 +2885,9 @@
 
   **预计耗时**：2-3 小时
 
-
 ### 3.6 resource_modules - 出入库管理（1 个页面）
 
-- [ ] 3.6.1 迁移 src/pages-sub/resource/out-storage-request.vue（出库申请）
+- [x] 3.6.1 迁移 src/pages-sub/resource/out-storage-request.vue（出库申请）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/pOutOfStorageRequest/pOutOfStorageRequest.vue`
@@ -2992,7 +2939,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -3028,7 +2974,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -3061,7 +3006,6 @@
 
   **预计耗时**：2-3 小时
 
-
 ### 3.7 resource_modules 验收
 
 - [ ] 3.7.1 对 resource_modules 所有文件进行合规性检查
@@ -3070,7 +3014,7 @@
 
 ### 3.8 fee_modules - 费用管理（6 个页面）
 
-- [ ] 3.8.1 迁移 src/pages-sub/fee/create.vue（创建费用）
+- [x] 3.8.1 迁移 src/pages-sub/fee/create.vue（创建费用）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/fee/createFee.vue`
@@ -3122,7 +3066,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -3158,7 +3101,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -3191,7 +3133,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.8.2 迁移 src/pages-sub/fee/owe-callable.vue（欠费催缴）
+- [x] 3.8.2 迁移 src/pages-sub/fee/owe-callable.vue（欠费催缴）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/fee/oweFeeCallable.vue`
@@ -3236,7 +3178,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -3272,7 +3213,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -3301,7 +3241,7 @@
 
   **预计耗时**：1.5-2 小时
 
-- [ ] 3.8.3 迁移 src/pages-sub/fee/write-owe-callable.vue（填写欠费催缴）
+- [x] 3.8.3 迁移 src/pages-sub/fee/write-owe-callable.vue（填写欠费催缴）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/fee/writeOweFeeCallable.vue`
@@ -3353,7 +3293,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -3389,7 +3328,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -3422,7 +3360,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.8.4 迁移 src/pages-sub/fee/room-pay.vue（房间缴费）
+- [x] 3.8.4 迁移 src/pages-sub/fee/room-pay.vue（房间缴费）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/fee/roomPayFee.vue`
@@ -3474,7 +3412,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -3510,7 +3447,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -3543,7 +3479,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.8.5 迁移 src/pages-sub/fee/pay-qrcode.vue（二维码缴费）
+- [x] 3.8.5 迁移 src/pages-sub/fee/pay-qrcode.vue（二维码缴费）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/fee/payFeeByQrCode.vue`
@@ -3595,7 +3531,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -3631,7 +3566,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -3664,7 +3598,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.8.6 迁移 src/pages-sub/fee/detail.vue（费用详情）
+- [x] 3.8.6 迁移 src/pages-sub/fee/detail.vue（费用详情）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/feeDetail/feeDetail.vue`
@@ -3709,7 +3643,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -3745,7 +3678,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -3773,7 +3705,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：1.5-2 小时
-
 
 ### 3.9 fee_modules - 充值管理（2 个页面）
 
@@ -3829,7 +3760,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -3865,7 +3795,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -3943,7 +3872,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -3979,7 +3907,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -4008,10 +3935,9 @@
 
   **预计耗时**：1.5-2 小时
 
-
 ### 3.10 fee_modules - 报表统计（6 个页面）
 
-- [ ] 3.10.1 迁移 src/pages-sub/report/fee-summary.vue（费用汇总报表）
+- [x] 3.10.1 迁移 src/pages-sub/report/fee-summary.vue（费用汇总报表）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/report/reportFeeSummary.vue`
@@ -4056,7 +3982,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -4092,7 +4017,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -4121,7 +4045,7 @@
 
   **预计耗时**：1.5-2 小时
 
-- [ ] 3.10.2 迁移 src/pages-sub/report/pay-fee-detail.vue（缴费明细报表）
+- [x] 3.10.2 迁移 src/pages-sub/report/pay-fee-detail.vue（缴费明细报表）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/report/reportPayFeeDetail.vue`
@@ -4166,7 +4090,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -4202,7 +4125,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -4231,7 +4153,7 @@
 
   **预计耗时**：1.5-2 小时
 
-- [ ] 3.10.3 迁移 src/pages-sub/report/room-fee.vue（房间费用报表）
+- [x] 3.10.3 迁移 src/pages-sub/report/room-fee.vue（房间费用报表）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/report/reportRoomFee.vue`
@@ -4276,7 +4198,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -4312,7 +4233,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -4341,7 +4261,7 @@
 
   **预计耗时**：1.5-2 小时
 
-- [ ] 3.10.4 迁移 src/pages-sub/report/data-report.vue（数据报表）
+- [x] 3.10.4 迁移 src/pages-sub/report/data-report.vue（数据报表）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/report/dataReport.vue`
@@ -4386,7 +4306,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -4422,7 +4341,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -4451,7 +4369,7 @@
 
   **预计耗时**：1.5-2 小时
 
-- [ ] 3.10.5 迁移 src/pages-sub/report/charge-machine-order.vue（充电桩订单）
+- [x] 3.10.5 迁移 src/pages-sub/report/charge-machine-order.vue（充电桩订单）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/report/chargeMachineOrder.vue`
@@ -4496,7 +4414,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -4532,7 +4449,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -4561,7 +4477,7 @@
 
   **预计耗时**：1.5-2 小时
 
-- [ ] 3.10.6 迁移 src/pages-sub/report/open-door-log.vue（开门记录）
+- [x] 3.10.6 迁移 src/pages-sub/report/open-door-log.vue（开门记录）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/report/openDoorLog.vue`
@@ -4606,7 +4522,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -4642,7 +4557,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -4670,7 +4584,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：1.5-2 小时
-
 
 ### 3.11 fee_modules 验收
 
@@ -4733,7 +4646,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -4769,7 +4681,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -4843,7 +4754,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -4879,7 +4789,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -4960,7 +4869,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -4996,7 +4904,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -5079,7 +4986,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -5115,7 +5021,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -5203,7 +5108,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -5239,7 +5143,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -5317,7 +5220,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -5353,7 +5255,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -5427,7 +5328,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -5463,7 +5363,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -5544,7 +5443,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -5580,7 +5478,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -5612,7 +5509,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：2-3 小时
-
 
 ### 4.2 oa_modules 验收
 
@@ -5672,7 +5568,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -5708,7 +5603,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -5789,7 +5683,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -5825,7 +5718,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -5904,7 +5796,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -5940,7 +5831,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -6026,7 +5916,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -6062,7 +5951,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -6097,7 +5985,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：2-3 小时
-
 
 ### 4.4 property_modules - 业主管理（3 个页面）
 
@@ -6151,7 +6038,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -6187,7 +6073,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -6275,7 +6160,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -6311,7 +6195,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -6396,7 +6279,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -6432,7 +6314,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -6464,7 +6345,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：2-3 小时
-
 
 ### 4.5 property_modules - 装修管理（5 个页面）
 
@@ -6518,7 +6398,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -6554,7 +6433,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -6635,7 +6513,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -6671,7 +6548,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -6750,7 +6626,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -6786,7 +6661,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -6867,7 +6741,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -6903,7 +6776,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -6984,7 +6856,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -7020,7 +6891,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -7052,7 +6922,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：2-3 小时
-
 
 ### 4.6 property_modules 验收
 
@@ -7107,7 +6976,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -7143,7 +7011,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -7217,7 +7084,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -7253,7 +7119,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -7327,7 +7192,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -7363,7 +7227,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -7442,7 +7305,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -7478,7 +7340,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -7564,7 +7425,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -7600,7 +7460,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -7635,7 +7494,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：2-3 小时
-
 
 ### 4.8 parking_modules 验收
 
@@ -7703,7 +7561,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -7739,7 +7596,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -7820,7 +7676,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -7856,7 +7711,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -7884,7 +7738,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：1.5-2 小时
-
 
 ### 5.2 notice_modules 验收
 
@@ -7939,7 +7792,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -7975,7 +7827,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -8049,7 +7900,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -8085,7 +7935,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -8159,7 +8008,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -8195,7 +8043,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -8276,7 +8123,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -8312,7 +8158,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -8390,7 +8235,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -8426,7 +8270,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -8454,7 +8297,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：1.5-2 小时
-
 
 ### 5.4 basic_modules 验收
 
@@ -8514,7 +8356,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -8550,7 +8391,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -8631,7 +8471,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -8667,7 +8506,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -8695,7 +8533,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：1.5-2 小时
-
 
 ### 5.6 other_modules - 抄表管理（6 个页面）
 
@@ -8744,7 +8581,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -8780,7 +8616,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -8861,7 +8696,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -8897,7 +8731,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -8975,7 +8808,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -9011,7 +8843,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -9085,7 +8916,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -9121,7 +8951,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -9202,7 +9031,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -9238,7 +9066,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -9323,7 +9150,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -9359,7 +9185,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -9391,7 +9216,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：2-3 小时
-
 
 ### 5.7 other_modules - 优惠券管理（3 个页面）
 
@@ -9447,7 +9271,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -9483,7 +9306,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -9568,7 +9390,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -9604,7 +9425,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -9689,7 +9509,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -9725,7 +9544,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -9757,7 +9575,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：2-3 小时
-
 
 ### 5.8 other_modules - 物品发布（2 个页面）
 
@@ -9813,7 +9630,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -9849,7 +9665,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -9927,7 +9742,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -9963,7 +9777,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -9991,7 +9804,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：1.5-2 小时
-
 
 ### 5.9 other_modules - 视频管理（2 个页面）
 
@@ -10045,7 +9857,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -10081,7 +9892,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -10162,7 +9972,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -10198,7 +10007,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -10226,7 +10034,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：1.5-2 小时
-
 
 ### 5.10 other_modules - 访客管理（2 个页面）
 
@@ -10280,7 +10087,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -10316,7 +10122,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -10397,7 +10202,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -10433,7 +10237,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -10461,7 +10264,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：1.5-2 小时
-
 
 ### 5.11 other_modules - 通用页面（1 个页面）
 
@@ -10510,7 +10312,6 @@
      - 使用 uni.showToast 显示错误信息
 
   **迁移步骤**：
-
   1. **技能触发检查**（强制执行）
      - 打开 `.claude/skills/check-trigger.md`
      - 逐项回答检查问题
@@ -10546,7 +10347,6 @@
      - 保留技能指导和审核子代理供下一个文件使用
 
   **验收标准**：
-
   - [ ] **代码规范**：
     - 使用 Vue3 Composition API（`<script setup lang="ts">`）
     - 使用 TypeScript 类型定义
@@ -10574,7 +10374,6 @@
     - 通过 beautiful-component-design 合规性检查
 
   **预计耗时**：1.5-2 小时
-
 
 ### 5.12 other_modules 验收
 
