@@ -24,7 +24,9 @@ context: fork
 
 - `gitee-example/constant/url.js` - **旧项目接口地址常量文件（迁移时必须参考）**
 - `src/api/mock/repair.mock.ts` - 最完整、最标准的参考实现
+- `src/http/alova.ts` - **响应拦截器配置（理解 ApiResponse 自动解包机制）**
 - `.claude/skills/api-migration/references/接口地址迁移.md` - **接口地址迁移规范（新增）**
+- `.claude/skills/api-migration/references/api-定义示例.md` - **API 函数定义规范（重要：不使用 ApiResponse 包裹）**
 - `.claude/skills/api-migration/references/mock-实现指南.md`
 - `.claude/skills/api-migration/references/mock-规范.md`
 - `.claude/skills/api-migration/references/mock-响应格式.md`
@@ -32,6 +34,7 @@ context: fork
 关键要求：
 
 - **迁移前必须查阅** `gitee-example/constant/url.js` 获取正确的接口地址
+- **必须理解响应拦截器机制**：`src/http/alova.ts` 已自动解包 `ApiResponse`，API 函数泛型直接使用业务数据类型
 - 使用 `{ query, body }` 解构参数
 - method 必须是数组：`['GET', 'POST']`
 - 必须设置 `delay: [300, 800]`
@@ -43,6 +46,35 @@ context: fork
 - **完全模仿**：100% 按照 `repair.mock.ts` 的代码结构编写
 - **类型安全**：所有 `ColumnItem.value` 赋值时添加 `as string` 断言
 - **响应格式**：强制使用 `successResponse`/`errorResponse`/`mockLog`
+- **⚠️ 响应拦截器自动解包**：`src/http/alova.ts` 已自动解包 `ApiResponse`，API 函数泛型直接使用业务数据类型，不需要包裹 `ApiResponse`
+
+## 响应拦截器自动解包机制
+
+**🔴 核心理解**：项目的 Alova 响应拦截器（`src/http/alova.ts` 第 116 行）已经自动解包了 `ApiResponse`，因此：
+
+1. **Mock 返回**：`successResponse({ list: [...], total: 10 })` → 生成 `{ code: 0, message: "成功", data: { list: [...], total: 10 } }`
+2. **拦截器处理**：提取 `data` 字段 → 返回 `{ list: [...], total: 10 }`
+3. **API 函数泛型**：直接写业务数据类型，不需要包裹 `ApiResponse`
+
+**正确示例**：
+
+```typescript
+// ✅ 正确 - 直接使用业务数据类型
+export function getRepairDetail(params: { repairId: string }) {
+	return http.Get<{ ownerRepair: RepairOrder }>("/api/repair/detail", { params });
+}
+
+export function getRepairList(params: RepairListParams) {
+	return http.Get<PaginationResponse<RepairOrder>>("/api/repair/list", { params });
+}
+
+// ❌ 错误 - 不需要包裹 ApiResponse（拦截器已经解包了）
+export function getRepairDetail(params: { repairId: string }) {
+	return http.Get<ApiResponse<{ ownerRepair: RepairOrder }>>("/api/repair/detail", { params });
+}
+```
+
+**详细说明**：参阅 [references/api-定义示例.md](references/api-定义示例.md)
 
 ## 迁移概述
 
