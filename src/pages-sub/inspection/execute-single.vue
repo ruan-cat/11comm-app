@@ -126,40 +126,39 @@ function getCurrentLocation() {
 /**
  * 加载巡检项标题
  */
-const {
-  send: sendLoadTitles,
-  onSuccess: onLoadTitlesSuccess,
-  onError: onLoadTitlesError,
-} = useRequest(() => getInspectionItemTitles({
-  itemId: itemId.value,
-  page: 1,
-  row: 100,
-}), {
-  immediate: false,
-})
+const { send: sendLoadTitles } = useRequest(
+  () =>
+    getInspectionItemTitles({
+      itemId: itemId.value,
+      page: 1,
+      row: 100,
+    }),
+  {
+    immediate: false,
+  },
+)
+  .onSuccess((event) => {
+    const result = event.data
+    titleList.value = result?.list || []
 
-onLoadTitlesSuccess((data) => {
-  titleList.value = data.data?.list || []
-
-  // 初始化 radio 字段
-  titleList.value.forEach((item) => {
-    if (item.titleType === '1001') {
-      // 单选：初始化为空字符串
-      item.radio = ''
-    }
-    else if (item.titleType === '2002') {
-      // 多选：初始化为空数组
-      item.radio = []
-    }
+    // 初始化 radio 字段
+    titleList.value.forEach((item) => {
+      if (item.titleType === '1001') {
+        // 单选：初始化为空字符串
+        item.radio = ''
+      }
+      else if (item.titleType === '2002') {
+        // 多选：初始化为空数组
+        item.radio = []
+      }
+    })
   })
-})
-
-onLoadTitlesError((error) => {
-  uni.showToast({
-    title: error.message || '加载巡检项失败',
-    icon: 'none',
+  .onError((error) => {
+    uni.showToast({
+      title: error.error || '加载巡检项失败',
+      icon: 'none',
+    })
   })
-})
 
 async function loadInspectionItemTitles() {
   await sendLoadTitles()
@@ -258,7 +257,7 @@ onSubmitSuccess(() => {
 
 onSubmitError((error) => {
   uni.showToast({
-    title: error.message || '提交失败',
+    title: error.error || '提交失败',
     icon: 'none',
   })
 })

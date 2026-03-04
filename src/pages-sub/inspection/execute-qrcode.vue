@@ -44,48 +44,45 @@ const taskDetails = ref<InspectionTaskDetail[]>([])
 /**
  * 查询巡检任务详情
  */
-const {
-  loading,
-  send: sendQueryTaskDetails,
-  onSuccess,
-  onError,
-} = useRequest(() => {
-  const currentTime = dayjs().format('HH:mm')
-  return getInspectionTaskDetail({
-    inspectionId: inspectionId.value,
-    state: '20200405',
-    qrCodeTime: currentTime,
-    page: 1,
-    row: 100,
-  })
-}, {
-  immediate: false,
-})
-
-onSuccess((data) => {
-  taskDetails.value = data.data?.list || []
-
-  // 如果找到任务，跳转到执行单项巡检页
-  if (taskDetails.value.length > 0) {
-    const item = taskDetails.value[0]
-
-    redirectToTyped('/pages-sub/inspection/execute-single', {
-      taskDetailId: item.taskDetailId,
-      taskId: item.taskId,
+const { loading, send: sendQueryTaskDetails } = useRequest(
+  () => {
+    const currentTime = dayjs().format('HH:mm')
+    return getInspectionTaskDetail({
       inspectionId: inspectionId.value,
-      inspectionName: inspectionName.value,
-      itemId: itemId.value,
-      fromPage: 'QrCode',
+      state: '20200405',
+      qrCodeTime: currentTime,
+      page: 1,
+      row: 100,
     })
-  }
-})
+  },
+  {
+    immediate: false,
+  },
+)
+  .onSuccess((event) => {
+    const result = event.data
+    taskDetails.value = result?.list || []
 
-onError((error) => {
-  uni.showToast({
-    title: error.message || '请求失败',
-    icon: 'none',
+    // 如果找到任务，跳转到执行单项巡检页
+    if (taskDetails.value.length > 0) {
+      const item = taskDetails.value[0]
+
+      redirectToTyped('/pages-sub/inspection/execute-single', {
+        taskDetailId: item.taskDetailId,
+        taskId: item.taskId,
+        inspectionId: inspectionId.value,
+        inspectionName: inspectionName.value,
+        itemId: itemId.value,
+        fromPage: 'QrCode',
+      })
+    }
   })
-})
+  .onError((error) => {
+    uni.showToast({
+      title: error.error || '请求失败',
+      icon: 'none',
+    })
+  })
 
 async function queryTaskDetails() {
   await sendQueryTaskDetails()

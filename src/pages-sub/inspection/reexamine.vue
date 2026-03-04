@@ -35,32 +35,30 @@ const selectedDate = ref('')
 /**
  * 获取补检任务列表
  */
-const {
-  loading,
-  send: sendGetTasks,
-  onSuccess,
-  onError,
-} = useRequest((date: string) => getInspectionTaskList({
-  page: 1,
-  row: 20,
-  moreState: '20200405,20200406',
-  canReexamine: '2000',
-  planInsTime: date,
-}), {
-  immediate: false,
-})
-
-onSuccess((data) => {
-  tasks.value = data.data?.list || []
-  noData.value = tasks.value.length === 0
-})
-
-onError((error) => {
-  uni.showToast({
-    title: error.message || '请求失败',
-    icon: 'none',
+const { loading, send: sendGetTasks } = useRequest(
+  (date: string) =>
+    getInspectionTaskList({
+      page: 1,
+      row: 20,
+      moreState: '20200405,20200406',
+      canReexamine: '2000',
+      planInsTime: date,
+    }),
+  {
+    immediate: false,
+  },
+)
+  .onSuccess((event) => {
+    const result = event.data
+    tasks.value = result?.list || []
+    noData.value = tasks.value.length === 0
   })
-})
+  .onError((error) => {
+    uni.showToast({
+      title: error.error || '请求失败',
+      icon: 'none',
+    })
+  })
 
 async function getReexamineTasks() {
   await sendGetTasks(selectedDate.value)
