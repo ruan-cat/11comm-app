@@ -76,12 +76,20 @@ const rules = {
 const {
   send: sendGetStaffList,
   onSuccess: onGetStaffListSuccess,
+  onError: onGetStaffListError,
 } = useRequest(() => getStaffList(), {
   immediate: false,
 })
 
 onGetStaffListSuccess((data) => {
   staffList.value = data.data || []
+})
+
+onGetStaffListError((error) => {
+  uni.showToast({
+    title: error.message || '获取员工列表失败',
+    icon: 'none',
+  })
 })
 
 async function loadStaffList() {
@@ -105,6 +113,7 @@ const {
   loading: submitting,
   send: sendTransferTask,
   onSuccess: onTransferSuccess,
+  onError: onTransferError,
 } = useRequest(transferData => transferInspectionTask(transferData), {
   immediate: false,
 })
@@ -119,6 +128,13 @@ onTransferSuccess(() => {
   setTimeout(() => {
     TypedRouter.toInspectionTaskList()
   }, 1500)
+})
+
+onTransferError((error) => {
+  uni.showToast({
+    title: error.message || '流转失败',
+    icon: 'none',
+  })
 })
 
 async function submitTransfer() {

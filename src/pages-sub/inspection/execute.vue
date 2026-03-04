@@ -63,6 +63,7 @@ const {
   loading,
   send: sendGetTaskDetails,
   onSuccess,
+  onError,
 } = useRequest(() => getInspectionTaskDetail({
   taskId: taskId.value,
   page: 1,
@@ -73,6 +74,13 @@ const {
 
 onSuccess((data) => {
   taskDetails.value = data.data?.list || []
+})
+
+onError((error) => {
+  uni.showToast({
+    title: error.message || '请求失败',
+    icon: 'none',
+  })
 })
 
 async function getTaskDetails() {

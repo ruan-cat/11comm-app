@@ -129,6 +129,7 @@ function getCurrentLocation() {
 const {
   send: sendLoadTitles,
   onSuccess: onLoadTitlesSuccess,
+  onError: onLoadTitlesError,
 } = useRequest(() => getInspectionItemTitles({
   itemId: itemId.value,
   page: 1,
@@ -150,6 +151,13 @@ onLoadTitlesSuccess((data) => {
       // 多选：初始化为空数组
       item.radio = []
     }
+  })
+})
+
+onLoadTitlesError((error) => {
+  uni.showToast({
+    title: error.message || '加载巡检项失败',
+    icon: 'none',
   })
 })
 
@@ -224,6 +232,7 @@ const {
   loading: submitting,
   send: sendSubmitInspection,
   onSuccess: onSubmitSuccess,
+  onError: onSubmitError,
 } = useRequest(submitData => submitInspection(submitData), {
   immediate: false,
 })
@@ -245,6 +254,13 @@ onSubmitSuccess(() => {
       uni.navigateBack()
     }
   }, 1500)
+})
+
+onSubmitError((error) => {
+  uni.showToast({
+    title: error.message || '提交失败',
+    icon: 'none',
+  })
 })
 
 async function handleSubmitInspection() {

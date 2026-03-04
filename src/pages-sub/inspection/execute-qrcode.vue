@@ -48,6 +48,7 @@ const {
   loading,
   send: sendQueryTaskDetails,
   onSuccess,
+  onError,
 } = useRequest(() => {
   const currentTime = dayjs().format('HH:mm')
   return getInspectionTaskDetail({
@@ -77,6 +78,13 @@ onSuccess((data) => {
       fromPage: 'QrCode',
     })
   }
+})
+
+onError((error) => {
+  uni.showToast({
+    title: error.message || '请求失败',
+    icon: 'none',
+  })
 })
 
 async function queryTaskDetails() {

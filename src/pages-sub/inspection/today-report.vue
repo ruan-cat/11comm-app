@@ -38,6 +38,7 @@ const {
   loading,
   send: sendLoadTodayReport,
   onSuccess,
+  onError,
 } = useRequest((queryTime: string) => getInspectionTodayReport({
   queryTime,
 }), {
@@ -47,6 +48,13 @@ const {
 onSuccess((data) => {
   inspections.value = data.data || []
   noData.value = inspections.value.length === 0
+})
+
+onError((error) => {
+  uni.showToast({
+    title: error.message || '请求失败',
+    icon: 'none',
+  })
 })
 
 async function loadTodayReport() {
