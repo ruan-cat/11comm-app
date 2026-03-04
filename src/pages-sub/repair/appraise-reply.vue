@@ -13,8 +13,10 @@
 -->
 
 <script setup lang="ts">
+import type { FormInstance, FormRules } from 'wot-design-uni/components/wd-form/types'
+import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { replyAppraise } from '@/api/repair'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -25,6 +27,12 @@ definePage({
   },
 })
 
+/** 表单实例 */
+const formRef = ref<FormInstance>()
+
+/** 表单标签统一宽度 */
+const LABEL_WIDTH = '80px'
+
 /** 页面参数 */
 const ruId = ref('')
 const repairId = ref('')
@@ -32,8 +40,15 @@ const repairId = ref('')
 /** 小区信息 */
 const communityInfo = getCurrentCommunity()
 
-/** 回复内容 */
-const replyContent = ref('')
+/** 表单数据模型 */
+const model = reactive({
+  reply: '',
+})
+
+/** 表单校验规则 */
+const formRules: FormRules = {
+  reply: [{ required: true, message: '请输入回复说明' }],
+}
 
 /** 提交回复请求 */
 const { send: submitReply, onSuccess: onReplySuccess, onError: onReplyError } = useRequest(
@@ -66,61 +81,68 @@ onReplyError((error) => {
   })
 })
 
+/** 表单提交 */
+function handleSubmit() {
+  formRef.value
+    ?.validate()
+    .then(({ valid }) => {
+      if (!valid) {
+        return
+      }
+
+      uni.showLoading({ title: '提交中...' })
+
+      submitReply({
+        ruId: ruId.value,
+        repairId: repairId.value,
+        reply: model.reply,
+        communityId: communityInfo.communityId,
+      })
+    })
+    .catch((error) => {
+      console.error('表单校验异常:', error)
+    })
+}
+
 /** 页面加载 */
 onLoad((options) => {
   ruId.value = (options?.ruId as string) || ''
   repairId.value = (options?.repairId as string) || ''
 })
-
-/** 提交回复 */
-async function handleSubmitReply() {
-  if (!replyContent.value.trim()) {
-    uni.showToast({
-      title: '请输入回复说明',
-      icon: 'none',
-    })
-    return
-  }
-
-  uni.showLoading({ title: '提交中...' })
-
-  await submitReply({
-    ruId: ruId.value,
-    repairId: repairId.value,
-    reply: replyContent.value,
-    communityId: communityInfo.communityId,
-  })
-}
 </script>
 
 <template>
   <view class="reply-appraise-page">
-    <!-- 回复说明 -->
-    <view class="bg-white p-3">
-      <view class="mb-2 text-sm font-bold">
+    <wd-form ref="formRef" :model="model" :rules="formRules">
+      <!-- 回复说明 -->
+      <view class="section-title">
         回复说明
       </view>
-      <wd-textarea
-        v-model="replyContent"
-        placeholder="请输入回复说明"
-        :maxlength="200"
-        show-word-limit
-        :rows="6"
-      />
-    </view>
+      <wd-cell-group border>
+        <wd-textarea
+          v-model="model.reply"
+          label="回复说明"
+          :label-width="LABEL_WIDTH"
+          prop="reply"
+          placeholder="请输入回复说明"
+          :maxlength="200"
+          show-word-limit
+          :rows="6"
+        />
+      </wd-cell-group>
 
-    <!-- 提交按钮 -->
-    <view class="mt-6 px-3">
-      <wd-button
-        block
-        type="success"
-        size="large"
-        :disabled="!replyContent.trim()"
-        @click="handleSubmitReply"
-      >
-        提交
-      </wd-button>
-    </view>
+      <!-- 提交按钮 -->
+      <view class="mt-6 px-3 pb-6">
+        <wd-button
+          block
+          type="success"
+          size="large"
+          @click="handleSubmit"
+        >
+          提交
+        </wd-button>
+      </view>
+    </wd-form>
   </view>
 </template>
 
@@ -128,6 +150,13 @@ async function handleSubmitReply() {
 .reply-appraise-page {
   min-height: 100vh;
   background-color: #f5f5f5;
-  padding-top: 12px;
+}
+
+.section-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  color: rgba(69, 90, 100, 0.6);
+  padding: 20px 15px 10px;
 }
 </style>

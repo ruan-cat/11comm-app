@@ -1,0 +1,134 @@
+<!--
+  开门记录页面
+  功能：查询开门记录列表
+
+  访问地址: http://localhost:9000/#/pages-sub/report/open-door-log
+  建议携带参数: ?communityId=COMM_001
+
+  完整示例: http://localhost:9000/#/pages-sub/report/open-door-log?communityId=COMM_001
+
+  旧代码：gitee-example/pages/report/openDoorLog.vue
+-->
+
+<script setup lang="ts">
+import { reactive, ref } from 'vue'
+import { getOpenDoorLogList } from '@/api/fee'
+import { getCurrentCommunity } from '@/utils/user'
+
+definePage({
+  style: {
+    navigationBarTitleText: '开门记录',
+    enablePullDownRefresh: false,
+  },
+})
+
+/** 小区信息 */
+const communityInfo = getCurrentCommunity()
+
+/** 搜索表单 */
+const searchForm = reactive({
+  startDate: '',
+  endDate: '',
+})
+
+/** 开门记录列表 */
+const openDoorLogs = ref<
+  Array<{
+    logId: string
+    roomId: string
+    roomName: string
+    ownerName: string
+    openType: string
+    openTypeName: string
+    openTime: string
+    remark: string
+  }>
+>([])
+
+/** z-paging 引用 */
+const pagingRef = ref()
+
+/** 加载开门记录 */
+const { send: loadLogs, loading: logsLoading } = useRequest(
+  (page: number, pageSize: number) =>
+    getOpenDoorLogList({
+      page,
+      row: pageSize,
+      communityId: communityInfo.communityId,
+      startDate: searchForm.startDate,
+      endDate: searchForm.endDate,
+    }),
+  { immediate: false },
+).onSuccess((event) => {
+  const data = event.data as { data: typeof openDoorLogs.value, total: number }
+  openDoorLogs.value = data.data || []
+  pagingRef.value?.complete(data.data || [])
+}).onError(() => {
+  pagingRef.value?.complete(false)
+})
+
+/** 搜索 */
+function handleQuery() {
+  pagingRef.value?.reload()
+}
+
+/** z-paging 查询回调 */
+function handleQuery(pageNo: number, pageSize: number) {
+  loadLogs(pageNo, pageSize)
+}
+</script>
+
+<template>
+  <view class="open-door-log-page">
+    <!-- 搜索栏 -->
+    <view class="search-bar bg-white p-3">
+      <view class="grid grid-cols-2 gap-2">
+        <view class="search-item">
+          <wd-datetime-picker v-model="searchForm.startDate" type="date" placeholder="开始日期" />
+        </view>
+        <view class="search-item">
+          <wd-datetime-picker v-model="searchForm.endDate" type="date" placeholder="结束日期" />
+        </view>
+      </view>
+      <view class="mt-3">
+        <wd-button type="primary" size="large" block @click="handleQuery">
+          搜索
+        </wd-button>
+      </view>
+    </view>
+
+    <!-- 列表 -->
+    <z-paging ref="pagingRef" v-model="openDoorLogs" @query="handleQuery">
+      <view class="p-3">
+        <view v-for="(item, index) in openDoorLogs" :key="index" class="log-card mb-3 rounded-lg bg-white p-3">
+          <view class="flex items-center justify-between border-b border-gray-200 pb-2">
+            <text class="font-medium">{{ item.roomName }}</text>
+            <text class="text-sm text-gray-500">{{ item.openTime }}</text>
+          </view>
+          <view class="grid grid-cols-2 mt-2 gap-2 text-sm">
+            <view class="text-gray-500">
+              业主: {{ item.ownerName }}
+            </view>
+            <view class="text-gray-500">
+              开门方式: {{ item.openTypeName }}
+            </view>
+            <view v-if="item.remark" class="col-span-2 text-gray-500">
+              备注: {{ item.remark }}
+            </view>
+          </view>
+        </view>
+      </view>
+    </z-paging>
+  </view>
+</template>
+
+<style scoped>
+.search-item {
+  background-color: #f1f1f1;
+  border-radius: 8rpx;
+  padding: 10rpx 20rpx;
+}
+.log-card {
+  background-color: #fff;
+}
+</style>
