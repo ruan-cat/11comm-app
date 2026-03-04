@@ -10,11 +10,12 @@
 -->
 
 <script setup lang="ts">
+import type { FormInstance, FormRules } from 'wot-design-uni/components/wd-form/types'
 import type { Complaint, ComplaintPhoto } from '@/types/complaint'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { getUserComplaintHistory, saveComplaint } from '@/api/complaint'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { navigateToTyped, TypedRouter } from '@/router'
@@ -30,6 +31,12 @@ definePage({
     enablePullDownRefresh: false,
   },
 })
+
+/** 表单实例 */
+const formRef = ref<FormInstance>()
+
+/** 表单标签统一宽度 */
+const LABEL_WIDTH = '80px'
 
 /** Tab 状态：'submit' = 发起投诉，'history' = 投诉历史 */
 const activeTab = ref<'submit' | 'history'>('submit')
@@ -62,17 +69,24 @@ const typeOptions = [
   { label: '建议', value: ComplaintTypeCode.SUGGESTION },
 ]
 
-/** 投诉类型索引 */
-const typeIndex = ref(-1)
+/** 表单数据模型 */
+const model = reactive({
+  typeCd: '',
+  complaintName: '',
+  tel: '',
+  context: '',
+})
 
-/** 投诉人 */
-const complaintName = ref('')
-
-/** 手机号码 */
-const tel = ref('')
-
-/** 投诉内容 */
-const context = ref('')
+/** 表单校验规则 */
+const formRules: FormRules = {
+  typeCd: [{ required: true, message: '请选择投诉类型' }],
+  complaintName: [{ required: true, message: '请填写投诉人' }],
+  tel: [
+    { required: true, message: '请填写手机号' },
+    { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确' },
+  ],
+  context: [{ required: true, message: '请填写投诉内容' }],
+}
 
 /** 图片列表（用于显示） */
 const imgList = ref<string[]>([])
@@ -130,12 +144,12 @@ const { loading: submitting, send: submitComplaint } = useRequest(
     const photoList: ComplaintPhoto[] = photos.value.map(photo => ({ photo }))
 
     return saveComplaint({
-      typeCd: typeOptions[typeIndex.value].value,
-      complaintName: complaintName.value,
-      tel: tel.value,
+      typeCd: model.typeCd,
+      complaintName: model.complaintName,
+      tel: model.tel,
       roomId: roomId.value,
       photos: photoList,
-      context: context.value,
+      context: model.context,
       userId: 'USER_001', // TODO: 从用户信息获取
       storeId: 'STORE_001', // TODO: 从用户信息获取
       communityId: communityInfo.communityId,
@@ -252,14 +266,6 @@ function handleSelectRoom() {
 }
 
 /**
- * 投诉类型变更
- * @example handleTypeChange({ detail: { value: 0 } })
- */
-function handleTypeChange(event: any) {
-  typeIndex.value = event.detail.value
-}
-
-/**
  * 选择图片
  * @example handleChooseImage()
  */
@@ -323,33 +329,25 @@ function handlePreviewImage(index: number) {
  * @example handleSubmit()
  */
 function handleSubmit() {
-  // 表单验证
-  if (typeIndex.value === -1) {
-    toast.error('请选择投诉类型')
-    return
-  }
-
-  if (!complaintName.value.trim()) {
-    toast.error('请填写投诉人')
-    return
-  }
-
-  if (!tel.value.trim()) {
-    toast.error('请填写手机号')
-    return
-  }
-
-  if (!context.value.trim()) {
-    toast.error('请填写投诉内容')
-    return
-  }
-
+  // 先验证房屋信息
   if (!roomId.value) {
     toast.error('请选择房屋信息')
     return
   }
 
-  submitComplaint()
+  // 表单验证
+  formRef.value
+    ?.validate()
+    .then(({ valid }) => {
+      if (!valid) {
+        return
+      }
+
+      submitComplaint()
+    })
+    .catch((error) => {
+      console.error('表单校验异常:', error)
+    })
 }
 
 /**
@@ -357,10 +355,10 @@ function handleSubmit() {
  * @example resetForm()
  */
 function resetForm() {
-  typeIndex.value = -1
-  complaintName.value = ''
-  tel.value = ''
-  context.value = ''
+  model.typeCd = ''
+  model.complaintName = ''
+  model.tel = ''
+  model.context = ''
   imgList.value = []
   photos.value = []
   floorId.value = ''
@@ -448,13 +446,12 @@ function handleViewDetail(complaint: Complaint) {
     </view>
 
     <!-- 发起投诉表单 -->
-    <view v-if="activeTab === 'submit'" class="submit-content p-3">
-      <!-- 房屋信息 -->
-      <view class="mb-3 bg-white">
-        <view class="px-3 pb-2 pt-3 text-gray-700 font-medium">
+    <view v-if="activeTab === 'submit'" class="submit-content">
+      <wd-form ref="formRef" :model="model" :rules="formRules">
+        <!-- 房屋信息 -->
+        <view class="section-title">
           房屋信息
         </view>
-
         <wd-cell-group border>
           <wd-cell title="楼栋" :value="floorDisplay" is-link @click="handleSelectFloor">
             <template #icon>
@@ -474,106 +471,104 @@ function handleViewDetail(complaint: Complaint) {
             </template>
           </wd-cell>
         </wd-cell-group>
-      </view>
 
-      <!-- 投诉信息 -->
-      <view class="mb-3 bg-white">
-        <view class="px-3 pb-2 pt-3 text-gray-700 font-medium">
+        <!-- 投诉信息 -->
+        <view class="section-title">
           投诉信息
         </view>
-
         <wd-cell-group border>
           <!-- 投诉类型 -->
-          <wd-cell title="投诉类型" is-link>
-            <picker
-              mode="selector"
-              :range="typeOptions"
-              :value="typeIndex"
-              range-key="label"
-              @change="handleTypeChange"
-            >
-              <view class="text-sm" :class="typeIndex === -1 ? 'text-gray-400' : 'text-gray-700'">
-                {{ typeIndex > -1 ? typeOptions[typeIndex].label : '请选择' }}
-              </view>
-            </picker>
-          </wd-cell>
+          <wd-picker
+            v-model="model.typeCd"
+            label="投诉类型"
+            :label-width="LABEL_WIDTH"
+            prop="typeCd"
+            :columns="typeOptions"
+            label-key="label"
+            value-key="value"
+            :rules="formRules.typeCd"
+          />
 
           <!-- 投诉人 -->
-          <wd-cell title="投诉人">
-            <template #value>
-              <input
-                v-model="complaintName"
-                placeholder="请输入投诉人"
-                class="text-right text-sm"
-              >
-            </template>
-          </wd-cell>
+          <wd-input
+            v-model="model.complaintName"
+            label="投诉人"
+            :label-width="LABEL_WIDTH"
+            prop="complaintName"
+            placeholder="请输入投诉人"
+            clearable
+            :rules="formRules.complaintName"
+          />
 
           <!-- 手机号码 -->
-          <wd-cell title="手机号码">
-            <template #value>
-              <input
-                v-model="tel"
-                type="number"
-                placeholder="请输入手机号码"
-                class="text-right text-sm"
-              >
-            </template>
-          </wd-cell>
+          <wd-input
+            v-model="model.tel"
+            label="手机号码"
+            :label-width="LABEL_WIDTH"
+            prop="tel"
+            type="number"
+            placeholder="请输入手机号码"
+            clearable
+            :rules="formRules.tel"
+          />
 
           <!-- 投诉内容 -->
-          <wd-cell title="投诉内容">
-            <template #value>
-              <wd-textarea
-                v-model="context"
-                placeholder="请输入投诉内容"
-                :maxlength="500"
-                show-word-limit
-                :auto-height="true"
-                :min-height="100"
-                clearable
-              />
-            </template>
-          </wd-cell>
+          <wd-textarea
+            v-model="model.context"
+            label="投诉内容"
+            :label-width="LABEL_WIDTH"
+            prop="context"
+            placeholder="请输入投诉内容"
+            :maxlength="500"
+            show-word-limit
+            :auto-height="true"
+            :min-height="100"
+            clearable
+            :rules="formRules.context"
+          />
         </wd-cell-group>
-      </view>
 
-      <!-- 图片上传 -->
-      <view class="mb-3 bg-white p-3">
-        <view class="mb-3 flex items-center justify-between">
-          <text class="text-gray-700 font-medium">图片上传</text>
-          <text class="text-sm text-gray-500">{{ imgList.length }}/4</text>
+        <!-- 图片上传 -->
+        <view class="section-title">
+          图片上传
         </view>
+        <view class="bg-white p-3">
+          <view class="mb-3 flex items-center justify-between">
+            <text class="text-sm text-gray-500">{{ imgList.length }}/4</text>
+          </view>
 
-        <view class="image-grid">
-          <!-- 已选图片 -->
-          <view
-            v-for="(img, index) in imgList"
-            :key="index"
-            class="image-item relative"
-            @tap="handlePreviewImage(index)"
-          >
-            <image :src="img" mode="aspectFill" class="h-full w-full" />
-            <view class="delete-btn" @tap.stop="handleDeleteImage(index)">
-              <wd-icon name="close" custom-class="text-white" size="16px" />
+          <view class="image-grid">
+            <!-- 已选图片 -->
+            <view
+              v-for="(img, index) in imgList"
+              :key="index"
+              class="image-item relative"
+              @tap="handlePreviewImage(index)"
+            >
+              <image :src="img" mode="aspectFill" class="h-full w-full" />
+              <view class="delete-btn" @tap.stop="handleDeleteImage(index)">
+                <wd-icon name="close" custom-class="text-white" size="16px" />
+              </view>
+            </view>
+
+            <!-- 添加按钮 -->
+            <view
+              v-if="imgList.length < 4"
+              class="image-item add-btn flex items-center justify-center"
+              @tap="handleChooseImage"
+            >
+              <wd-icon name="camera" custom-class="text-gray-400" size="40px" />
             </view>
           </view>
-
-          <!-- 添加按钮 -->
-          <view
-            v-if="imgList.length < 4"
-            class="image-item add-btn flex items-center justify-center"
-            @tap="handleChooseImage"
-          >
-            <wd-icon name="camera" custom-class="text-gray-400" size="40px" />
-          </view>
         </view>
-      </view>
 
-      <!-- 提交按钮 -->
-      <wd-button type="success" size="large" :loading="submitting" @click="handleSubmit">
-        提交
-      </wd-button>
+        <!-- 提交按钮 -->
+        <view class="mt-6 px-3 pb-6">
+          <wd-button type="success" size="large" :loading="submitting" @click="handleSubmit">
+            提交
+          </wd-button>
+        </view>
+      </wd-form>
     </view>
   </view>
 </template>
@@ -582,6 +577,14 @@ function handleViewDetail(complaint: Complaint) {
 .complaint-order-page {
   min-height: 100vh;
   background-color: #f5f5f5;
+}
+
+.section-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  color: rgba(69, 90, 100, 0.6);
+  padding: 20px 15px 10px;
 }
 
 /** Tab 样式 */

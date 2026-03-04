@@ -10,18 +10,14 @@
 -->
 
 <script setup lang="ts">
-import type { Complaint } from '@/types/complaint'
-import { onShow } from '@dcloudio/uni-app'
+import type { Complaint, QueryComplaintListParams } from '@/types/complaint'
 import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
 import { ref } from 'vue'
 import { getTodoComplaintList } from '@/api/complaint'
-import { useGlobalToast } from '@/hooks/useGlobalToast'
+import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { TypedRouter } from '@/router'
 import { getCurrentCommunity } from '@/utils/user'
-
-/** 全局 Toast 提示 */
-const toast = useGlobalToast()
 
 definePage({
   style: {
@@ -30,54 +26,58 @@ definePage({
   },
 })
 
-/** 投诉列表 */
-const complaintList = ref<Complaint[]>([])
-
-/** 是否无数据 */
-const noData = ref(false)
-
 /** 获取小区信息 */
 const communityInfo = getCurrentCommunity()
 
-/** 加载投诉列表 */
-const { loading, send: loadList } = useRequest(
-  () =>
+/** z-paging 组件引用 */
+const pagingRef = ref()
+
+/** 投诉列表（由 z-paging 接管） */
+const complaintList = ref<Complaint[]>([])
+
+/**
+ * 使用 useRequest 管理请求状态 - 链式回调写法
+ * @description 必须设置 immediate: false，由 z-paging 控制请求时机
+ */
+const { send: loadList } = useRequest(
+  (params: QueryComplaintListParams) =>
     getTodoComplaintList({
-      page: 1,
-      row: 15,
+      ...params,
       userId: 'USER_001', // TODO: 从用户信息获取
       communityId: communityInfo.communityId,
     }),
   { immediate: false },
 )
-  .onSuccess((result) => {
-    const list = result.data?.data || []
-    if (list.length < 1) {
-      noData.value = true
-      complaintList.value = []
-      return
-    }
+  .onSuccess((event) => {
+    const result = event.data
+    const list = result.data || []
 
     // 格式化日期为 MM-DD
-    complaintList.value = list.map((item) => {
+    const formattedList = list.map((item) => {
       const date = dayjs(item.createTime)
       return {
         ...item,
         createTime: `${date.month() + 1}-${date.date()}`,
       }
     })
-    noData.value = false
+
+    pagingRef.value?.complete(formattedList)
   })
   .onError((error) => {
-    console.error('❌ 加载投诉列表失败:', error)
-    toast.error(error.error || '加载失败，请稍后重试')
-    noData.value = true
+    console.error('加载列表失败:', error)
+    pagingRef.value?.complete(false)
   })
 
-/** 页面显示时加载数据 */
-onShow(() => {
-  loadList()
-})
+/**
+ * z-paging 的 @query 回调
+ * @description 接收分页参数，触发请求（不使用 await/try-catch）
+ */
+function handleQuery(pageNo: number, pageSize: number) {
+  loadList({
+    page: pageNo,
+    row: pageSize,
+  })
+}
 
 /**
  * 查看投诉详情
@@ -98,69 +98,82 @@ function handleDispatch(complaint: Complaint) {
 
 <template>
   <view class="complaint-list-page">
-    <!-- 加载状态 -->
-    <view v-if="loading" class="flex items-center justify-center p-8">
-      <wd-loading />
-    </view>
-
-    <!-- 投诉列表 -->
-    <view v-else-if="!noData && complaintList.length > 0" class="p-3">
-      <view
-        v-for="(item, index) in complaintList"
-        :key="index"
-        class="complaint-card mb-3 rounded bg-white p-3"
-      >
-        <!-- 头部：投诉ID 和 电话 -->
-        <view class="flex items-center justify-between border-b border-gray-200 pb-2">
-          <text class="font-medium">{{ item.complaintId }}</text>
-          <text class="text-sm text-gray-500">{{ item.tel }}</text>
-        </view>
-
-        <!-- 投诉信息 -->
-        <view class="mt-2">
-          <view class="info-row flex items-center justify-between text-sm">
-            <text class="text-gray-500">投诉类型</text>
-            <text class="text-gray-700">{{ item.typeName }}</text>
+    <z-paging
+      ref="pagingRef"
+      v-model="complaintList"
+      @query="handleQuery"
+    >
+      <!-- 投诉列表 -->
+      <view class="p-3">
+        <view
+          v-for="(item, index) in complaintList"
+          :key="index"
+          class="complaint-card mb-3 rounded bg-white p-3"
+        >
+          <!-- 头部：投诉ID 和 电话 -->
+          <view class="flex items-center justify-between border-b border-gray-200 pb-2">
+            <text class="font-medium">{{ item.complaintId }}</text>
+            <text class="text-sm text-gray-500">{{ item.tel }}</text>
           </view>
 
-          <view class="info-row flex items-center justify-between text-sm">
-            <text class="text-gray-500">投诉人</text>
-            <text class="text-gray-700">{{ item.complaintName }}</text>
+          <!-- 投诉信息 -->
+          <view class="mt-2">
+            <view class="info-row flex items-center justify-between text-sm">
+              <text class="text-gray-500">投诉类型</text>
+              <text class="text-gray-700">{{ item.typeName }}</text>
+            </view>
+
+            <view class="info-row flex items-center justify-between text-sm">
+              <text class="text-gray-500">投诉人</text>
+              <text class="text-gray-700">{{ item.complaintName }}</text>
+            </view>
+
+            <view class="info-row flex items-center justify-between text-sm">
+              <text class="text-gray-500">房间</text>
+              <text class="text-gray-700">{{ item.roomName }}</text>
+            </view>
+
+            <view class="info-row flex items-center justify-between text-sm">
+              <text class="text-gray-500">投诉时间</text>
+              <text class="text-gray-700">{{ item.createTime }}</text>
+            </view>
+
+            <view class="info-row flex items-center justify-between text-sm">
+              <text class="text-gray-500">投诉内容</text>
+              <text class="line-clamp-2 text-gray-700">{{ item.context }}</text>
+            </view>
           </view>
 
-          <view class="info-row flex items-center justify-between text-sm">
-            <text class="text-gray-500">房间</text>
-            <text class="text-gray-700">{{ item.roomName }}</text>
+          <!-- 底部操作按钮 -->
+          <view class="mt-3 flex items-center justify-end gap-2 border-t border-gray-200 pt-3">
+            <wd-button size="small" plain @click="handleDetail(item)">
+              详情
+            </wd-button>
+            <wd-button size="small" type="success" @click="handleDispatch(item)">
+              办结
+            </wd-button>
           </view>
-
-          <view class="info-row flex items-center justify-between text-sm">
-            <text class="text-gray-500">投诉时间</text>
-            <text class="text-gray-700">{{ item.createTime }}</text>
-          </view>
-
-          <view class="info-row flex items-center justify-between text-sm">
-            <text class="text-gray-500">投诉内容</text>
-            <text class="line-clamp-2 text-gray-700">{{ item.context }}</text>
-          </view>
-        </view>
-
-        <!-- 底部操作按钮 -->
-        <view class="mt-3 flex items-center justify-end gap-2 border-t border-gray-200 pt-3">
-          <wd-button size="small" plain @click="handleDetail(item)">
-            详情
-          </wd-button>
-          <wd-button size="small" type="success" @click="handleDispatch(item)">
-            办结
-          </wd-button>
         </view>
       </view>
-    </view>
 
-    <!-- 空数据状态 -->
-    <view v-else class="flex flex-col items-center justify-center" style="min-height: 60vh;">
-      <wd-icon name="inbox" custom-class="text-gray-300" size="80px" />
-      <text class="mt-4 text-gray-400">暂无投诉数据</text>
-    </view>
+      <!-- 空状态 -->
+      <template #empty>
+        <view class="flex flex-col items-center justify-center" style="min-height: 60vh;">
+          <wd-icon name="inbox" custom-class="text-gray-300" size="80px" />
+          <text class="mt-4 text-gray-400">暂无投诉数据</text>
+        </view>
+      </template>
+
+      <!-- 加载状态 -->
+      <template #loading>
+        <ZPagingLoading
+          icon="document"
+          icon-class="i-carbon-document text-orange-400 animate-pulse"
+          primary-text="正在加载投诉列表..."
+          secondary-text="请稍候片刻"
+        />
+      </template>
+    </z-paging>
   </view>
 </template>
 

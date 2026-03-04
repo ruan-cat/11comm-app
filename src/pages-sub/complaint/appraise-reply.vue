@@ -11,10 +11,12 @@
 -->
 
 <script setup lang="ts">
+import type { FormInstance, FormRules } from 'wot-design-uni/components/wd-form/types'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { replyComplaintAppraise } from '@/api/complaint'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 /** 全局 Toast 提示 */
@@ -27,18 +29,31 @@ definePage({
   },
 })
 
+/** 表单实例 */
+const formRef = ref<FormInstance>()
+
+/** 表单标签统一宽度 */
+const LABEL_WIDTH = '80px'
+
 /** 页面参数 */
 const appraiseId = ref('')
 const communityId = ref('')
 
-/** 回复内容 */
-const replyContext = ref('')
+/** 表单数据模型 */
+const model = reactive({
+  replyContext: '',
+})
+
+/** 表单校验规则 */
+const formRules: FormRules = {
+  replyContext: [{ required: true, message: '请输入回复内容' }],
+}
 
 /** 提交回复 */
 const { loading: submitting, send: submitReply } = useRequest(
   () =>
     replyComplaintAppraise({
-      replyContext: replyContext.value,
+      replyContext: model.replyContext,
       communityId: communityId.value,
       appraiseId: appraiseId.value,
     }),
@@ -67,37 +82,48 @@ onLoad((options) => {
 
 /** 提交回复 */
 function handleSubmit() {
-  if (!replyContext.value.trim()) {
-    toast.error('请输入回复内容')
-    return
-  }
-  submitReply()
+  formRef.value
+    ?.validate()
+    .then(({ valid }) => {
+      if (!valid) {
+        return
+      }
+
+      submitReply()
+    })
+    .catch((error) => {
+      console.error('表单校验异常:', error)
+    })
 }
 </script>
 
 <template>
   <view class="appraise-reply-page">
-    <view class="p-3">
+    <wd-form ref="formRef" :model="model" :rules="formRules">
       <!-- 回复内容输入 -->
-      <view class="mb-3 bg-white">
-        <wd-cell-group border>
-          <wd-textarea
-            v-model="replyContext"
-            placeholder="请输入回复说明"
-            :maxlength="200"
-            show-word-limit
-            :auto-height="true"
-            :min-height="200"
-            clearable
-          />
-        </wd-cell-group>
-      </view>
+      <FormSectionTitle title="回复说明" />
+      <wd-cell-group border>
+        <wd-textarea
+          v-model="model.replyContext"
+          label="回复说明"
+          :label-width="LABEL_WIDTH"
+          prop="replyContext"
+          placeholder="请输入回复说明"
+          :maxlength="200"
+          show-word-limit
+          :auto-height="true"
+          :min-height="200"
+          clearable
+        />
+      </wd-cell-group>
 
       <!-- 提交按钮 -->
-      <wd-button type="success" size="large" :loading="submitting" @click="handleSubmit">
-        提交
-      </wd-button>
-    </view>
+      <view class="mt-6 px-3 pb-6">
+        <wd-button type="success" size="large" :loading="submitting" @click="handleSubmit">
+          提交
+        </wd-button>
+      </view>
+    </wd-form>
   </view>
 </template>
 
@@ -105,5 +131,13 @@ function handleSubmit() {
 .appraise-reply-page {
   min-height: 100vh;
   background-color: #f5f5f5;
+}
+
+.section-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  color: rgba(69, 90, 100, 0.6);
+  padding: 20px 15px 10px;
 }
 </style>

@@ -11,10 +11,12 @@
 -->
 
 <script setup lang="ts">
+import type { FormInstance, FormRules } from 'wot-design-uni/components/wd-form/types'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { auditComplaint } from '@/api/complaint'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { ComplaintStateCode } from '@/types/complaint'
 import { getCurrentCommunity } from '@/utils/user'
@@ -28,6 +30,12 @@ definePage({
     enablePullDownRefresh: false,
   },
 })
+
+/** 表单实例 */
+const formRef = ref<FormInstance>()
+
+/** 表单标签统一宽度 */
+const LABEL_WIDTH = '80px'
 
 /** 页面参数 */
 const complaintId = ref('')
@@ -45,11 +53,17 @@ const stateOptions = [
   },
 ]
 
-/** 处理结果索引 */
-const stateIndex = ref(-1)
+/** 表单数据模型 */
+const model = reactive({
+  state: '',
+  remark: '',
+})
 
-/** 处理意见 */
-const remark = ref('')
+/** 表单校验规则 */
+const formRules: FormRules = {
+  state: [{ required: true, message: '请选择处理结果' }],
+  remark: [{ required: true, message: '请填写处理意见' }],
+}
 
 /** 获取小区信息 */
 const communityInfo = getCurrentCommunity()
@@ -58,8 +72,8 @@ const communityInfo = getCurrentCommunity()
 const { loading: submitting, send: submitAudit } = useRequest(
   () =>
     auditComplaint({
-      state: stateOptions[stateIndex.value].value,
-      remark: remark.value,
+      state: model.state,
+      remark: model.remark,
       taskId: taskId.value,
       complaintId: complaintId.value,
       communityId: communityInfo.communityId,
@@ -89,41 +103,29 @@ onLoad((options) => {
   }
 })
 
-/**
- * 处理结果变更
- * @example handleStateChange({ detail: { value: 0 } })
- */
-function handleStateChange(event: any) {
-  stateIndex.value = event.detail.value
-}
-
 /** 提交审核 */
 function handleSubmit() {
   // 表单验证
-  if (stateIndex.value === -1) {
-    toast.error('请选择处理结果')
-    return
-  }
+  formRef.value
+    ?.validate()
+    .then(({ valid }) => {
+      if (!valid) {
+        return
+      }
 
-  if (!remark.value.trim()) {
-    toast.error('请填写处理意见')
-    return
-  }
-
-  if (remark.value.length > 200) {
-    toast.error('处理意见不能超过200个字')
-    return
-  }
-
-  submitAudit()
+      submitAudit()
+    })
+    .catch((error) => {
+      console.error('表单校验异常:', error)
+    })
 }
 </script>
 
 <template>
   <view class="audit-page">
-    <view class="p-3">
+    <wd-form ref="formRef" :model="model" :rules="formRules">
       <!-- 投诉信息提示 -->
-      <view class="mb-3 rounded bg-white p-3">
+      <view class="rounded bg-white p-3">
         <view class="flex items-center gap-2 text-gray-600">
           <wd-icon name="info" custom-class="text-blue-500" />
           <text class="text-sm">投诉编号：{{ complaintId }}</text>
@@ -131,49 +133,43 @@ function handleSubmit() {
       </view>
 
       <!-- 审核信息表单 -->
-      <view class="mb-3 bg-white">
-        <view class="px-3 pb-2 pt-3 text-gray-700 font-medium">
-          审核信息
-        </view>
+      <FormSectionTitle title="审核信息" />
+      <wd-cell-group border>
+        <!-- 处理结果 -->
+        <wd-picker
+          v-model="model.state"
+          label="处理结果"
+          :label-width="LABEL_WIDTH"
+          prop="state"
+          :columns="stateOptions"
+          label-key="label"
+          value-key="value"
+          :rules="formRules.state"
+        />
 
-        <wd-cell-group border>
-          <!-- 处理结果 -->
-          <wd-cell title="处理结果" is-link>
-            <picker
-              mode="selector"
-              :range="stateOptions"
-              :value="stateIndex"
-              range-key="label"
-              @change="handleStateChange"
-            >
-              <view class="text-sm" :class="stateIndex === -1 ? 'text-gray-400' : 'text-gray-700'">
-                {{ stateIndex > -1 ? stateOptions[stateIndex].label : '请选择处理结果' }}
-              </view>
-            </picker>
-          </wd-cell>
-
-          <!-- 处理意见 -->
-          <wd-cell title="处理意见">
-            <template #value>
-              <wd-textarea
-                v-model="remark"
-                placeholder="请输入处理意见"
-                :maxlength="200"
-                show-word-limit
-                :auto-height="true"
-                :min-height="100"
-                clearable
-              />
-            </template>
-          </wd-cell>
-        </wd-cell-group>
-      </view>
+        <!-- 处理意见 -->
+        <wd-textarea
+          v-model="model.remark"
+          label="处理意见"
+          :label-width="LABEL_WIDTH"
+          prop="remark"
+          placeholder="请输入处理意见"
+          :maxlength="200"
+          show-word-limit
+          :auto-height="true"
+          :min-height="100"
+          clearable
+          :rules="formRules.remark"
+        />
+      </wd-cell-group>
 
       <!-- 提交按钮 -->
-      <wd-button type="success" size="large" :loading="submitting" @click="handleSubmit">
-        提交
-      </wd-button>
-    </view>
+      <view class="mt-6 px-3 pb-6">
+        <wd-button type="success" size="large" :loading="submitting" @click="handleSubmit">
+          提交
+        </wd-button>
+      </view>
+    </wd-form>
   </view>
 </template>
 
@@ -181,5 +177,13 @@ function handleSubmit() {
 .audit-page {
   min-height: 100vh;
   background-color: #f5f5f5;
+}
+
+.section-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  color: rgba(69, 90, 100, 0.6);
+  padding: 20px 15px 10px;
 }
 </style>
