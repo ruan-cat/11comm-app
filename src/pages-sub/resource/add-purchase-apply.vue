@@ -114,6 +114,8 @@ const { send: loadStoreHouses } = useRequest(
     label: item.shName,
     value: item.shId,
   }))
+}).onError((error) => {
+  console.error('加载仓库列表失败:', error)
 })
 
 /** 仓库变更 */
@@ -140,7 +142,14 @@ const { send: submitPurchase, loading: submitting } = useRequest(
     resOrderType: string
   }) => savePurchaseApply(data),
   { immediate: false },
-)
+).onSuccess(() => {
+  toast.success('提交成功')
+  setTimeout(() => {
+    uni.navigateBack()
+  }, 1500)
+}).onError((error) => {
+  console.error('提交采购申请失败:', error)
+})
 
 // ==================== 生命周期 ====================
 
@@ -194,20 +203,11 @@ async function handleSubmit() {
         quantity: 1,
       }))
 
-      try {
-        await submitPurchase({
-          resourceStores,
-          description: model.description,
-          resOrderType: model.resOrderType,
-        })
-        toast.success('提交成功')
-        setTimeout(() => {
-          uni.navigateBack()
-        }, 1500)
-      }
-      catch (error) {
-        toast.error('提交失败')
-      }
+      submitPurchase({
+        resourceStores,
+        description: model.description,
+        resOrderType: model.resOrderType,
+      })
     })
     .catch((error: any) => {
       console.error('表单校验异常:', error)
