@@ -17,7 +17,7 @@ import { useRequest } from 'alova/client'
 import { ref } from 'vue'
 import { getComplaintAppraises, getComplaintEvents } from '@/api/complaint'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
-import { navigateToTyped } from '@/router'
+import { TypedRouter } from '@/router'
 import { ComplaintAppraiseState, ComplaintEventType } from '@/types/complaint'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -68,8 +68,9 @@ const { loading: eventsLoading, send: loadEvents } = useRequest(
     }),
   { immediate: false },
 )
-  .onSuccess((result) => {
-    events.value = result.data?.data || []
+  .onSuccess((event) => {
+    const result = event.data
+    events.value = result?.list || []
   })
   .onError((error) => {
     console.error('❌ 加载流转记录失败:', error)
@@ -87,8 +88,9 @@ const { loading: appraisesLoading, send: loadAppraises } = useRequest(
     }),
   { immediate: false },
 )
-  .onSuccess((result) => {
-    appraises.value = result.data?.data || []
+  .onSuccess((event) => {
+    const result = event.data
+    appraises.value = result?.list || []
   })
   .onError((error) => {
     console.error('❌ 加载评价列表失败:', error)
@@ -139,10 +141,7 @@ function handleReplyAppraise(appraise: ComplaintAppraise) {
     toast.error('缺少评价ID')
     return
   }
-  navigateToTyped('/pages-sub/complaint/appraise-reply', {
-    appraiseId: appraise.appraiseId,
-    communityId: communityInfo.communityId,
-  })
+  TypedRouter.toComplaintAppraiseReply(appraise.appraiseId, communityInfo.communityId)
 }
 
 /**

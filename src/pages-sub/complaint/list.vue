@@ -40,12 +40,7 @@ const complaintList = ref<Complaint[]>([])
  * @description 必须设置 immediate: false，由 z-paging 控制请求时机
  */
 const { send: loadList } = useRequest(
-  (params: QueryComplaintListParams) =>
-    getTodoComplaintList({
-      ...params,
-      userId: 'USER_001', // TODO: 从用户信息获取
-      communityId: communityInfo.communityId,
-    }),
+  (params: QueryComplaintListParams) => getTodoComplaintList(params),
   { immediate: false },
 )
   .onSuccess((event) => {
@@ -76,6 +71,9 @@ function handleQuery(pageNo: number, pageSize: number) {
   loadList({
     page: pageNo,
     row: pageSize,
+    userId: 'USER_001', // TODO: 从用户信息获取
+    storeId: 'STORE_001', // TODO: 从用户信息获取
+    communityId: communityInfo.communityId,
   })
 }
 

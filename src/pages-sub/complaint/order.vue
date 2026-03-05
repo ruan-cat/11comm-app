@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'wot-design-uni/components/wd-form/types'
-import type { Complaint, ComplaintPhoto } from '@/types/complaint'
+import type { Complaint } from '@/types/complaint'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
@@ -83,7 +83,7 @@ const formRules: FormRules = {
   complaintName: [{ required: true, message: '请填写投诉人' }],
   tel: [
     { required: true, message: '请填写手机号' },
-    { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确' },
+    { required: false, pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确' },
   ],
   context: [{ required: true, message: '请填写投诉内容' }],
 }
@@ -114,8 +114,8 @@ const { loading: historyLoading, send: loadHistory } = useRequest(
     }),
   { immediate: false },
 )
-  .onSuccess((result) => {
-    const list = result.data?.data || []
+  .onSuccess((event) => {
+    const list = event.data.complaints || []
     if (list.length < 1) {
       noHistory.value = true
       historyList.value = []
@@ -141,7 +141,7 @@ const { loading: historyLoading, send: loadHistory } = useRequest(
 /** 提交投诉 */
 const { loading: submitting, send: submitComplaint } = useRequest(
   () => {
-    const photoList: ComplaintPhoto[] = photos.value.map(photo => ({ photo }))
+    const photoList: Array<{ photo: string }> = photos.value.map(photo => ({ photo }))
 
     return saveComplaint({
       typeCd: model.typeCd,
@@ -221,7 +221,7 @@ function handleTabChange(tab: 'submit' | 'history') {
  * @example handleSelectFloor()
  */
 function handleSelectFloor() {
-  navigateToTyped('/pages-sub/selector/floor-list', { communityId: communityInfo.communityId })
+  navigateToTyped('/pages-sub/selector/select-floor', {})
 }
 
 /**
@@ -234,10 +234,8 @@ function handleSelectUnit() {
     return
   }
 
-  navigateToTyped('/pages-sub/selector/unit-list', {
-    communityId: communityInfo.communityId,
+  navigateToTyped('/pages-sub/selector/select-unit', {
     floorId: floorId.value,
-    floorNum: floorNum.value,
   })
 }
 
@@ -256,12 +254,9 @@ function handleSelectRoom() {
     return
   }
 
-  navigateToTyped('/pages-sub/selector/room-list', {
-    communityId: communityInfo.communityId,
+  navigateToTyped('/pages-sub/selector/select-room', {
     floorId: floorId.value,
-    floorNum: floorNum.value,
     unitId: unitId.value,
-    unitNum: unitNum.value,
   })
 }
 
@@ -281,12 +276,13 @@ function handleChooseImage() {
     sourceType: ['album', 'camera'],
     success: (res) => {
       const tempFiles = res.tempFilePaths
+      const files = Array.isArray(tempFiles) ? tempFiles : [tempFiles]
 
       // 添加到显示列表
-      imgList.value = [...imgList.value, ...tempFiles]
+      imgList.value = [...imgList.value, ...files]
 
       // 转换为 Base64
-      tempFiles.forEach((filePath) => {
+      files.forEach((filePath) => {
         uni.getFileSystemManager().readFile({
           filePath,
           encoding: 'base64',
