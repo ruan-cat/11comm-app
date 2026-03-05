@@ -48,6 +48,8 @@ const { send: loadDetail, loading } = useRequest(
       },
     ]
   }
+}).onError((error) => {
+  console.error('加载采购申请详情失败:', error)
 })
 
 onLoad((options) => {
