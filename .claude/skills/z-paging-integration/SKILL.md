@@ -1,6 +1,30 @@
 ---
 name: z-paging-integration
-description: z-paging 分页组件与 api-migration 适配方案 - 提供 z-paging 与 useRequest 回调钩子模式的正确集成方式。当需要实现列表分页功能、集成 z-paging 与 Alova useRequest、处理分页筛选刷新时使用。必须与 api-migration、api-error-handling 协同。
+description: |
+  z-paging 分页组件与 api-migration 适配方案 - 提供 z-paging 与 useRequest 回调钩子模式的正确集成方式。
+
+  触发条件（满足任意一项即触发）：
+  - 页面包含 <z-paging> 组件
+  - 需要实现列表分页功能（工单列表、房屋列表、活动列表等）
+  - 用户提及"分页"、"列表加载"、"上拉加载"、"下拉刷新"等关键词
+  - 从 Vue2 迁移分页列表页面
+  - 需要实现筛选条件 + 分页的组合功能
+  - 修复 z-paging 相关错误（无限循环、无法加载等）
+
+  必须协同的技能（强制组合）：
+  - api-migration（API 接口调用）
+  - api-error-handling（错误提示处理）
+  - beautiful-component-design（可选，列表项美化）
+
+  禁止项：
+  - 禁止在 @query 回调中使用 try/catch
+  - 禁止在 @query 回调中调用 refresh()/reload()（会导致无限循环）
+  - 禁止同时使用 :query 属性和 @query 事件
+  - 禁止使用 @query 时设置 :auto="false"
+  - 禁止重复配置全局已配置的 props（default-page-size、refresher-enabled 等）
+  - 禁止忘记调用 complete() 方法
+
+  覆盖场景：维修工单列表、房屋申请列表、活动列表、投诉列表、选择器列表等所有需要分页的列表页面。
 ---
 
 # z-paging 分页组件集成方案

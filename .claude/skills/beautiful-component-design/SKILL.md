@@ -1,7 +1,38 @@
 ---
 name: beautiful-component-design
-description: 移动端 uni-app + wot-design-uni 组件美化规范。当需要添加 FormSectionTitle、使用 Carbon Icons、实现响应式设计、选择器组件美化、弹框交互时使用。表单页面必须与 use-wd-form 技能协同。
+description: |
+  移动端 uni-app + wot-design-uni 组件美化规范 - 提供图标、文本对齐、响应式设计、表单分区标题、选择器美化、弹框交互的完整规范。
+
+  触发条件（满足任意一项即触发）：
+  - 需要添加 FormSectionTitle 组件（表单分区标题）
+  - 需要使用 Carbon Icons 图标
+  - 需要实现响应式设计（rpx 单位、图片网格）
+  - 需要美化选择器组件（wd-picker）
+  - 需要实现弹框交互（wd-message-box、wd-popup）
+  - 需要美化详情页卡片（通栏标题 + 色彩编码）
+  - 用户提及"美化"、"图标"、"对齐"、"响应式"、"FormSectionTitle"等关键词
+  - 修复组件嵌套顺序错误（wd-picker 和 wd-cell）
+  - 修复插槽使用错误（#value 插槽不存在）
+
+  必须协同的技能：
+  - use-wd-form（表单页面必须协同）
+  - api-migration（如果有接口调用）
+  - api-error-handling（如果有接口调用）
+  - z-paging-integration（列表页面美化）
+
+  禁止项：
+  - 禁止使用 <view class="section-title"> 代替 FormSectionTitle
+  - 禁止 wd-cell 包裹 wd-picker（正确：wd-picker 包裹 wd-cell）
+  - 禁止使用不存在的 #value 插槽（wd-cell 没有此插槽）
+  - 禁止使用 wd-popup 实现标准交互（应使用 wd-message-box）
+  - 禁止在详情页卡片容器保留 padding（应移除以实现通栏标题）
+
+  覆盖场景：表单页面、详情页面、列表页面、选择器页面、弹框交互、图标使用、响应式布局等所有需要美化的场景。
+---
+
+name: beautiful-component-design
 color: pink
+
 ---
 
 # 组件美化设计规范

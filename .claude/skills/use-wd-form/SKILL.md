@@ -1,6 +1,32 @@
 ---
 name: use-wd-form
-description: 使用 wot-design-uni 的 wd-form 组件编写表单页的标准规范。当需要实现表单页面（包含 <wd-form>）、添加选择功能（必须使用 wd-picker 而非 wd-radio-group）、表单分区标题（必须使用 FormSectionTitle）时使用。必须与 beautiful-component-design 技能协同。
+description: |
+  使用 wot-design-uni 的 wd-form 组件编写表单页的标准规范 - 提供表单结构、wd-picker 选择器、校验规则、提交处理的完整规范。
+
+  触发条件（满足任意一项即触发）：
+  - 页面包含 <wd-form> 组件
+  - 需要实现表单页面（创建、编辑、提交等）
+  - 需要添加选择功能（必须使用 wd-picker 而非 wd-radio-group）
+  - 需要添加表单分区标题（必须使用 FormSectionTitle）
+  - 用户提及"表单"、"wd-form"、"表单校验"、"表单提交"等关键词
+  - 从 Vue2 迁移表单页面
+  - 需要实现单选/多选功能（单选用 wd-picker，多选用 wd-checkbox-group）
+
+  必须协同的技能：
+  - beautiful-component-design（FormSectionTitle、图标、美化）
+  - api-migration（如果有接口调用）
+  - api-error-handling（如果有接口调用）
+  - code-migration + component-migration（从 Vue2 迁移时）
+
+  禁止项：
+  - 禁止使用 wd-radio-group 实现单选（应使用 wd-picker）
+  - 禁止使用 <view class="section-title"> 代替 FormSectionTitle
+  - 禁止 wd-cell 包裹 wd-picker（正确：wd-picker 包裹 wd-cell）
+  - 禁止使用不存在的 #value 插槽
+  - 禁止单选初始化为数组（应为空字符串）
+  - 禁止多选初始化为字符串（应为空数组）
+
+  覆盖场景：维修工单创建、房屋申请、投诉录单、活动报名、用户信息编辑等所有表单页面。
 ---
 
 # 使用 `<wd-form>` 表单组件编写表单页的实施规范
