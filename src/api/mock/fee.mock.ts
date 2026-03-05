@@ -157,7 +157,7 @@ const mockFeeDatabase = {
     const feeDetails = filteredData.slice(start, end)
 
     return {
-      feeDetails,
+      list: feeDetails,
     }
   },
 }
@@ -184,7 +184,7 @@ export default defineUniAppMock([
         feeId: params.feeId,
       })
 
-      mockLog('queryFeeDetail result', `${result.feeDetails.length} items`)
+      mockLog('queryFeeDetail result', `${result.list.length} items`)
       return successResponse(result, '查询费用详情成功')
     },
   },
