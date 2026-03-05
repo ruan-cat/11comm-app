@@ -9,8 +9,9 @@
 
 <script setup lang="ts">
 import { useRequest } from 'alova/client'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { queryItemOutList } from '@/api/resource'
+import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
@@ -22,8 +23,10 @@ definePage({
 
 const communityInfo = getCurrentCommunity()
 
+type ZPagingRef = any
+
+const pagingRef = ref<ZPagingRef>()
 const list = ref<any[]>([])
-const total = ref(0)
 
 const { send: loadList } = useRequest(
   (params: { page: number, row: number }) =>
@@ -34,24 +37,10 @@ const { send: loadList } = useRequest(
   { immediate: false },
 ).onSuccess((event) => {
   const response = event.data
-  total.value = response?.total || 0
-  list.value = response?.list || []
-})
-
-const { send: loadMore } = useRequest(
-  (params: { page: number, row: number }) =>
-    queryItemOutList({
-      ...params,
-      communityId: communityInfo.communityId,
-    }),
-  { immediate: false },
-).onSuccess((event) => {
-  const response = event.data
-  list.value = [...list.value, ...(response?.list || [])]
-})
-
-onMounted(() => {
-  loadList({ page: 1, row: 10 })
+  pagingRef.value?.complete(response?.list || [])
+}).onError((error) => {
+  console.error('加载领用申请列表失败:', error)
+  pagingRef.value?.complete(false)
 })
 
 function goToAddApply() {
@@ -62,63 +51,72 @@ function goToDetail(item: any) {
   uni.navigateTo({ url: `/pages-sub/resource/item-out-detail?applyOrderId=${item.applyOrderId}` })
 }
 
-function onPullDownRefresh() {
-  loadList({ page: 1, row: 10 }).finally(() => {
-    uni.stopPullDownRefresh()
+function handleQuery(pageNo: number, pageSize: number) {
+  loadList({
+    page: pageNo,
+    row: pageSize,
   })
-}
-
-function onReachBottom() {
-  if (list.value.length < total.value) {
-    const page = Math.floor(list.value.length / 10) + 1
-    loadMore({ page, row: 10 })
-  }
 }
 </script>
 
 <template>
   <view class="page-container">
-    <view class="search-bar">
-      <wd-button type="primary" size="small" @click="goToAddApply">
-        领用申请
-      </wd-button>
-    </view>
-
-    <view v-if="list.length > 0" class="list-container">
-      <view v-for="(item, index) in list" :key="index" class="list-item" @click="goToDetail(item)">
-        <view class="item-header">
-          <view class="item-title">
-            <wd-icon name="" custom-class="i-carbon-shopping-cart text-green-500 mr-2" />
-            <text class="font-medium">{{ item.resourceNames }}</text>
-            <text class="status-text">({{ item.stateName }})</text>
-          </view>
-          <view class="item-actions">
-            <wd-button type="info" size="small" plain @click.stop="goToDetail(item)">
-              详情
-            </wd-button>
-          </view>
+    <z-paging ref="pagingRef" v-model="list" @query="handleQuery">
+      <template #top>
+        <view class="search-bar">
+          <wd-button type="primary" size="small" @click="goToAddApply">
+            领用申请
+          </wd-button>
         </view>
+      </template>
 
-        <view class="item-content">
-          <view class="info-item">
-            <text class="label">申请人:</text>
-            <text>{{ item.createUserName }}</text>
+      <view class="list-container">
+        <view v-for="(item, index) in list" :key="index" class="list-item" @click="goToDetail(item)">
+          <view class="item-header">
+            <view class="item-title">
+              <wd-icon name="" custom-class="i-carbon-shopping-cart text-green-500 mr-2" />
+              <text class="font-medium">{{ item.resourceNames }}</text>
+              <text class="status-text">({{ item.stateName }})</text>
+            </view>
+            <view class="item-actions">
+              <wd-button type="info" size="small" plain @click.stop="goToDetail(item)">
+                详情
+              </wd-button>
+            </view>
           </view>
-          <view class="info-item">
-            <text class="label">时间:</text>
-            <text>{{ item.createTime }}</text>
-          </view>
-          <view class="info-item">
-            <text class="label">订单:</text>
-            <text>{{ item.applyOrderId }}</text>
+
+          <view class="item-content">
+            <view class="info-item">
+              <text class="label">申请人:</text>
+              <text>{{ item.createUserName }}</text>
+            </view>
+            <view class="info-item">
+              <text class="label">时间:</text>
+              <text>{{ item.createTime }}</text>
+            </view>
+            <view class="info-item">
+              <text class="label">订单:</text>
+              <text>{{ item.applyOrderId }}</text>
+            </view>
           </view>
         </view>
       </view>
-    </view>
 
-    <view v-else class="empty-container">
-      <wd-status-tip image="content" tip="暂无数据" />
-    </view>
+      <template #empty>
+        <view class="empty-container">
+          <wd-status-tip image="content" tip="暂无数据" />
+        </view>
+      </template>
+
+      <template #loading>
+        <ZPagingLoading
+          icon="document"
+          icon-class="i-carbon-document text-blue-400 animate-pulse"
+          primary-text="正在加载领用管理列表..."
+          secondary-text="请稍候片刻"
+        />
+      </template>
+    </z-paging>
   </view>
 </template>
 
