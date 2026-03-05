@@ -90,7 +90,7 @@ export function queryOweFeeCallable(params: {
   payerObjId?: string
 }) {
   return http.Get<{
-    data: Array<{
+    list: Array<{
       feeId: string
       feeName: string
       ownerName: string
@@ -127,9 +127,10 @@ export function getChargeMachineList(params: {
   row: number
   communityId: string
   machineNameLike?: string
+  machineId?: string
 }) {
   return http.Get<{
-    data: Array<{
+    list: Array<{
       machineId: string
       machineName: string
       machineCode: string
@@ -152,7 +153,7 @@ export function getChargeMachineOrderList(params: {
   machineId?: string
 }) {
   return http.Get<{
-    data: Array<{
+    list: Array<{
       orderId: string
       personName: string
       personTel: string
@@ -179,7 +180,7 @@ export function getChargeMachinePortList(params: {
   machineId: string
 }) {
   return http.Get<{
-    data: Array<{
+    list: Array<{
       portId: string
       portName: string
       portCode: string
@@ -201,7 +202,7 @@ export function getFeeSummaryReport(params: {
   floorId?: string
 }) {
   return http.Get<{
-    data: Array<{
+    list: Array<{
       feeRoomCount: number
       oweRoomCount: number
       curOweFee: number
@@ -226,7 +227,7 @@ export function getPayFeeDetailReport(params: {
   roomId?: string
 }) {
   return http.Get<{
-    data: Array<{
+    list: Array<{
       feeId: string
       feeName: string
       roomId: string
@@ -253,7 +254,7 @@ export function getRoomFeeReport(params: {
   roomId?: string
 }) {
   return http.Get<{
-    data: Array<{
+    list: Array<{
       roomId: string
       roomName: string
       ownerName: string
@@ -275,7 +276,7 @@ export function getDataReport(params: {
   endDate?: string
 }) {
   return http.Get<{
-    data: Array<{
+    list: Array<{
       name: string
       value: number
       unit?: string
@@ -294,7 +295,7 @@ export function getOpenDoorLogList(params: {
   endDate?: string
 }) {
   return http.Get<{
-    data: Array<{
+    list: Array<{
       logId: string
       roomId: string
       roomName: string
