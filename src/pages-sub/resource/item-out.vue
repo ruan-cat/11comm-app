@@ -85,8 +85,9 @@ const { send: submitOut, loading: submitting } = useRequest(
   setTimeout(() => {
     uni.navigateBack()
   }, 1500)
-}).onError(() => {
-  toast.error('出库失败')
+}).onError((error) => {
+  console.error('出库失败:', error)
+  // 全局拦截器已自动显示错误提示，无需重复处理
 })
 
 onLoad((options) => {

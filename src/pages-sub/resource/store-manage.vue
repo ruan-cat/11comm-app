@@ -47,8 +47,9 @@ const { send: loadList, loading: listLoading } = useRequest(
   if (resourceList.value.length >= (response?.total || 0)) {
     finished.value = true
   }
-}).onError(() => {
-  toast.error('加载失败')
+}).onError((error) => {
+  console.error('加载失败:', error)
+  // 全局拦截器已自动显示错误提示，无需重复处理
 })
 
 let page = 1
