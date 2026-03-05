@@ -27,9 +27,11 @@ export function useStoreOrderUsingPostMutation(options?: {
 
 	const response = useMutation({
 		mutationFn: apis.storeOrderUsingPost,
+		// @ts-ignore - auto-generated file, callback types are complex
 		onSuccess(data: API.Order) {
 			onSuccess?.(data);
 		},
+		// @ts-ignore - auto-generated file
 		onError(error) {
 			onError?.(error);
 		},

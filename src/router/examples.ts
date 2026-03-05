@@ -29,7 +29,7 @@ export function navigationExamples() {
   TypedRouter.toComplaintHandle('complaint789')
 
   // 跳转到巡检列表
-  TypedRouter.toInspectionList({ status: 'pending' })
+  TypedRouter.toInspectionTaskList()
 
   // 跳转到巡检执行页面
   TypedRouter.toInspectionExecute('task123', 'normal')
@@ -55,7 +55,7 @@ export function basicNavigationExamples() {
   // 跳转到页面（自动类型检查）
   navigateToTyped('/pages-sub/repair/order-detail', {
     repairId: 'repair123',
-    status: 'pending',
+    storeId: 'store123',
   })
 
   // 重定向到页面
@@ -70,7 +70,7 @@ export function basicNavigationExamples() {
 /** 示例 3：错误处理 */
 export async function navigationWithErrorHandling() {
   try {
-    await TypedRouter.toRepairDetail('repair123')
+    await TypedRouter.toRepairDetail('repair123', 'store123')
     console.log('跳转成功')
   }
   catch (error) {
@@ -99,7 +99,7 @@ export function batchNavigation(repairIds: string[]) {
   // 遍历维修工单，逐个跳转到详情页
   repairIds.forEach((id, index) => {
     setTimeout(() => {
-      TypedRouter.toRepairDetail(id)
+      TypedRouter.toRepairDetail(id, 'store123')
     }, index * 100) // 避免频繁跳转
   })
 }

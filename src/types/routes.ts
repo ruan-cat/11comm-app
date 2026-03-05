@@ -30,6 +30,8 @@ export type PageRoute
     | '/pages-sub/complaint/list'
     | '/pages-sub/complaint/detail'
     | '/pages-sub/complaint/handle'
+    | '/pages-sub/complaint/order' // 投诉录单
+    | '/pages-sub/complaint/appraise-reply' // 回复评价
 	/** 巡检管理模块 (8个页面) */
     | '/pages-sub/inspection/task-list' // 巡检任务列表
     | '/pages-sub/inspection/execute' // 巡检过程页
@@ -62,6 +64,13 @@ export type PageRoute
     | '/pages-sub/work/copy-work' // 抄送工作单 ← gitee-example/pages/work/copyWork.vue
     | '/pages-sub/work/do-copy-work' // 处理抄送工作单 ← gitee-example/pages/work/doCopyWork.vue
     | '/pages-sub/work/audit-work' // 工作单审核 ← gitee-example/pages/work/doWorkAudit.vue
+	/** 费用管理模块 (6个页面) */
+    | '/pages-sub/fee/charge' // 充电桩列表 ← gitee-example/pages/charge/charge.vue
+    | '/pages-sub/fee/charge-detail' // 充电桩详情 ← gitee-example/pages/charge/chargeDetail.vue
+    | '/pages-sub/fee/detail' // 费用详情 ← gitee-example/pages/feeDetail/feeDetail.vue
+    | '/pages-sub/fee/owe-callable' // 欠费催缴列表 ← gitee-example/pages/fee/oweFeeCallable.vue
+    | '/pages-sub/fee/write-owe-callable' // 填写欠费催缴 ← gitee-example/pages/fee/writeOweFeeCallable.vue
+    | '/pages-sub/fee/room-pay' // 房间缴费 ← gitee-example/pages/fee/roomPayFee.vue
 
 /** Tab页面路由类型 */
 export type TabRoute = '/pages/index/index' | '/pages/work-dashboard/index' | '/pages/address/list' | '/pages/me/me'
@@ -145,6 +154,11 @@ export interface PageParams {
   }
   '/pages-sub/complaint/handle': {
     complaintId: string
+  }
+  '/pages-sub/complaint/order': {} // 投诉录单，无参数
+  '/pages-sub/complaint/appraise-reply': {
+    appraiseId: string
+    communityId: string
   }
   /** 巡检模块参数 (8个页面) */
   '/pages-sub/inspection/task-list': {} // 巡检任务列表，无参数
@@ -249,6 +263,30 @@ export interface PageParams {
   }
   '/pages-sub/work/audit-work': {
     taskId: string // 任务ID
+  }
+  /** 费用管理模块参数 (6个页面) */
+  '/pages-sub/fee/charge': {
+    communityId?: string // 小区ID
+  }
+  '/pages-sub/fee/charge-detail': {
+    machineId: string // 充电桩ID
+    machineName: string // 充电桩名称
+    communityId?: string // 小区ID
+  }
+  '/pages-sub/fee/detail': {
+    feeId: string // 费用ID
+    communityId?: string // 小区ID
+  }
+  '/pages-sub/fee/owe-callable': {
+    communityId?: string // 小区ID
+  }
+  '/pages-sub/fee/write-owe-callable': {
+    roomId: string // 房间ID
+    roomName: string // 房间名称
+    communityId?: string // 小区ID
+  }
+  '/pages-sub/fee/room-pay': {
+    communityId?: string // 小区ID
   }
 }
 

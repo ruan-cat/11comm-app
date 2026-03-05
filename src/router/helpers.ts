@@ -142,6 +142,14 @@ export class TypedRouter {
     return navigateToTyped('/pages-sub/complaint/handle', { complaintId })
   }
 
+  static toComplaintOrder() {
+    return navigateToTyped('/pages-sub/complaint/order', {})
+  }
+
+  static toComplaintAppraiseReply(appraiseId: string, communityId: string) {
+    return navigateToTyped('/pages-sub/complaint/appraise-reply', { appraiseId, communityId })
+  }
+
   /** 巡检模块导航 (8个页面) */
 
   /** 跳转到巡检任务列表 */
@@ -375,6 +383,66 @@ export class TypedRouter {
   static toWorkAudit(taskId: string) {
     return navigateToTyped('/pages-sub/work/audit-work', { taskId })
   }
+
+  /** 费用管理模块导航 (6个页面) */
+
+  /**
+   * 跳转到充电桩列表页
+   * @description 对应旧代码 gitee-example/pages/charge/charge.vue
+   */
+  static toFeeCharge(params?: PageParams['/pages-sub/fee/charge']) {
+    return navigateToTyped('/pages-sub/fee/charge', params)
+  }
+
+  /**
+   * 跳转到充电桩详情页
+   * @description 对应旧代码 gitee-example/pages/charge/chargeDetail.vue
+   */
+  static toFeeChargeDetail(params: PageParams['/pages-sub/fee/charge-detail']) {
+    return navigateToTyped('/pages-sub/fee/charge-detail', params)
+  }
+
+  /**
+   * 跳转到费用详情页
+   * @description 对应旧代码 gitee-example/pages/feeDetail/feeDetail.vue
+   */
+  static toFeeDetail(params: PageParams['/pages-sub/fee/detail']) {
+    return navigateToTyped('/pages-sub/fee/detail', params)
+  }
+
+  /**
+   * 跳转到欠费催缴列表页
+   * @description 对应旧代码 gitee-example/pages/fee/oweFeeCallable.vue
+   */
+  static toFeeOweCallable(params?: PageParams['/pages-sub/fee/owe-callable']) {
+    return navigateToTyped('/pages-sub/fee/owe-callable', params)
+  }
+
+  /**
+   * 跳转到填写欠费催缴页
+   * @description 对应旧代码 gitee-example/pages/fee/writeOweFeeCallable.vue
+   */
+  static toFeeWriteOweCallable(params: PageParams['/pages-sub/fee/write-owe-callable']) {
+    return navigateToTyped('/pages-sub/fee/write-owe-callable', params)
+  }
+
+  /**
+   * 跳转到房间缴费页
+   * @description 对应旧代码 gitee-example/pages/fee/roomPayFee.vue
+   */
+  static toFeeRoomPay(params?: PageParams['/pages-sub/fee/room-pay']) {
+    return navigateToTyped('/pages-sub/fee/room-pay', params)
+  }
+
+  /**
+   * 跳转到创建费用页（占位方法，待实现）
+   * @description 创建费用功能
+   */
+  static toFeeCreate(params: { payerObjId: string, payerObjName: string }) {
+    // TODO: 实现创建费用页面后，更新此方法
+    console.warn('toFeeCreate: 创建费用页面尚未实现', params)
+    return Promise.reject(new Error('创建费用页面尚未实现'))
+  }
 }
 
 /** 路由参数解析工具 */
@@ -427,6 +495,8 @@ export function isValidRoute(path: string): path is PageRoute {
     '/pages-sub/complaint/list',
     '/pages-sub/complaint/detail',
     '/pages-sub/complaint/handle',
+    '/pages-sub/complaint/order',
+    '/pages-sub/complaint/appraise-reply',
     // 巡检管理模块
     '/pages-sub/inspection/task-list',
     '/pages-sub/inspection/execute',
@@ -460,6 +530,13 @@ export function isValidRoute(path: string): path is PageRoute {
     '/pages-sub/work/copy-work',
     '/pages-sub/work/do-copy-work',
     '/pages-sub/work/audit-work',
+    // 费用管理模块
+    '/pages-sub/fee/charge',
+    '/pages-sub/fee/charge-detail',
+    '/pages-sub/fee/detail',
+    '/pages-sub/fee/owe-callable',
+    '/pages-sub/fee/write-owe-callable',
+    '/pages-sub/fee/room-pay',
   ]
 
   return validRoutes.includes(path as PageRoute)

@@ -19,7 +19,7 @@ const AUTH_REQUIRED_PAGES: PageRoute[] = [
   '/pages-sub/complaint/detail',
   '/pages-sub/complaint/handle',
   // 巡检模块
-  '/pages-sub/inspection/list',
+  '/pages-sub/inspection/task-list',
   '/pages-sub/inspection/execute',
 ]
 
