@@ -72,6 +72,8 @@ const { send: loadStoreHouses } = useRequest(
     label: item.shName,
     value: item.shId,
   }))
+}).onError((error) => {
+  console.error('加载仓库列表失败:', error)
 })
 
 const { send: submitReturn, loading: submitting } = useRequest(
@@ -183,22 +185,17 @@ async function handleSubmit() {
     return
   }
 
-  try {
-    await submitReturn({
-      resourceStores: itemList.value.map(item => ({
-        resId: item.resId,
-        resName: item.resName,
-        shzId: item.shzId,
-        curStock: item.curStock,
-      })),
-      remark: model.remark,
-      applyType: '20000',
-      communityId: communityInfo.communityId,
-    })
-  }
-  catch (error) {
-    // error handled by onError
-  }
+  submitReturn({
+    resourceStores: itemList.value.map(item => ({
+      resId: item.resId,
+      resName: item.resName,
+      shzId: item.shzId,
+      curStock: item.curStock,
+    })),
+    remark: model.remark,
+    applyType: '20000',
+    communityId: communityInfo.communityId,
+  })
 }
 </script>
 

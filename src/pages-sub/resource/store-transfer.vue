@@ -178,23 +178,18 @@ async function handleSubmit() {
     return
   }
 
-  try {
-    await submitTransfer({
-      resourceStores: itemList.value.map(item => ({
-        resId: item.resId,
-        resName: item.resName,
-        resCode: '',
-        price: 0,
-        quantity: item.giveQuantity,
-      })),
-      description: model.description,
-      communityId: communityInfo.communityId,
-      targetUserId: model.acceptUserId,
-    })
-  }
-  catch (error) {
-    // error handled by onError
-  }
+  submitTransfer({
+    resourceStores: itemList.value.map(item => ({
+      resId: item.resId,
+      resName: item.resName,
+      resCode: '',
+      price: 0,
+      quantity: item.giveQuantity,
+    })),
+    description: model.description,
+    communityId: communityInfo.communityId,
+    targetUserId: model.acceptUserId,
+  })
 }
 </script>
 

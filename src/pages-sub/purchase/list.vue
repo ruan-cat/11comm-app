@@ -14,7 +14,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { ref } from 'vue'
 import { listResourceStores } from '@/api/purchase'
-import { useGlobalToast } from '@/hooks/useGlobalToast'
+import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
@@ -29,38 +29,40 @@ definePage({
 /** 小区信息 */
 const communityInfo = getCurrentCommunity()
 
-/** 全局 Toast */
-const toast = useGlobalToast()
-
 // ==================== 页面状态 ====================
 
 /** 商品列表 */
 const purchaseList = ref<ResourceStore[]>([])
+type ZPagingRef = any
+const pagingRef = ref<ZPagingRef>()
+const currentCommunityId = ref(communityInfo.communityId)
 
 // ==================== API 请求 ====================
 
 /** 加载商品列表 */
-const { send: loadPurchaseList, loading } = useRequest(
+const { send: loadPurchaseList } = useRequest(
   (params: { page: number, row: number, communityId: string }) => listResourceStores(params),
   {
     immediate: false,
   },
 ).onSuccess((event) => {
   const data = event.data as { resourceStores?: typeof purchaseList.value }
-  if (data?.resourceStores) {
-    purchaseList.value = data.resourceStores
-  }
+  pagingRef.value?.complete(data?.resourceStores || [])
 }).onError((error) => {
   console.error('加载商品列表失败:', error)
-  // 全局拦截器已自动显示错误提示，无需重复处理
+  pagingRef.value?.complete(false)
 })
 
 // ==================== 生命周期 ====================
 
 onLoad((options) => {
-  const communityId = options?.communityId || communityInfo.communityId
-  loadPurchaseList({ page: 1, row: 50, communityId })
+  currentCommunityId.value = options?.communityId || communityInfo.communityId
+  pagingRef.value?.reload()
 })
+
+function handleQuery(pageNo: number, pageSize: number) {
+  loadPurchaseList({ page: pageNo, row: pageSize, communityId: currentCommunityId.value })
+}
 
 // ==================== 方法 ====================
 
@@ -84,9 +86,6 @@ function handleSelectItem(item: ResourceStore) {
     // 存储到全局或通过事件传递
     uni.$emit('purchaseSelect', floorInfo)
 
-    // 由于无法直接调用上一页方法，使用路由参数方式
-    const params = encodeURIComponent(JSON.stringify(floorInfo))
-
     uni.navigateBack({
       delta: 1,
     })
@@ -96,33 +95,42 @@ function handleSelectItem(item: ResourceStore) {
 
 <template>
   <view class="page-container">
-    <view v-if="loading" class="loading-container">
-      <wd-loading />
-    </view>
+    <z-paging ref="pagingRef" v-model="purchaseList" @query="handleQuery">
+      <view class="goods-list">
+        <wd-cell-group border>
+          <wd-cell
+            v-for="item in purchaseList"
+            :key="item.resId"
+            :title="item.resName"
+            :value="`库存: ${item.stock}`"
+            is-link
+            @click="handleSelectItem(item)"
+          >
+            <template #label>
+              <view class="goods-label">
+                <text class="text-grey text-sm">{{ item.parentRstName }} - {{ item.rstName }}</text>
+                <text class="text-grey text-sm">¥{{ item.price }}</text>
+              </view>
+            </template>
+          </wd-cell>
+        </wd-cell-group>
+      </view>
 
-    <view v-else-if="purchaseList.length === 0" class="empty-container">
-      <text class="text-grey">暂无商品</text>
-    </view>
+      <template #empty>
+        <view class="empty-container">
+          <text class="text-grey">暂无商品</text>
+        </view>
+      </template>
 
-    <view v-else class="goods-list">
-      <wd-cell-group border>
-        <wd-cell
-          v-for="item in purchaseList"
-          :key="item.resId"
-          :title="item.resName"
-          :value="`库存: ${item.stock}`"
-          is-link
-          @click="handleSelectItem(item)"
-        >
-          <template #label>
-            <view class="goods-label">
-              <text class="text-grey text-sm">{{ item.parentRstName }} - {{ item.rstName }}</text>
-              <text class="text-grey text-sm">¥{{ item.price }}</text>
-            </view>
-          </template>
-        </wd-cell>
-      </wd-cell-group>
-    </view>
+      <template #loading>
+        <ZPagingLoading
+          icon="document"
+          icon-class="i-carbon-document text-blue-400 animate-pulse"
+          primary-text="正在加载商品列表..."
+          secondary-text="请稍候片刻"
+        />
+      </template>
+    </z-paging>
   </view>
 </template>
 

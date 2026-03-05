@@ -73,6 +73,8 @@ const { send: loadStoreHouses } = useRequest(
     label: item.shName,
     value: item.shId,
   }))
+}).onError((error) => {
+  console.error('加载仓库列表失败:', error)
 })
 
 const { send: submitApply, loading: submitting } = useRequest(
@@ -159,34 +161,27 @@ async function handleSubmit() {
     return
   }
 
-  // 表单验证
-  try {
-    await formRef.value?.validate()
-  }
-  catch {
-    return
-  }
-
-  try {
-    await submitApply({
-      resourceStores: itemList.value.map(item => ({
-        resId: item.resId,
-        resName: item.resName,
-        resCode: item.resCode,
-        price: item.price,
-        quantity: item.quantity || 1,
-      })),
-      description: model.description,
-      resOrderType: model.resOrderType,
-      endUserName: model.endUserName,
-      endUserTel: model.endUserTel,
-      communityId: communityInfo.communityId,
-      shId: model.shId,
+  formRef.value?.validate()
+    .then(() => {
+      submitApply({
+        resourceStores: itemList.value.map(item => ({
+          resId: item.resId,
+          resName: item.resName,
+          resCode: item.resCode,
+          price: item.price,
+          quantity: item.quantity || 1,
+        })),
+        description: model.description,
+        resOrderType: model.resOrderType,
+        endUserName: model.endUserName,
+        endUserTel: model.endUserTel,
+        communityId: communityInfo.communityId,
+        shId: model.shId,
+      })
     })
-  }
-  catch (error) {
-    // error handled by onError
-  }
+    .catch(() => {
+      // 表单校验未通过
+    })
 }
 </script>
 

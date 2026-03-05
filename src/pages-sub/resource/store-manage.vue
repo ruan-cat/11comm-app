@@ -10,7 +10,7 @@ import { onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { ref } from 'vue'
 import { queryMyResourceStoreInfo } from '@/api/resource'
-import { useGlobalToast } from '@/hooks/useGlobalToast'
+import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
@@ -20,73 +20,37 @@ definePage({
 })
 
 const communityInfo = getCurrentCommunity()
-const toast = useGlobalToast()
 
 const resName = ref('')
 const searchUserName = ref('')
+type ZPagingRef = any
+const pagingRef = ref<ZPagingRef>()
 const resourceList = ref<any[]>([])
-const loading = ref(false)
-const finished = ref(false)
-const refreshing = ref(false)
 
-const { send: loadList, loading: listLoading } = useRequest(
+const { send: loadList } = useRequest(
   (params: { page: number, row: number, resName?: string, searchUserName?: string, communityId: string }) =>
     queryMyResourceStoreInfo(params),
   { immediate: false },
 ).onSuccess((event) => {
   const response = event.data
-  const list = response?.list || []
-  if (refreshing.value) {
-    resourceList.value = list
-    refreshing.value = false
-  }
-  else {
-    resourceList.value = resourceList.value.concat(list)
-  }
-
-  if (resourceList.value.length >= (response?.total || 0)) {
-    finished.value = true
-  }
+  pagingRef.value?.complete(response?.list || [])
 }).onError((error) => {
   console.error('加载失败:', error)
-  // 全局拦截器已自动显示错误提示，无需重复处理
+  pagingRef.value?.complete(false)
 })
 
-let page = 1
-
-function loadResourceList() {
-  if (listLoading.value || finished.value)
-    return
-
+function handleQuery(pageNo: number, pageSize: number) {
   loadList({
-    page,
-    row: 10,
+    page: pageNo,
+    row: pageSize,
     resName: resName.value,
     searchUserName: searchUserName.value,
     communityId: communityInfo.communityId,
-  }).then(() => {
-    page++
   })
 }
 
-function onRefresh() {
-  finished.value = false
-  page = 1
-  refreshing.value = true
-  loadResourceList()
-}
-
-function onLoadMore() {
-  if (finished.value)
-    return
-  loadResourceList()
-}
-
 function searchResource() {
-  finished.value = false
-  page = 1
-  resourceList.value = []
-  loadResourceList()
+  pagingRef.value?.reload()
 }
 
 function goToReturn() {
@@ -109,83 +73,84 @@ function goToTransfer() {
 
 onShow(() => {
   if (resourceList.value.length === 0) {
-    loadResourceList()
+    pagingRef.value?.reload()
   }
 })
 </script>
 
 <template>
   <view class="page-container">
-    <!-- 搜索栏 -->
-    <view class="search-bar">
-      <view class="search-form">
-        <text class="cuIcon-search" />
-        <input
-          v-model="resName"
-          type="text"
-          placeholder="输入物品名称"
-          confirm-type="search"
-          @confirm="searchResource"
-        >
-      </view>
-      <view class="action">
-        <button class="search-btn" @click="searchResource">
-          搜索
-        </button>
-      </view>
-    </view>
+    <z-paging ref="pagingRef" v-model="resourceList" @query="handleQuery">
+      <template #top>
+        <!-- 搜索栏 -->
+        <view class="search-bar">
+          <view class="search-form">
+            <text class="cuIcon-search" />
+            <input
+              v-model="resName"
+              type="text"
+              placeholder="输入物品名称"
+              confirm-type="search"
+              @confirm="searchResource"
+            >
+          </view>
+          <view class="action">
+            <button class="search-btn" @click="searchResource">
+              搜索
+            </button>
+          </view>
+        </view>
 
-    <!-- 操作按钮 -->
-    <view class="action-bar">
-      <button class="action-btn" @click="goToReturn">
-        退还
-      </button>
-      <button class="action-btn" @click="goToScrap">
-        损耗
-      </button>
-      <button class="action-btn" @click="goToTransfer">
-        转赠
-      </button>
-    </view>
+        <!-- 操作按钮 -->
+        <view class="action-bar">
+          <button class="action-btn" @click="goToReturn">
+            退还
+          </button>
+          <button class="action-btn" @click="goToScrap">
+            损耗
+          </button>
+          <button class="action-btn" @click="goToTransfer">
+            转赠
+          </button>
+        </view>
+      </template>
 
-    <!-- 列表 -->
-    <view v-if="resourceList.length > 0" class="resource-list">
-      <view v-for="(item, index) in resourceList" :key="index" class="resource-item">
-        <view class="item-content">
-          <view class="item-name">
-            <text class="margin-right-xs text-green">{{ item.userName }}</text>
-            <text class="ellip">{{ item.resName }}({{ item.parentRstName }} > {{ item.rstName }})</text>
-          </view>
-          <view class="item-info">
-            <text>库存：{{ item.stock }}{{ item.unitCodeName }}</text>
-          </view>
-          <view class="item-info">
-            <text>最小计量总数：{{ item.miniStock }}{{ item.miniUnitCodeName }}</text>
-          </view>
-          <view class="item-info">
-            <text>固定资产：{{ item.isFixedName }}</text>
+      <!-- 列表 -->
+      <view class="resource-list">
+        <view v-for="(item, index) in resourceList" :key="index" class="resource-item">
+          <view class="item-content">
+            <view class="item-name">
+              <text class="margin-right-xs text-green">{{ item.userName }}</text>
+              <text class="ellip">{{ item.resName }}({{ item.parentRstName }} > {{ item.rstName }})</text>
+            </view>
+            <view class="item-info">
+              <text>库存：{{ item.stock }}{{ item.unitCodeName }}</text>
+            </view>
+            <view class="item-info">
+              <text>最小计量总数：{{ item.miniStock }}{{ item.miniUnitCodeName }}</text>
+            </view>
+            <view class="item-info">
+              <text>固定资产：{{ item.isFixedName }}</text>
+            </view>
           </view>
         </view>
       </view>
 
-      <!-- 加载更多 -->
-      <view v-if="listLoading" class="loading-more">
-        <text>加载中...</text>
-      </view>
-      <view v-else-if="finished" class="loading-more">
-        <text>没有更多了</text>
-      </view>
-    </view>
+      <template #empty>
+        <view class="empty-page">
+          <text class="empty-text">暂无数据</text>
+        </view>
+      </template>
 
-    <!-- 空状态 -->
-    <view v-else-if="!listLoading" class="empty-page">
-      <text class="empty-text">暂无数据</text>
-    </view>
-
-    <!-- 加载中 -->
-    <view v-if="listLoading && resourceList.length === 0" class="loading-page">
-      <wd-loading />
-    </view>
+      <template #loading>
+        <ZPagingLoading
+          icon="document"
+          icon-class="i-carbon-document text-blue-400 animate-pulse"
+          primary-text="正在加载库存列表..."
+          secondary-text="请稍候片刻"
+        />
+      </template>
+    </z-paging>
   </view>
 </template>
 

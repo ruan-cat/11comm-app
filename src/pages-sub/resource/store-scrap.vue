@@ -6,6 +6,7 @@
 -->
 
 <script setup lang="ts">
+import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import { onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { onBeforeUnmount, ref } from 'vue'
@@ -25,6 +26,7 @@ const communityInfo = getCurrentCommunity()
 const toast = useGlobalToast()
 
 const formRef = ref()
+const formRules: FormRules = {}
 
 const scrapTypes = ref([
   { state: '', stateName: '请选择' },
@@ -160,28 +162,23 @@ async function handleSubmit() {
     return
   }
 
-  try {
-    await submitScrap({
-      resourceStores: itemList.value.map(item => ({
-        resId: item.resId,
-        resName: item.resName,
-        giveQuantity: item.giveQuantity,
-        state: item.state,
-        purchaseRemark: item.purchaseRemark,
-      })),
-      flag: 1,
-      communityId: communityInfo.communityId,
-    })
-  }
-  catch (error) {
-    // error handled by onError
-  }
+  submitScrap({
+    resourceStores: itemList.value.map(item => ({
+      resId: item.resId,
+      resName: item.resName,
+      giveQuantity: item.giveQuantity,
+      state: item.state,
+      purchaseRemark: item.purchaseRemark,
+    })),
+    flag: 1,
+    communityId: communityInfo.communityId,
+  })
 }
 </script>
 
 <template>
   <view class="page-container">
-    <view>
+    <wd-form ref="formRef" :model="itemList" :rules="formRules">
       <!-- 选择物品 -->
       <FormSectionTitle title="选择物品" />
 
@@ -244,7 +241,7 @@ async function handleSubmit() {
           提交
         </wd-button>
       </view>
-    </view>
+    </wd-form>
   </view>
 </template>
 
