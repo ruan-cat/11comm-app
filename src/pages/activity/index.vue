@@ -9,16 +9,18 @@
 -->
 
 <script setup lang="ts">
-import type { ZPagingRef } from '@/components/z-paging/types'
 import type { Activity, ActivityListParams, ActivityListResponse } from '@/types/activity'
-import { onLoad, onMounted } from '@dcloudio/uni-app'
+import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getActivityList, increaseActivityView } from '@/api/activity'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { TypedRouter } from '@/router'
 import { getImageUrl } from '@/utils'
+
+/** z-paging 组件引用 */
+type ZPagingRef = any
 
 /** 页面配置 */
 definePage({

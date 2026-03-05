@@ -40,6 +40,16 @@ function handleImageError() {
   emit('error')
 }
 
+/** 预览图片 */
+function handlePreviewImage() {
+  // #ifdef H5
+  uni.previewImage({ urls: [props.src] })
+  // #endif
+  // #ifndef H5
+  uni.previewImage({ urls: [props.src] })
+  // #endif
+}
+
 function handleImageLoad() {
   isLoading.value = false
   emit('load')
@@ -97,7 +107,7 @@ function handleImageLoad() {
       name="search"
       size="20"
       custom-class="i-carbon-zoom-in absolute top-4 right-4 z-30 text-white bg-black/20 rounded-full p-2 backdrop-blur-sm cursor-pointer hover:bg-black/30 transition-colors"
-      @click="uni.previewImage({ urls: [props.src] })"
+      @click="handlePreviewImage"
     />
   </view>
 </template>

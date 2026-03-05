@@ -57,9 +57,10 @@ function toggleExpand() {
     uni.createSelectorQuery()
       .select('.activity-content')
       .boundingClientRect((rect) => {
-        if (rect) {
+        const rectItem = Array.isArray(rect) ? rect[0] : rect
+        if (rectItem) {
           uni.pageScrollTo({
-            scrollTop: rect.top - 100,
+            scrollTop: rectItem.top - 100,
             duration: 300,
           })
         }
@@ -73,8 +74,9 @@ function handleContentLoad() {
   uni.createSelectorQuery()
     .select('.content-body')
     .boundingClientRect((rect) => {
-      if (rect) {
-        contentHeight.value = Math.ceil(rect.height * 2) // px 转 rpx
+      const rectItem = Array.isArray(rect) ? rect[0] : rect
+      if (rectItem) {
+        contentHeight.value = Math.ceil(rectItem.height * 2) // px 转 rpx
       }
     })
     .exec()
