@@ -22,6 +22,7 @@ import { useRequest } from 'alova/client'
 import { onMounted, reactive, ref } from 'vue'
 import { getInspectionItemTitles, submitInspection } from '@/api/inspection'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 
 definePage({
@@ -30,6 +31,9 @@ definePage({
     enablePullDownRefresh: false,
   },
 })
+
+/** 全局 Toast */
+const toast = useGlobalToast()
 
 /** 表单标签统一宽度 */
 const LABEL_WIDTH = '80px'
@@ -115,10 +119,7 @@ function getCurrentLocation() {
       locationInfo.value.address = `${res.latitude.toFixed(6)}, ${res.longitude.toFixed(6)}`
     },
     fail: () => {
-      uni.showToast({
-        title: '获取位置失败',
-        icon: 'none',
-      })
+      toast.error('获取位置失败')
     },
   })
 }
@@ -154,10 +155,8 @@ const { send: sendLoadTitles } = useRequest(
     })
   })
   .onError((error) => {
-    uni.showToast({
-      title: error.error || '加载巡检项失败',
-      icon: 'none',
-    })
+    console.error('加载巡检项失败:', error)
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 async function loadInspectionItemTitles() {
@@ -237,10 +236,7 @@ const {
 })
 
 onSubmitSuccess(() => {
-  uni.showToast({
-    title: '提交成功',
-    icon: 'success',
-  })
+  toast.success('提交成功')
 
   // 返回上一页或跳转到巡检打卡页
   setTimeout(() => {
@@ -256,10 +252,8 @@ onSubmitSuccess(() => {
 })
 
 onSubmitError((error) => {
-  uni.showToast({
-    title: error.error || '提交失败',
-    icon: 'none',
-  })
+  console.error('提交失败:', error)
+  // 全局拦截器已自动显示错误提示，无需重复处理
 })
 
 async function handleSubmitInspection() {
@@ -273,26 +267,17 @@ async function handleSubmitInspection() {
 
   // 校验必填项
   if (!formData.patrolType) {
-    uni.showToast({
-      title: '巡检情况不能为空',
-      icon: 'none',
-    })
+    toast.warning('巡检情况不能为空')
     return
   }
 
   if (!description) {
-    uni.showToast({
-      title: '巡检说明不能为空',
-      icon: 'none',
-    })
+    toast.warning('巡检说明不能为空')
     return
   }
 
   if (formData.photos.length === 0) {
-    uni.showToast({
-      title: '请上传巡检图片',
-      icon: 'none',
-    })
+    toast.warning('请上传巡检图片')
     return
   }
 
