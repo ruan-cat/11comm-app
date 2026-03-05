@@ -16,6 +16,7 @@ import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
 import { getActivityList, increaseActivityView } from '@/api/activity'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 import { getImageUrl } from '@/utils'
 
@@ -40,6 +41,8 @@ interface PageOptions {
 
 /** 响应式数据状态 */
 const currentCommunityId = ref<string>('')
+
+const toast = useGlobalToast()
 
 /** z-paging 组件引用 */
 const pagingRef = ref<ZPagingRef>()
@@ -178,10 +181,7 @@ async function navigateToDetail(item: Activity) {
   }
   catch (err) {
     console.error('跳转详情页失败:', err)
-    uni.showToast({
-      title: '跳转失败，请重试',
-      icon: 'none',
-    })
+    toast.error('跳转失败，请重试')
   }
 }
 
@@ -190,10 +190,7 @@ onLoad((options: PageOptions) => {
   console.log('Activities页面加载，参数:', options)
 
   if (!options.currentCommunityId) {
-    uni.showToast({
-      title: '社区参数缺失',
-      icon: 'none',
-    })
+    toast.warning('社区参数缺失')
     return
   }
 

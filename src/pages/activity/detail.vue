@@ -20,6 +20,7 @@ import ActivityError from '@/components/activity/activity-error.vue'
 import ActivityHeroImage from '@/components/activity/activity-hero.vue'
 import ActivityInfo from '@/components/activity/activity-info.vue'
 import ActivitySkeleton from '@/components/activity/activity-skeleton.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 /** 页面配置 */
 definePage({
@@ -29,6 +30,8 @@ definePage({
     navigationBarTextStyle: 'white',
   },
 })
+
+const toast = useGlobalToast()
 
 /** 接口参数 */
 interface PageOptions {
@@ -168,11 +171,7 @@ function showError(type: typeof errorState.value.type, message: string) {
 
 function handleRetry() {
   if (retryCount.value >= maxRetryCount) {
-    uni.showToast({
-      title: '已达到最大重试次数',
-      icon: 'none',
-      duration: 2000,
-    })
+    toast.warning('已达到最大重试次数')
     return
   }
 
