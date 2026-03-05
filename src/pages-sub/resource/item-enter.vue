@@ -69,6 +69,8 @@ const { send: loadDetail, loading } = useRequest(
       rsId: '',
     }))
   }
+}).onError((error) => {
+  console.error('加载入库详情失败:', error)
 })
 
 const { send: submitEnter, loading: submitting } = useRequest(
@@ -124,23 +126,18 @@ async function handleSubmit() {
     return
   }
 
-  try {
-    await submitEnter({
-      resourceStores: itemList.value.map(item => ({
-        resId: item.resId,
-        resName: item.resName,
-        resCode: '',
-        price: Number.parseFloat(item.price),
-        quantity: Number.parseInt(item.purchaseQuantity),
-      })),
-      description: '',
-      applyOrderId: applyOrderId.value,
-      taskId: taskId.value,
-    })
-  }
-  catch (error) {
-    // error handled by onError
-  }
+  submitEnter({
+    resourceStores: itemList.value.map(item => ({
+      resId: item.resId,
+      resName: item.resName,
+      resCode: '',
+      price: Number.parseFloat(item.price),
+      quantity: Number.parseInt(item.purchaseQuantity),
+    })),
+    description: '',
+    applyOrderId: applyOrderId.value,
+    taskId: taskId.value,
+  })
 }
 </script>
 
