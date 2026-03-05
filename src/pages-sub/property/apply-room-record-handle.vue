@@ -14,12 +14,15 @@ import { useRequest } from 'alova/client'
 import { ref } from 'vue'
 import { saveApplicationRecord } from '@/api/property-application'
 import { buildApplyFromParams } from '@/hooks/property/use-property-apply-room'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 definePage({
   style: {
     navigationBarTitleText: '记录处理',
   },
 })
+
+const toast = useGlobalToast()
 
 const applyRoomInfo = ref<PropertyApplication>({} as PropertyApplication)
 const imgList = ref<any[]>([])
@@ -82,9 +85,7 @@ const {
 )
 
 onSaveSuccess(() => {
-  uni.showToast({
-    title: '保存成功',
-  })
+  toast.success('保存成功')
   setTimeout(() => {
     uni.navigateBack({
       delta: 1,
@@ -93,10 +94,7 @@ onSaveSuccess(() => {
 })
 
 onSaveError((error) => {
-  uni.showToast({
-    title: '保存失败',
-    icon: 'none',
-  })
+  toast.error('保存失败')
   console.error('保存记录失败', error)
 })
 
@@ -123,10 +121,7 @@ function dispatchRecord() {
   }
 
   if (msg !== '') {
-    uni.showToast({
-      title: msg,
-      icon: 'none',
-    })
+    toast.warning(msg)
     return
   }
 

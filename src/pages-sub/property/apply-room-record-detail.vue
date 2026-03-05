@@ -14,12 +14,15 @@ import { useRequest } from 'alova/client'
 import { ref } from 'vue'
 import { deleteApplicationRecord, getApplicationRecordDetailList } from '@/api/property-application'
 import { buildRecordFromParams } from '@/hooks/property/use-property-apply-room'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 definePage({
   style: {
     navigationBarTitleText: '记录详情',
   },
 })
+
+const toast = useGlobalToast()
 
 const recordInfo = ref<ApplicationRecord & { communityId?: string, roomName?: string }>({} as ApplicationRecord & { communityId?: string, roomName?: string })
 const recordList = ref<ApplicationRecordDetail[]>([])
@@ -59,10 +62,7 @@ onRecordDetailSuccess((res) => {
 
 onRecordDetailError((error) => {
   console.error('加载记录详情失败', error)
-  uni.showToast({
-    title: '加载记录详情失败',
-    icon: 'none',
-  })
+  // 全局拦截器已自动显示错误提示，无需重复处理
 })
 
 /** 预览图片 */
@@ -99,9 +99,7 @@ const {
 )
 
 onDeleteSuccess(() => {
-  uni.showToast({
-    title: '删除成功',
-  })
+  toast.success('删除成功')
   setTimeout(() => {
     uni.navigateBack({
       delta: 1,
@@ -110,11 +108,8 @@ onDeleteSuccess(() => {
 })
 
 onDeleteError((error) => {
-  uni.showToast({
-    title: '删除失败',
-    icon: 'none',
-  })
   console.error('删除记录失败', error)
+  // 全局拦截器已自动显示错误提示，无需重复处理
 })
 
 /** 删除记录 */

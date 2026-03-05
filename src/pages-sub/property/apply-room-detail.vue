@@ -22,6 +22,7 @@ import {
   submitReviewUpdate,
 } from '@/api/property-application'
 import { extractApplyRecordParams } from '@/hooks/property/use-property-apply-room'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { goBack, TypedRouter } from '@/router'
 
 definePage({
@@ -29,6 +30,8 @@ definePage({
     navigationBarTitleText: '房屋申请详情',
   },
 })
+
+const toast = useGlobalToast()
 
 const applyRoomInfo = ref<PropertyApplication>({} as PropertyApplication)
 const errorSwitch = ref(false)
@@ -93,10 +96,7 @@ onFeeDetailSuccess((res) => {
 
 onFeeDetailError((error) => {
   console.error('查询费用项缴费历史失败', error)
-  uni.showToast({
-    title: '查询费用历史失败',
-    icon: 'none',
-  })
+  // 全局拦截器已自动显示错误提示，无需重复处理
 })
 
 /** 缴费历史复选框选择 */
@@ -158,10 +158,7 @@ onFeeDiscountSuccess((res) => {
 
 onFeeDiscountError((error) => {
   console.error('查询费用折扣失败', error)
-  uni.showToast({
-    title: '查询费用折扣失败',
-    icon: 'none',
-  })
+  // 全局拦截器已自动显示错误提示，无需重复处理
 })
 
 /** 修改折扣类型 */
@@ -212,20 +209,15 @@ const {
 )
 
 onCheckSuccess(() => {
-  uni.showToast({
-    title: '保存成功',
-  })
+  toast.success('保存成功')
   setTimeout(() => {
     goBack()
   }, 1000)
 })
 
 onCheckError((error) => {
-  uni.showToast({
-    title: '操作失败',
-    icon: 'none',
-  })
   console.error('提交失败', error)
+  // 全局拦截器已自动显示错误提示，无需重复处理
 })
 
 /** 提交审核更新 - 使用 useRequest */
@@ -242,9 +234,7 @@ const {
 )
 
 onReviewSuccess(() => {
-  uni.showToast({
-    title: '保存成功',
-  })
+  toast.success('保存成功')
   setTimeout(() => {
     // TODO: 用路由子代理来修复调整
     // goBack()
@@ -252,11 +242,8 @@ onReviewSuccess(() => {
 })
 
 onReviewError((error) => {
-  uni.showToast({
-    title: '操作失败',
-    icon: 'none',
-  })
   console.error('提交失败', error)
+  // 全局拦截器已自动显示错误提示，无需重复处理
 })
 
 /** 保存修改 */
@@ -271,18 +258,12 @@ function submit() {
   if (applyRoomInfo.value.state === '1') {
     const state = (checkState.value as { state: number }).state
     if (!state) {
-      uni.showToast({
-        title: '请选择验房状态',
-        icon: 'none',
-      })
+      toast.warning('请选择验房状态')
       return
     }
 
     if (!checkRemark.value) {
-      uni.showToast({
-        title: '请填写验房备注',
-        icon: 'none',
-      })
+      toast.warning('请填写验房备注')
       return
     }
 
@@ -301,42 +282,27 @@ function submit() {
   else if (applyRoomInfo.value.state === '2') {
     const state = (reviewState.value as { state: number }).state
     if (!state) {
-      uni.showToast({
-        title: '请选择审批状态',
-        icon: 'none',
-      })
+      toast.warning('请选择审批状态')
       return
     }
 
     if (state === 4 && !(discountId.value as any).discountId) {
-      uni.showToast({
-        title: '请选择优惠名称',
-        icon: 'none',
-      })
+      toast.warning('请选择优惠名称')
       return
     }
 
     if (state === 4 && !returnWay.value) {
-      uni.showToast({
-        title: '请选择退还方式',
-        icon: 'none',
-      })
+      toast.warning('请选择退还方式')
       return
     }
 
     if (state === 4 && returnWay.value === '1002' && selectedFees.value.length <= 0) {
-      uni.showToast({
-        title: '请选择缴费记录',
-        icon: 'none',
-      })
+      toast.warning('请选择缴费记录')
       return
     }
 
     if (!reviewRemark.value) {
-      uni.showToast({
-        title: '请填写审批备注',
-        icon: 'none',
-      })
+      toast.warning('请填写审批备注')
       return
     }
 
@@ -413,18 +379,12 @@ onDetailSuccess((res) => {
 
 onDetailError((error) => {
   console.error('加载申请详情失败', error)
-  uni.showToast({
-    title: '加载失败',
-    icon: 'none',
-  })
+  // 全局拦截器已自动显示错误提示，无需重复处理
 })
 
 onLoad((options: { ardId?: string, communityId?: string }) => {
   if (!options.ardId || !options.communityId) {
-    uni.showToast({
-      title: '参数错误',
-      icon: 'none',
-    })
+    toast.error('参数错误')
     return
   }
 
