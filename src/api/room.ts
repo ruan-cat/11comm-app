@@ -47,3 +47,41 @@ export function getRoomDetail(params: { roomId: string }) {
     },
   })
 }
+
+/**
+ * 查询房屋信息（支持多条件查询）
+ * @param params - 查询参数
+ * @param params.page - 页码
+ * @param params.row - 每页数量
+ * @param params.communityId - 小区ID
+ * @param params.floorNum - 楼栋号
+ * @param params.unitNum - 单元号
+ * @param params.roomNum - 房间号
+ * @returns 房屋信息响应
+ * @example getRoomInfo({ page: 1, row: 1, communityId: 'COMM_001', floorNum: '1', unitNum: '1', roomNum: '101' })
+ */
+export function getRoomInfo(params: {
+  page: number
+  row: number
+  communityId: string
+  floorNum?: string
+  unitNum?: string
+  roomNum?: string
+}) {
+  return http.Get<{
+    rooms: Array<{
+      roomId: string
+      floorNum?: string
+      unitNum?: string
+      roomNum?: string
+      builtUpArea?: string
+      ownerName?: string
+      link?: string
+    }>
+  }>('/app/room.queryRooms', {
+    params,
+    meta: {
+      ignoreAuth: true,
+    },
+  })
+}
