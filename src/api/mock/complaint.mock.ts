@@ -9,9 +9,9 @@ import type {
   Complaint,
   ComplaintAppraise,
   ComplaintEvent,
-} from '@/types/complaint'
+} from '../../types/complaint'
 import dayjs from 'dayjs'
-import { ComplaintAppraiseState, ComplaintEventType, ComplaintTypeCode } from '@/types/complaint'
+import { ComplaintAppraiseState, ComplaintEventType, ComplaintTypeCode } from '../../types/complaint'
 
 import {
   createPaginationResponse,
