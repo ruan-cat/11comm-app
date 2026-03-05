@@ -9,6 +9,7 @@ import {
   getWxCode,
 } from '@/api/login'
 import { isDoubleTokenRes, isSingleTokenRes } from '@/api/types/login'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { isDoubleTokenMode } from '@/utils'
 import { useUserStore } from './user'
 
@@ -96,22 +97,17 @@ export const useTokenStore = defineStore(
      * @returns 登录结果
      */
     const login = async (credentials: { username: string, password: string, code: string, uuid: string }) => {
+      const toast = useGlobalToast()
       try {
         const res = await _login(credentials)
         console.log('普通登录-res: ', res)
         await _postLogin(res.data)
-        uni.showToast({
-          title: '登录成功',
-          icon: 'success',
-        })
+        toast.success('登录成功')
         return res
       }
       catch (error) {
         console.error('登录失败:', error)
-        uni.showToast({
-          title: '登录失败，请重试',
-          icon: 'error',
-        })
+        toast.error('登录失败，请重试')
         throw error
       }
     }
@@ -121,6 +117,7 @@ export const useTokenStore = defineStore(
      * @returns 登录结果
      */
     const wxLogin = async () => {
+      const toast = useGlobalToast()
       try {
         // 获取微信小程序登录的code
         const code = await getWxCode()
@@ -128,18 +125,12 @@ export const useTokenStore = defineStore(
         const res = await _wxLogin(code)
         console.log('微信登录-res: ', res)
         await _postLogin(res.data)
-        uni.showToast({
-          title: '登录成功',
-          icon: 'success',
-        })
+        toast.success('登录成功')
         return res
       }
       catch (error) {
         console.error('微信登录失败:', error)
-        uni.showToast({
-          title: '微信登录失败，请重试',
-          icon: 'error',
-        })
+        toast.error('微信登录失败，请重试')
         throw error
       }
     }

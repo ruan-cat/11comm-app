@@ -9,6 +9,7 @@ import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { computed, nextTick, ref, watch } from 'vue'
 import { formatStaffList, queryStaffList } from '@/api/staff'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 interface UseAddressListOptions {
   storeId?: string
@@ -93,11 +94,9 @@ export function useAddressList(options: UseAddressListOptions = {}) {
    * 拨打电话
    */
   const callPhone = (phone: string) => {
+    const toast = useGlobalToast()
     if (!phone) {
-      uni.showToast({
-        title: '电话号码不存在',
-        icon: 'none',
-      })
+      toast.warning('电话号码不存在')
       return
     }
 
@@ -108,10 +107,7 @@ export function useAddressList(options: UseAddressListOptions = {}) {
       },
       fail: (error) => {
         console.error('拨打失败:', error)
-        uni.showToast({
-          title: '拨打失败',
-          icon: 'none',
-        })
+        toast.error('拨打失败')
       },
     })
   }
@@ -120,11 +116,9 @@ export function useAddressList(options: UseAddressListOptions = {}) {
    * 搜索员工
    */
   const searchStaff = () => {
+    const toast = useGlobalToast()
     if (!searchKeyword.value.trim()) {
-      uni.showToast({
-        title: '请输入搜索关键词',
-        icon: 'none',
-      })
+      toast.warning('请输入搜索关键词')
       return
     }
     loadStaffInfo()
@@ -207,11 +201,9 @@ export function useAddressList(options: UseAddressListOptions = {}) {
    * 错误处理
    */
   const handleError = (error: any) => {
+    const toast = useGlobalToast()
     console.error('员工数据加载失败:', error)
-    uni.showToast({
-      title: '加载失败，请重试',
-      icon: 'none',
-    })
+    toast.error('加载失败，请重试')
   }
 
   // ==================== 计算属性 ====================

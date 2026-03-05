@@ -1,3 +1,5 @@
+import { useGlobalToast } from '@/hooks/useGlobalToast'
+
 /**
  * 文件上传钩子函数使用示例
  * @example
@@ -116,12 +118,10 @@ export function useUpload<T = string>(
    * @returns 是否通过检查
    */
   const checkFileSize = (size: number) => {
+    const toast = useGlobalToast()
     const sizeInMB = size / 1024 / 1024
     if (sizeInMB > maxSize) {
-      uni.showToast({
-        title: `文件大小不能超过${maxSize}MB`,
-        icon: 'none',
-      })
+      toast.warning(`文件大小不能超过${maxSize}MB`)
       return false
     }
     return true

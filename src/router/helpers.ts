@@ -3,6 +3,7 @@
  */
 
 import type { PageParams, PageRoute, TabRoute } from '@/types/routes'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 /** 类型安全的路由跳转函数 */
 export function navigateToTyped<T extends keyof PageParams>(
@@ -10,6 +11,7 @@ export function navigateToTyped<T extends keyof PageParams>(
   params?: PageParams[T],
   options?: UniApp.NavigateToOptions,
 ) {
+  const toast = useGlobalToast()
   let fullUrl: string = url
   if (params && Object.keys(params).length > 0) {
     const query = new URLSearchParams(params as any).toString()
@@ -21,11 +23,7 @@ export function navigateToTyped<T extends keyof PageParams>(
     ...options,
     fail: (err) => {
       console.error('页面跳转失败:', err)
-      uni.showToast({
-        title: '页面跳转失败',
-        icon: 'none',
-        duration: 2000,
-      })
+      toast.error('页面跳转失败')
     },
   })
 }
