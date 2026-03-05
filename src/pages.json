@@ -54,6 +54,7 @@
         "navigationBarTextStyle": "white"
       }
     },
+    // #ifdef MP-WEIXIN
     {
       "path": "pages/activity/index",
       "type": "page",
@@ -67,6 +68,20 @@
         "onReachBottomDistance": 50
       }
     },
+    // #endif
+    // #ifdef H5
+    {
+      "path": "pages/activity/index",
+      "type": "page",
+      "name": "Activities",
+      "style": {
+        "navigationBarTitleText": "社区活动",
+        "navigationBarBackgroundColor": "#368CFE",
+        "navigationBarTextStyle": "white",
+        "enablePullDownRefresh": false
+      }
+    },
+    // #endif
     {
       "path": "pages/address/list",
       "type": "page",
@@ -329,6 +344,7 @@
             "navigationBarTitleText": "记录处理"
           }
         },
+        // #ifdef MP-WEIXIN
         {
           "path": "property/apply-room-record",
           "type": "page",
@@ -337,6 +353,18 @@
             "enablePullDownRefresh": true
           }
         },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "property/apply-room-record",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "申请记录",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef MP-WEIXIN
         {
           "path": "property/apply-room",
           "type": "page",
@@ -345,6 +373,17 @@
             "enablePullDownRefresh": true
           }
         },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "property/apply-room",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "房屋申请",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
         {
           "path": "repair/add-order",
           "type": "page",
@@ -528,7 +567,396 @@
             "navigationBarBackgroundColor": "#368bff",
             "navigationBarTextStyle": "white"
           }
+        },
+        // #ifdef H5
+        {
+          "path": "fee/charge-detail",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "充电桩详情",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "fee/charge",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "充电桩",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "fee/create",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "创建费用",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "fee/detail",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "费用详情",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "fee/owe-callable",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "欠费催缴",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "fee/pay-qrcode",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "二维码缴费",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "fee/room-pay",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "房间缴费",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "fee/write-owe-callable",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "填写欠费催缴",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "purchase/list",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "选择商品",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "purchase/request",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "采购申请",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "purchase/review",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "采购审核",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "purchase/schedule",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "采购进度",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "purchase/urgent-apply",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "紧急采购申请",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "report/charge-machine-order",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "充电桩订单",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "report/data-report",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "数据报表",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "report/fee-summary",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "费用汇总报表",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "report/open-door-log",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "开门记录",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "report/pay-fee-detail",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "缴费明细报表",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "report/room-fee",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "房间费用报表",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/add-item-out",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "领用申请",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/add-purchase-apply",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "采购申请",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/allocation-apply",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "物资调拨申请",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/allocation-audit",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "调拨审核",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/allocation-detail",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "调拨详情",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/allocation-enter",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "调拨入库",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/allocation-manage",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "调拨管理",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/edit-purchase-apply",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "编辑采购申请",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/item-enter",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "物品入库",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/item-out-audit",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "领用审核",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/item-out-manage",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "领用管理",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/item-out",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "物品出库",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/out-storage-request",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "出库申请",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/purchase-apply-audit",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "采购审核",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/purchase-apply-detail",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "采购详情",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/purchase-apply-manage",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "采购申请管理",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/store-manage",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "库存管理"
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/store-return",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "库存退货",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/store-scrap",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "库存报废",
+            "enablePullDownRefresh": false
+          }
+        },
+        // #endif
+        // #ifdef H5
+        {
+          "path": "resource/store-transfer",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "库存调拨",
+            "enablePullDownRefresh": false
+          }
         }
+        // #endif
       ]
     }
   ],
