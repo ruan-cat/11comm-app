@@ -80,6 +80,8 @@ const { send: loadFeeInfo, loading: feeInfoLoading } = useRequest(
   if (event.data.list && event.data.list.length > 0) {
     feeInfo.value = event.data.list[0]
   }
+}).onError((error) => {
+  console.error('加载费用信息失败:', error)
 })
 
 /** 加载缴费历史 */
@@ -102,6 +104,8 @@ const { send: loadFeeDetail, loading: detailLoading } = useRequest(
   if (feeDetails.value.length < 1) {
     noData.value = true
   }
+}).onError((error) => {
+  console.error('加载缴费历史失败:', error)
 })
 
 /** 页面加载 */

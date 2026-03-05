@@ -11,6 +11,7 @@
 -->
 
 <script setup lang="ts">
+import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import { useRequest } from 'alova/client'
 import { reactive, ref } from 'vue'
 import { getRoomInfo } from '@/api/room'
@@ -31,6 +32,9 @@ const communityInfo = getCurrentCommunity()
 
 /** 全局 Toast */
 const toast = useGlobalToast()
+
+/** 表单标签统一宽度 */
+const LABEL_WIDTH = '140rpx'
 
 /** 搜索表单 */
 const searchForm = reactive({
@@ -54,6 +58,14 @@ const roomInfo = ref<{
 /** 当前 Tab */
 const activeTab = ref(0)
 
+/** 表单引用 */
+const formRef = ref()
+
+/** 表单校验规则 */
+const searchRules: FormRules = {
+  roomName: [{ required: true, message: '请输入房屋编号' }],
+}
+
 /** 加载房屋信息 */
 const { send: loadRoomInfo, loading: roomLoading } = useRequest(
   (params: { floorNum?: string, unitNum?: string, roomNum?: string }) =>
@@ -76,11 +88,15 @@ const { send: loadRoomInfo, loading: roomLoading } = useRequest(
   roomInfo.value = data.rooms[0]
   // 默认选中第一个 tab
   activeTab.value = 0
+}).onError((error) => {
+  console.error('加载房屋信息失败:', error)
+  toast.warning('加载房屋信息失败')
 })
 
 /** 搜索房屋 */
-function handleSearch() {
-  if (!searchForm.roomName) {
+async function handleSearch() {
+  const valid = await formRef.value?.validate()
+  if (!valid) {
     return
   }
 
@@ -123,26 +139,31 @@ function handleCreateFee() {
 <template>
   <view class="room-pay-page">
     <!-- 搜索栏 -->
-    <view class="search-bar bg-white p-3">
-      <view class="flex items-center gap-2">
-        <view class="flex-1">
-          <input
-            v-model="searchForm.roomName"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-            type="text"
-            placeholder="输入房屋编号 楼栋-单元-房屋"
-            confirm-type="search"
-            @confirm="handleSearch"
-          >
+    <wd-form ref="formRef" :model="searchForm" :rules="searchRules">
+      <FormSectionTitle title="房屋检索" />
+      <wd-cell-group border>
+        <wd-input
+          v-model="searchForm.roomName"
+          label="房屋编号"
+          :label-width="LABEL_WIDTH"
+          prop="roomName"
+          placeholder="输入房屋编号 楼栋-单元-房屋"
+          clearable
+          @confirm="handleSearch"
+        />
+      </wd-cell-group>
+
+      <view class="search-bar bg-white px-3 pb-3 pt-2">
+        <view class="flex items-center justify-end gap-2">
+          <wd-button size="small" @click="handleSearch">
+            搜索
+          </wd-button>
+          <wd-button v-if="roomInfo.roomId" size="small" type="primary" @click="handleCreateFee">
+            创建费用
+          </wd-button>
         </view>
-        <wd-button size="small" @click="handleSearch">
-          搜索
-        </wd-button>
-        <wd-button v-if="roomInfo.roomId" size="small" type="primary" @click="handleCreateFee">
-          创建费用
-        </wd-button>
       </view>
-    </view>
+    </wd-form>
 
     <!-- 房屋信息 -->
     <view v-if="roomInfo.roomId">

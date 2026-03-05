@@ -119,6 +119,8 @@ const { send: loadFeeTypeCds, loading: feeTypeLoading } = useRequest(
     value: item.statusCd,
     label: item.name,
   }))
+}).onError((error) => {
+  console.error('加载收费类型失败:', error)
 })
 
 /** 加载收费项目列表 */
@@ -140,6 +142,8 @@ const { send: loadConfigs, loading: configsLoading } = useRequest(
     value: item.configId,
     label: item.feeName,
   }))
+}).onError((error) => {
+  console.error('加载收费项目失败:', error)
 })
 
 /** 提交创建费用 */
@@ -167,6 +171,8 @@ const { send: submitCreateFee, loading: submitLoading } = useRequest(
   const data = event.data as { totalRoom: number, successRoom: number, errorRoom: number }
   toast.success(`创建收费成功，总共[${data.totalRoom}]房屋，成功[${data.successRoom}],失败[${data.errorRoom}]`)
   uni.navigateBack()
+}).onError((error) => {
+  console.error('创建费用失败:', error)
 })
 
 // ==================== 生命周期 ====================

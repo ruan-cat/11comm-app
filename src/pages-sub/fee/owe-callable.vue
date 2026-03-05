@@ -68,6 +68,8 @@ const { send: loadOweFeeCallable, loading: listLoading } = useRequest(
   { immediate: false },
 ).onSuccess((event) => {
   callables.value = event.data.list || []
+}).onError((error) => {
+  console.error('加载欠费催缴列表失败:', error)
 })
 
 /**

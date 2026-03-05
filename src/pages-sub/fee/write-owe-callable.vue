@@ -84,6 +84,8 @@ const { send: loadFees, loading: feesLoading } = useRequest(
 ).onSuccess((event) => {
   const data = event.data as FeeListResponse
   fees.value = data.list || []
+}).onError((error) => {
+  console.error('加载费用列表失败:', error)
 })
 
 /** 提交欠费催缴 */
@@ -105,6 +107,8 @@ const { send: submitWriteCallable, loading: submitLoading } = useRequest(
   }
   toast.success(data.msg)
   uni.navigateBack()
+}).onError((error) => {
+  console.error('登记欠费催缴失败:', error)
 })
 
 // ==================== 生命周期 ====================
