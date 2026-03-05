@@ -3,7 +3,7 @@
  * 对应业务：采购申请、物品领用、物资调拨、仓库管理
  */
 
-import type { ApiResponse, PaginationResponse } from '@/types/api'
+import type { PaginationResponse } from '@/types/api'
 import { http } from '@/http/alova'
 
 /** ==================== 类型定义 ==================== */
@@ -72,6 +72,26 @@ export interface ApplyItem {
   createUserName: string
   /** 创建时间 */
   createTime: string
+  /** 仓库ID */
+  shId?: string
+  /** 仓库名称 */
+  shName?: string
+  /** 联系人 */
+  endUserName?: string
+  /** 联系电话 */
+  endUserTel?: string
+  /** 申请说明 */
+  description?: string
+  /** 订单类型 */
+  resOrderType?: string
+  /** 采购申请详情列表 */
+  purchaseApplyDetailVo?: Array<{
+    resId: string
+    resName: string
+    resCode: string
+    price: number
+    quantity: number
+  }>
 }
 
 /** 调拨申请项 */
@@ -188,91 +208,91 @@ export interface AuditReq {
 
 /** 1. 查询物资列表 */
 export function listResourceStores(params: { page: number, row: number, communityId?: string, shId?: string }) {
-  return http.Get<ApiResponse<PaginationResponse<ResourceStore>>>('/app/resourceStore.listResourceStores', {
+  return http.Get<PaginationResponse<ResourceStore>>('/app/resourceStore.listResourceStores', {
     params,
   })
 }
 
 /** 2. 查询仓库列表 */
 export function listStoreHouses(params: { page: number, row: number, communityId?: string, allowPurchase?: string }) {
-  return http.Get<ApiResponse<PaginationResponse<StoreHouse>>>('/app/resourceStore.listStorehouses', {
+  return http.Get<PaginationResponse<StoreHouse>>('/app/resourceStore.listStorehouses', {
     params,
   })
 }
 
 /** 3. 查询采购申请列表 */
 export function queryPurchaseApplyList(params: { page: number, row: number, communityId?: string, userId?: string }) {
-  return http.Get<ApiResponse<PaginationResponse<ApplyItem>>>('/app/purchaseApply.listPurchaseApplys', {
+  return http.Get<PaginationResponse<ApplyItem>>('/app/purchaseApply.listPurchaseApplys', {
     params,
   })
 }
 
 /** 4. 查询领用申请列表 */
 export function queryItemOutList(params: { page: number, row: number, communityId?: string, userId?: string }) {
-  return http.Get<ApiResponse<PaginationResponse<ApplyItem>>>('/app/itemRelease.listItemRelease', {
+  return http.Get<PaginationResponse<ApplyItem>>('/app/itemRelease.listItemRelease', {
     params,
   })
 }
 
 /** 5. 查询调拨申请列表 */
 export function listAllocationStorehouseApplys(params: { page: number, row: number, communityId?: string, userId?: string }) {
-  return http.Get<ApiResponse<PaginationResponse<AllocationItem>>>('/app/resourceStore.listAllocationStorehouseApplys', {
+  return http.Get<PaginationResponse<AllocationItem>>('/app/resourceStore.listAllocationStorehouseApplys', {
     params,
   })
 }
 
 /** 6. 查询采购待办列表 */
 export function listMyAuditOrders(params: { page: number, row: number, communityId?: string }) {
-  return http.Get<ApiResponse<PaginationResponse<AuditTask>>>('/app/purchaseApply.listMyAuditOrders', {
+  return http.Get<PaginationResponse<AuditTask>>('/app/purchaseApply.listMyAuditOrders', {
     params,
   })
 }
 
 /** 7. 查询领用待办列表 */
 export function listMyItemOutOrders(params: { page: number, row: number, communityId?: string }) {
-  return http.Get<ApiResponse<PaginationResponse<AuditTask>>>('/app/itemRelease.queryUndoItemRelease', {
+  return http.Get<PaginationResponse<AuditTask>>('/app/itemRelease.queryUndoItemRelease', {
     params,
   })
 }
 
 /** 8. 查询调拨待办列表 */
 export function listMyAllocationStoreAuditOrders(params: { page: number, row: number, communityId?: string }) {
-  return http.Get<ApiResponse<PaginationResponse<AuditTask>>>('/app/resourceStore.listAllocationStoreAuditOrders', {
+  return http.Get<PaginationResponse<AuditTask>>('/app/resourceStore.listAllocationStoreAuditOrders', {
     params,
   })
 }
 
 /** 9. 查询采购已办列表 */
 export function listAuditHistoryOrders(params: { page: number, row: number, communityId?: string }) {
-  return http.Get<ApiResponse<PaginationResponse<AuditTask>>>('/app/purchaseApply.listAuditHistoryOrders', {
+  return http.Get<PaginationResponse<AuditTask>>('/app/purchaseApply.listAuditHistoryOrders', {
     params,
   })
 }
 
 /** 10. 查询领用已办列表 */
 export function listItemOutAuditHistoryOrders(params: { page: number, row: number, communityId?: string }) {
-  return http.Get<ApiResponse<PaginationResponse<AuditTask>>>('/app/itemRelease.queryFinishItemRelease', {
+  return http.Get<PaginationResponse<AuditTask>>('/app/itemRelease.queryFinishItemRelease', {
     params,
   })
 }
 
 /** 11. 查询调拨已办列表 */
 export function getAllocationHisAudit(params: { page: number, row: number, communityId?: string }) {
-  return http.Get<ApiResponse<PaginationResponse<AuditTask>>>('/app/resourceStore.listAllocationStoreHisAuditOrders', {
+  return http.Get<PaginationResponse<AuditTask>>('/app/resourceStore.listAllocationStoreHisAuditOrders', {
     params,
   })
 }
 
 /** 12. 查询物品类型 */
 export function listResourceStoreTypes(params: { page: number, row: number, communityId?: string }) {
-  return http.Get<ApiResponse<PaginationResponse<ResourceStoreType>>>('/app/resourceStoreType.listResourceStoreTypes', {
+  return http.Get<PaginationResponse<ResourceStoreType>>('/app/resourceStoreType.listResourceStoreTypes', {
     params,
   })
 }
 
 /** 13. 查询调拨物品列表 */
 export function listAllocationStorehouses(params: { page: number, row: number, communityId?: string }) {
-  return http.Get<ApiResponse<PaginationResponse<ResourceStore>>>('/app/resourceStore.listAllocationStorehouses', {
+  return http.Get<PaginationResponse<ResourceStore>>('/app/resourceStore.listAllocationStorehouses', {
     params,
   })
 }
@@ -291,17 +311,33 @@ export function savePurchaseApply(data: {
   description: string
   resOrderType: string
 }) {
-  return http.Post<ApiResponse<void>>('/app/purchase/purchaseApply', { data })
+  return http.Post<void>('/app/purchase/purchaseApply', { data })
+}
+
+/** 14.1 更新采购申请 */
+export function updatePurchaseApply(data: {
+  applyOrderId: string
+  resourceStores: Array<{
+    resId: string
+    resName: string
+    resCode: string
+    price: number
+    quantity: number
+  }>
+  description: string
+  resOrderType: string
+}) {
+  return http.Post<void>('/app/purchase/updatePurchaseApply', { data })
 }
 
 /** 15. 提交领用申请 */
 export function saveItemOutApply(data: SaveItemOutReq) {
-  return http.Post<ApiResponse<void>>('/app/collection/resourceOut', { data })
+  return http.Post<void>('/app/collection/resourceOut', { data })
 }
 
 /** 16. 提交调拨申请 */
 export function saveAllocationStorehouse(data: SaveAllocationReq) {
-  return http.Post<ApiResponse<void>>('/app/resourceStore.saveAllocationStorehouse', { data })
+  return http.Post<void>('/app/resourceStore.saveAllocationStorehouse', { data })
 }
 
 /** 17. 提交入库 */
@@ -316,7 +352,7 @@ export function saveResourceEnter(data: {
   description: string
   applyOrderId: string
 }) {
-  return http.Post<ApiResponse<void>>('/app/purchase/resourceEnter', { data })
+  return http.Post<void>('/app/purchase/resourceEnter', { data })
 }
 
 /** 18. 提交出库 */
@@ -331,7 +367,7 @@ export function saveResourceOut(data: {
   description: string
   applyOrderId: string
 }) {
-  return http.Post<ApiResponse<void>>('/app/collection/resourceOut', { data })
+  return http.Post<void>('/app/collection/resourceOut', { data })
 }
 
 /** 19. 提交调拨入库 */
@@ -346,32 +382,32 @@ export function allocationStoreEnter(data: {
   description: string
   applyOrderId: string
 }) {
-  return http.Post<ApiResponse<void>>('/app/resourceStore.allocationStoreEnter', { data })
+  return http.Post<void>('/app/resourceStore.allocationStoreEnter', { data })
 }
 
 /** 20. 采购审核 */
 export function saveAuditOrders(data: AuditReq) {
-  return http.Post<ApiResponse<void>>('/app/purchaseApply.auditApplyOrder', { data })
+  return http.Post<void>('/app/purchaseApply.auditApplyOrder', { data })
 }
 
 /** 21. 领用审核 */
 export function auditUndoItemRelease(data: AuditReq) {
-  return http.Post<ApiResponse<void>>('/app/itemRelease.auditUndoItemRelease', { data })
+  return http.Post<void>('/app/itemRelease.auditUndoItemRelease', { data })
 }
 
 /** 22. 调拨审核 */
 export function saveAuditAllocationStoreOrder(data: AuditReq) {
-  return http.Post<ApiResponse<void>>('/app/resourceStore.auditAllocationStoreOrder', { data })
+  return http.Post<void>('/app/resourceStore.auditAllocationStoreOrder', { data })
 }
 
 /** 23. 取消采购申请 */
 export function deletePurchaseApply(data: { applyOrderId: string }) {
-  return http.Post<ApiResponse<void>>('/app/purchaseApply.deletePurchaseApply', { data })
+  return http.Post<void>('/app/purchaseApply.deletePurchaseApply', { data })
 }
 
 /** 24. 取消调拨 */
 export function deleteAllocationStorehouse(data: { allocationId: string }) {
-  return http.Post<ApiResponse<void>>('/app/resourceStore.deleteAllocationStorehouse', { data })
+  return http.Post<void>('/app/resourceStore.deleteAllocationStorehouse', { data })
 }
 
 /** 25. 物品转赠 */
@@ -387,7 +423,7 @@ export function saveResourceStoreTransfer(data: {
   communityId: string
   targetUserId: string
 }) {
-  return http.Post<ApiResponse<void>>('/app/resourceStore.saveAllocationUserStorehouse', { data })
+  return http.Post<void>('/app/resourceStore.saveAllocationUserStorehouse', { data })
 }
 
 /** 26. 查询我的物资库存（个人物资） */
@@ -398,7 +434,7 @@ export function queryMyResourceStoreInfo(params: {
   resName?: string
   searchUserName?: string
 }) {
-  return http.Get<ApiResponse<PaginationResponse<ResourceStore>>>('/app/resourceStore.queryMyResourceStoreInfo', {
+  return http.Get<PaginationResponse<ResourceStore>>('/app/resourceStore.queryMyResourceStoreInfo', {
     params,
   })
 }
@@ -415,7 +451,7 @@ export function saveResourceReturn(data: {
   applyType: string
   communityId: string
 }) {
-  return http.Post<ApiResponse<void>>('/app/resourceStore.saveResourceReturn', { data })
+  return http.Post<void>('/app/resourceStore.saveResourceReturn', { data })
 }
 
 /** 28. 物资报废 */
@@ -430,5 +466,5 @@ export function saveResourceScrap(data: {
   flag: number
   communityId: string
 }) {
-  return http.Post<ApiResponse<void>>('/app/resourceStore.saveResourceScrap', { data })
+  return http.Post<void>('/app/resourceStore.saveResourceScrap', { data })
 }
