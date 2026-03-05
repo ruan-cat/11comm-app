@@ -9,6 +9,7 @@
 -->
 
 <script setup lang="ts">
+import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { ref } from 'vue'
@@ -37,6 +38,8 @@ interface ItemInfo {
 }
 
 const itemList = ref<ItemInfo[]>([])
+const formRef = ref()
+const formRules: FormRules = {}
 
 const { send: loadDetail, loading } = useRequest(
   (params: { page: number, row: number, applyOrderId: string }) =>
@@ -51,6 +54,8 @@ const { send: loadDetail, loading } = useRequest(
     stock: item.stock || 0,
     purchaseQuantity: '',
   }))
+}).onError((error) => {
+  console.error('加载调拨入库详情失败:', error)
 })
 
 const { send: submitEnter, loading: submitting } = useRequest(
@@ -100,29 +105,24 @@ async function handleSubmit() {
     return
   }
 
-  try {
-    await submitEnter({
-      resourceStores: itemList.value.map(item => ({
-        resId: item.resId,
-        resName: item.resName,
-        resCode: '',
-        price: 0,
-        quantity: Number.parseInt(item.purchaseQuantity),
-      })),
-      description: '',
-      applyOrderId: applyOrderId.value,
-    })
-  }
-  catch (error) {
-    // error handled by onError
-  }
+  submitEnter({
+    resourceStores: itemList.value.map(item => ({
+      resId: item.resId,
+      resName: item.resName,
+      resCode: '',
+      price: 0,
+      quantity: Number.parseInt(item.purchaseQuantity),
+    })),
+    description: '',
+    applyOrderId: applyOrderId.value,
+  })
 }
 </script>
 
 <template>
   <view class="page-container">
     <wd-loading v-if="loading" />
-    <view v-else>
+    <wd-form v-else ref="formRef" :model="itemList" :rules="formRules">
       <FormSectionTitle title="调拨物品" />
 
       <wd-cell-group border>
@@ -154,7 +154,7 @@ async function handleSubmit() {
           提交入库
         </wd-button>
       </view>
-    </view>
+    </wd-form>
   </view>
 </template>
 
