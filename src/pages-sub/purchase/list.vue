@@ -50,8 +50,9 @@ const { send: loadPurchaseList, loading } = useRequest(
   if (data?.resourceStores) {
     purchaseList.value = data.resourceStores
   }
-}).onError((event) => {
-  toast.show({ msg: event.error?.message || '加载失败' })
+}).onError((error) => {
+  console.error('加载商品列表失败:', error)
+  // 全局拦截器已自动显示错误提示，无需重复处理
 })
 
 // ==================== 生命周期 ====================

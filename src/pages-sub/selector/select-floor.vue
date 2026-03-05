@@ -281,10 +281,7 @@ onMounted(() => {
   // 监听网络状态变化
   uni.onNetworkStatusChange((res) => {
     if (!res.isConnected) {
-      uni.showToast({
-        title: '网络连接已断开',
-        icon: 'none',
-      })
+      toast.error('网络连接已断开')
     }
   })
 })

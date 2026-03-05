@@ -76,7 +76,7 @@ const { loading: loadingTask, send: loadTaskDetail } = useRequest(
   })
   .onError((error) => {
     console.error('获取任务详情失败:', error)
-    toast.error('获取任务详情失败')
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 /** 获取保养项列表 */
