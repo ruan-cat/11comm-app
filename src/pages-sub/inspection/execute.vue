@@ -16,6 +16,7 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { computed, onMounted, ref } from 'vue'
 import { getInspectionTaskDetail } from '@/api/inspection'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 
 definePage({
@@ -24,6 +25,9 @@ definePage({
     enablePullDownRefresh: false,
   },
 })
+
+/** 全局 Toast */
+const toast = useGlobalToast()
 
 /** 路由参数 */
 const taskId = ref('')
@@ -74,10 +78,7 @@ const {
     taskDetails.value = data.list || []
   })
   .onError((error) => {
-    uni.showToast({
-      title: error.error || '请求失败',
-      icon: 'none',
-    })
+    toast.error(error.error || '请求失败')
   })
 
 async function getTaskDetails() {

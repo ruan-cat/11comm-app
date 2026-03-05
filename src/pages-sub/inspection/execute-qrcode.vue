@@ -17,6 +17,7 @@ import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
 import { getInspectionTaskDetail } from '@/api/inspection'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { redirectToTyped } from '@/router'
 
 definePage({
@@ -25,6 +26,9 @@ definePage({
     enablePullDownRefresh: false,
   },
 })
+
+/** 全局 Toast */
+const toast = useGlobalToast()
 
 /** 路由参数 */
 const inspectionId = ref('')
@@ -78,10 +82,8 @@ const { loading, send: sendQueryTaskDetails } = useRequest(
     }
   })
   .onError((error) => {
-    uni.showToast({
-      title: error.error || '请求失败',
-      icon: 'none',
-    })
+    console.error('请求失败:', error)
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 async function queryTaskDetails() {
