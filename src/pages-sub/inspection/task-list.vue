@@ -14,6 +14,7 @@ import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
 import { getInspectionTaskList } from '@/api/inspection'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 
 definePage({
@@ -22,6 +23,9 @@ definePage({
     enablePullDownRefresh: false,
   },
 })
+
+/** 全局 Toast */
+const toast = useGlobalToast()
 
 /** 巡检任务列表 */
 const tasks = ref<InspectionTask[]>([])
@@ -49,10 +53,7 @@ const {
     noData.value = tasks.value.length === 0
   })
   .onError((error) => {
-    uni.showToast({
-      title: error.error || '请求失败',
-      icon: 'none',
-    })
+    toast.error(error.error || '请求失败')
   })
 
 async function getInspectionTasks() {
@@ -69,10 +70,7 @@ function startInspection(item: InspectionTask) {
   const planTime = dayjs(item.planInsTime.replace(/-/g, '/'))
 
   if (now.isBefore(planTime)) {
-    uni.showToast({
-      title: '尚未开始',
-      icon: 'none',
-    })
+    toast.warning('尚未开始')
     return
   }
 

@@ -51,7 +51,8 @@ const {
     noData.value = inspections.value.length === 0
   })
   .onError((event) => {
-    toast.show({ msg: (event.error as any)?.message || '请求失败' })
+    console.error('请求失败:', event)
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 async function loadTodayReport() {

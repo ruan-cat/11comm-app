@@ -16,6 +16,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
 import { getInspectionTaskDetail } from '@/api/inspection'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 definePage({
   style: {
@@ -23,6 +24,9 @@ definePage({
     enablePullDownRefresh: false,
   },
 })
+
+/** 全局 Toast */
+const toast = useGlobalToast()
 
 /** 路由参数 */
 const staffId = ref('')
@@ -62,10 +66,8 @@ const {
     noData.value = inspections.value.length === 0
   })
   .onError((error) => {
-    uni.showToast({
-      title: error.error || '请求失败',
-      icon: 'none',
-    })
+    console.error('请求失败:', error)
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 async function loadStaffInspectionDetail() {

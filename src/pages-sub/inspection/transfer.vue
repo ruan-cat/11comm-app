@@ -86,9 +86,8 @@ const {
     staffList.value = event.data || []
   })
   .onError((event) => {
-    toast.show({
-      msg: event.error?.message || '获取员工列表失败',
-    })
+    console.error('获取员工列表失败:', event)
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 async function loadStaffList() {
@@ -123,9 +122,8 @@ const {
     }, 1500)
   })
   .onError((error) => {
-    toast.show({
-      msg: error.error || '流转失败',
-    })
+    console.error('流转失败:', error)
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 async function submitTransfer() {
