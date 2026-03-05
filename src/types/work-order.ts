@@ -131,6 +131,22 @@ export interface WorkOrderDetail extends WorkOrder {
   copyUsers?: WorkOrderCopyUser[]
   /** 操作记录 */
   operationLogs?: WorkOrderLog[]
+  /** 结束时间 */
+  endTime?: string
+  /** 执行人列表 */
+  staffs?: WorkOrderStaff[]
+  /** 抄送执行人列表 */
+  copyStaffs?: WorkOrderStaff[]
+}
+
+/**
+ * 工作单执行人信息
+ */
+export interface WorkOrderStaff {
+  /** 员工ID */
+  staffId: string
+  /** 员工姓名 */
+  staffName?: string
 }
 
 /**
