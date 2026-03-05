@@ -14,6 +14,7 @@
 import { useRequest } from 'alova/client'
 import { reactive, ref } from 'vue'
 import { getOpenDoorLogList } from '@/api/fee'
+import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -69,6 +70,7 @@ const { send: loadLogs, loading: logsLoading } = useRequest(
   openDoorLogs.value = list
   pagingRef.value?.complete(list)
 }).onError(() => {
+  toast.warning('加载开门记录失败')
   pagingRef.value?.complete(false)
 })
 
@@ -104,6 +106,15 @@ function handleQuery(pageNo: number, pageSize: number) {
 
     <!-- 列表 -->
     <z-paging ref="pagingRef" v-model="openDoorLogs" @query="handleQuery">
+      <template #loading>
+        <z-paging-loading
+          icon="time"
+          icon-class="i-carbon-time text-cyan-400 animate-pulse"
+          primary-text="正在加载开门记录..."
+          secondary-text="请稍候片刻"
+        />
+      </template>
+
       <view class="p-3">
         <view v-for="(item, index) in openDoorLogs" :key="index" class="log-card mb-3 rounded-lg bg-white p-3">
           <view class="flex items-center justify-between border-b border-gray-200 pb-2">

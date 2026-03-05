@@ -16,6 +16,7 @@ import { useRequest } from 'alova/client'
 import { reactive, ref } from 'vue'
 import { getPayFeeDetailReport, queryDictInfo } from '@/api/fee'
 import { getFloorList } from '@/api/floor'
+import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -78,6 +79,9 @@ const { send: loadFeeTypes } = useRequest(
     value: item.statusCd,
     label: item.name,
   }))
+}).onError((error) => {
+  console.error('加载费用类型失败:', error)
+  toast.warning('加载费用类型失败')
 })
 
 /** 加载楼栋列表 */
@@ -95,6 +99,9 @@ const { send: loadFloors } = useRequest(
     value: item.floorId,
     label: item.floorName,
   }))
+}).onError((error) => {
+  console.error('加载楼栋列表失败:', error)
+  toast.warning('加载楼栋列表失败')
 })
 
 /** 加载缴费明细 */
@@ -115,6 +122,7 @@ const { send: loadPayFeeDetails } = useRequest(
   payFeeDetails.value = list
   pagingRef.value?.complete(list)
 }).onError(() => {
+  toast.warning('加载缴费明细失败')
   pagingRef.value?.complete(false)
 })
 
@@ -160,6 +168,15 @@ loadFloors()
 
     <!-- 列表 -->
     <z-paging ref="pagingRef" v-model="payFeeDetails" @query="handleQuery">
+      <template #loading>
+        <z-paging-loading
+          icon="document"
+          icon-class="i-carbon-document text-blue-400 animate-pulse"
+          primary-text="正在加载缴费明细..."
+          secondary-text="请稍候片刻"
+        />
+      </template>
+
       <view class="p-3">
         <view v-for="(item, index) in payFeeDetails" :key="index" class="detail-card mb-3 rounded-lg bg-white p-3">
           <view class="flex items-center justify-between border-b border-gray-200 pb-2">

@@ -50,6 +50,9 @@ const { send: loadReport, loading: reportLoading } = useRequest(
 ).onSuccess((event) => {
   const data = event.data as { list: Array<{ name: string, value: number, unit?: string }> }
   reportData.value = data.list || []
+}).onError((error) => {
+  console.error('加载数据报表失败:', error)
+  toast.warning('加载数据报表失败')
 })
 
 /** 页面加载 */

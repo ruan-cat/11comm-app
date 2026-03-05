@@ -14,6 +14,7 @@
 import { useRequest } from 'alova/client'
 import { ref } from 'vue'
 import { getChargeMachineOrderList } from '@/api/fee'
+import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -67,6 +68,7 @@ const { send: loadOrders, loading: ordersLoading } = useRequest(
   orders.value = list
   pagingRef.value?.complete(list)
 }).onError(() => {
+  toast.warning('加载充电桩订单失败')
   pagingRef.value?.complete(false)
 })
 
@@ -80,6 +82,15 @@ function handleQuery(pageNo: number, pageSize: number) {
   <view class="charge-order-page">
     <!-- 列表 -->
     <z-paging ref="pagingRef" v-model="orders" @query="handleQuery">
+      <template #loading>
+        <z-paging-loading
+          icon="document"
+          icon-class="i-carbon-document text-orange-400 animate-pulse"
+          primary-text="正在加载充电桩订单..."
+          secondary-text="请稍候片刻"
+        />
+      </template>
+
       <view class="p-3">
         <view v-for="(item, index) in orders" :key="index" class="order-card mb-3 rounded-lg bg-white p-3">
           <view class="flex items-center justify-between border-b border-gray-200 pb-2">

@@ -16,6 +16,7 @@ import { useRequest } from 'alova/client'
 import { reactive, ref } from 'vue'
 import { getRoomFeeReport, queryDictInfo } from '@/api/fee'
 import { getFloorList } from '@/api/floor'
+import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -70,6 +71,9 @@ const { send: loadFeeTypes } = useRequest(
 ).onSuccess((event) => {
   const data = event.data as Array<{ statusCd: string, name: string }>
   feeTypeCds.value = data.map(item => ({ value: item.statusCd, label: item.name }))
+}).onError((error) => {
+  console.error('加载费用类型失败:', error)
+  toast.warning('加载费用类型失败')
 })
 
 /** 加载楼栋列表 */
@@ -79,6 +83,9 @@ const { send: loadFloors } = useRequest(
 ).onSuccess((event) => {
   const data = event.data as { list: Array<{ floorId: string, floorName: string }> }
   floors.value = (data.list || []).map(item => ({ value: item.floorId, label: item.floorName }))
+}).onError((error) => {
+  console.error('加载楼栋列表失败:', error)
+  toast.warning('加载楼栋列表失败')
 })
 
 /** 加载房间费用 */
@@ -99,6 +106,7 @@ const { send: loadRoomFees } = useRequest(
   roomFees.value = list
   pagingRef.value?.complete(list)
 }).onError(() => {
+  toast.warning('加载房间费用失败')
   pagingRef.value?.complete(false)
 })
 
@@ -138,6 +146,15 @@ loadFloors()
 
     <!-- 列表 -->
     <z-paging ref="pagingRef" v-model="roomFees" @query="handleQuery">
+      <template #loading>
+        <z-paging-loading
+          icon="home"
+          icon-class="i-carbon-home text-purple-400 animate-pulse"
+          primary-text="正在加载房间费用..."
+          secondary-text="请稍候片刻"
+        />
+      </template>
+
       <view class="p-3">
         <view v-for="(item, index) in roomFees" :key="index" class="detail-card mb-3 rounded-lg bg-white p-3">
           <view class="flex items-center justify-between border-b border-gray-200 pb-2">

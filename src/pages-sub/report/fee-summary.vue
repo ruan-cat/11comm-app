@@ -83,6 +83,9 @@ const { send: loadFeeTypes } = useRequest(
     value: item.statusCd,
     label: item.name,
   }))
+}).onError((error) => {
+  console.error('加载费用类型失败:', error)
+  toast.warning('加载费用类型失败')
 })
 
 /** 加载楼栋列表 */
@@ -100,6 +103,9 @@ const { send: loadFloors } = useRequest(
     value: item.floorId,
     label: item.floorName,
   }))
+}).onError((error) => {
+  console.error('加载楼栋列表失败:', error)
+  toast.warning('加载楼栋列表失败')
 })
 
 /** 加载费用汇总 */
@@ -120,6 +126,9 @@ const { send: loadFeeSummary, loading: summaryLoading } = useRequest(
   if (data.list && data.list.length > 0) {
     feeSummary.value = data.list[0]
   }
+}).onError((error) => {
+  console.error('加载费用汇总失败:', error)
+  toast.warning('加载费用汇总失败')
 })
 
 /** 费用类型变更 */
