@@ -64,6 +64,10 @@ function handleQuery(pageNo: number, pageSize: number) {
   loadRecordListRequest({
     page: pageNo,
     row: pageSize,
+    communityId: applyRoomInfo.value.communityId,
+    applicationId: applyRoomInfo.value.ardId,
+    roomId: applyRoomInfo.value.roomId,
+    roomName: applyRoomInfo.value.roomName,
   })
 }
 

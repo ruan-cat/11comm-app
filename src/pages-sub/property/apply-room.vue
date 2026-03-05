@@ -84,7 +84,8 @@ function handleQuery(pageNo: number, pageSize: number) {
   loadApplyListRequest({
     page: pageNo,
     row: pageSize,
-  } as PropertyApplicationListParams)
+    communityId: communityId.value,
+  })
 }
 
 /** 搜索申请 - 重置到第一页并刷新 */
