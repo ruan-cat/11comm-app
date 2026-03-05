@@ -76,6 +76,8 @@ const { send: loadStoreHouses } = useRequest(
     label: item.shName,
     value: item.shId,
   }))
+}).onError((error) => {
+  console.error('加载仓库列表失败:', error)
 })
 
 const { send: submitAllocation, loading: submitting } = useRequest(
@@ -92,7 +94,14 @@ const { send: submitAllocation, loading: submitting } = useRequest(
     toShId: string
   }) => saveAllocationStorehouse(data),
   { immediate: false },
-)
+).onSuccess(() => {
+  toast.success('提交成功')
+  setTimeout(() => {
+    uni.navigateBack()
+  }, 1500)
+}).onError((error) => {
+  console.error('提交调拨申请失败:', error)
+})
 
 onShow(() => {
   loadStoreHouses()
@@ -139,21 +148,12 @@ async function handleSubmit() {
         return
       }
 
-      try {
-        await submitAllocation({
-          resourceStores: itemList.value,
-          description: model.description,
-          fromShId: model.fromShId,
-          toShId: model.toShId,
-        })
-        toast.success('提交成功')
-        setTimeout(() => {
-          uni.navigateBack()
-        }, 1500)
-      }
-      catch (error) {
-        toast.error('提交失败')
-      }
+      submitAllocation({
+        resourceStores: itemList.value,
+        description: model.description,
+        fromShId: model.fromShId,
+        toShId: model.toShId,
+      })
     })
     .catch((error: any) => {
       console.error('表单校验异常:', error)
