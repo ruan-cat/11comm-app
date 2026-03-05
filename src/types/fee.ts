@@ -16,6 +16,8 @@ export interface Fee {
   feeName: string
   /** 费用类型 */
   feeType: FeeType
+  /** 费用类型名称 */
+  feeTypeCdName?: string
   /** 房间ID */
   roomId: string
   /** 房间名称 */
@@ -36,6 +38,10 @@ export interface Fee {
   startTime: string
   /** 费用结束时间 */
   endTime: string
+  /** 截止时间 */
+  deadlineTime?: string
+  /** 费用标识 */
+  feeFlagName?: string
   /** 状态 */
   state: FeeState
   /** 状态名称 */
@@ -64,12 +70,16 @@ export interface FeeListParams {
   state?: string
   /** 业主姓名 */
   ownerName?: string
+  /** 费用ID */
+  feeId?: string
+  /** 缴费对象ID（房间ID或其他对象ID） */
+  payerObjId?: string
 }
 
 /** 费用列表响应 */
 export interface FeeListResponse {
   /** 费用列表 */
-  data: Fee[]
+  list: Fee[]
   /** 总数量 */
   total: number
   /** 当前页码 */
@@ -102,6 +112,8 @@ export interface FeeDetail {
   payMethod: string
   /** 缴费状态 */
   payState: string
+  /** 缴费周期 */
+  cycles?: string
   /** 创建时间 */
   createTime: string
 }
@@ -121,7 +133,7 @@ export interface FeeDetailParams {
 /** 费用详情响应 */
 export interface FeeDetailResponse {
   /** 费用详情列表 */
-  feeDetails: FeeDetail[]
+  list: FeeDetail[]
 }
 
 /** 欠费信息 */
