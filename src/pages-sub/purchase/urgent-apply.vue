@@ -66,8 +66,12 @@ const resourceStores = ref<
   Array<{
     resId: string
     resName: string
+    resCode: string
     parentRstName?: string
     rstName?: string
+    price: number
+    stock: number
+    description: string
     quantity: number
     urgentPrice: number
     remark: string
@@ -81,7 +85,7 @@ const formRules: FormRules = {
   endUserName: [{ required: true, message: '请输入使用人' }],
   endUserTel: [
     { required: true, message: '请输入联系电话' },
-    { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号' },
+    { required: false, pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号' },
   ],
   description: [{ required: true, message: '请输入申请说明' }],
 }
@@ -91,7 +95,15 @@ const formRules: FormRules = {
 /** 提交紧急采购申请 */
 const { send: submitUrgentPurchase, loading: submitting } = useRequest(
   (data: {
-    resourceStores: typeof resourceStores.value
+    resourceStores: Array<{
+      resId: string
+      resName: string
+      resCode: string
+      price: number
+      stock: number
+      description: string
+      quantity: number
+    }>
     description: string
     resOrderType: string
     endUserName: string
@@ -102,19 +114,46 @@ const { send: submitUrgentPurchase, loading: submitting } = useRequest(
     immediate: false,
   },
 )
+  .onSuccess(() => {
+    canSubmit.value = true
+    toast.success('提交成功')
+    setTimeout(() => {
+      uni.navigateBack({
+        delta: 1,
+      })
+    }, 1500)
+  })
+  .onError(() => {
+    canSubmit.value = true
+    console.error('提交失败')
+  })
 
 // ==================== 生命周期 ====================
 
 onShow(() => {
   // 监听商品选择事件
   uni.$off('urgentPurchaseSelect')
-  uni.$on('urgentPurchaseSelect', (list: typeof resourceStores.value) => {
+  uni.$on('urgentPurchaseSelect', (list: Array<{
+    resId: string
+    resName: string
+    resCode: string
+    parentRstName?: string
+    rstName?: string
+    price: number
+    stock: number
+    description: string
+    urgentPrice?: number
+  }>) => {
     if (list && list.length > 0) {
       // 设置每个商品的默认值
       resourceStores.value = list.map(item => ({
         ...item,
-        quantity: 0,
-        urgentPrice: item.urgentPrice || 0,
+        resCode: item.resCode || '',
+        price: item.price || 0,
+        stock: item.stock || 0,
+        description: item.description || '',
+        quantity: 1,
+        urgentPrice: item.urgentPrice || item.price || 0,
         remark: '',
       }))
     }
@@ -154,63 +193,54 @@ function handleIncQuantity(resId: string) {
 }
 
 /** 提交表单 */
-async function handleSubmit() {
+function handleSubmit() {
   // 验证商品
   if (resourceStores.value.length === 0) {
-    toast.showToast('请选择商品', 'none')
+    toast.error('请选择商品')
     return
   }
 
   // 验证每个商品
   for (const item of resourceStores.value) {
     if (!item.quantity || item.quantity < 1) {
-      toast.showToast('请完善数量信息', 'none')
+      toast.error('请完善数量信息')
       return
     }
     if (!item.urgentPrice || item.urgentPrice <= 0) {
-      toast.showToast('请完善价格信息', 'none')
+      toast.error('请完善价格信息')
       return
     }
   }
 
   // 验证表单
-  try {
-    await formRef.value.validate()
-  }
-  catch {
-    return
-  }
+  formRef.value.validate()
+    .then(() => {
+      if (!canSubmit.value || submitting.value)
+        return
+      canSubmit.value = false
 
-  if (!canSubmit.value || submitting.value)
-    return
-  canSubmit.value = false
+      const data = {
+        resourceStores: resourceStores.value.map(item => ({
+          resId: item.resId,
+          resName: item.resName,
+          resCode: item.resCode,
+          price: item.urgentPrice,
+          stock: item.stock,
+          description: item.remark,
+          quantity: item.quantity,
+        })),
+        description: model.description,
+        resOrderType: RES_ORDER_TYPE,
+        endUserName: model.endUserName,
+        endUserTel: model.endUserTel,
+        communityId: communityInfo.communityId,
+      }
 
-  const data = {
-    resourceStores: resourceStores.value,
-    description: model.description,
-    resOrderType: RES_ORDER_TYPE,
-    endUserName: model.endUserName,
-    endUserTel: model.endUserTel,
-    communityId: communityInfo.communityId,
-  }
-
-  try {
-    await submitUrgentPurchase(data)
-
-    toast.showToast('提交成功', 'success')
-
-    setTimeout(() => {
-      uni.navigateBack({
-        delta: 1,
-      })
-    }, 1500)
-  }
-  catch (error: any) {
-    toast.showToast(error?.message || '提交失败', 'none')
-  }
-  finally {
-    canSubmit.value = true
-  }
+      submitUrgentPurchase(data)
+    })
+    .catch(() => {
+      // 表单校验失败，不做处理
+    })
 }
 </script>
 

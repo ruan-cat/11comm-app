@@ -32,9 +32,6 @@ const communityInfo = getCurrentCommunity()
 /** 全局 Toast */
 const toast = useGlobalToast()
 
-/** 路由对象 */
-const router = useRouter()
-
 // ==================== 页面状态 ====================
 
 /** 商品列表 */
@@ -48,21 +45,20 @@ const { send: loadPurchaseList, loading } = useRequest(
   {
     immediate: false,
   },
-)
+).onSuccess((event) => {
+  const data = event.data as { resourceStores?: typeof purchaseList.value }
+  if (data?.resourceStores) {
+    purchaseList.value = data.resourceStores
+  }
+}).onError((event) => {
+  toast.show({ msg: event.error?.message || '加载失败' })
+})
 
 // ==================== 生命周期 ====================
 
 onLoad((options) => {
   const communityId = options?.communityId || communityInfo.communityId
   loadPurchaseList({ page: 1, row: 50, communityId })
-    .then((res) => {
-      if (res?.resourceStores) {
-        purchaseList.value = res.resourceStores
-      }
-    })
-    .catch((error) => {
-      toast.showToast(error?.message || '加载失败', 'none')
-    })
 })
 
 // ==================== 方法 ====================

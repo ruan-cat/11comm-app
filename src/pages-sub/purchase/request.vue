@@ -10,7 +10,6 @@
 
 <script setup lang="ts">
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
-import type { TypedRouter } from '@/router'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { computed, reactive, ref } from 'vue'
@@ -38,9 +37,6 @@ const communityInfo = getCurrentCommunity()
 
 /** 全局 Toast */
 const toast = useGlobalToast()
-
-/** 路由对象 */
-const router = useRouter()
 
 // ==================== 页面状态 ====================
 
@@ -102,7 +98,7 @@ const hasSelectedItem = computed(() => {
 const formRules: FormRules = {
   numberPuchase: [
     { required: true, message: '请输入采购数量' },
-    { pattern: /^[1-9]\d*$/, message: '采购数量必须为正整数' },
+    { required: false, pattern: /^[1-9]\d*$/, message: '采购数量必须为正整数' },
   ],
   explainPuchase: [{ required: true, message: '请输入申请说明' }],
 }
@@ -128,6 +124,17 @@ const { send: submitPurchase, loading: submitting } = useRequest(
     immediate: false,
   },
 )
+  .onSuccess(() => {
+    toast.success('提交成功')
+    setTimeout(() => {
+      uni.switchTab({
+        url: '/pages/index/index',
+      })
+    }, 1500)
+  })
+  .onError((error) => {
+    console.error('提交失败:', error)
+  })
 
 // ==================== 生命周期 ====================
 
@@ -136,17 +143,26 @@ onLoad(() => {
 })
 
 onShow(() => {
-  // 获取选择商品信息
-  const floorInfo = (router as TypedRouter).getParams('floorInfo')
-  if (floorInfo) {
-    const info = typeof floorInfo === 'string' ? JSON.parse(floorInfo) : floorInfo
-    model.resId = info.resId || ''
-    model.resCode = info.resCode || ''
-    model.typeName = info.resName || '请选择'
-    model.price = Number(info.price) || 0
-    model.stock = Number(info.stock) || 0
-    model.description = info.description || ''
-  }
+  // 监听商品选择事件
+  uni.$off('purchaseSelect')
+  uni.$on('purchaseSelect', (info: {
+    resId: string
+    resName: string
+    resCode: string
+    price: number
+    stock: number
+    description: string
+  }) => {
+    if (info) {
+      model.resId = info.resId || ''
+      model.resCode = info.resCode || ''
+      model.typeName = info.resName || '请选择'
+      model.price = Number(info.price) || 0
+      model.stock = Number(info.stock) || 0
+      model.description = info.description || ''
+      selectedIndex.value = 0
+    }
+  })
 })
 
 // ==================== 方法 ====================
@@ -170,52 +186,38 @@ function handleExplainChange(e: Event) {
 }
 
 /** 提交采购申请 */
-async function handleSubmit() {
+function handleSubmit() {
   if (!hasSelectedItem.value) {
-    toast.showToast('请先选择商品', 'none')
+    toast.show('请先选择商品')
     return
   }
 
-  try {
-    await formRef.value.validate()
-  }
-  catch {
-    return
-  }
+  formRef.value.validate()
+    .then(() => {
+      if (submitting.value)
+        return
 
-  if (submitting.value)
-    return
+      const data = {
+        resourceStores: [
+          {
+            resId: model.resId,
+            resName: model.typeName,
+            resCode: model.resCode,
+            price: model.price,
+            stock: model.stock,
+            description: model.explainPuchase,
+            quantity: model.numberPuchase,
+          },
+        ],
+        description: model.description,
+        resOrderType: '10000',
+      }
 
-  const data = {
-    resourceStores: [
-      {
-        resId: model.resId,
-        resName: model.typeName,
-        resCode: model.resCode,
-        price: model.price,
-        stock: model.stock,
-        description: model.explainPuchase,
-        quantity: model.numberPuchase,
-      },
-    ],
-    description: model.description,
-    resOrderType: '10000',
-  }
-
-  try {
-    await submitPurchase(data)
-
-    toast.showToast('提交成功', 'success')
-
-    setTimeout(() => {
-      uni.switchTab({
-        url: '/pages/index/index',
-      })
-    }, 1500)
-  }
-  catch (error: any) {
-    toast.showToast(error?.message || '提交失败', 'none')
-  }
+      submitPurchase(data)
+    })
+    .catch(() => {
+      // 表单校验失败，不做处理
+    })
 }
 </script>
 
