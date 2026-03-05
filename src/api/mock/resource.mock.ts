@@ -286,8 +286,9 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStore.listResourceStores',
     method: 'GET',
-    timeout: randomDelay(),
-    response: ({ query }) => {
+    delay: [200, 800],
+    body: async ({ query }) => {
+      await randomDelay(200, 800)
       mockLog('listResourceStores', query)
       const { page = 1, row = 10 } = query as { page?: number, row?: number }
       const start = (page - 1) * row
@@ -306,8 +307,9 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStore.listStorehouses',
     method: 'GET',
-    timeout: randomDelay(),
-    response: ({ query }) => {
+    delay: [200, 800],
+    body: async ({ query }) => {
+      await randomDelay(200, 800)
       mockLog('listStorehouses', query)
       const { page = 1, row = 10, allowPurchase } = query as { page?: number, row?: number, allowPurchase?: string }
       let filteredList = storeHouseList
@@ -330,8 +332,9 @@ export default defineUniAppMock([
   {
     url: '/app/purchaseApply.listPurchaseApplys',
     method: 'GET',
-    timeout: randomDelay(),
-    response: ({ query }) => {
+    delay: [200, 800],
+    body: async ({ query }) => {
+      await randomDelay(200, 800)
       mockLog('queryPurchaseApplyList', query)
       const { page = 1, row = 10 } = query as { page?: number, row?: number }
       const start = (page - 1) * row
@@ -350,8 +353,9 @@ export default defineUniAppMock([
   {
     url: '/app/itemRelease.listItemRelease',
     method: 'GET',
-    timeout: randomDelay(),
-    response: ({ query }) => {
+    delay: [200, 800],
+    body: async ({ query }) => {
+      await randomDelay(200, 800)
       mockLog('queryItemOutList', query)
       const { page = 1, row = 10 } = query as { page?: number, row?: number }
       const start = (page - 1) * row
@@ -370,8 +374,9 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStore.listAllocationStorehouseApplys',
     method: 'GET',
-    timeout: randomDelay(),
-    response: ({ query }) => {
+    delay: [200, 800],
+    body: async ({ query }) => {
+      await randomDelay(200, 800)
       mockLog('listAllocationStorehouseApplys', query)
       const { page = 1, row = 10 } = query as { page?: number, row?: number }
       const start = (page - 1) * row
@@ -390,8 +395,9 @@ export default defineUniAppMock([
   {
     url: '/app/purchaseApply.listMyAuditOrders',
     method: 'GET',
-    timeout: randomDelay(),
-    response: ({ query }) => {
+    delay: [200, 800],
+    body: async ({ query }) => {
+      await randomDelay(200, 800)
       mockLog('listMyAuditOrders', query)
       const { page = 1, row = 10 } = query as { page?: number, row?: number }
       const purchaseTasks = auditTaskList.filter(item => item.businessType === '采购审核')
@@ -411,8 +417,9 @@ export default defineUniAppMock([
   {
     url: '/app/itemRelease.queryUndoItemRelease',
     method: 'GET',
-    timeout: randomDelay(),
-    response: ({ query }) => {
+    delay: [200, 800],
+    body: async ({ query }) => {
+      await randomDelay(200, 800)
       mockLog('listMyItemOutOrders', query)
       const { page = 1, row = 10 } = query as { page?: number, row?: number }
       const itemOutTasks = auditTaskList.filter(item => item.businessType === '领用审核')
@@ -432,8 +439,9 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStore.listAllocationStoreAuditOrders',
     method: 'GET',
-    timeout: randomDelay(),
-    response: ({ query }) => {
+    delay: [200, 800],
+    body: async ({ query }) => {
+      await randomDelay(200, 800)
       mockLog('listMyAllocationStoreAuditOrders', query)
       const { page = 1, row = 10 } = query as { page?: number, row?: number }
       const allocationTasks = auditTaskList.filter(item => item.businessType === '调拨审核')
@@ -453,8 +461,8 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStoreType.listResourceStoreTypes',
     method: 'GET',
-    timeout: randomDelay(),
-    response: () => {
+    delay: [200, 800],
+    body: async () => {
       const types = [
         { rstId: 'T001', rstName: '办公家具', parentRstId: '' },
         { rstId: 'T002', rstName: '办公用品', parentRstId: '' },
@@ -473,8 +481,9 @@ export default defineUniAppMock([
   {
     url: '/app/purchase/purchaseApply',
     method: 'POST',
-    timeout: randomDelay(),
-    response: ({ body }) => {
+    delay: [200, 800],
+    body: async ({ body }) => {
+      await randomDelay(200, 800)
       mockLog('savePurchaseApply', body)
       const data = body as {
         resourceStores: Array<{ resId: string, resName: string }>
@@ -482,7 +491,7 @@ export default defineUniAppMock([
         resOrderType: string
       }
       const newApply = {
-        applyOrderId: `PA_${dayjs().format('YYYYMMDD')}_${generateId(3)}`,
+        applyOrderId: `PA_${dayjs().format('YYYYMMDD')}_${Math.random().toString().slice(2, 5)}`,
         resourceNames: data.resourceStores.map(item => item.resName).join('、'),
         state: 1200,
         stateName: '待审核',
@@ -500,8 +509,9 @@ export default defineUniAppMock([
   {
     url: '/app/collection/resourceOut',
     method: 'POST',
-    timeout: randomDelay(),
-    response: ({ body }) => {
+    delay: [200, 800],
+    body: async ({ body }) => {
+      await randomDelay(200, 800)
       mockLog('saveItemOutApply', body)
       const data = body as {
         resourceStores: Array<{ resId: string, resName: string }>
@@ -509,7 +519,7 @@ export default defineUniAppMock([
         resOrderType: string
       }
       const newApply = {
-        applyOrderId: `IO_${dayjs().format('YYYYMMDD')}_${generateId(3)}`,
+        applyOrderId: `IO_${dayjs().format('YYYYMMDD')}_${generateId('IO')}`,
         resourceNames: data.resourceStores.map(item => item.resName).join('、'),
         state: 1200,
         stateName: '待审核',
@@ -527,15 +537,16 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStore.saveAllocationStorehouse',
     method: 'POST',
-    timeout: randomDelay(),
-    response: ({ body }) => {
+    delay: [200, 800],
+    body: async ({ body }) => {
+      await randomDelay(200, 800)
       mockLog('saveAllocationStorehouse', body)
       const data = body as {
         resourceStores: Array<{ resId: string, resName: string }>
         description: string
       }
       const newApply = {
-        allocationId: `AL_${dayjs().format('YYYYMMDD')}_${generateId(3)}`,
+        allocationId: `AL_${dayjs().format('YYYYMMDD')}_${generateId('IO')}`,
         resourceNames: data.resourceStores.map(item => item.resName).join('、'),
         state: 1200,
         stateName: '待审核',
@@ -555,8 +566,9 @@ export default defineUniAppMock([
   {
     url: '/app/purchaseApply.auditApplyOrder',
     method: 'POST',
-    timeout: randomDelay(),
-    response: ({ body }) => {
+    delay: [200, 800],
+    body: async ({ body }) => {
+      await randomDelay(200, 800)
       mockLog('saveAuditOrders', body)
       const { taskId, status } = body as { taskId: string, status: string }
       const task = auditTaskList.find(item => item.taskId === taskId)
@@ -572,8 +584,9 @@ export default defineUniAppMock([
   {
     url: '/app/itemRelease.auditUndoItemRelease',
     method: 'POST',
-    timeout: randomDelay(),
-    response: ({ body }) => {
+    delay: [200, 800],
+    body: async ({ body }) => {
+      await randomDelay(200, 800)
       mockLog('auditUndoItemRelease', body)
       const { taskId, status } = body as { taskId: string, status: string }
       const task = auditTaskList.find(item => item.taskId === taskId)
@@ -589,8 +602,9 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStore.auditAllocationStoreOrder',
     method: 'POST',
-    timeout: randomDelay(),
-    response: ({ body }) => {
+    delay: [200, 800],
+    body: async ({ body }) => {
+      await randomDelay(200, 800)
       mockLog('saveAuditAllocationStoreOrder', body)
       const { taskId, status } = body as { taskId: string, status: string }
       const task = auditTaskList.find(item => item.taskId === taskId)
@@ -606,8 +620,9 @@ export default defineUniAppMock([
   {
     url: '/app/purchase/resourceEnter',
     method: 'POST',
-    timeout: randomDelay(),
-    response: () => {
+    delay: [200, 800],
+    body: async () => {
+      await randomDelay(200, 800)
       mockLog('saveResourceEnter')
       return successResponse(null, '入库成功')
     },
@@ -617,8 +632,9 @@ export default defineUniAppMock([
   {
     url: '/app/purchaseApply.deletePurchaseApply',
     method: 'POST',
-    timeout: randomDelay(),
-    response: ({ body }) => {
+    delay: [200, 800],
+    body: async ({ body }) => {
+      await randomDelay(200, 800)
       mockLog('deletePurchaseApply', body)
       const { applyOrderId } = body as { applyOrderId: string }
       const index = purchaseApplyList.findIndex(item => item.applyOrderId === applyOrderId)
@@ -633,8 +649,9 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStore.deleteAllocationStorehouse',
     method: 'POST',
-    timeout: randomDelay(),
-    response: ({ body }) => {
+    delay: [200, 800],
+    body: async ({ body }) => {
+      await randomDelay(200, 800)
       mockLog('deleteAllocationStorehouse', body)
       const { allocationId } = body as { allocationId: string }
       const index = allocationList.findIndex(item => item.allocationId === allocationId)
@@ -649,8 +666,9 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStore.allocationStoreEnter',
     method: 'POST',
-    timeout: randomDelay(),
-    response: () => {
+    delay: [200, 800],
+    body: async () => {
+      await randomDelay(200, 800)
       mockLog('allocationStoreEnter')
       return successResponse(null, '调拨入库成功')
     },
@@ -660,8 +678,9 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStore.saveAllocationUserStorehouse',
     method: 'POST',
-    timeout: randomDelay(),
-    response: () => {
+    delay: [200, 800],
+    body: async () => {
+      await randomDelay(200, 800)
       mockLog('saveResourceStoreTransfer')
       return successResponse(null, '转赠成功')
     },
@@ -671,8 +690,9 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStore.listAllocationStorehouses',
     method: 'GET',
-    timeout: randomDelay(),
-    response: ({ query }) => {
+    delay: [200, 800],
+    body: async ({ query }) => {
+      await randomDelay(200, 800)
       mockLog('listAllocationStorehouses', query)
       const { page = 1, row = 10 } = query as { page?: number, row?: number }
       const start = (page - 1) * row
@@ -691,8 +711,9 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStore.queryMyResourceStoreInfo',
     method: 'GET',
-    timeout: randomDelay(),
-    response: ({ query }) => {
+    delay: [200, 800],
+    body: async ({ query }) => {
+      await randomDelay(200, 800)
       mockLog('queryMyResourceStoreInfo', query)
       const { page = 1, row = 10, resName, searchUserName } = query as {
         page?: number
@@ -826,8 +847,9 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStore.saveResourceReturn',
     method: 'POST',
-    timeout: randomDelay(),
-    response: ({ body }) => {
+    delay: [200, 800],
+    body: async ({ body }) => {
+      await randomDelay(200, 800)
       mockLog('saveResourceReturn', body)
       return successResponse(null, '退还成功')
     },
@@ -837,8 +859,9 @@ export default defineUniAppMock([
   {
     url: '/app/resourceStore.saveResourceScrap',
     method: 'POST',
-    timeout: randomDelay(),
-    response: ({ body }) => {
+    delay: [200, 800],
+    body: async ({ body }) => {
+      await randomDelay(200, 800)
       mockLog('saveResourceScrap', body)
       return successResponse(null, '报废成功')
     },
