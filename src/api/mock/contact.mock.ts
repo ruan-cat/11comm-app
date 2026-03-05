@@ -26,8 +26,8 @@ function createMockContact(id: string): Contact {
   return {
     contactId: `CON_${id}`,
     name: generateChineseName(),
-    position: positionItem.value,
-    department: departmentItem.value as DepartmentType,
+    position: String(positionItem.value),
+    department: String(departmentItem.value) as DepartmentType,
     phone: generatePhoneNumber(),
     email: `employee${id}@property.com`,
     workTime: '09:00-18:00',
@@ -299,7 +299,8 @@ export default defineUniAppMock([
       await randomDelay(100, 200)
 
       try {
-        const departments = DEPARTMENT_TYPES.map((deptName) => {
+        const departments = CONTACT_DEPARTMENT_OPTIONS.map((deptItem) => {
+          const deptName = String(deptItem.value) as DepartmentType
           const deptContacts = mockContactDatabase.contacts.filter(c => c.department === deptName)
           return {
             departmentName: deptName,
