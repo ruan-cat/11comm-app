@@ -11,6 +11,7 @@
 import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
 import { deleteAllocationStorehouse, listAllocationStorehouseApplys } from '@/api/resource'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
@@ -21,6 +22,8 @@ definePage({
 })
 
 const communityInfo = getCurrentCommunity()
+
+const toast = useGlobalToast()
 
 const list = ref<any[]>([])
 const total = ref(0)
@@ -53,7 +56,7 @@ const { send: loadMore } = useRequest(
 const { send: cancelReq } = useRequest((data: { allocationId: string }) => deleteAllocationStorehouse(data), {
   immediate: false,
 }).onSuccess(() => {
-  uni.showToast({ title: '取消成功', icon: 'success' })
+  toast.success('取消成功')
   loadList({ page: 1, row: 10 })
 })
 

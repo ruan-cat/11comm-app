@@ -11,6 +11,7 @@
 import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
 import { listMyAuditOrders, saveAuditOrders } from '@/api/resource'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
@@ -24,6 +25,9 @@ definePage({
 
 /** 小区信息 */
 const communityInfo = getCurrentCommunity()
+
+/** Toast 提示 */
+const toast = useGlobalToast()
 
 // ==================== 列表状态 ====================
 
@@ -67,7 +71,7 @@ const { send: auditApply } = useRequest(
   (data: { taskId: string, status: string, remark?: string }) => saveAuditOrders(data),
   { immediate: false },
 ).onSuccess(() => {
-  uni.showToast({ title: '审核成功', icon: 'success' })
+  toast.success('审核成功')
   loadList({ page: 1, row: 10 })
 })
 

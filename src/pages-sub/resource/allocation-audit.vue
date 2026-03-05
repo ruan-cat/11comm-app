@@ -11,6 +11,7 @@
 import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
 import { getAllocationHisAudit, listMyAllocationStoreAuditOrders, saveAuditAllocationStoreOrder } from '@/api/resource'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
@@ -21,6 +22,8 @@ definePage({
 })
 
 const communityInfo = getCurrentCommunity()
+
+const toast = useGlobalToast()
 
 const list = ref<any[]>([])
 const total = ref(0)
@@ -56,7 +59,7 @@ const { send: auditApply } = useRequest(
   (data: { taskId: string, status: string, remark?: string }) => saveAuditAllocationStoreOrder(data),
   { immediate: false },
 ).onSuccess(() => {
-  uni.showToast({ title: '审核成功', icon: 'success' })
+  toast.success('审核成功')
   changeListType(currentPage.value)
 })
 
