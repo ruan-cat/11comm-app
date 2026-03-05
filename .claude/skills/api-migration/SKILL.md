@@ -1,6 +1,32 @@
 ---
 name: api-migration
-description: 专业的接口请求迁移专家，从 Java110Context + uni.request 迁移到 Alova + TypeScript + Mock 接口。当需要实现 API 接口迁移、编写 Mock 接口、定义接口类型、处理 useRequest 集成时使用。分页功能必须与 z-paging-integration 协同。
+description: |
+  专业的接口请求迁移专家，从 Java110Context + uni.request 迁移到 Alova + TypeScript + Mock 接口 - 提供 API 定义、Mock 实现、类型安全的完整迁移方案。
+
+  触发条件（满足任意一项即触发）：
+  - 需要实现 API 接口迁移（从 Vue2 到 Vue3）
+  - 需要编写 Mock 接口（*.mock.ts 文件）
+  - 需要定义接口类型（TypeScript 类型定义）
+  - 需要处理 useRequest 集成（Alova 请求管理）
+  - 用户提及"API 迁移"、"接口定义"、"Mock 数据"、"useRequest"等关键词
+  - 需要查阅旧项目接口地址（gitee-example/constant/url.js）
+  - 需要实现分页接口（PaginationParams、PaginationResponse）
+
+  必须协同的技能：
+  - api-error-handling（错误提示处理，几乎总是需要）
+  - z-paging-integration（分页功能时）
+  - use-wd-form（表单提交时）
+  - code-migration（从 Vue2 迁移时）
+
+  禁止项：
+  - 禁止使用 try/catch 包装 send() 函数
+  - 禁止使用 immediate: true（必须手动触发请求）
+  - 禁止在 Mock 文件中使用 ResultEnum（应使用 ResultEnumMap）
+  - 禁止 API 函数泛型包裹 ApiResponse（拦截器已自动解包）
+  - 禁止 Mock 接口 URL 包含 /api 前缀（应直接使用 /app 等路径）
+  - 禁止使用 defineMock（应使用 defineUniAppMock）
+
+  覆盖场景：所有 API 接口调用，包括列表查询、详情查询、创建、更新、删除、状态变更等 CRUD 操作。
 context: fork
 ---
 
@@ -186,6 +212,9 @@ const { send: loadStates } = useRequest(() => getRepairStates(), {
 #### ❌ 禁止：组合式解构写法（冗长型）
 
 ```typescript
+import { useGlobalToast } from "@/hooks/useGlobalToast";
+const toast = useGlobalToast();
+
 /** 暂停维修 */
 const {
 	send: stopRepair,
@@ -196,10 +225,7 @@ const {
 });
 
 onStopSuccess(() => {
-	uni.showToast({
-		title: "暂停成功",
-		icon: "success",
-	});
+	toast.success("暂停成功");
 
 	setTimeout(() => {
 		pagingRef.value?.reload();
@@ -207,10 +233,7 @@ onStopSuccess(() => {
 });
 
 onStopError((error) => {
-	uni.showToast({
-		title: error.error || "暂停失败",
-		icon: "none",
-	});
+	toast.error(error.error || "暂停失败");
 });
 ```
 
@@ -267,26 +290,23 @@ const { send: loadRepairOrderList } = useRequest(
 #### 场景 3：表单提交
 
 ```typescript
+import { useGlobalToast } from "@/hooks/useGlobalToast";
+const toast = useGlobalToast();
+
 /** 提交维修工单 */
 const { send: submitRepair, loading: submitting } = useRequest(
 	(params: RepairCreateParams) => createRepairOrder(params),
 	{ immediate: false },
 )
 	.onSuccess(() => {
-		uni.showToast({
-			title: "提交成功",
-			icon: "success",
-		});
+		toast.success("提交成功");
 
 		setTimeout(() => {
 			uni.navigateBack();
 		}, 1500);
 	})
 	.onError((error) => {
-		uni.showToast({
-			title: error.error || "提交失败",
-			icon: "none",
-		});
+		toast.error(error.error || "提交失败");
 	});
 ```
 
@@ -321,6 +341,9 @@ const {
 链式回调写法完美适配 `api-error-handling` 技能的错误处理规范:
 
 ```typescript
+import { useGlobalToast } from "@/hooks/useGlobalToast";
+const toast = useGlobalToast();
+
 const { send: loadData } = useRequest(() => getData(), {
 	immediate: false,
 })
@@ -330,10 +353,7 @@ const { send: loadData } = useRequest(() => getData(), {
 	})
 	.onError((error) => {
 		// 统一错误提示（符合 api-error-handling 规范）
-		uni.showToast({
-			title: error.error || "操作失败",
-			icon: "none",
-		});
+		toast.error(error.error || "操作失败");
 	});
 ```
 

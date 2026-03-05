@@ -1,6 +1,28 @@
 ---
 name: api-error-handling
-description: 接口错误提示能力 - 提供统一的接口错误提示标准和实施方案，基于 wot-design-uni 和 Alova useRequest 回调模式。当需要实现接口错误提示、处理 useRequest onError 回调、全局错误拦截时使用。几乎所有 API 调用都需要此技能。
+description: |
+  接口错误提示能力 - 提供统一的接口错误提示标准和实施方案，基于 wot-design-uni 和 Alova useRequest 回调模式。
+
+  触发条件（满足任意一项即触发）：
+  - 编写任何 API 接口调用代码（使用 useRequest）
+  - 处理 useRequest 的 onError 回调
+  - 实现全局错误拦截逻辑
+  - 用户提及"接口错误提示"、"错误处理"、"Toast 提示"等关键词
+  - 从 Vue2 迁移 API 调用（需要添加错误处理）
+  - 实现表单提交、列表加载等涉及 API 的功能
+
+  必须协同的技能：
+  - api-migration（API 接口迁移时）
+  - z-paging-integration（分页列表时）
+  - use-wd-form（表单提交时）
+
+  禁止项：
+  - 禁止使用 try/catch 包装 send() 函数
+  - 禁止在组件内手动显示错误 Toast（全局拦截器已处理）
+  - 禁止使用 immediate: true（必须手动触发请求）
+  - 禁止在 onError 中重复显示错误提示
+
+  覆盖场景：几乎所有 API 调用都需要此技能，包括列表查询、详情查询、表单提交、数据删除、状态更新等。
 ---
 
 # 接口错误提示能力
