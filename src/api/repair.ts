@@ -180,7 +180,7 @@ export function queryRepairInfo(params?: { communityId?: string, rsts?: string }
 /** 19. 查询字典数据 */
 export function queryDictInfo(params: { domain: string, name?: string }) {
   return http.Get<{
-    data: Array<{
+    list: Array<{
       statusCd: string
       name: string
     }>
