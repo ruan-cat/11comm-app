@@ -4,6 +4,7 @@
 -->
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 interface Props {
   /** 是否显示错误状态 */
@@ -35,6 +36,8 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
+
+const toast = useGlobalToast()
 
 /** 响应式数据 */
 const isRetrying = ref<boolean>(false)
@@ -132,11 +135,7 @@ function handleContactSupport() {
       switch (res.tapIndex) {
         case 0:
           // 在线客服
-          uni.showToast({
-            title: '正在连接客服...',
-            icon: 'loading',
-            duration: 1500,
-          })
+          toast.info('正在连接客服...')
           break
         case 1:
           // 电话客服
@@ -146,11 +145,7 @@ function handleContactSupport() {
           break
         case 2:
           // 意见反馈
-          uni.showToast({
-            title: '跳转反馈页面',
-            icon: 'none',
-            duration: 1500,
-          })
+          toast.info('跳转反馈页面')
           break
       }
     },

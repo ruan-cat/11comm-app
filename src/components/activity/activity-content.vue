@@ -4,6 +4,7 @@
 -->
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 interface Props {
   /** 富文本内容 */
@@ -24,6 +25,8 @@ const props = withDefaults(defineProps<Props>(), {
   expandText: '展开全文',
   collapseText: '收起内容',
 })
+
+const toast = useGlobalToast()
 
 /** 响应式数据 */
 const isExpanded = ref<boolean>(false)
@@ -86,11 +89,7 @@ function copyContent() {
   uni.setClipboardData({
     data: props.content.replace(/<[^>]*>/g, ''), // 移除HTML标签
     success: () => {
-      uni.showToast({
-        title: '内容已复制',
-        icon: 'success',
-        duration: 1500,
-      })
+      toast.success('内容已复制')
     },
   })
 }
@@ -104,18 +103,10 @@ function shareContent() {
     title: '分享活动内容',
     summary: props.content.replace(/<[^>]*>/g, '').substring(0, 100),
     success: () => {
-      uni.showToast({
-        title: '分享成功',
-        icon: 'success',
-        duration: 1500,
-      })
+      toast.success('分享成功')
     },
     fail: () => {
-      uni.showToast({
-        title: '分享失败',
-        icon: 'none',
-        duration: 1500,
-      })
+      toast.error('分享失败')
     },
   })
 }

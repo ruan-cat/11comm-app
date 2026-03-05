@@ -6,6 +6,7 @@
 import type { ActivityStatus } from '@/types/activity'
 import dayjs from 'dayjs'
 import { computed } from 'vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 interface Props {
   /** 活动标题 */
@@ -27,6 +28,8 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
+const toast = useGlobalToast()
 
 /** 计算属性 */
 const formattedStartTime = computed(() => {
@@ -66,21 +69,13 @@ const statusConfig = computed(() => {
 /** 方法 */
 function handleAuthorClick() {
   // 可以跳转到发布者详情页
-  uni.showToast({
-    title: '查看发布者信息',
-    icon: 'none',
-    duration: 1500,
-  })
+  toast.info('查看发布者信息')
 }
 
 function handleTimeClick() {
   // 可以添加到日历
   if (props.startTime) {
-    uni.showToast({
-      title: '已添加到日历',
-      icon: 'success',
-      duration: 1500,
-    })
+    toast.success('已添加到日历')
   }
 }
 </script>
