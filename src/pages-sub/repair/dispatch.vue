@@ -24,6 +24,7 @@ import RepairListItem from '@/components/common/repair-list-item/index.vue'
 import RepairListSearchBar from '@/components/common/repair-list-search-bar/index.vue'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { useGlobalMessage } from '@/hooks/useGlobalMessage'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 import { getCurrentCommunity, getUserInfo } from '@/utils/user'
 
@@ -35,6 +36,7 @@ definePage({
 })
 
 const message = useGlobalMessage()
+const toast = useGlobalToast()
 
 /** 搜索条件 */
 const searchName = ref('')
@@ -122,10 +124,7 @@ const { send: startRepair } = useRequest(
   { immediate: false },
 )
   .onSuccess(() => {
-    uni.showToast({
-      title: '启动成功',
-      icon: 'success',
-    })
+    toast.success('启动成功')
 
     // 刷新列表
     setTimeout(() => {
@@ -133,10 +132,7 @@ const { send: startRepair } = useRequest(
     }, 1000)
   })
   .onError((error) => {
-    uni.showToast({
-      title: error.error || '启动失败',
-      icon: 'none',
-    })
+    toast.error(error.error || '启动失败')
   })
 
 function handleStartRepair(item: RepairOrder) {
@@ -176,10 +172,7 @@ const { send: stopRepair } = useRequest(
   { immediate: false },
 )
   .onSuccess(() => {
-    uni.showToast({
-      title: '暂停成功',
-      icon: 'success',
-    })
+    toast.success('暂停成功')
 
     // 刷新列表
     setTimeout(() => {
@@ -187,10 +180,7 @@ const { send: stopRepair } = useRequest(
     }, 1000)
   })
   .onError((error) => {
-    uni.showToast({
-      title: error.error || '暂停失败',
-      icon: 'none',
-    })
+    toast.error(error.error || '暂停失败')
   })
 
 function handleStopRepair(item: RepairOrder) {

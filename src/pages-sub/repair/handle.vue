@@ -250,7 +250,7 @@ const {
   })
   .onError((error) => {
     console.error('加载师傅列表失败:', error)
-    toast.error('加载维修师傅列表失败，请重试')
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 /**
@@ -272,7 +272,7 @@ const {
   })
   .onError((error) => {
     console.error('加载支付方式失败:', error)
-    toast.error('加载支付方式列表失败，请重试')
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 // ==================== 事件处理 ====================
@@ -461,15 +461,7 @@ const {
   })
   .onError((error) => {
     console.error('派单/转单/退单失败:', error)
-    const actionTextMap: Record<DispatchAction, string> = {
-      DISPATCH: '派单',
-      TRANSFER: '转单',
-      BACK: '回退',
-      RETURN: '退单',
-      FINISH: '办结',
-    }
-    const actionText = actionTextMap[model.action] || '操作'
-    toast.error(`${actionText}失败，请重试`)
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 /**
@@ -508,7 +500,7 @@ const {
   })
   .onError((error) => {
     console.error('办结失败:', error)
-    toast.error('办结失败，请重试')
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 /** 当前操作是否正在提交 */

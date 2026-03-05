@@ -18,6 +18,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { reactive, ref } from 'vue'
 import { replyAppraise } from '@/api/repair'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
@@ -26,6 +27,8 @@ definePage({
     enablePullDownRefresh: false,
   },
 })
+
+const toast = useGlobalToast()
 
 /** 表单实例 */
 const formRef = ref<FormInstance>()
@@ -63,10 +66,7 @@ const { send: submitReply, onSuccess: onReplySuccess, onError: onReplyError } = 
 
 onReplySuccess(() => {
   uni.hideLoading()
-  uni.showToast({
-    title: '回复成功',
-    icon: 'success',
-  })
+  toast.success('回复成功')
 
   setTimeout(() => {
     uni.navigateBack()
@@ -75,10 +75,7 @@ onReplySuccess(() => {
 
 onReplyError((error) => {
   uni.hideLoading()
-  uni.showToast({
-    title: error.error || '回复失败',
-    icon: 'none',
-  })
+  toast.error(error.error || '回复失败')
 })
 
 /** 表单提交 */

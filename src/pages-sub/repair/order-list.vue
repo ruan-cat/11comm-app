@@ -23,6 +23,7 @@ import { getRepairOrderList, robRepairOrder } from '@/api/repair'
 import RepairListItem from '@/components/common/repair-list-item/index.vue'
 import RepairListSearchBar from '@/components/common/repair-list-search-bar/index.vue'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 import { getCurrentCommunity, getUserInfo } from '@/utils/user'
 
@@ -32,6 +33,8 @@ definePage({
     enablePullDownRefresh: false,
   },
 })
+
+const toast = useGlobalToast()
 
 /** 搜索条件 */
 const searchName = ref('')
@@ -138,10 +141,7 @@ const { send: robOrder } = useRequest(
 )
   .onSuccess(() => {
     uni.hideLoading()
-    uni.showToast({
-      title: '抢单成功',
-      icon: 'success',
-    })
+    toast.success('抢单成功')
 
     // 延迟刷新列表
     setTimeout(() => {
@@ -150,10 +150,8 @@ const { send: robOrder } = useRequest(
   })
   .onError((error) => {
     uni.hideLoading()
-    uni.showToast({
-      title: error.error || '抢单失败',
-      icon: 'none',
-    })
+    console.error('抢单失败:', error)
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 async function handleRobOrder(item: RepairOrder) {

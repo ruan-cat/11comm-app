@@ -214,10 +214,7 @@ const { send: loadResources } = useRequest(
       selectedResourceId.value = ''
     }
     else {
-      uni.showToast({
-        title: '暂无商品',
-        icon: 'none',
-      })
+      toast.warning('暂无商品')
       resourceOptions.value = []
       selectedResourceId.value = ''
     }
