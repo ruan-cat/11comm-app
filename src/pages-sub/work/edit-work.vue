@@ -18,6 +18,7 @@ import { useRequest } from 'alova/client'
 import { ref } from 'vue'
 import { getWorkOrderDetail, updateWorkOrder } from '@/api/work-order'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { WorkOrderPriorityName, WorkOrderTypeName } from '@/types/work-order'
 
 /** 路由参数 */
@@ -32,6 +33,8 @@ definePage({
     navigationBarTextStyle: 'white',
   },
 })
+
+const toast = useGlobalToast()
 
 /** 表单引用 */
 const formRef = ref()
@@ -97,7 +100,7 @@ const { send: submitUpdate, loading: submitLoading } = useRequest(
   () => updateWorkOrder(formData.value),
   { immediate: false },
 ).onSuccess(() => {
-  uni.showToast({ title: '更新成功', icon: 'success' })
+  toast.success('更新成功')
   setTimeout(() => {
     uni.navigateBack()
   }, 1500)

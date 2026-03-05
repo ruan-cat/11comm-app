@@ -17,6 +17,7 @@ import { useRequest } from 'alova/client'
 import { computed, ref } from 'vue'
 import { finishWorkCopy, getWorkOrderDetail, getWorkTaskItems } from '@/api/work-order'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 /** 路由参数 */
 const props = defineProps<{
@@ -31,6 +32,8 @@ definePage({
     navigationBarTextStyle: 'white',
   },
 })
+
+const toast = useGlobalToast()
 
 /** 工作单信息 */
 const workDetail = ref<WorkOrderDetail | null>(null)
@@ -92,7 +95,7 @@ const { send: submitFinish, loading: submitLoading } = useRequest(
   }),
   { immediate: false },
 ).onSuccess(() => {
-  uni.showToast({ title: '提交成功', icon: 'success' })
+  toast.success('提交成功')
   setTimeout(() => {
     uni.navigateBack()
   }, 1500)
@@ -103,11 +106,11 @@ const { send: submitFinish, loading: submitLoading } = useRequest(
 /** 处理提交 */
 function handleSubmit() {
   if (!selectedItemId.value) {
-    uni.showToast({ title: '请选择任务项', icon: 'none' })
+    toast.warning('请选择任务项')
     return
   }
   if (!deductionReason.value.trim()) {
-    uni.showToast({ title: '请输入处理说明', icon: 'none' })
+    toast.warning('请输入处理说明')
     return
   }
   submitFinish()

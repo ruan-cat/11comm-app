@@ -16,6 +16,7 @@ import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
 import { auditWorkOrder, getWorkOrderDetail } from '@/api/work-order'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 /** 路由参数 */
 const props = defineProps<{
@@ -29,6 +30,8 @@ definePage({
     navigationBarTextStyle: 'white',
   },
 })
+
+const toast = useGlobalToast()
 
 /** 工作单详情 */
 const orderDetail = ref<WorkOrderDetail | null>(null)
@@ -46,7 +49,7 @@ const { loading, send: loadDetail } = useRequest(
   })
   .onError((error) => {
     console.error('加载工作单详情失败:', error)
-    uni.showToast({ title: '加载失败', icon: 'none' })
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 /** 当前审核结果 */
@@ -65,17 +68,14 @@ const { loading: auditLoading, send: doAudit } = useRequest(
   { immediate: false },
 )
   .onSuccess(() => {
-    uni.showToast({
-      title: currentResult === 'pass' ? '审核通过' : '已驳回',
-      icon: 'success',
-    })
+    toast.success(currentResult === 'pass' ? '审核通过' : '已驳回')
     setTimeout(() => {
       uni.navigateBack()
     }, 1500)
   })
   .onError((error) => {
     console.error('审核失败:', error)
-    uni.showToast({ title: '审核失败', icon: 'none' })
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 /** 进入页面加载数据 */
@@ -113,7 +113,7 @@ function handlePass() {
 /** 处理驳回 */
 function handleReject() {
   if (!opinion.value.trim()) {
-    uni.showToast({ title: '请填写驳回原因', icon: 'none' })
+    toast.warning('请填写驳回原因')
     return
   }
   uni.showModal({

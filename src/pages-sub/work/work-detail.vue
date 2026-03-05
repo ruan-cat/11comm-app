@@ -16,6 +16,7 @@ import { useRequest } from 'alova/client'
 import { computed, onMounted, ref } from 'vue'
 import { completeWorkOrder, getWorkOrderDetail, startWorkOrder } from '@/api/work-order'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router/helpers'
 
 /** 路由参数 */
@@ -31,6 +32,8 @@ definePage({
   },
 })
 
+const toast = useGlobalToast()
+
 /** 工作单详情 */
 const orderDetail = ref<WorkOrderDetail | null>(null)
 
@@ -44,7 +47,7 @@ const { loading, send: loadDetail } = useRequest(
   })
   .onError((error) => {
     console.error('加载工作单详情失败:', error)
-    uni.showToast({ title: '加载失败', icon: 'none' })
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 /** 开始处理请求 */
@@ -53,12 +56,12 @@ const { loading: startLoading, send: doStart } = useRequest(
   { immediate: false },
 )
   .onSuccess(() => {
-    uni.showToast({ title: '开始处理', icon: 'success' })
+    toast.success('开始处理')
     loadDetail()
   })
   .onError((error) => {
     console.error('开始处理失败:', error)
-    uni.showToast({ title: '操作失败', icon: 'none' })
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 /** 完成请求 */
@@ -67,12 +70,12 @@ const { loading: completeLoading, send: doComplete } = useRequest(
   { immediate: false },
 )
   .onSuccess(() => {
-    uni.showToast({ title: '已完成', icon: 'success' })
+    toast.success('已完成')
     loadDetail()
   })
   .onError((error) => {
     console.error('完成失败:', error)
-    uni.showToast({ title: '操作失败', icon: 'none' })
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 /** 进入页面加载数据 */

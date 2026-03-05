@@ -15,6 +15,7 @@ import { useRequest } from 'alova/client'
 import { ref } from 'vue'
 import { createWorkOrder } from '@/api/work-order'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { WorkOrderPriorityName, WorkOrderTypeName } from '@/types/work-order'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -25,6 +26,8 @@ definePage({
     navigationBarTextStyle: 'white',
   },
 })
+
+const toast = useGlobalToast()
 
 /** 表单数据 */
 const formData = ref<CreateWorkOrderParams>({
@@ -82,14 +85,14 @@ const { loading, send: submitOrder } = useRequest(
   { immediate: false },
 )
   .onSuccess(() => {
-    uni.showToast({ title: '创建成功', icon: 'success' })
+    toast.success('创建成功')
     setTimeout(() => {
       uni.navigateBack()
     }, 1500)
   })
   .onError((error) => {
     console.error('创建工作单失败:', error)
-    uni.showToast({ title: '创建失败', icon: 'none' })
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 /** 表单引用 */
@@ -102,7 +105,7 @@ async function handleSubmit() {
     submitOrder()
   }
   catch {
-    uni.showToast({ title: '请完善表单信息', icon: 'none' })
+    toast.warning('请完善表单信息')
   }
 }
 </script>
