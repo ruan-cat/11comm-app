@@ -134,7 +134,7 @@ const { loading: historyLoading, send: loadHistory } = useRequest(
   })
   .onError((error) => {
     console.error('❌ 加载投诉历史失败:', error)
-    toast.error(error.error || '加载失败，请稍后重试')
+    // 全局拦截器已自动显示错误提示，无需重复处理
     noHistory.value = true
   })
 
@@ -167,7 +167,7 @@ const { loading: submitting, send: submitComplaint } = useRequest(
   })
   .onError((error) => {
     console.error('❌ 提交投诉失败:', error)
-    toast.error(error.error || '提交失败，请稍后重试')
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 /** 页面加载 */

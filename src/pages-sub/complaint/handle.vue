@@ -70,7 +70,7 @@ const { loading: submitting, send: submitHandle } = useRequest(
   })
   .onError((error) => {
     console.error('❌ 投诉处理失败:', error)
-    toast.error(error.error || '投诉处理失败，请稍后重试')
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 /** 页面加载 */

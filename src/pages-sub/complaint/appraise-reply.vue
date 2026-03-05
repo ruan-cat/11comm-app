@@ -67,7 +67,7 @@ const { loading: submitting, send: submitReply } = useRequest(
   })
   .onError((error) => {
     console.error('❌ 回复评价失败:', error)
-    toast.error(error.error || '回复评价失败，请稍后重试')
+    // 全局拦截器已自动显示错误提示，无需重复处理
   })
 
 /** 页面加载 */
