@@ -3,55 +3,52 @@
   "hooks": {
     "SessionStart": [
       {
+        "matcher": "*",
         "hooks": [
           {
+            "name": "memorix-session-start",
             "type": "command",
             "command": "memorix.cmd hook",
-            "timeout": 10
+            "description": "Load memorix context at session start"
           }
         ]
       }
     ],
-    "PostToolUse": [
+    "AfterTool": [
       {
+        "matcher": "*",
         "hooks": [
           {
+            "name": "memorix-after-tool",
             "type": "command",
             "command": "memorix.cmd hook",
-            "timeout": 10
+            "description": "Record tool usage in memorix"
           }
         ]
       }
     ],
-    "UserPromptSubmit": [
+    "AfterAgent": [
       {
+        "matcher": "*",
         "hooks": [
           {
+            "name": "memorix-after-agent",
             "type": "command",
             "command": "memorix.cmd hook",
-            "timeout": 10
+            "description": "Record agent response in memorix"
           }
         ]
       }
     ],
-    "PreCompact": [
+    "PreCompress": [
       {
+        "matcher": "*",
         "hooks": [
           {
+            "name": "memorix-pre-compress",
             "type": "command",
             "command": "memorix.cmd hook",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "memorix.cmd hook",
-            "timeout": 10
+            "description": "Save context before compression"
           }
         ]
       }
