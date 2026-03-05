@@ -12,6 +12,7 @@
 
 <script setup lang="ts">
 import type { ColumnItem } from 'wot-design-uni/components/wd-picker-view/types'
+import { useRequest } from 'alova/client'
 import { reactive, ref } from 'vue'
 import { getPayFeeDetailReport, queryDictInfo } from '@/api/fee'
 import { getFloorList } from '@/api/floor'
@@ -89,8 +90,8 @@ const { send: loadFloors } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const data = event.data as { apiFloorDataVoList: Array<{ floorId: string, floorName: string }> }
-  floors.value = (data.apiFloorDataVoList || []).map(item => ({
+  const data = event.data as { list: Array<{ floorId: string, floorName: string }> }
+  floors.value = (data.list || []).map(item => ({
     value: item.floorId,
     label: item.floorName,
   }))
@@ -110,15 +111,15 @@ const { send: loadPayFeeDetails } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const data = event.data as { data: typeof payFeeDetails.value, total: number }
-  payFeeDetails.value = data.data || []
-  pagingRef.value?.complete(data.data || [])
+  const list = event.data.list || []
+  payFeeDetails.value = list
+  pagingRef.value?.complete(list)
 }).onError(() => {
   pagingRef.value?.complete(false)
 })
 
-/** 搜索 */
-function handleQuery() {
+/** 搜索并重新加载（搜索按钮点击） */
+function handleSearch() {
   pagingRef.value?.reload()
 }
 
@@ -151,7 +152,7 @@ loadFloors()
         </view>
       </view>
       <view class="mt-3">
-        <wd-button type="primary" size="large" block @click="handleQuery">
+        <wd-button type="primary" size="large" block @click="handleSearch">
           搜索
         </wd-button>
       </view>

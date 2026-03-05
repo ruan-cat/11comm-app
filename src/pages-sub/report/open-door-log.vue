@@ -11,8 +11,10 @@
 -->
 
 <script setup lang="ts">
+import { useRequest } from 'alova/client'
 import { reactive, ref } from 'vue'
 import { getOpenDoorLogList } from '@/api/fee'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
@@ -24,6 +26,9 @@ definePage({
 
 /** 小区信息 */
 const communityInfo = getCurrentCommunity()
+
+/** 全局 Toast */
+const toast = useGlobalToast()
 
 /** 搜索表单 */
 const searchForm = reactive({
@@ -60,15 +65,15 @@ const { send: loadLogs, loading: logsLoading } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const data = event.data as { data: typeof openDoorLogs.value, total: number }
-  openDoorLogs.value = data.data || []
-  pagingRef.value?.complete(data.data || [])
+  const list = event.data.list || []
+  openDoorLogs.value = list
+  pagingRef.value?.complete(list)
 }).onError(() => {
   pagingRef.value?.complete(false)
 })
 
-/** 搜索 */
-function handleQuery() {
+/** 搜索并重新加载（搜索按钮点击） */
+function handleSearch() {
   pagingRef.value?.reload()
 }
 
@@ -91,7 +96,7 @@ function handleQuery(pageNo: number, pageSize: number) {
         </view>
       </view>
       <view class="mt-3">
-        <wd-button type="primary" size="large" block @click="handleQuery">
+        <wd-button type="primary" size="large" block @click="handleSearch">
           搜索
         </wd-button>
       </view>

@@ -95,8 +95,8 @@ const { send: loadFloors } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const data = event.data as { apiFloorDataVoList: Array<{ floorId: string, floorName: string }> }
-  floors.value = (data.apiFloorDataVoList || []).map(item => ({
+  const data = event.data as { list: Array<{ floorId: string, floorName: string }> }
+  floors.value = (data.list || []).map(item => ({
     value: item.floorId,
     label: item.floorName,
   }))
@@ -116,9 +116,9 @@ const { send: loadFeeSummary, loading: summaryLoading } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const data = event.data as { data: typeof feeSummary.value[] }
-  if (data.data && data.data.length > 0) {
-    feeSummary.value = data.data[0]
+  const data = event.data as { list: Array<typeof feeSummary.value> }
+  if (data.list && data.list.length > 0) {
+    feeSummary.value = data.list[0]
   }
 })
 

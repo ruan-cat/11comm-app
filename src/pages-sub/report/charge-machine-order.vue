@@ -11,8 +11,10 @@
 -->
 
 <script setup lang="ts">
+import { useRequest } from 'alova/client'
 import { ref } from 'vue'
 import { getChargeMachineOrderList } from '@/api/fee'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
@@ -24,6 +26,9 @@ definePage({
 
 /** 小区信息 */
 const communityInfo = getCurrentCommunity()
+
+/** 全局 Toast */
+const toast = useGlobalToast()
 
 /** 订单列表 */
 const orders = ref<
@@ -58,9 +63,9 @@ const { send: loadOrders, loading: ordersLoading } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const data = event.data as { data: typeof orders.value }
-  orders.value = data.data || []
-  pagingRef.value?.complete(data.data || [])
+  const list = event.data.list || []
+  orders.value = list
+  pagingRef.value?.complete(list)
 }).onError(() => {
   pagingRef.value?.complete(false)
 })

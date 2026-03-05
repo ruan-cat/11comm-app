@@ -11,6 +11,7 @@
 -->
 
 <script setup lang="ts">
+import { useRequest } from 'alova/client'
 import { ref } from 'vue'
 import { getDataReport } from '@/api/fee'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
@@ -47,8 +48,8 @@ const { send: loadReport, loading: reportLoading } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const data = event.data as { data: typeof reportData.value }
-  reportData.value = data.data || []
+  const data = event.data as { list: Array<{ name: string, value: number, unit?: string }> }
+  reportData.value = data.list || []
 })
 
 /** 页面加载 */
