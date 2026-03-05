@@ -9,7 +9,6 @@
 
 <script setup lang="ts">
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
-import type { TypedRouter } from '@/router'
 import { onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { computed, reactive, ref } from 'vue'
@@ -37,9 +36,6 @@ const communityInfo = getCurrentCommunity()
 
 /** 全局 Toast */
 const toast = useGlobalToast()
-
-/** 路由对象 */
-const router = useRouter()
 
 // ==================== 页面状态 ====================
 
@@ -91,7 +87,7 @@ const formRules: FormRules = {
   endUserName: [{ required: true, message: '请输入联系人' }],
   endUserTel: [
     { required: true, message: '请输入手机号' },
-    { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确' },
+    { required: false, pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确' },
   ],
   description: [{ required: true, message: '请输入申请说明' }],
 }
@@ -112,8 +108,9 @@ const { send: loadStoreHouses } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const list = event.data?.list || []
-  storeHouseOptions.value = list.map(item => ({
+  const response = event.data
+  const list = response?.list || []
+  storeHouseOptions.value = list.map((item: any) => ({
     label: item.shName,
     value: item.shId,
   }))
@@ -151,14 +148,13 @@ onShow(() => {
   // 加载仓库列表
   loadStoreHouses()
 
-  // 获取选择商品信息
-  const floorInfo = (router as TypedRouter).getParams('floorInfo')
-  if (floorInfo) {
-    const info = typeof floorInfo === 'string' ? JSON.parse(floorInfo) : floorInfo
+  // 监听商品选择事件
+  uni.$off('purchaseSelect')
+  uni.$on('purchaseSelect', (info: any) => {
     if (info && Array.isArray(info)) {
       purchaseList.value = info
     }
-  }
+  })
 })
 
 // ==================== 方法 ====================
@@ -254,7 +250,7 @@ async function handleSubmit() {
           placeholder="请输入手机号"
           clearable
           type="number"
-          maxlength="11"
+          :maxlength="11"
         />
       </wd-cell-group>
 

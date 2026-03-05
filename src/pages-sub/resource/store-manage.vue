@@ -34,7 +34,8 @@ const { send: loadList, loading: listLoading } = useRequest(
     queryMyResourceStoreInfo(params),
   { immediate: false },
 ).onSuccess((event) => {
-  const list = event.data?.list || []
+  const response = event.data
+  const list = response?.list || []
   if (refreshing.value) {
     resourceList.value = list
     refreshing.value = false
@@ -43,7 +44,7 @@ const { send: loadList, loading: listLoading } = useRequest(
     resourceList.value = resourceList.value.concat(list)
   }
 
-  if (resourceList.value.length >= (event.data?.total || 0)) {
+  if (resourceList.value.length >= (response?.total || 0)) {
     finished.value = true
   }
 }).onError(() => {

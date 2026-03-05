@@ -9,7 +9,7 @@
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import { onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { computed, reactive, ref } from 'vue'
+import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 import { listStoreHouses, saveResourceReturn } from '@/api/resource'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
@@ -66,8 +66,9 @@ const { send: loadStoreHouses } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const list = event.data?.list || []
-  storeHouseOptions.value = list.map(item => ({
+  const response = event.data
+  const list = response?.list || []
+  storeHouseOptions.value = list.map((item: any) => ({
     label: item.shName,
     value: item.shId,
   }))
@@ -95,21 +96,33 @@ const { send: submitReturn, loading: submitting } = useRequest(
   toast.error('退还失败')
 })
 
+/** 监听资源选择事件 */
+function handleResourceSelected(data: string) {
+  try {
+    const selectedItems = JSON.parse(data)
+    if (Array.isArray(selectedItems) && selectedItems.length > 0) {
+      itemList.value = selectedItems.map((item: any) => ({
+        ...item,
+        curStock: 0,
+        shzId: '',
+        shzName: '请选择仓库',
+      }))
+    }
+  }
+  catch (error) {
+    console.error('解析选择的资源数据失败:', error)
+  }
+}
+
 onShow(() => {
   loadStoreHouses()
-  // 获取选择的数据
-  const pages = getCurrentPages()
-  const currentPage = pages[pages.length - 1]
-  // @ts-expect-error selectedItems 属性在页面栈中不存在
-  const selectedItems = currentPage?.selectedItems
-  if (selectedItems && selectedItems.length > 0) {
-    itemList.value = selectedItems.map((item: any) => ({
-      ...item,
-      curStock: 0,
-      shzId: '',
-      shzName: '请选择仓库',
-    }))
-  }
+  // 监听资源选择事件
+  uni.$on('getResourceListInfo', handleResourceSelected)
+})
+
+onBeforeUnmount(() => {
+  // 移除事件监听
+  uni.$off('getResourceListInfo', handleResourceSelected)
 })
 
 function goToSelectResource() {

@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 import { saveResourceScrap } from '@/api/resource'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
@@ -71,22 +71,34 @@ const { send: submitScrap, loading: submitting } = useRequest(
   toast.error('提交失败')
 })
 
-onShow(() => {
-  // 获取选择的数据
-  const pages = getCurrentPages()
-  const currentPage = pages[pages.length - 1]
-  // @ts-expect-error selectedItems 属性在页面栈中不存在
-  const selectedItems = currentPage?.selectedItems
-  if (selectedItems && selectedItems.length > 0) {
-    itemList.value = selectedItems.map((item: any) => ({
-      ...item,
-      giveQuantity: 0,
-      state: '',
-      stateName: '请选择',
-      purchaseRemark: '',
-    }))
-    hasSelectedItem.value = true
+/** 监听资源选择事件 */
+function handleResourceSelected(data: string) {
+  try {
+    const selectedItems = JSON.parse(data)
+    if (Array.isArray(selectedItems) && selectedItems.length > 0) {
+      itemList.value = selectedItems.map((item: any) => ({
+        ...item,
+        giveQuantity: 0,
+        state: '',
+        stateName: '请选择',
+        purchaseRemark: '',
+      }))
+      hasSelectedItem.value = true
+    }
   }
+  catch (error) {
+    console.error('解析选择的资源数据失败:', error)
+  }
+}
+
+onShow(() => {
+  // 监听资源选择事件
+  uni.$on('getResourceListInfo', handleResourceSelected)
+})
+
+onBeforeUnmount(() => {
+  // 移除事件监听
+  uni.$off('getResourceListInfo', handleResourceSelected)
 })
 
 function goToSelectResource() {
@@ -168,7 +180,7 @@ async function handleSubmit() {
 
 <template>
   <view class="page-container">
-    <wd-form ref="formRef">
+    <view>
       <!-- 选择物品 -->
       <FormSectionTitle title="选择物品" />
 
@@ -231,7 +243,7 @@ async function handleSubmit() {
           提交
         </wd-button>
       </view>
-    </wd-form>
+    </view>
   </view>
 </template>
 

@@ -32,7 +32,6 @@ const LABEL_WIDTH = '80px'
 
 const communityInfo = getCurrentCommunity()
 const toast = useGlobalToast()
-const router = useRouter()
 
 // ==================== 页面状态 ====================
 
@@ -72,7 +71,7 @@ const formRules: FormRules = {
   endUserName: [{ required: true, message: '请输入联系人' }],
   endUserTel: [
     { required: true, message: '请输入手机号' },
-    { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确' },
+    { required: false, pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确' },
   ],
   description: [{ required: true, message: '请输入领用说明' }],
 }
@@ -90,8 +89,9 @@ const { send: loadStoreHouses } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const list = event.data?.list || []
-  storeHouseOptions.value = list.map(item => ({
+  const response = event.data
+  const list = response?.list || []
+  storeHouseOptions.value = list.map((item: any) => ({
     label: item.shName,
     value: item.shId,
   }))
@@ -207,7 +207,7 @@ async function handleSubmit() {
           placeholder="请输入手机号"
           clearable
           type="number"
-          maxlength="11"
+          :maxlength="11"
         />
       </wd-cell-group>
 

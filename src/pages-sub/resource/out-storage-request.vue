@@ -9,7 +9,7 @@
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import { onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { computed, reactive, ref } from 'vue'
+import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 import { listStoreHouses, saveItemOutApply } from '@/api/resource'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
@@ -67,8 +67,9 @@ const { send: loadStoreHouses } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const list = event.data?.list || []
-  storeHouseOptions.value = list.map(item => ({
+  const response = event.data
+  const list = response?.list || []
+  storeHouseOptions.value = list.map((item: any) => ({
     label: item.shName,
     value: item.shId,
   }))
@@ -100,22 +101,34 @@ const { send: submitApply, loading: submitting } = useRequest(
   toast.error('提交失败')
 })
 
+/** 监听资源选择事件 */
+function handleResourceSelected(data: string) {
+  try {
+    const selectedItems = JSON.parse(data)
+    if (Array.isArray(selectedItems) && selectedItems.length > 0) {
+      itemList.value = selectedItems.map((item: any) => ({
+        resId: item.resId,
+        resName: item.resName,
+        resCode: item.resCode || '',
+        price: item.price || 0,
+        quantity: 1,
+      }))
+    }
+  }
+  catch (error) {
+    console.error('解析选择的资源数据失败:', error)
+  }
+}
+
 onShow(() => {
   loadStoreHouses()
-  // 获取选择的数据
-  const pages = getCurrentPages()
-  const currentPage = pages[pages.length - 1]
-  // @ts-expect-error selectedItems 属性在页面栈中不存在
-  const selectedItems = currentPage?.selectedItems
-  if (selectedItems && selectedItems.length > 0) {
-    itemList.value = selectedItems.map((item: any) => ({
-      resId: item.resId,
-      resName: item.resName,
-      resCode: item.resCode || '',
-      price: item.price || 0,
-      quantity: 1,
-    }))
-  }
+  // 监听资源选择事件
+  uni.$on('getResourceListInfo', handleResourceSelected)
+})
+
+onBeforeUnmount(() => {
+  // 移除事件监听
+  uni.$off('getResourceListInfo', handleResourceSelected)
 })
 
 function goToSelectResource() {
@@ -136,7 +149,7 @@ function removeItem(index: number) {
 }
 
 function handleQuantityChange(index: number, value: string) {
-  itemList.value[index].quantity = Number.parseInt(value) || 1
+  itemList.value[index].quantity = Number(value) || 1
 }
 
 async function handleSubmit() {
@@ -155,7 +168,13 @@ async function handleSubmit() {
 
   try {
     await submitApply({
-      resourceStores: itemList.value,
+      resourceStores: itemList.value.map(item => ({
+        resId: item.resId,
+        resName: item.resName,
+        resCode: item.resCode,
+        price: item.price,
+        quantity: item.quantity || 1,
+      })),
       description: model.description,
       resOrderType: model.resOrderType,
       endUserName: model.endUserName,
@@ -222,7 +241,7 @@ async function handleSubmit() {
                 <input
                   class="quantity-input"
                   type="number"
-                  :value="item.quantity"
+                  :value="String(item.quantity)"
                   placeholder="请输入数量"
                   @input="handleQuantityChange(index, ($event as any).detail.value)"
                 >

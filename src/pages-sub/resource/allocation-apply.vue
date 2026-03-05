@@ -70,8 +70,9 @@ const { send: loadStoreHouses } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const list = event.data?.list || []
-  storeHouseOptions.value = list.map(item => ({
+  const response = event.data
+  const list = response?.list || []
+  storeHouseOptions.value = list.map((item: any) => ({
     label: item.shName,
     value: item.shId,
   }))
@@ -87,6 +88,8 @@ const { send: submitAllocation, loading: submitting } = useRequest(
       quantity: number
     }>
     description: string
+    fromShId: string
+    toShId: string
   }) => saveAllocationStorehouse(data),
   { immediate: false },
 )
@@ -140,6 +143,8 @@ async function handleSubmit() {
         await submitAllocation({
           resourceStores: itemList.value,
           description: model.description,
+          fromShId: model.fromShId,
+          toShId: model.toShId,
         })
         toast.success('提交成功')
         setTimeout(() => {
