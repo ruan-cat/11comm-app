@@ -530,7 +530,7 @@ export default defineUniAppMock([
         console.log('🚀 Mock API: listComplaintEvent', params, '→', `${result.list.length} items`)
         return successResponse(
           {
-            data: result.list,
+            list: result.list,
             total: result.total,
           },
           '获取投诉事件成功',
@@ -569,7 +569,7 @@ export default defineUniAppMock([
         console.log('🚀 Mock API: listComplaintAppraise', params, '→', `${result.list.length} items`)
         return successResponse(
           {
-            data: result.list,
+            list: result.list,
             total: result.total,
           },
           '获取投诉评价成功',
