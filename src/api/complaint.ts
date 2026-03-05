@@ -5,11 +5,12 @@
  * 旧代码：gitee-example/api/complaint/complaint.js
  */
 
+import type { PaginationResponse } from '@/types/api'
 import type {
   AuditComplaintParams,
   Complaint,
-  ComplaintAppraiseListResponse,
-  ComplaintEventListResponse,
+  ComplaintAppraise,
+  ComplaintEvent,
   ComplaintListResponse,
   ComplaintOperationResponse,
   HandleComplaintParams,
@@ -56,7 +57,7 @@ export function getUserComplaintHistory(params: QueryComplaintListParams) {
  * @example getComplaintEvents({ complaintId: 'xxx', communityId: 'xxx', page: 1, row: 100 })
  */
 export function getComplaintEvents(params: QueryComplaintEventParams) {
-  return http.Get<ComplaintEventListResponse>('/app/complaint.listComplaintEvent', { params })
+  return http.Get<PaginationResponse<ComplaintEvent>>('/app/complaint.listComplaintEvent', { params })
 }
 
 /**
@@ -65,7 +66,7 @@ export function getComplaintEvents(params: QueryComplaintEventParams) {
  * @example getComplaintAppraises({ complaintId: 'xxx', communityId: 'xxx', page: 1, row: 100 })
  */
 export function getComplaintAppraises(params: QueryComplaintAppraiseParams) {
-  return http.Get<ComplaintAppraiseListResponse>('/app/complaintAppraise.listComplaintAppraise', { params })
+  return http.Get<PaginationResponse<ComplaintAppraise>>('/app/complaintAppraise.listComplaintAppraise', { params })
 }
 
 /** ==================== 创建和更新接口 ==================== */
