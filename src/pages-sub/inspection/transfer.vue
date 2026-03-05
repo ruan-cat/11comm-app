@@ -17,6 +17,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { onMounted, reactive, ref } from 'vue'
 import { getStaffList, transferInspectionTask } from '@/api/inspection'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 
 definePage({
@@ -31,6 +32,9 @@ const taskInfoStr = ref('')
 
 /** 任务信息 */
 const taskInfo = ref<InspectionTask>({} as InspectionTask)
+
+/** 全局 Toast */
+const toast = useGlobalToast()
 
 /** 获取路由参数 */
 onLoad((options) => {
@@ -75,22 +79,17 @@ const rules = {
  */
 const {
   send: sendGetStaffList,
-  onSuccess: onGetStaffListSuccess,
-  onError: onGetStaffListError,
 } = useRequest(() => getStaffList(), {
   immediate: false,
 })
-
-onGetStaffListSuccess((data) => {
-  staffList.value = data.data || []
-})
-
-onGetStaffListError((error) => {
-  uni.showToast({
-    title: error.message || '获取员工列表失败',
-    icon: 'none',
+  .onSuccess((event) => {
+    staffList.value = event.data || []
   })
-})
+  .onError((event) => {
+    toast.show({
+      msg: event.error?.message || '获取员工列表失败',
+    })
+  })
 
 async function loadStaffList() {
   await sendGetStaffList()
@@ -112,30 +111,22 @@ function handleStaffConfirm(value: { value: string, label: string }) {
 const {
   loading: submitting,
   send: sendTransferTask,
-  onSuccess: onTransferSuccess,
-  onError: onTransferError,
 } = useRequest(transferData => transferInspectionTask(transferData), {
   immediate: false,
 })
+  .onSuccess(() => {
+    toast.success('流转成功')
 
-onTransferSuccess(() => {
-  uni.showToast({
-    title: '流转成功',
-    icon: 'success',
+    // 跳转回巡检打卡页
+    setTimeout(() => {
+      TypedRouter.toInspectionTaskList()
+    }, 1500)
   })
-
-  // 跳转回巡检打卡页
-  setTimeout(() => {
-    TypedRouter.toInspectionTaskList()
-  }, 1500)
-})
-
-onTransferError((error) => {
-  uni.showToast({
-    title: error.message || '流转失败',
-    icon: 'none',
+  .onError((error) => {
+    toast.show({
+      msg: error.error || '流转失败',
+    })
   })
-})
 
 async function submitTransfer() {
   // 表单校验
@@ -148,9 +139,8 @@ async function submitTransfer() {
 
   // 验证不能流转给自己
   if (formData.staffId === currentUserId) {
-    uni.showToast({
-      title: '不能流转给自己',
-      icon: 'none',
+    toast.show({
+      msg: '不能流转给自己',
     })
     return
   }
@@ -172,9 +162,8 @@ onMounted(() => {
     }
     catch (error) {
       console.error('解析任务信息失败:', error)
-      uni.showToast({
-        title: '数据错误',
-        icon: 'none',
+      toast.show({
+        msg: '数据错误',
       })
     }
   }

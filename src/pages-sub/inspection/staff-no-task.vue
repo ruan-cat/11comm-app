@@ -48,8 +48,6 @@ const noData = ref(false)
 const {
   loading,
   send: sendLoadStaffInspectionDetail,
-  onSuccess,
-  onError,
 } = useRequest(() => getInspectionTaskDetail({
   planUserId: staffId.value,
   queryTime: queryTime.value,
@@ -58,18 +56,17 @@ const {
 }), {
   immediate: false,
 })
-
-onSuccess((data) => {
-  inspections.value = data.data?.list || []
-  noData.value = inspections.value.length === 0
-})
-
-onError((error) => {
-  uni.showToast({
-    title: error.message || '请求失败',
-    icon: 'none',
+  .onSuccess((event) => {
+    const data = event.data
+    inspections.value = data.list || []
+    noData.value = inspections.value.length === 0
   })
-})
+  .onError((error) => {
+    uni.showToast({
+      title: error.error || '请求失败',
+      icon: 'none',
+    })
+  })
 
 async function loadStaffInspectionDetail() {
   await sendLoadStaffInspectionDetail()

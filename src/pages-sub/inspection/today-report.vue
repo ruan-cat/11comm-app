@@ -13,6 +13,7 @@ import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
 import { getInspectionTodayReport } from '@/api/inspection'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 
 definePage({
@@ -31,31 +32,27 @@ const noData = ref(false)
 /** 查询日期 */
 const queryDate = ref('')
 
+/** 全局 Toast */
+const toast = useGlobalToast()
+
 /**
  * 加载今日巡检统计
  */
 const {
   loading,
   send: sendLoadTodayReport,
-  onSuccess,
-  onError,
 } = useRequest((queryTime: string) => getInspectionTodayReport({
   queryTime,
 }), {
   immediate: false,
 })
-
-onSuccess((data) => {
-  inspections.value = data.data || []
-  noData.value = inspections.value.length === 0
-})
-
-onError((error) => {
-  uni.showToast({
-    title: error.message || '请求失败',
-    icon: 'none',
+  .onSuccess((event) => {
+    inspections.value = event.data || []
+    noData.value = inspections.value.length === 0
   })
-})
+  .onError((event) => {
+    toast.show({ msg: (event.error as any)?.message || '请求失败' })
+  })
 
 async function loadTodayReport() {
   await sendLoadTodayReport(queryDate.value)

@@ -35,8 +35,6 @@ const noData = ref(false)
 const {
   loading,
   send: sendGetTasks,
-  onSuccess,
-  onError,
 } = useRequest(() => getInspectionTaskList({
   page: 1,
   row: 10,
@@ -45,18 +43,17 @@ const {
 }), {
   immediate: false,
 })
-
-onSuccess((data) => {
-  tasks.value = data.data?.list || []
-  noData.value = tasks.value.length === 0
-})
-
-onError((error) => {
-  uni.showToast({
-    title: error.message || '请求失败',
-    icon: 'none',
+  .onSuccess((event) => {
+    const data = event.data
+    tasks.value = data.list || []
+    noData.value = tasks.value.length === 0
   })
-})
+  .onError((error) => {
+    uni.showToast({
+      title: error.error || '请求失败',
+      icon: 'none',
+    })
+  })
 
 async function getInspectionTasks() {
   await sendGetTasks()

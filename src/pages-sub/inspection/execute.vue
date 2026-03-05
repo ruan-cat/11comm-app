@@ -62,8 +62,6 @@ const totalCount = computed(() => {
 const {
   loading,
   send: sendGetTaskDetails,
-  onSuccess,
-  onError,
 } = useRequest(() => getInspectionTaskDetail({
   taskId: taskId.value,
   page: 1,
@@ -71,17 +69,16 @@ const {
 }), {
   immediate: false,
 })
-
-onSuccess((data) => {
-  taskDetails.value = data.data?.list || []
-})
-
-onError((error) => {
-  uni.showToast({
-    title: error.message || '请求失败',
-    icon: 'none',
+  .onSuccess((event) => {
+    const data = event.data
+    taskDetails.value = data.list || []
   })
-})
+  .onError((error) => {
+    uni.showToast({
+      title: error.error || '请求失败',
+      icon: 'none',
+    })
+  })
 
 async function getTaskDetails() {
   await sendGetTaskDetails()
