@@ -234,7 +234,6 @@
             "enablePullDownRefresh": false
           }
         },
-        // #ifdef MP-WEIXIN
         {
           "path": "inspection/execute-single",
           "type": "page",
@@ -243,13 +242,6 @@
             "enablePullDownRefresh": false
           }
         },
-        // #endif
-        // #ifdef H5
-        {
-          "path": "inspection/execute-single",
-          "type": "page"
-        },
-        // #endif
         {
           "path": "inspection/execute",
           "type": "page",

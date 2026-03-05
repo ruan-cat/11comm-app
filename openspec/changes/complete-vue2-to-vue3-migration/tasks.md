@@ -36,9 +36,9 @@
 
 ### 2.4 合规性修复验收
 
-- [ ] 2.4.1 对所有修复文件进行合规性检查
-- [ ] 2.4.2 生成合规性修复报告
-- [ ] 2.4.3 确认合规性通过率达到 100%
+- [x] 2.4.1 对所有修复文件进行合规性检查
+- [x] 2.4.2 生成合规性修复报告
+- [x] 2.4.3 确认合规性通过率达到 100%
 
 ## 3. 阶段 2：高优先级模块迁移
 
@@ -3008,9 +3008,9 @@
 
 ### 3.7 resource_modules 验收
 
-- [ ] 3.7.1 对 resource_modules 所有文件进行合规性检查
-- [ ] 3.7.2 生成 resource_modules 迁移报告
-- [ ] 3.7.3 确认 resource_modules 迁移完成
+- [x] 3.7.1 对 resource_modules 所有文件进行合规性检查
+- [x] 3.7.2 生成 resource_modules 迁移报告
+- [x] 3.7.3 确认 resource_modules 迁移完成
 
 ### 3.8 fee_modules - 费用管理（6 个页面）
 
@@ -3708,7 +3708,7 @@
 
 ### 3.9 fee_modules - 充值管理（2 个页面）
 
-- [ ] 3.9.1 迁移 src/pages-sub/fee/charge.vue（充值）
+- [x] 3.9.1 迁移 src/pages-sub/fee/charge.vue（充值）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/charge/charge.vue`
@@ -3827,7 +3827,7 @@
 
   **预计耗时**：2-3 小时
 
-- [ ] 3.9.2 迁移 src/pages-sub/fee/charge-detail.vue（充值详情）
+- [x] 3.9.2 迁移 src/pages-sub/fee/charge-detail.vue（充值详情）
 
   **基本信息**：
   - **源文件**：`gitee-example/pages/charge/chargeDetail.vue`
@@ -4587,15 +4587,15 @@
 
 ### 3.11 fee_modules 验收
 
-- [ ] 3.11.1 对 fee_modules 所有文件进行合规性检查
-- [ ] 3.11.2 生成 fee_modules 迁移报告
-- [ ] 3.11.3 确认 fee_modules 迁移完成
+- [x] 3.11.1 对 fee_modules 所有文件进行合规性检查
+- [x] 3.11.2 生成 fee_modules 迁移报告
+- [x] 3.11.3 确认 fee_modules 迁移完成
 
 ### 3.12 高优先级模块阶段验收
 
-- [ ] 3.12.1 生成高优先级模块迁移总结报告
-- [ ] 3.12.2 确认 43 个页面全部迁移完成
-- [ ] 3.12.3 确认合规性通过率 100%
+- [x] 3.12.1 生成高优先级模块迁移总结报告
+- [x] 3.12.2 确认 43 个页面全部迁移完成
+- [x] 3.12.3 确认合规性通过率 100%
 
 ## 4. 阶段 3：中优先级模块迁移
 
