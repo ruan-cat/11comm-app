@@ -49,14 +49,14 @@ const roomInfo = ref<{
   builtUpArea?: string
   ownerName?: string
   link?: string
-}>({})
+}>({ roomId: '' })
 
 /** 当前 Tab */
 const activeTab = ref(0)
 
 /** 加载房屋信息 */
 const { send: loadRoomInfo, loading: roomLoading } = useRequest(
-  (params: { floorNum: string, unitNum: string, roomNum: string }) =>
+  (params: { floorNum?: string, unitNum?: string, roomNum?: string }) =>
     getRoomInfo({
       page: 1,
       row: 1,
@@ -69,7 +69,7 @@ const { send: loadRoomInfo, loading: roomLoading } = useRequest(
 ).onSuccess((event) => {
   const data = event.data as { rooms: typeof roomInfo.value[] }
   if (!data.rooms || data.rooms.length === 0) {
-    toast.showError('未查询到房屋')
+    toast.error('未查询到房屋')
     roomInfo.value = { roomId: '' }
     return
   }
@@ -86,7 +86,7 @@ function handleSearch() {
 
   const roomNums = searchForm.roomName.split('-')
   if (roomNums.length !== 3) {
-    toast.showError('输入房屋格式错误，如1-1-1')
+    toast.error('输入房屋格式错误，如1-1-1')
     return
   }
 
@@ -109,7 +109,7 @@ function handleTabChange(index: number) {
 /** 创建费用 */
 function handleCreateFee() {
   if (!roomInfo.value.roomId) {
-    toast.showError('请先搜索房屋')
+    toast.error('请先搜索房屋')
     return
   }
 

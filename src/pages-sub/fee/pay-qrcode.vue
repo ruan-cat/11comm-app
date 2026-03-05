@@ -57,7 +57,7 @@ const { send: generateQrcode, loading: qrcodeLoading } = useRequest(
 ).onSuccess((event) => {
   const data = event.data as { code: number, msg: string, data: { codeUrl: string } }
   if (data.code !== 0) {
-    toast.showError(data.msg)
+    toast.error(data.msg)
     return
   }
   qrcodeUrl.value = data.data.codeUrl

@@ -57,7 +57,7 @@ const { send: loadMachines, loading: machinesLoading } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  machines.value = (event.data as { data: typeof machines.value }).data || []
+  machines.value = event.data.list || []
 })
 
 /** 搜索 */

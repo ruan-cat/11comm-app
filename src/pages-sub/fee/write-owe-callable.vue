@@ -12,6 +12,7 @@
 
 <script setup lang="ts">
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
+import type { FeeListResponse } from '@/types/fee'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { reactive, ref } from 'vue'
@@ -81,8 +82,8 @@ const { send: loadFees, loading: feesLoading } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const data = event.data as { data: typeof fees.value }
-  fees.value = data.data || []
+  const data = event.data as FeeListResponse
+  fees.value = data.list || []
 })
 
 /** 提交欠费催缴 */
@@ -99,10 +100,10 @@ const { send: submitWriteCallable, loading: submitLoading } = useRequest(
 ).onSuccess((event) => {
   const data = event.data as { code: number, msg: string }
   if (data.code !== 0) {
-    toast.showError(data.msg)
+    toast.error(data.msg)
     return
   }
-  toast.showSuccess(data.msg)
+  toast.success(data.msg)
   uni.navigateBack()
 })
 
@@ -128,7 +129,7 @@ function handleFeeChange(values: string[]) {
 /** 提交表单 */
 async function handleSubmit() {
   if (selectedFeeIds.value.length === 0) {
-    toast.showError('请选择要催缴的费用')
+    toast.error('请选择要催缴的费用')
     return
   }
 

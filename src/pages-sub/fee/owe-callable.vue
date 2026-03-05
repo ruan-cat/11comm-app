@@ -67,7 +67,7 @@ const { send: loadOweFeeCallable, loading: listLoading } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  callables.value = (event.data as { data: typeof callables.value }).data || []
+  callables.value = event.data.list || []
 })
 
 /**
@@ -75,14 +75,14 @@ const { send: loadOweFeeCallable, loading: listLoading } = useRequest(
  */
 async function handleSearch() {
   if (!searchForm.value.roomName) {
-    toast.showError('请输入房屋编号')
+    toast.error('请输入房屋编号')
     return
   }
 
   // 解析房屋编号
   const roomNums = searchForm.value.roomName.split('-')
   if (roomNums.length !== 3) {
-    toast.showError('输入房屋格式错误，如1-1-1')
+    toast.error('输入房屋格式错误，如1-1-1')
     return
   }
 
@@ -98,7 +98,7 @@ async function handleSearch() {
  */
 function handleWriteCallable() {
   if (!searchForm.value.roomId) {
-    toast.showError('请先搜索房屋')
+    toast.error('请先搜索房屋')
     return
   }
 

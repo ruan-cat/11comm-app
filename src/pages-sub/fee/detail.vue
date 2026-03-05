@@ -11,6 +11,7 @@
 -->
 
 <script setup lang="ts">
+import type { Fee, FeeDetail } from '@/types/fee'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { ref } from 'vue'
@@ -36,29 +37,31 @@ const toast = useGlobalToast()
 const feeId = ref('')
 
 /** 费用信息 */
-const feeInfo = ref<{
-  feeName: string
-  feeTypeCdName: string
-  deadlineTime: string
-  feeFlagName: string
-  stateName: string
-}>({
+const feeInfo = ref<Fee>({
+  feeId: '',
   feeName: '',
+  feeType: 'PROPERTY',
   feeTypeCdName: '',
+  roomId: '',
+  roomName: '',
+  communityId: '',
+  ownerName: '',
+  ownerTel: '',
+  receivedAmount: 0,
+  paidAmount: 0,
+  oweAmount: 0,
+  startTime: '',
+  endTime: '',
   deadlineTime: '',
   feeFlagName: '',
+  state: 'UNPAID',
   stateName: '',
+  createTime: '',
+  updateTime: '',
 })
 
 /** 缴费历史列表 */
-const feeDetails = ref<
-  Array<{
-    detailId: string
-    receivedAmount: number
-    cycles: string
-    createTime: string
-  }>
->([])
+const feeDetails = ref<FeeDetail[]>([])
 
 /** 是否无数据 */
 const noData = ref(false)
@@ -74,9 +77,8 @@ const { send: loadFeeInfo, loading: feeInfoLoading } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const data = event.data as { data: typeof feeInfo.value[] }
-  if (data.data && data.data.length > 0) {
-    feeInfo.value = data.data[0]
+  if (event.data.list && event.data.list.length > 0) {
+    feeInfo.value = event.data.list[0]
   }
 })
 
@@ -91,8 +93,7 @@ const { send: loadFeeDetail, loading: detailLoading } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const data = event.data as { feeDetails: typeof feeDetails.value }
-  feeDetails.value = (data.feeDetails || []).map(item => ({
+  feeDetails.value = (event.data.list || []).map((item: FeeDetail) => ({
     ...item,
     // 格式化日期
     createTime: item.createTime?.replace(/-/g, '/') || '',

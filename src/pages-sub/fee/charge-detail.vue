@@ -103,9 +103,9 @@ const { send: loadMachine, loading: machineLoading } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  const data = event.data as { data: typeof machine.value[] }
-  if (data.data && data.data.length > 0) {
-    machine.value = data.data[0]
+  const list = event.data.list || []
+  if (list.length > 0) {
+    machine.value = list[0]
   }
 })
 
@@ -120,7 +120,7 @@ const { send: loadOrders, loading: ordersLoading } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  orders.value = (event.data as { data: typeof orders.value }).data || []
+  orders.value = event.data.list || []
 })
 
 /** 加载插座列表 */
@@ -134,7 +134,7 @@ const { send: loadPorts, loading: portsLoading } = useRequest(
     }),
   { immediate: false },
 ).onSuccess((event) => {
-  ports.value = (event.data as { data: typeof ports.value }).data || []
+  ports.value = event.data.list || []
 })
 
 /** Tab 切换 */

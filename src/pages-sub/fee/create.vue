@@ -165,7 +165,7 @@ const { send: submitCreateFee, loading: submitLoading } = useRequest(
   },
 ).onSuccess((event) => {
   const data = event.data as { totalRoom: number, successRoom: number, errorRoom: number }
-  toast.showSuccess(`创建收费成功，总共[${data.totalRoom}]房屋，成功[${data.successRoom}],失败[${data.errorRoom}]`)
+  toast.success(`创建收费成功，总共[${data.totalRoom}]房屋，成功[${data.successRoom}],失败[${data.errorRoom}]`)
   uni.navigateBack()
 })
 
