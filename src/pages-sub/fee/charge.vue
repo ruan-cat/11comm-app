@@ -1,6 +1,6 @@
 <!--
   充电桩列表页面
-  功能：显示充电桩列表，支持搜索
+  功能：查询并选择充电桩，进入充电桩详情
 
   访问地址: http://localhost:9000/#/pages-sub/fee/charge
   建议携带参数: ?communityId=COMM_001
@@ -11,9 +11,14 @@
 -->
 
 <script setup lang="ts">
+import type { FormRules } from 'wot-design-uni/components/wd-form/types'
+import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { getChargeMachineList } from '@/api/fee'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
+import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -24,49 +29,65 @@ definePage({
   },
 })
 
-/** 小区信息 */
-const communityInfo = getCurrentCommunity()
-
-/** 搜索关键词 */
-const searchKeyword = ref('')
-
-/** 充电桩列表 */
-const machines = ref<
-  Array<{
-    machineId: string
-    machineName: string
-    machineCode: string
-    photoUrl: string
-    communityId: string
-    factoryName: string
-    ruleName: string
-    chargeTypeName: string
-    stateName: string
-    state: string
-  }>
->([])
-
-/** 加载充电桩列表 */
-const { send: loadMachines, loading: machinesLoading } = useRequest(
-  (keyword: string) =>
-    getChargeMachineList({
-      page: 1,
-      row: 50,
-      communityId: communityInfo.communityId,
-      machineNameLike: keyword,
-    }),
-  { immediate: false },
-).onSuccess((event) => {
-  machines.value = event.data.list || []
-})
-
-/** 搜索 */
-function handleSearch() {
-  loadMachines(searchKeyword.value)
+interface ChargeMachine {
+  machineId: string
+  machineName: string
+  machineCode: string
+  photoUrl: string
+  communityId: string
+  factoryName: string
+  ruleName: string
+  chargeTypeName: string
+  stateName: string
+  state: string
 }
 
-/** 查看详情 */
-function handleDetail(machine: (typeof machines.value)[0]) {
+type ZPagingRef = any
+
+const LABEL_WIDTH = '92px'
+const communityInfo = getCurrentCommunity()
+const toast = useGlobalToast()
+const pagingRef = ref<ZPagingRef>()
+const formRef = ref()
+
+const machines = ref<ChargeMachine[]>([])
+const currentCommunityId = ref(communityInfo.communityId)
+const searchModel = reactive({
+  machineNameLike: '',
+})
+
+const searchRules: FormRules = {
+  machineNameLike: [{ required: false, message: '请输入充电桩名称' }],
+}
+
+const { send: loadMachines } = useRequest(
+  (params: { page: number, row: number, machineNameLike?: string, communityId: string }) => getChargeMachineList(params),
+  { immediate: false },
+)
+  .onSuccess((event) => {
+    machines.value = event.data.list || []
+    pagingRef.value?.complete(machines.value)
+  })
+  .onError((error) => {
+    console.error('加载充电桩列表失败:', error)
+    toast.warning('加载充电桩列表失败，请稍后重试')
+    pagingRef.value?.complete(false)
+  })
+
+function handleQuery(pageNo: number, pageSize: number) {
+  loadMachines({
+    page: pageNo,
+    row: pageSize,
+    communityId: currentCommunityId.value,
+    machineNameLike: searchModel.machineNameLike || undefined,
+  })
+}
+
+function handleSearch() {
+  pagingRef.value?.reload()
+}
+
+function handleDetail(machine: ChargeMachine) {
   TypedRouter.toFeeChargeDetail({
     communityId: machine.communityId,
     machineId: machine.machineId,
@@ -74,76 +95,119 @@ function handleDetail(machine: (typeof machines.value)[0]) {
   })
 }
 
-// 初始加载
-loadMachines('')
+onLoad((options) => {
+  currentCommunityId.value = options?.communityId || communityInfo.communityId
+})
 </script>
 
 <template>
   <view class="charge-page">
-    <!-- 搜索栏 -->
-    <view class="search-bar bg-white p-3">
-      <view class="flex items-center gap-2">
-        <view class="flex-1">
-          <input
-            v-model="searchKeyword"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-            type="text"
-            placeholder="输入充电桩名称"
-            confirm-type="search"
-            @confirm="handleSearch"
-          >
-        </view>
-        <wd-button size="small" @click="handleSearch">
+    <wd-form ref="formRef" :model="searchModel" :rules="searchRules">
+      <FormSectionTitle title="查询条件" />
+      <wd-cell-group border>
+        <wd-input
+          v-model="searchModel.machineNameLike"
+          label="充电桩名称"
+          :label-width="LABEL_WIDTH"
+          prop="machineNameLike"
+          placeholder="请输入充电桩名称"
+          clearable
+          @confirm="handleSearch"
+        />
+      </wd-cell-group>
+
+      <view class="search-actions">
+        <wd-button type="primary" block @click="handleSearch">
           搜索
         </wd-button>
       </view>
-    </view>
+    </wd-form>
 
-    <!-- 充电桩列表 -->
-    <view v-if="machines.length > 0" class="p-3">
-      <view class="grid grid-cols-2 gap-3">
-        <view
-          v-for="(item, index) in machines"
-          :key="index"
-          class="machine-card rounded-lg bg-white p-3"
-          @click="handleDetail(item)"
-        >
-          <!-- 图片 -->
-          <view class="mb-2">
-            <image
-              v-if="item.photoUrl"
-              :src="item.photoUrl"
-              class="machine-image w-full rounded"
+    <FormSectionTitle title="充电桩" />
+    <z-paging ref="pagingRef" v-model="machines" @query="handleQuery">
+      <view class="list-wrap">
+        <view class="machine-grid">
+          <view
+            v-for="(item, index) in machines"
+            :key="item.machineId || index"
+            class="machine-card"
+            @click="handleDetail(item)"
+          >
+            <wd-img
+              :src="item.photoUrl || '/static/image/noPhoto.jpg'"
               mode="aspectFill"
+              class="machine-image"
             />
-            <image v-else src="/static/image/noPhoto.jpg" class="machine-image w-full rounded" mode="aspectFill" />
-          </view>
-
-          <!-- 名称 -->
-          <view class="text-center">
-            <text class="text-sm font-medium">{{ item.machineName }}</text>
+            <view class="machine-name-wrap">
+              <text class="machine-name">{{ item.machineName }}</text>
+            </view>
           </view>
         </view>
       </view>
-    </view>
 
-    <!-- 空状态 -->
-    <view v-else class="flex flex-col items-center justify-center py-20">
-      <text class="text-gray-400">暂无充电桩</text>
-    </view>
+      <template #empty>
+        <view class="empty-wrap">
+          <wd-status-tip image="search" tip="暂无充电桩" />
+        </view>
+      </template>
 
-    <!-- 加载状态 -->
-    <view v-if="machinesLoading" class="p-3 text-center text-gray-400">
-      <text>加载中...</text>
-    </view>
+      <template #loading>
+        <z-paging-loading
+          icon="data-base"
+          icon-class="i-carbon-data-base text-blue-400 animate-pulse"
+          primary-text="正在加载充电桩列表..."
+          secondary-text="请稍候片刻"
+        />
+      </template>
+    </z-paging>
   </view>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.charge-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.search-actions {
+  padding: 20rpx 24rpx 16rpx;
+}
+
+.list-wrap {
+  padding: 0 24rpx 24rpx;
+}
+
+.machine-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24rpx;
+}
+
 .machine-card {
   background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
 }
+
 .machine-image {
-  height: 200rpx;
+  width: 100%;
+  height: 220rpx;
+}
+
+.machine-name-wrap {
+  padding: 16rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.machine-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  text-align: center;
+}
+
+.empty-wrap {
+  padding: 120rpx 0;
 }
 </style>
