@@ -72,7 +72,7 @@ const { loading: loadingTask, send: loadTaskDetail } = useRequest(
   { immediate: false },
 )
   .onSuccess((event) => {
-    taskInfo.value = event.data?.task || null
+    taskInfo.value = event.task || null
   })
   .onError((error) => {
     console.error('获取任务详情失败:', error)
@@ -85,7 +85,7 @@ const { loading: loadingItems, send: loadDetailItems } = useRequest(
   { immediate: false },
 )
   .onSuccess((event) => {
-    detailItems.value = event.data?.items || []
+    detailItems.value = event.items || []
   })
   .onError((error) => {
     console.error('获取保养项列表失败:', error)

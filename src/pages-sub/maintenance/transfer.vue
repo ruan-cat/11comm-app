@@ -73,7 +73,7 @@ const { loading: loadingTask, send: loadTaskDetail } = useRequest(
   { immediate: false },
 )
   .onSuccess((event) => {
-    taskInfo.value = event.data?.task || null
+    taskInfo.value = (event.data as { task: MaintenanceTask }).task || null
   })
   .onError((error) => {
     console.error('获取任务详情失败:', error)
@@ -177,7 +177,7 @@ onMounted(() => {
           <wd-icon name="" custom-class="i-carbon-settings text-colorui-blue text-24px" />
           <text>{{ taskInfo.taskName }}</text>
         </view>
-        <wd-tag :custom-style="{ backgroundColor: getStatusColor(taskInfo.status) }" size="small">
+        <wd-tag :custom-style="`background-color: ${getStatusColor(taskInfo.status)}`" size="small">
           {{ taskInfo.statusName }}
         </wd-tag>
       </view>
@@ -246,7 +246,7 @@ onMounted(() => {
 
     <!-- 员工选择器 -->
     <wd-picker
-      v-model="showStaffPicker"
+      v-model:visible="showStaffPicker"
       :columns="staffList.map(item => ({ label: item.userName, value: item.userId }))"
       label-key="label"
       value-key="value"

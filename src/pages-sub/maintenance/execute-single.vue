@@ -64,6 +64,9 @@ const resultOptions = [
   { label: '需维修', value: '需维修' },
 ]
 
+/** 选中的结果值 */
+const selectedResult = ref('')
+
 /** 结果选择器显示状态 */
 const showResultPicker = ref(false)
 
@@ -230,11 +233,12 @@ async function handleSubmit() {
 
     <!-- 结果选择器 -->
     <wd-picker
-      :model-value="showResultPicker"
+      v-model="formData.result"
       :columns="resultOptions"
       label-key="label"
       value-key="value"
       title="选择执行结果"
+      :visible="showResultPicker"
       @confirm="handleResultConfirm"
       @close="showResultPicker = false"
     />
