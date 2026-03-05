@@ -73,9 +73,10 @@ const {
 )
 
 // 详情加载成功回调
-onDetailSuccess((result) => {
-  console.log('✅ 申请详情加载成功:', result)
-  selectedApplication.value = result.data[0]
+onDetailSuccess((event) => {
+  const { list } = event.data
+  console.log('✅ 申请详情加载成功:', event.data)
+  selectedApplication.value = list[0]
   showDetail.value = true
 })
 
@@ -276,7 +277,7 @@ function handleLoadRecord() {
     page: 1,
     row: 10,
     communityId: selectedApplication.value.communityId,
-    ardId: selectedApplication.value.ardId,
+    applicationId: selectedApplication.value.ardId,
     roomId: selectedApplication.value.roomId,
     roomName: selectedApplication.value.roomName,
   })
@@ -346,9 +347,9 @@ onMounted(() => {
       <view v-if="listLoading" class="loading">
         加载中...
       </view>
-      <view v-else-if="applicationList?.data?.length" class="list">
+      <view v-else-if="applicationList?.list?.length" class="list">
         <view
-          v-for="item in applicationList.data"
+          v-for="item in applicationList.list"
           :key="item.ardId"
           class="list-item"
           @click="handleViewDetail(item)"
@@ -420,10 +421,10 @@ onMounted(() => {
     </view>
 
     <!-- 跟踪记录 -->
-    <view v-if="recordList?.data?.length" class="record-section">
+    <view v-if="recordList?.list?.length" class="record-section">
       <FormSectionTitle title="跟踪记录" />
       <view class="record-list">
-        <text v-for="item in recordList.data" :key="item.ardrId" class="record-item">
+        <text v-for="item in recordList.list" :key="item.ardrId" class="record-item">
           {{ item.createUserName }} - {{ item.remark }} ({{ item.createTime }})
         </text>
       </view>
