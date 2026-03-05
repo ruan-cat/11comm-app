@@ -9,8 +9,9 @@
 
 <script setup lang="ts">
 import { useRequest } from 'alova/client'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { listMyAuditOrders, saveAuditOrders } from '@/api/resource'
+import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -34,8 +35,9 @@ const toast = useGlobalToast()
 /** 列表数据 */
 const list = ref<any[]>([])
 
-/** 总数 */
-const total = ref(0)
+type ZPagingRef = any
+
+const pagingRef = ref<ZPagingRef>()
 
 // ==================== 分页请求 ====================
 
@@ -49,21 +51,10 @@ const { send: loadList } = useRequest(
   { immediate: false },
 ).onSuccess((event) => {
   const response = event.data
-  total.value = response?.total || 0
-  list.value = response?.list || []
-})
-
-/** 加载更多 */
-const { send: loadMore } = useRequest(
-  (params: { page: number, row: number }) =>
-    listMyAuditOrders({
-      ...params,
-      communityId: communityInfo.communityId,
-    }),
-  { immediate: false },
-).onSuccess((event) => {
-  const response = event.data
-  list.value = [...list.value, ...(response?.list || [])]
+  pagingRef.value?.complete(response?.list || [])
+}).onError((error) => {
+  console.error('加载采购审核待办列表失败:', error)
+  pagingRef.value?.complete(false)
 })
 
 /** 审核操作 */
@@ -73,12 +64,8 @@ const { send: auditApply } = useRequest(
 ).onSuccess(() => {
   toast.success('审核成功')
   loadList({ page: 1, row: 10 })
-})
-
-// ==================== 生命周期 ====================
-
-onMounted(() => {
-  loadList({ page: 1, row: 10 })
+}).onError((error) => {
+  console.error('采购审核操作失败:', error)
 })
 
 // ==================== 方法 ====================
@@ -125,65 +112,69 @@ function handleAuditReject(item: any) {
 }
 
 /** 下拉刷新 */
-function onPullDownRefresh() {
-  loadList({ page: 1, row: 10 }).finally(() => {
-    uni.stopPullDownRefresh()
+function handleQuery(pageNo: number, pageSize: number) {
+  loadList({
+    page: pageNo,
+    row: pageSize,
   })
-}
-
-/** 上拉加载更多 */
-function onReachBottom() {
-  if (list.value.length < total.value) {
-    const page = Math.floor(list.value.length / 10) + 1
-    loadMore({ page, row: 10 })
-  }
 }
 </script>
 
 <template>
   <view class="page-container">
-    <!-- 列表 -->
-    <view v-if="list.length > 0" class="list-container">
-      <view v-for="(item, index) in list" :key="index" class="list-item">
-        <view class="item-header" @click="goToDetail(item)">
-          <view class="item-title">
-            <wd-icon name="" custom-class="i-carbon-shopping-cart text-green-500 mr-2" />
-            <text class="font-medium">{{ item.resourceNames }}</text>
+    <z-paging ref="pagingRef" v-model="list" @query="handleQuery">
+      <view class="list-container">
+        <view v-for="(item, index) in list" :key="index" class="list-item">
+          <view class="item-header" @click="goToDetail(item)">
+            <view class="item-title">
+              <wd-icon name="" custom-class="i-carbon-shopping-cart text-green-500 mr-2" />
+              <text class="font-medium">{{ item.resourceNames }}</text>
+            </view>
+            <view class="item-status">
+              <text class="status-text">({{ item.stateName }})</text>
+            </view>
           </view>
-          <view class="item-status">
-            <text class="status-text">({{ item.stateName }})</text>
-          </view>
-        </view>
 
-        <view class="item-content" @click="goToDetail(item)">
-          <view class="info-item">
-            <text class="label">申请人:</text>
-            <text>{{ item.createUserName }}</text>
+          <view class="item-content" @click="goToDetail(item)">
+            <view class="info-item">
+              <text class="label">申请人:</text>
+              <text>{{ item.createUserName }}</text>
+            </view>
+            <view class="info-item">
+              <text class="label">时间:</text>
+              <text>{{ item.createTime }}</text>
+            </view>
           </view>
-          <view class="info-item">
-            <text class="label">时间:</text>
-            <text>{{ item.createTime }}</text>
-          </view>
-        </view>
 
-        <view class="item-actions">
-          <wd-button type="success" size="small" @click="handleAuditPass(item)">
-            通过
-          </wd-button>
-          <wd-button type="error" size="small" @click="handleAuditReject(item)">
-            拒绝
-          </wd-button>
-          <wd-button type="info" size="small" plain @click="goToDetail(item)">
-            详情
-          </wd-button>
+          <view class="item-actions">
+            <wd-button type="success" size="small" @click="handleAuditPass(item)">
+              通过
+            </wd-button>
+            <wd-button type="error" size="small" @click="handleAuditReject(item)">
+              拒绝
+            </wd-button>
+            <wd-button type="info" size="small" plain @click="goToDetail(item)">
+              详情
+            </wd-button>
+          </view>
         </view>
       </view>
-    </view>
 
-    <!-- 空状态 -->
-    <view v-else class="empty-container">
-      <wd-status-tip image="content" tip="暂无待审核数据" />
-    </view>
+      <template #empty>
+        <view class="empty-container">
+          <wd-status-tip image="content" tip="暂无待审核数据" />
+        </view>
+      </template>
+
+      <template #loading>
+        <ZPagingLoading
+          icon="document"
+          icon-class="i-carbon-document text-blue-400 animate-pulse"
+          primary-text="正在加载采购审核列表..."
+          secondary-text="请稍候片刻"
+        />
+      </template>
+    </z-paging>
   </view>
 </template>
 
