@@ -65,6 +65,8 @@ const { send: loadDetail, loading } = useRequest(
       remark: '',
     }))
   }
+}).onError((error) => {
+  console.error('加载出库详情失败:', error)
 })
 
 const { send: submitOut, loading: submitting } = useRequest(
@@ -121,22 +123,17 @@ async function handleSubmit() {
     return
   }
 
-  try {
-    await submitOut({
-      resourceStores: itemList.value.map(item => ({
-        resId: item.resId,
-        resName: item.resName,
-        resCode: '',
-        price: 0,
-        quantity: Number.parseInt(item.purchaseQuantity),
-      })),
-      description: '',
-      applyOrderId: applyOrderId.value,
-    })
-  }
-  catch (error) {
-    // error handled by onError
-  }
+  submitOut({
+    resourceStores: itemList.value.map(item => ({
+      resId: item.resId,
+      resName: item.resName,
+      resCode: '',
+      price: 0,
+      quantity: Number.parseInt(item.purchaseQuantity),
+    })),
+    description: '',
+    applyOrderId: applyOrderId.value,
+  })
 }
 </script>
 
