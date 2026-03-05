@@ -287,6 +287,9 @@ export default {
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
+import { useGlobalToast } from "@/hooks/useGlobalToast";
+
+const toast = useGlobalToast();
 
 interface FormData {
 	title: string;
@@ -303,10 +306,7 @@ const selectedIndex = ref(0);
 
 const handleSubmit = () => {
 	if (!formData.title) {
-		uni.showToast({
-			title: "请输入标题",
-			icon: "none",
-		});
+		toast.error("请输入标题");
 		return;
 	}
 	submitForm();

@@ -310,6 +310,10 @@ function formatDate(date: string | number | Date, format: string = 'YYYY-MM-DD')
 
 ```typescript
 <script setup lang="ts">
+import { useGlobalToast } from "@/hooks/useGlobalToast";
+
+const toast = useGlobalToast();
+
 /** 处理输入事件 */
 const handleInput = (e: Event) => {
   const target = e.target as HTMLInputElement
@@ -326,7 +330,7 @@ const handlePickerChange = (e: any) => {
 const handleSubmit = async () => {
   try {
     await submitTask(formData)
-    uni.showToast({ title: '提交成功', icon: 'success' })
+    toast.success('提交成功')
   } catch (error) {
     console.error('提交失败:', error)
   }
