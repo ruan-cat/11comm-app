@@ -1,6 +1,32 @@
 ---
 name: add-new-component
-description: 新建公共组件规范。当需要创建新的公共组件（如 src/components/common 目录下的组件）时使用。提供组件文件结构、TypeScript 类型定义、Vue 组件编写、组件文档编写、测试页面创建等完整规范。
+description: |
+  新建公共组件规范专家 - 指导在 src/components/common 目录下创建符合项目规范的公共组件，包括文件结构、TypeScript 类型、Vue 组件、文档和测试页面。
+
+  触发条件（满足任意一项即触发）：
+  - 任务包含"新建组件"、"公共组件"、"common 组件"、"创建组件"等关键词
+  - 需要在 src/components/common 目录下创建新组件
+  - 需要创建可复用的业务组件（如表单分区标题、操作按钮组、信息展示卡片）
+  - 需要编写组件的 TypeScript 类型定义
+  - 需要编写组件使用文档（index.md）
+  - 需要创建组件测试页面（src/pages/test-use/）
+  - 用户提及"组件规范"、"组件文档"、"组件测试"等关键词
+
+  必须协同的技能：
+  - beautiful-component-design（组件美化时）- 图标、响应式设计、表单分区标题
+  - component-migration（从旧组件迁移时）- ColorUI → wot-design-uni
+  - use-wd-form（组件内包含表单时）- 表单结构、wd-picker、校验规则
+
+  禁止事项：
+  - 禁止在 components 目录外创建公共组件
+  - 禁止不编写组件文档（index.md）
+  - 禁止不提供使用示例和测试页面
+  - 禁止组件命名不规范（必须使用短横线命名法）
+  - 禁止不定义 TypeScript 类型（types.ts）
+  - 禁止在组件文件顶部不添加说明注释
+  - 禁止不使用 withDefaults 设置 props 默认值
+
+  覆盖场景：所有需要跨页面复用的业务组件，包括表单分区标题（FormSectionTitle）、操作按钮组（ActivityActions）、信息展示卡片（ActivityInfo）、加载状态组件（ZPagingLoading）等。
 ---
 
 # 新建公共组件规范

@@ -1,6 +1,30 @@
 ---
 name: use-uniapp-dynamic-page-title
-description: 在 uni-app 项目中实现动态页面标题设置。使用 uni.setNavigationBarTitle API 根据页面参数、状态或业务逻辑动态修改导航栏标题。当页面需要根据不同场景显示不同标题时使用（如派单/转单/办结显示不同标题）。
+description: |
+  uni-app 动态页面标题设置专家 - 根据路由参数或业务状态动态设置页面标题，使用 uni.setNavigationBarTitle API。
+
+  触发条件（满足任意一项即触发）：
+  - 任务包含"动态标题"、"页面标题"、"navigationBarTitleText"、"setNavigationBarTitle"等关键词
+  - 需要根据路由参数动态设置页面标题（如显示工单编号、房屋地址）
+  - 需要根据业务状态动态更新标题（如派单/转单显示不同标题）
+  - 从 Vue2 迁移需要动态标题的页面
+  - 实现详情页、编辑页、审核页等需要显示动态信息的标题
+  - 页面标题需要根据数据加载后的内容变化
+  - 需要在不同操作模式下显示不同标题（查看/编辑/审核）
+
+  必须协同的技能：
+  - route-migration（路由迁移时）- 确保路由参数正确传递
+  - code-migration（Vue2 迁移时）- Options API → Composition API
+  - api-migration（需要从接口获取标题数据时）- API 调用规范
+
+  禁止事项：
+  - 禁止在 pages.json 中硬编码动态标题
+  - 禁止使用 uni.setNavigationBarTitle 的回调形式（应使用 Promise 或直接调用）
+  - 禁止在 onLoad 之外的生命周期钩子中设置初始标题
+  - 禁止不处理标题设置失败的情况
+  - 禁止标题过长不做截断处理
+
+  覆盖场景：几乎所有需要根据数据动态显示标题的页面，包括详情页（显示编号/名称）、编辑页（显示操作类型）、审核页（显示审核状态）、表单页（显示创建/修改模式）等。
 ---
 
 # uni-app 动态页面标题设置
