@@ -69,6 +69,9 @@ interface ImportMeta {
 // src/http/alova-backend.ts
 import { createAlova } from "alova";
 import AdapterUniapp from "@alova/adapter-uniapp";
+import { useGlobalToast } from "@/hooks/useGlobalToast";
+
+const toast = useGlobalToast();
 
 /**
  * 连接后端 API 的 Alova 实例
@@ -103,10 +106,7 @@ export const alovaBackend = createAlova({
 			// 检查业务状态
 			if (!data.success) {
 				// 显示错误提示
-				uni.showToast({
-					title: data.message || "请求失败",
-					icon: "error",
-				});
+				toast.error(data.message || "请求失败");
 				throw new Error(data.message || "请求失败");
 			}
 
@@ -118,10 +118,7 @@ export const alovaBackend = createAlova({
 			console.error("API 请求错误:", error);
 
 			// 显示错误提示
-			uni.showToast({
-				title: error.message || "网络错误",
-				icon: "error",
-			});
+			toast.error(error.message || "网络错误");
 
 			throw error;
 		},
@@ -356,6 +353,9 @@ import { ref, onMounted } from "vue";
 import { useRequest } from "alova/client";
 import { getRepairDetailApi, updateRepairApi } from "@/api/repair-backend";
 import type { RepairOrder } from "@/api/types/repair";
+import { useGlobalToast } from "@/hooks/useGlobalToast";
+
+const toast = useGlobalToast();
 
 // 获取页面参数
 const props = defineProps<{
@@ -377,7 +377,7 @@ const { loading: updating, send: updateStatus } = useRequest(
   {
     immediate: false,
     onSuccess: () => {
-      uni.showToast({ title: "更新成功" });
+      toast.success("更新成功");
       loadDetail(); // 刷新详情
     },
   }
@@ -444,6 +444,9 @@ import { ref, reactive } from "vue";
 import { useRequest } from "alova/client";
 import { createRepairApi } from "@/api/repair-backend";
 import type { CreateRepairParams } from "@/api/types/repair";
+import { useGlobalToast } from "@/hooks/useGlobalToast";
+
+const toast = useGlobalToast();
 
 // 表单数据
 const formData = reactive<CreateRepairParams>({
@@ -462,7 +465,7 @@ const { loading, send: submitForm } = useRequest(
   {
     immediate: false,
     onSuccess: () => {
-      uni.showToast({ title: "创建成功" });
+      toast.success("创建成功");
       setTimeout(() => {
         uni.navigateBack();
       }, 1500);
@@ -474,7 +477,7 @@ const { loading, send: submitForm } = useRequest(
 async function handleSubmit() {
   // 表单验证
   if (!formData.title.trim()) {
-    uni.showToast({ title: "请输入标题", icon: "error" });
+    toast.error("请输入标题");
     return;
   }
 
