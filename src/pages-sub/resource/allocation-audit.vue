@@ -11,6 +11,7 @@
 import { useRequest } from 'alova/client'
 import { onMounted, ref } from 'vue'
 import { getAllocationHisAudit, listMyAllocationStoreAuditOrders, saveAuditAllocationStoreOrder } from '@/api/resource'
+import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -25,8 +26,10 @@ const communityInfo = getCurrentCommunity()
 
 const toast = useGlobalToast()
 
+type ZPagingRef = any
+
+const pagingRef = ref<ZPagingRef>()
 const list = ref<any[]>([])
-const total = ref(0)
 const currentPage = ref(0) // 0: 待办, 1: 已办
 
 const { send: loadList } = useRequest(
@@ -38,8 +41,10 @@ const { send: loadList } = useRequest(
   { immediate: false },
 ).onSuccess((event) => {
   const response = event.data
-  total.value = response?.total || 0
-  list.value = response?.list || []
+  pagingRef.value?.complete(response?.list || [])
+}).onError((error) => {
+  console.error('加载调拨审核待办列表失败:', error)
+  pagingRef.value?.complete(false)
 })
 
 const { send: loadHistory } = useRequest(
@@ -51,8 +56,10 @@ const { send: loadHistory } = useRequest(
   { immediate: false },
 ).onSuccess((event) => {
   const response = event.data
-  total.value = response?.total || 0
-  list.value = response?.list || []
+  pagingRef.value?.complete(response?.list || [])
+}).onError((error) => {
+  console.error('加载调拨审核历史列表失败:', error)
+  pagingRef.value?.complete(false)
 })
 
 const { send: auditApply } = useRequest(
@@ -61,20 +68,17 @@ const { send: auditApply } = useRequest(
 ).onSuccess(() => {
   toast.success('审核成功')
   changeListType(currentPage.value)
+}).onError((error) => {
+  console.error('调拨审核操作失败:', error)
 })
 
 onMounted(() => {
-  changeListType(0)
+  pagingRef.value?.reload()
 })
 
 function changeListType(type: number) {
   currentPage.value = type
-  if (type === 0) {
-    loadList({ page: 1, row: 10 })
-  }
-  else {
-    loadHistory({ page: 1, row: 10 })
-  }
+  pagingRef.value?.reload()
 }
 
 function goToDetail(item: any) {
@@ -124,21 +128,12 @@ function handleAuditReject(item: any) {
   })
 }
 
-function onPullDownRefresh() {
-  changeListType(currentPage.value).finally(() => {
-    uni.stopPullDownRefresh()
-  })
-}
-
-function onReachBottom() {
-  if (list.value.length < total.value) {
-    const page = Math.floor(list.value.length / 10) + 1
-    if (currentPage.value === 0) {
-      loadList({ page, row: 10 })
-    }
-    else {
-      loadHistory({ page, row: 10 })
-    }
+function handleQuery(pageNo: number, pageSize: number) {
+  if (currentPage.value === 0) {
+    loadList({ page: pageNo, row: pageSize })
+  }
+  else {
+    loadHistory({ page: pageNo, row: pageSize })
   }
 }
 </script>
@@ -157,48 +152,59 @@ function onReachBottom() {
       </view>
     </view>
 
-    <!-- 列表 -->
-    <view v-if="list.length > 0" class="list-container">
-      <view v-for="(item, index) in list" :key="index" class="list-item">
-        <view class="item-header" @click="goToDetail(item)">
-          <view class="item-title">
-            <wd-icon name="" custom-class="i-carbon-delivery text-green-500 mr-2" />
-            <text class="font-medium">{{ item.resourceNames }}</text>
+    <z-paging ref="pagingRef" v-model="list" @query="handleQuery">
+      <view class="list-container">
+        <view v-for="(item, index) in list" :key="index" class="list-item">
+          <view class="item-header" @click="goToDetail(item)">
+            <view class="item-title">
+              <wd-icon name="" custom-class="i-carbon-delivery text-green-500 mr-2" />
+              <text class="font-medium">{{ item.resourceNames }}</text>
+            </view>
+            <view class="item-status">
+              <text class="status-text">({{ item.stateName }})</text>
+            </view>
           </view>
-          <view class="item-status">
-            <text class="status-text">({{ item.stateName }})</text>
-          </view>
-        </view>
 
-        <view class="item-content" @click="goToDetail(item)">
-          <view class="info-item">
-            <text class="label">申请人:</text>
-            <text>{{ item.createUserName }}</text>
+          <view class="item-content" @click="goToDetail(item)">
+            <view class="info-item">
+              <text class="label">申请人:</text>
+              <text>{{ item.createUserName }}</text>
+            </view>
+            <view class="info-item">
+              <text class="label">时间:</text>
+              <text>{{ item.createTime }}</text>
+            </view>
           </view>
-          <view class="info-item">
-            <text class="label">时间:</text>
-            <text>{{ item.createTime }}</text>
-          </view>
-        </view>
 
-        <view v-if="currentPage === 0" class="item-actions">
-          <wd-button type="success" size="small" @click="handleAuditPass(item)">
-            通过
-          </wd-button>
-          <wd-button type="error" size="small" @click="handleAuditReject(item)">
-            拒绝
-          </wd-button>
-          <wd-button type="info" size="small" plain @click="goToDetail(item)">
-            详情
-          </wd-button>
+          <view v-if="currentPage === 0" class="item-actions">
+            <wd-button type="success" size="small" @click="handleAuditPass(item)">
+              通过
+            </wd-button>
+            <wd-button type="error" size="small" @click="handleAuditReject(item)">
+              拒绝
+            </wd-button>
+            <wd-button type="info" size="small" plain @click="goToDetail(item)">
+              详情
+            </wd-button>
+          </view>
         </view>
       </view>
-    </view>
 
-    <!-- 空状态 -->
-    <view v-else class="empty-container">
-      <wd-status-tip image="content" tip="暂无数据" />
-    </view>
+      <template #empty>
+        <view class="empty-container">
+          <wd-status-tip image="content" tip="暂无数据" />
+        </view>
+      </template>
+
+      <template #loading>
+        <ZPagingLoading
+          icon="document"
+          icon-class="i-carbon-document text-blue-400 animate-pulse"
+          primary-text="正在加载调拨审核列表..."
+          secondary-text="请稍候片刻"
+        />
+      </template>
+    </z-paging>
   </view>
 </template>
 
