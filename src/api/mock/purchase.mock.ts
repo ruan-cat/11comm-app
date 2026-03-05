@@ -159,7 +159,10 @@ function listResourceStores(params: {
   const list = resourceStoreList.slice(start, end)
 
   return successResponse(
-    { resourceStores: list },
+    {
+      list,
+      total: resourceStoreList.length,
+    },
     '查询成功',
   )
 }
@@ -182,7 +185,7 @@ function savePurchaseApply(body: {
 
   // 验证
   if (!body.resourceStores || body.resourceStores.length === 0) {
-    return errorResponse('请选择采购物资', ResultEnumMap.BusinessError)
+    return errorResponse('请选择采购物资', ResultEnumMap.Error)
   }
 
   // 生成采购申请
@@ -225,19 +228,19 @@ function saveUrgentPurchaseApply(body: {
 
   // 验证
   if (!body.resourceStores || body.resourceStores.length === 0) {
-    return errorResponse('请选择采购物资', ResultEnumMap.BusinessError)
+    return errorResponse('请选择采购物资', ResultEnumMap.Error)
   }
 
   if (!body.endUserName) {
-    return errorResponse('请输入使用人', ResultEnumMap.BusinessError)
+    return errorResponse('请输入使用人', ResultEnumMap.Error)
   }
 
   if (!body.endUserTel) {
-    return errorResponse('请输入联系电话', ResultEnumMap.BusinessError)
+    return errorResponse('请输入联系电话', ResultEnumMap.Error)
   }
 
   if (!body.description) {
-    return errorResponse('请输入申请说明', ResultEnumMap.BusinessError)
+    return errorResponse('请输入申请说明', ResultEnumMap.Error)
   }
 
   // 生成采购申请
@@ -259,8 +262,31 @@ function saveUrgentPurchaseApply(body: {
 
 // ==================== 注册 Mock 接口 ====================
 
-export default defineUniAppMock({
-  '/app/resourceStore.listResourceStores': listResourceStores,
-  '/app/purchase/purchaseApply': savePurchaseApply,
-  '/app/purchase/urgentPurchaseApply': saveUrgentPurchaseApply,
-})
+export default defineUniAppMock([
+  /** 查询物资列表 */
+  {
+    url: '/app/resourceStore.listResourceStores',
+    method: 'GET',
+    body: (params) => {
+      return listResourceStores(params.query)
+    },
+  },
+
+  /** 提交采购申请 */
+  {
+    url: '/app/purchase/purchaseApply',
+    method: 'POST',
+    body: (params) => {
+      return savePurchaseApply(params.body as Parameters<typeof savePurchaseApply>[0])
+    },
+  },
+
+  /** 提交紧急采购申请 */
+  {
+    url: '/app/purchase/urgentPurchaseApply',
+    method: 'POST',
+    body: (params) => {
+      return saveUrgentPurchaseApply(params.body as Parameters<typeof saveUrgentPurchaseApply>[0])
+    },
+  },
+])
