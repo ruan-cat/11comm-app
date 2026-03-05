@@ -84,6 +84,8 @@ const { send: loadStoreHouses } = useRequest(
     label: item.shName,
     value: item.shId,
   }))
+}).onError((error) => {
+  console.error('加载仓库列表失败:', error)
 })
 
 const { send: loadDetail } = useRequest(
@@ -110,6 +112,8 @@ const { send: loadDetail } = useRequest(
       quantity: item.quantity || 0,
     }))
   }
+}).onError((error) => {
+  console.error('加载采购申请详情失败:', error)
 })
 
 const { send: submitUpdate, loading: submitting } = useRequest(
@@ -131,6 +135,8 @@ const { send: submitUpdate, loading: submitting } = useRequest(
   setTimeout(() => {
     uni.navigateBack()
   }, 1500)
+}).onError((error) => {
+  console.error('修改采购申请失败:', error)
 })
 
 onMounted(() => {
@@ -178,17 +184,12 @@ async function handleSubmit() {
         return
       }
 
-      try {
-        await submitUpdate({
-          applyOrderId: applyOrderId.value,
-          resourceStores: itemList.value,
-          description: model.description,
-          resOrderType: model.resOrderType,
-        })
-      }
-      catch (error) {
-        toast.error('提交失败')
-      }
+      submitUpdate({
+        applyOrderId: applyOrderId.value,
+        resourceStores: itemList.value,
+        description: model.description,
+        resOrderType: model.resOrderType,
+      })
     })
     .catch((error: any) => {
       console.error('表单校验异常:', error)
