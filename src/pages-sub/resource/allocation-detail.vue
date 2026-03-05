@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { listAllocationStorehouseApplys, listAllocationStorehouses } from '@/api/resource'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -48,6 +48,8 @@ const { send: loadApplyInfo, loading: loadingApply } = useRequest(
       },
     ]
   }
+}).onError((error) => {
+  console.error('加载调拨申请信息失败:', error)
 })
 
 const { send: loadResourceList, loading: loadingResource } = useRequest(
@@ -57,6 +59,8 @@ const { send: loadResourceList, loading: loadingResource } = useRequest(
 ).onSuccess((event) => {
   const response = event.data
   resourceList.value = response?.list || []
+}).onError((error) => {
+  console.error('加载调拨商品列表失败:', error)
 })
 
 onLoad((options) => {
