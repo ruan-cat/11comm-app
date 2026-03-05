@@ -1,6 +1,35 @@
 ---
 name: code-migration
-description: 专注于 Vue2 Options API 到 Vue3 Composition API + TypeScript 的迁移。当需要进行 Vue2 到 Vue3 代码迁移、Options API 到 Composition API 转换、TypeScript 类型定义、Vuex 到 Pinia 迁移、组合式函数编写时使用。完整页面迁移需与 component-migration、style-migration、api-migration 协同。
+description: |
+  专注于 Vue2 Options API 到 Vue3 Composition API + TypeScript 的迁移。
+
+  触发条件（满足任意一项即触发）：
+  - 任务包含"Vue2 到 Vue3"、"Options API"、"Composition API"、"代码迁移"等关键词
+  - 需要将 Options API（data、methods、computed）转换为 Composition API（ref、reactive、computed）
+  - 需要添加 TypeScript 类型定义
+  - 需要迁移生命周期钩子（mounted → onMounted）
+  - 需要将 Vuex 迁移到 Pinia
+  - 需要编写组合式函数（Composables）
+  - 需要添加 definePage 页面配置
+  - 需要处理静态资源导入（@/ 别名 → import）
+  - 从 Vue2 项目迁移页面代码
+
+  必须协同的技能：
+  - component-migration（组件迁移）- ColorUI → wot-design-uni
+  - style-migration（样式迁移）- ColorUI 类名 → UnoCSS 原子类
+  - api-migration（如果有接口）- API 调用
+  - api-error-handling（如果有接口）- 错误提示
+  - route-migration（路由迁移）- pages.json → 约定式路由
+
+  禁止事项：
+  - 禁止使用 export default {}（必须使用 <script setup lang="ts">）
+  - 禁止使用 this（Composition API 中不存在 this）
+  - 禁止使用 any 类型（必须明确类型）
+  - 禁止在 definePage 中添加 name 或 meta 字段（只使用 style）
+  - 禁止在微信小程序样式中使用 * 通配符选择器
+  - 禁止在模板中直接使用 @/ 别名字符串（静态资源必须 import）
+
+  覆盖场景：几乎所有从 Vue2 迁移到 Vue3 的页面都需要此技能，包括代码结构、响应式数据、生命周期、状态管理等。
 context: fork
 ---
 

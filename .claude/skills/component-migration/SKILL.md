@@ -1,6 +1,34 @@
 ---
 name: component-migration
-description: 专业的 uni-app 组件迁移专家，从 ColorUI + uni-app 内置组件到 wot-design-uni 组件库的迁移。当需要组件映射转换、Icon 图标迁移、表单组件迁移、修复 wot-design-uni 组件使用错误（类型错误、插槽错误、嵌套顺序错误）时使用。表单迁移必须与 use-wd-form 协同，api 迁移必须与 api-migration 协同。
+description: |
+  专业的 uni-app 组件迁移专家，从 ColorUI + uni-app 内置组件到 wot-design-uni 组件库的迁移。
+
+  触发条件（满足任意一项即触发）：
+  - 任务包含"组件迁移"、"ColorUI"、"wot-design-uni"等关键词
+  - 需要将 ColorUI 组件（cu-btn、cu-list、cu-card）迁移到 wot-design-uni
+  - 需要修复 wot-design-uni 组件使用错误（类型错误、插槽错误、嵌套顺序错误）
+  - 需要迁移 Icon 图标（cuIcon-* → i-carbon-*）
+  - 需要迁移表单组件（cu-form → wd-form）
+  - 需要迁移空状态组件（no-data-page → wd-status-tip）
+  - 需要迁移图片组件（image → wd-img）
+  - 从 Vue2 项目迁移页面组件
+
+  必须协同的技能：
+  - use-wd-form（表单页面迁移时，必须）- 表单结构、wd-picker、校验规则
+  - beautiful-component-design（表单页面迁移时，必须）- FormSectionTitle、图标、美化
+  - api-migration（如果有接口）- API 调用
+  - api-error-handling（如果有接口）- 错误提示
+  - style-migration（样式迁移）- ColorUI 类名 → UnoCSS 原子类
+  - code-migration（Vue2 迁移）- Options API → Composition API
+
+  禁止事项：
+  - 禁止使用 wd-empty 组件（不存在，必须使用 wd-status-tip）
+  - 禁止使用 wd-cell 的 #value 插槽（不存在）
+  - 禁止使用 wd-radio-group 替代 wd-picker（除非动态场景）
+  - 禁止在子组件内直接使用 <wd-toast />、<wd-message-box />（必须使用全局组合式函数）
+  - 禁止跳过 beautiful-component-design 技能（表单页面必须使用）
+
+  覆盖场景：几乎所有从 Vue2 迁移到 Vue3 的组件都需要此技能，包括按钮、列表、卡片、表单、图标、空状态等。
 context: fork
 ---
 
@@ -632,6 +660,9 @@ loading.hide();
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { useGlobalToast } from "@/hooks/useGlobalToast";
+
+const toast = useGlobalToast();
 
 // 需要维护多个状态变量
 const showStopModal = ref(false);
@@ -641,7 +672,7 @@ const currentItem = ref(null);
 // 需要手动校验和处理
 function handleConfirm() {
 	if (!stopReason.value.trim()) {
-		uni.showToast({ title: "请填写原因", icon: "none" });
+		toast.error("请填写原因");
 		return;
 	}
 	// 业务逻辑...

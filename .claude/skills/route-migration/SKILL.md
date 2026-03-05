@@ -1,6 +1,31 @@
 ---
 name: route-migration
-description: 专注于 Vue2 传统路由配置到 Vue3 约定式路由的迁移。当需要处理从 pages.json 到文件系统路由的转换、多平台路由适配或页面配置迁移时使用。完整页面迁移需与 code-migration、component-migration 协同。
+description: |
+  专注于 Vue2 传统路由配置到 Vue3 约定式路由的迁移。
+
+  触发条件（满足任意一项即触发）：
+  - 任务包含"路由迁移"、"pages.json"、"约定式路由"、"路由配置"等关键词
+  - 需要从 pages.json 迁移到文件系统路由
+  - 需要添加 definePage 页面配置
+  - 需要配置强类型路由系统（TypedRouter）
+  - 需要更新路由跳转代码（uni.navigateTo → TypedRouter）
+  - 需要处理多平台路由适配
+  - 需要查阅路由迁移映射表（docs/prompts/route-migration-map.yml）
+  - 从 Vue2 项目迁移页面路由
+
+  必须协同的技能：
+  - code-migration（代码迁移）- Vue2 → Vue3 代码写法
+  - component-migration（组件迁移）- ColorUI → wot-design-uni
+  - style-migration（样式迁移）- ColorUI 类名 → UnoCSS 原子类
+
+  禁止事项：
+  - 禁止自行决定路由路径（必须查阅映射表）
+  - 禁止使用 uni.navigateTo 字符串拼接（必须使用 TypedRouter）
+  - 禁止在 definePage 中添加 name 字段（只使用 style）
+  - 禁止跳过 definePage 配置（会导致标题显示为 "unibest"）
+  - 禁止不更新映射表状态（完成后必须添加 ✅ 标记）
+
+  覆盖场景：几乎所有从 Vue2 迁移到 Vue3 的页面都需要此技能，包括路由配置、页面跳转、参数传递等。
 context: fork
 ---
 

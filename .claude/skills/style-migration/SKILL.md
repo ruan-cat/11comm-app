@@ -1,6 +1,33 @@
 ---
 name: style-migration
-description: 专注于 ColorUI 到 UnoCSS + wot-design-uni 的样式系统迁移，从传统 CSS 框架到现代化原子 CSS。当需要迁移 ColorUI 类名到 UnoCSS 原子类、SCSS 变量到 UnoCSS 主题配置、固定像素到响应式单位时使用。完整页面迁移需与 component-migration、code-migration 协同。
+description: |
+  专注于 ColorUI 到 UnoCSS + wot-design-uni 的样式系统迁移，从传统 CSS 框架到现代化原子 CSS。
+
+  触发条件（满足任意一项即触发）：
+  - 任务包含"样式迁移"、"ColorUI"、"UnoCSS"、"原子 CSS"等关键词
+  - 需要将 ColorUI 类名（cu-btn、cu-list、cu-card）迁移到 UnoCSS 原子类
+  - 需要将 SCSS 变量迁移到 UnoCSS 主题配置
+  - 需要将固定像素（20px）转换为响应式单位（20rpx）
+  - 需要迁移渐变背景（bg-gradual-* → bg-gradient-to-*）
+  - 需要迁移间距样式（margin-xs → m-10rpx）
+  - 需要迁移圆角样式（radius-sm → rounded-8rpx）
+  - 从 Vue2 项目迁移页面样式
+
+  必须协同的技能：
+  - component-migration（组件迁移）- ColorUI → wot-design-uni
+  - code-migration（代码迁移）- Vue2 → Vue3 代码写法
+  - beautiful-component-design（可选）- 样式美化
+
+  禁止事项：
+  - 禁止滥用 UnoCSS shortcuts 功能（不要将业务样式写入 uno.config.ts）
+  - 禁止将 ColorUI 类名直接转为 shortcuts（应展开为原子类）
+  - 禁止在微信小程序样式中使用 * 通配符选择器
+  - 禁止使用 UnoCSS 的 space-y-* / space-x-* 类（微信小程序不支持）
+  - 禁止使用 UnoCSS 的 divide-y-* / divide-x-* 类（微信小程序不支持）
+  - 禁止使用复杂的 :nth-child() 选择器（如 n+2, 3n+1）
+  - 禁止使用 :not() 伪类选择器（特别是 :not([hidden])）
+
+  覆盖场景：几乎所有从 Vue2 迁移到 Vue3 的页面都需要此技能，包括布局、颜色、间距、形状、渐变等样式。
 context: fork
 ---
 
