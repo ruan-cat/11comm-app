@@ -10,6 +10,7 @@
 <script lang="ts" setup>
 import type { IUploadSuccessInfo } from '@/api/types/login'
 import { storeToRefs } from 'pinia'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { LOGIN_PAGE } from '@/router/config'
 import { TypedRouter } from '@/router/helpers'
 import { useUserStore } from '@/store'
@@ -21,6 +22,8 @@ definePage({
     navigationBarTitleText: '我的',
   },
 })
+
+const toast = useGlobalToast()
 
 const userStore = useUserStore()
 const tokenStore = useTokenStore()
@@ -84,10 +87,7 @@ function handleLogout() {
         /** 清空用户信息 */
         useTokenStore().logout()
         /** 执行退出登录逻辑 */
-        uni.showToast({
-          title: '退出登录成功',
-          icon: 'success',
-        })
+        toast.success('退出登录成功')
         // #ifdef MP-WEIXIN
         /** 微信小程序，去首页 */
         // uni.reLaunch({ url: '/pages/index/index' })
@@ -108,10 +108,7 @@ function handleRepairFinish() {
 
 /** 跳转到投诉已办（暂未实现） */
 function handleComplaintFinish() {
-  uni.showToast({
-    title: '功能开发中',
-    icon: 'none',
-  })
+  toast.info('功能开发中')
 }
 </script>
 

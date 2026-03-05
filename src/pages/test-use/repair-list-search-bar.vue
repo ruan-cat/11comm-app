@@ -8,12 +8,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import RepairListSearchBar from '@/components/common/repair-list-search-bar/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 
 definePage({
   style: {
     navigationBarTitleText: 'repair-list-search-bar 组件演示',
   },
 })
+
+const toast = useGlobalToast()
 
 /** 场景 1：完整功能（带状态筛选） */
 const searchName1 = ref('')
@@ -25,26 +28,17 @@ function handleSearch1() {
     searchName: searchName1.value,
     selectedState: selectedState1.value,
   })
-  uni.showToast({
-    title: `搜索: ${searchName1.value || '全部'}, 状态: ${selectedState1.value || '全部'}`,
-    icon: 'none',
-  })
+  toast.info(`搜索: ${searchName1.value || '全部'}, 状态: ${selectedState1.value || '全部'}`)
 }
 
 function handleClear1() {
   console.log('场景1 - 清空搜索')
-  uni.showToast({
-    title: '已清空搜索',
-    icon: 'none',
-  })
+  toast.info('已清空搜索')
 }
 
 function handleStateChange1(value: string) {
   console.log('场景1 - 状态改变:', value)
-  uni.showToast({
-    title: `状态改变: ${value || '全部'}`,
-    icon: 'none',
-  })
+  toast.info(`状态改变: ${value || '全部'}`)
 }
 
 /** 场景 2：仅搜索（不带状态筛选） */
@@ -55,10 +49,7 @@ function handleSearch2() {
   console.log('场景2 - 搜索:', {
     searchName: searchName2.value,
   })
-  uni.showToast({
-    title: `搜索: ${searchName2.value || '全部'}`,
-    icon: 'none',
-  })
+  toast.info(`搜索: ${searchName2.value || '全部'}`)
 }
 
 /** 场景 3：自定义占位符 */
@@ -71,10 +62,7 @@ function handleSearch3() {
     searchName: searchName3.value,
     selectedState: selectedState3.value,
   })
-  uni.showToast({
-    title: `搜索: ${searchName3.value || '全部'}`,
-    icon: 'none',
-  })
+  toast.info(`搜索: ${searchName3.value || '全部'}`)
 }
 </script>
 

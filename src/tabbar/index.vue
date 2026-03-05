@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CustomTabBarItem } from './config'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { customTabbarEnable, needHideNativeTabbar, tabbarCacheEnable } from './config'
 import { tabbarList, tabbarStore } from './store'
 
@@ -10,14 +11,13 @@ defineOptions({
 })
 // #endif
 
+const toast = useGlobalToast()
+
 /**
  * 中间的鼓包tabbarItem的点击事件
  */
 function handleClickBulge() {
-  uni.showToast({
-    title: '点击了中间的鼓包tabbarItem',
-    icon: 'none',
-  })
+  toast.info('点击了中间的鼓包tabbarItem')
 }
 
 function handleClick(index: number) {
