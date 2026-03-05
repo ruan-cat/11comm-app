@@ -80,7 +80,6 @@ const { loading: detailLoading, send: loadDetail } = useRequest(
   })
   .onError((error) => {
     console.error('❌ 加载工单详情失败:', error)
-    toast.error(error.error || '加载失败，请稍后重试')
   })
 
 /** 加载工单流转记录 */
