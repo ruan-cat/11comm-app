@@ -39,8 +39,8 @@ const { loading, send: loadDetail } = useRequest(
   () => getWorkOrderDetail({ orderId: props.orderId || '' }),
   { immediate: false },
 )
-  .onSuccess((event) => {
-    orderDetail.value = event.data?.order || null
+  .onSuccess(({ data }) => {
+    orderDetail.value = data.order || null
   })
   .onError((error) => {
     console.error('加载工作单详情失败:', error)

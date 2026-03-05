@@ -41,28 +41,32 @@ const { loading, send: loadDetail } = useRequest(
   () => getWorkOrderDetail({ orderId: props.orderId || '' }),
   { immediate: false },
 )
-  .onSuccess((event) => {
-    orderDetail.value = event.data?.order || null
+  .onSuccess(({ data }) => {
+    orderDetail.value = data.order || null
   })
   .onError((error) => {
     console.error('加载工作单详情失败:', error)
     uni.showToast({ title: '加载失败', icon: 'none' })
   })
 
+/** 当前审核结果 */
+let currentResult: 'pass' | 'reject' = 'pass'
+
 /** 审核请求 */
 const { loading: auditLoading, send: doAudit } = useRequest(
-  (result: 'pass' | 'reject') =>
-    auditWorkOrder({
+  (result: 'pass' | 'reject') => {
+    currentResult = result
+    return auditWorkOrder({
       orderId: props.orderId || '',
       result,
       opinion: opinion.value,
-    }),
+    })
+  },
   { immediate: false },
 )
-  .onSuccess((_, args) => {
-    const result = args[0]
+  .onSuccess(() => {
     uni.showToast({
-      title: result === 'pass' ? '审核通过' : '已驳回',
+      title: currentResult === 'pass' ? '审核通过' : '已驳回',
       icon: 'success',
     })
     setTimeout(() => {
@@ -122,6 +126,14 @@ function handleReject() {
     },
   })
 }
+
+/** 预览图片 */
+function handlePreviewImage(photo: string) {
+  uni.previewImage({
+    urls: orderDetail.value?.completePhotos || [],
+    current: photo,
+  })
+}
 </script>
 
 <template>
@@ -171,7 +183,7 @@ function handleReject() {
                 :src="photo"
                 mode="aspectFill"
                 class="h-20 w-20 rounded"
-                @click="uni.previewImage({ urls: orderDetail.completePhotos || [], current: photo })"
+                @click="handlePreviewImage(photo)"
               />
             </view>
           </view>
@@ -200,7 +212,7 @@ function handleReject() {
     <view v-if="orderDetail" class="shadow-top fixed bottom-0 left-0 right-0 bg-white p-4 pb-safe">
       <view class="flex gap-3">
         <wd-button
-          type="danger"
+          type="error"
 
           plain block
           :loading="auditLoading"

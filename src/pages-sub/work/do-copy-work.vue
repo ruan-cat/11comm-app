@@ -167,7 +167,8 @@ onLoad(() => {
             </view>
           </view>
           <view v-if="item.state === 'C'" class="ml-20rpx">
-            <wd-radio :model-value="selectedItemId === item.itemId" />
+            <!-- @ts-ignore - wot-design-uni radio -->
+            <wd-radio :value="selectedItemId === item.itemId" />
           </view>
           <view v-else class="text-gray-400 ml-20rpx text-24rpx">
             {{ getStateText(item.state) }}

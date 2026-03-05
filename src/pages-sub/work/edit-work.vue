@@ -46,9 +46,9 @@ const formData = ref<UpdateWorkOrderParams>({
   type: '1',
   priority: '2',
   content: '',
-  endTime: '',
-  staffIds: [],
-  copyStaffIds: [],
+  planEndTime: '',
+  staffId: '',
+  copyUserIds: [],
 })
 
 /** 工作单类型选项 */
@@ -68,24 +68,25 @@ const rules: FormRules = {
   title: [{ required: true, message: '请输入工作单标题' }],
   type: [{ required: true, message: '请选择工作单类型' }],
   content: [{ required: true, message: '请输入工作内容' }],
-  endTime: [{ required: true, message: '请选择完成日期' }],
+  planEndTime: [{ required: true, message: '请选择完成日期' }],
 }
 
 /** 获取工作单详情 */
 const { send: loadDetail, loading: detailLoading } = useRequest(
-  () => getWorkOrderDetail(props.orderId || ''),
+  () => getWorkOrderDetail({ orderId: props.orderId || '' }),
   { immediate: false },
-).onSuccess(({ data }) => {
-  const detail = data.data as WorkOrderDetail
+).onSuccess((event) => {
+  const response = event.data
+  const detail = response?.order as WorkOrderDetail
   formData.value = {
     orderId: detail.orderId,
     title: detail.title,
     type: detail.type,
     priority: detail.priority,
     content: detail.content,
-    endTime: detail.endTime || '',
-    staffIds: detail.staffs?.map(s => s.staffId) || [],
-    copyStaffIds: detail.copyStaffs?.map(s => s.staffId) || [],
+    planEndTime: detail.endTime || '',
+    staffId: detail.staffId || '',
+    copyUserIds: detail.copyStaffs?.map(s => s.staffId) || [],
   }
 }).onError((error) => {
   console.error('获取工作单详情失败:', error)
@@ -118,7 +119,7 @@ async function handleSubmit() {
 /** 处理日期选择 */
 function handleDateConfirm(e: { value: Date }) {
   const date = e.value
-  formData.value.endTime = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+  formData.value.planEndTime = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 }
 
 onLoad(() => {
@@ -167,11 +168,11 @@ onLoad(() => {
       <FormSectionTitle title="时间设置" icon="i-carbon-calendar" />
       <wd-cell-group border>
         <wd-datetime-picker
-          v-model="formData.endTime"
+          v-model="formData.planEndTime"
           :label-width="LABEL_WIDTH"
           type="date"
           label="完成日期"
-          prop="endTime"
+          prop="planEndTime"
           placeholder="请选择完成日期"
           @confirm="handleDateConfirm"
         />

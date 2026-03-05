@@ -38,8 +38,9 @@ const tasks = ref<WorkTask[]>([])
 const { send: loadTasks, loading } = useRequest(
   () => getWorkTaskList({ workId: props.workId || '', page: 1, row: 100 }),
   { immediate: false },
-).onSuccess(({ data }) => {
-  tasks.value = data.data || []
+).onSuccess((event) => {
+  const response = event.data
+  tasks.value = response?.list || []
 }).onError((error) => {
   console.error('获取任务列表失败:', error)
 })
