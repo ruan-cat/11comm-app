@@ -267,11 +267,9 @@ function handleSubmit() {
                   </text>
                 </view>
               </template>
-              <template #value>
-                <view class="remove-btn" @click="handleRemoveItem(index, item.resId)">
-                  移除
-                </view>
-              </template>
+              <view class="remove-btn" @click="handleRemoveItem(index, item.resId)">
+                移除
+              </view>
             </wd-cell>
 
             <view class="goods-form">

@@ -21,7 +21,7 @@ route_mappings:
   basic_modules:
     gitee-example/pages/index/index.vue: src/pages/index/index.vue
     gitee-example/pages/index/work.vue: src/pages/work-dashboard/index.vue
-    gitee-example/pages/login/login.vue: src/pages/login/index.vue
+    gitee-example/pages/login/login.vue: src/pages/login/login.vue
     gitee-example/pages/my/my.vue: src/pages/profile/index.vue
     gitee-example/pages/my/staffDetailAttendance.vue: src/pages/profile/attendance.vue
     gitee-example/pages/userInfo/userInfo.vue: src/pages/profile/user-info.vue
@@ -30,7 +30,7 @@ route_mappings:
 
   # ===== 2. 通讯录模块 (1个页面) - 已完成迁移 ✅ =====
   address_modules:
-    gitee-example/pages/addressList/addressList.vue: src/pages/addressList/index.vue
+    gitee-example/pages/addressList/addressList.vue: src/pages/address/list.vue
 
   # ===== 3. 维修管理模块 (10个页面) - 已完成迁移 ✅ =====
   repair_modules:

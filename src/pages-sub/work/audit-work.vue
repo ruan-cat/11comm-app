@@ -152,11 +152,9 @@ function handlePreviewImage(photo: string) {
         <wd-cell title="工作单标题" :value="orderDetail.title" />
         <wd-cell title="工作单类型" :value="orderDetail.typeName" />
         <wd-cell title="当前状态">
-          <template #value>
-            <wd-tag :type="getStatusType(orderDetail.status)" size="small">
-              {{ orderDetail.statusName }}
-            </wd-tag>
-          </template>
+          <wd-tag :type="getStatusType(orderDetail.status)" size="small">
+            {{ orderDetail.statusName }}
+          </wd-tag>
         </wd-cell>
       </wd-cell-group>
 

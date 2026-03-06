@@ -97,6 +97,9 @@ const {
   }),
   {
     immediate: false,
+    onError: (error) => {
+      console.error('加载活动详情失败:', error)
+    },
   },
 )
 
