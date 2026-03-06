@@ -206,7 +206,15 @@
         "backgroundColor": "#F3F4F6"
       }
     },
-    
+    // #ifdef H5
+    {
+      "path": "pages/webview/index",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "网页视图"
+      }
+    }
+    // #endif
   ],
   "subPackages": [
     {
@@ -282,7 +290,7 @@
           }
         },
         // #endif
-        // #ifdef H5 || MP-WEIXIN
+        // #ifdef MP-WEIXIN
         {
           "path": "appointment/index",
           "type": "page",
@@ -292,7 +300,14 @@
           }
         },
         // #endif
-        // #ifdef H5 || MP-WEIXIN
+        {
+          "path": "appointment/index",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "预约管理"
+          }
+        },
+        // #ifdef MP-WEIXIN
         {
           "path": "appointment/queue",
           "type": "page",
@@ -302,7 +317,14 @@
           }
         },
         // #endif
-        // #ifdef H5 || MP-WEIXIN
+        {
+          "path": "appointment/queue",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "排队预约"
+          }
+        },
+        // #ifdef MP-WEIXIN
         {
           "path": "meter/add-meter",
           "type": "page",
@@ -312,7 +334,14 @@
           }
         },
         // #endif
-        // #ifdef H5 || MP-WEIXIN
+        {
+          "path": "meter/add-meter",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "新增水表"
+          }
+        },
+        // #ifdef MP-WEIXIN
         {
           "path": "meter/add-share-reading",
           "type": "page",
@@ -322,7 +351,14 @@
           }
         },
         // #endif
-        // #ifdef H5 || MP-WEIXIN
+        {
+          "path": "meter/add-share-reading",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "新增共享抄表"
+          }
+        },
+        // #ifdef MP-WEIXIN
         {
           "path": "meter/audit-share-reading",
           "type": "page",
@@ -332,7 +368,14 @@
           }
         },
         // #endif
-        // #ifdef H5 || MP-WEIXIN
+        {
+          "path": "meter/audit-share-reading",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "审核共享抄表"
+          }
+        },
+        // #ifdef MP-WEIXIN
         {
           "path": "meter/qrcode-meter",
           "type": "page",
@@ -342,7 +385,14 @@
           }
         },
         // #endif
-        // #ifdef H5 || MP-WEIXIN
+        {
+          "path": "meter/qrcode-meter",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "二维码水表"
+          }
+        },
+        // #ifdef MP-WEIXIN
         {
           "path": "meter/reading",
           "type": "page",
@@ -352,7 +402,14 @@
           }
         },
         // #endif
-        // #ifdef H5 || MP-WEIXIN
+        {
+          "path": "meter/reading",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "抄表"
+          }
+        },
+        // #ifdef MP-WEIXIN
         {
           "path": "meter/share-meter",
           "type": "page",
@@ -362,6 +419,13 @@
           }
         },
         // #endif
+        {
+          "path": "meter/share-meter",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "共享水表"
+          }
+        },
         // #ifdef H5 || MP-WEIXIN
         {
           "path": "demo/index",
@@ -784,6 +848,27 @@
         },
         // #endif
         {
+          "path": "coupon/write-off-coupon",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "核销优惠券"
+          }
+        },
+        {
+          "path": "coupon/write-off-integral",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "核销积分"
+          }
+        },
+        {
+          "path": "coupon/write-off-reserve",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "核销预约"
+          }
+        },
+        {
           "path": "fee/charge-detail",
           "type": "page",
           "style": {
@@ -845,6 +930,20 @@
           "style": {
             "navigationBarTitleText": "填写欠费催缴",
             "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "item/release-detail",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "物品详情"
+          }
+        },
+        {
+          "path": "item/release",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "物品放行"
           }
         },
         {
@@ -1269,6 +1368,34 @@
           "style": {
             "navigationBarTitleText": "库存调拨",
             "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "video/list",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "视频列表"
+          }
+        },
+        {
+          "path": "video/play",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "视频播放"
+          }
+        },
+        {
+          "path": "visit/detail",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "访客详情"
+          }
+        },
+        {
+          "path": "visit/index",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "访客管理"
           }
         }
       ]
