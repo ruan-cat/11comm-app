@@ -7,15 +7,18 @@
 ### 未完成页面迁移（88 个页面）
 
 **高优先级模块（43 个页面）**：
+
 - resource_modules（资源采购）- 29 个页面：采购申请流程、资源管理、物品管理、调拨管理、库存管理、出入库管理
 - fee_modules（费用管理）- 14 个页面：费用管理、充值管理、报表统计
 
 **中优先级模块（24 个页面）**：
+
 - oa_modules（OA 工作流）- 8 个页面：工作流管理、表单管理、审核流程
 - property_modules（房屋管理）- 11 个页面（剩余）：房屋基础管理、业主管理、装修管理
 - parking_modules（车辆管理）- 5 个页面：车辆管理、道闸管理
 
 **低优先级模块（21 个页面）**：
+
 - notice_modules（公告管理）- 2 个页面（剩余）：公告列表、公告详情
 - basic_modules（基础模块）- 5 个页面（剩余）：个人中心、用户信息、密码修改等
 - other_modules（其他功能）- 14 个页面：预约管理、抄表管理、优惠券管理、物品发布、视频管理、访客管理等
@@ -23,6 +26,7 @@
 ### Skills 合规性修复（20 个问题）
 
 **P0 级别问题（必须修复）**：
+
 - api-error-handling 问题（8 个文件）：inspection 模块所有文件缺少 onError 回调
 - z-paging 问题（5 个文件）：complaint、property、activity 模块的列表页未使用 z-paging 组件
 - use-wd-form 问题（7 个文件）：repair、complaint 模块的表单页未使用 wd-form 组件
@@ -45,6 +49,7 @@
 ### 影响的代码模块
 
 **未迁移模块（88 个文件）**：
+
 - `src/pages-sub/purchase/` - 5 个文件
 - `src/pages-sub/resource/` - 24 个文件
 - `src/pages-sub/fee/` - 8 个文件
@@ -63,6 +68,7 @@
 - `src/pages/webview/` - 1 个文件
 
 **需要修复的模块（20 个文件）**：
+
 - `src/pages-sub/inspection/` - 8 个文件（缺少 api-error-handling）
 - `src/pages-sub/complaint/` - 6 个文件（缺少 z-paging 或 use-wd-form）
 - `src/pages-sub/property/` - 2 个文件（缺少 z-paging）
@@ -72,6 +78,7 @@
 ### 依赖的 Skills 技能
 
 所有迁移任务必须严格遵循以下技能规范：
+
 - `code-migration`: Vue2 Options API → Vue3 Composition API + TypeScript
 - `component-migration`: ColorUI + uni-app 内置组件 → wot-design-uni
 - `style-migration`: ColorUI 类名 → UnoCSS 原子类
@@ -86,6 +93,7 @@
 ### 团队协作模式
 
 采用子代理团队模式完成迁移：
+
 - **技能指导子代理**：负责学习全部 Skills 文档，提供技术指导
 - **代码迁移子代理**：根据任务清单和技能指导完成具体迁移
 - **审核子代理**：根据 Skills 规范审核迁移结果
