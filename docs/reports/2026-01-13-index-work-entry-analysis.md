@@ -201,4 +201,4 @@
 
 **分析范围**: 首页（index）、工作台（work）、TabBar 配置
 
-**参考文档**: `docs/reports/vue2-route-navigation-map.md`
+**参考文档**: `docs\vue2-route-navigation-map.md`

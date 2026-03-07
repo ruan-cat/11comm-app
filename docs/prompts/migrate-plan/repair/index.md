@@ -10,7 +10,7 @@
 
 ### 01 按照路由要求，新建简单占位符页面
 
-1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确清楚要处理的页面。
+1. 阅读 `docs\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确清楚要处理的页面。
 2. 阅读 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容。
 3. 我们一共需要新建 13 个页面。按照 `维修工单流程模块` 的说明。需要新建 13 个页面。
 4. 阅读 `route-migration` 子代理文档。
@@ -20,14 +20,14 @@
 
 ### 02 新建路由跳转函数并在页面内使用
 
-1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确清楚跳路由时需要传递的参数。
+1. 阅读 `docs\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确清楚跳路由时需要传递的参数。
 2. 通过 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，针对性的阅读关于路由跳转的函数，针对性的用 `uni.navigateTo` 函数在 `旧项目` 的 vue 组件内查询清楚跳路由时的传参。
 3. 按照 `route-migration` 子代理的要求，新建整个 `维修工单流程模块` 所需要的强类型路由跳转函数。
 4. 在 `维修工单流程模块系列页面` 内，每一个 vue 组件顶部都补全说明跳转路由的地址、并且提供一个临时性质的按钮，和临时性质的，写死的假数据，实现点击按钮即可跳路由的功能，我需要尽早在 `维修工单流程模块系列页面` 内模拟整个跳路由的业务流程。
 
 ### 03 新建接口
 
-1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
+1. 阅读 `docs\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
 2. 通过 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，理清楚这 13 个页面的接口。
 3. 按照 `api-migration` 子代理的要求，完成接口迁移。
 4. 在 `src\types\repair.ts` 内补全业务类型。
@@ -36,7 +36,7 @@
 
 ### 04 迁移组件
 
-1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
+1. 阅读 `docs\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
 2. 通过 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，准备实现组件迁移。
 3. 按照 `component-migration` 子代理的要求，完成全部 `维修工单流程模块系列页面` 的组件迁移。
 4. 这个阶段只负责实现组件迁移，不考虑样式迁移。
@@ -51,19 +51,19 @@
 
 ### 05 迁移样式
 
-1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
+1. 阅读 `docs\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
 2. 通过 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，准备实现样式迁移。
 3. 按照 `style-migration` 子代理的要求，完成全部 `维修工单流程模块系列页面` 的样式迁移。
 
 ### 06 代码写法迁移
 
-1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
+1. 阅读 `docs\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
 2. 通过 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件，准备实现代码迁移。
 3. 按照 `code-migration` 子代理的要求，完成全部 `维修工单流程模块系列页面` 的代码迁移。
 
 ### 07 整体性检查
 
-1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
+1. 阅读 `docs\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确要迁移的代码。一共 13 个页面。
 2. 通过 `docs\prompts\route-migration-map.yml` 关于 `3. 维修管理模块 (10个页面)` 的内容，反向阅读 `旧项目` 的 vue 组件。
 3. 对全部的 `维修工单流程模块系列页面` 组件，使用全部的迁移子代理，做全面的检查，最后输出一个查漏补缺的文档。
 
@@ -141,7 +141,7 @@ src\pages-sub\repair\handle.vue
 
 ## 021 设计迁移 selectFloor selectUnit selectRoom 这三个页面的迁移计划
 
-1. 阅读 `docs\reports\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确清楚该模块的引用关系。
+1. 阅读 `docs\vue2-route-navigation-map.md` 文档的 `维修工单流程模块` 。明确清楚该模块的引用关系。
 2. 重点阅读 `选择房屋相关页面` 和其他模块的关联关系。
 3. 从 `维修工单流程模块` 的 `选择房屋相关页面` 内，得知 `旧项目` 的代码，搞清楚这三个页面在旧项目的 `维修工单流程模块` 内，是如何使用的。
 4. 阅读 `docs\prompts\route-migration-map.yml` 关于 `选择器页面 (3个)` 的内容。明确清楚这三个旧页面在新项目内如何新建页面，如何新建路由。
@@ -160,7 +160,7 @@ src\pages-sub\repair\handle.vue
 ### 01
 
 1. 生成你的迁移计划 markdown 文档，生成在 `docs\prompts\migrate-plan` 目录内。
-2. 不要更新 `docs\reports\vue2-route-navigation-map.md` 文档，你应该更新 `docs\prompts\route-migration-map.yml` 的 `选择器页面 (3个)` 部分，来标记你已完成迁移任务。
+2. 不要更新 `docs\vue2-route-navigation-map.md` 文档，你应该更新 `docs\prompts\route-migration-map.yml` 的 `选择器页面 (3个)` 部分，来标记你已完成迁移任务。
 
 ## 022 补全完善接口
 
@@ -227,7 +227,7 @@ src\pages-sub\repair\handle.vue
 
 ## 027 反向检查业务字段是否准确
 
-1. 请你阅读 `docs\reports\vue2-route-navigation-map.md` 的 `维修工单流程模块` 。
+1. 请你阅读 `docs\vue2-route-navigation-map.md` 的 `维修工单流程模块` 。
 2. 根据 `docs\prompts\route-migration-map.yml` ，反向的阅读旧代码对应的 vue2 代码，确定在旧代码内，已经有的业务类型。
 3. 检查 `src\pages-sub\repair` 和 `src\pages-sub\selector` 的 vue 组件，确保这些组件内的代码均满足旧代码的业务类型。
 4. 按照 `docs\prompts\migrate-plan\2025-11-17-select-floor-unit-room-migration-plan.md` 文档的要求，修改对应的迁移后的代码。
@@ -581,7 +581,7 @@ src\pages-sub\repair\handle.vue
 3. 请问是当前页面的 `http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001` feeFlag 参数影响了下拉列表的数据选择么？
 4. 请问是该页面对应的下拉选择接口有问题么？是对应的 mock 接口返回的数据不够么？如果是，请为 mock 接口增加数据，便于我实现有意义的下拉选择功能。
 5. 请问页面 `pages-sub/repair/select-resource` 的 feeFlag 参数还可以填写那些值呢？这个值在 `选择维修物资` 页面内，是如何使用的？
-6. 请阅读 `docs\reports\vue2-route-navigation-map.md` 的 `维修工单流程模块` 部分，结合本项目跳路由的工具，告诉我。 `选择维修物资` 页面的上一级页面是从哪里进入的？我该怎么确保能够充分的进入到该页面的每一种情况，便于我自主测试？
+6. 请阅读 `docs\vue2-route-navigation-map.md` 的 `维修工单流程模块` 部分，结合本项目跳路由的工具，告诉我。 `选择维修物资` 页面的上一级页面是从哪里进入的？我该怎么确保能够充分的进入到该页面的每一种情况，便于我自主测试？
 7. 回答上述的全部问题，便于我学习了解。
 
 ### 05 处理 `选择维修物资` 页面的接口故障
@@ -828,7 +828,7 @@ invoker	@	vue.runtime.esm.js:10209
 
 ### 01 <!-- TODO: --> 检查 `维修已办单` `维修待办单` `维修工单池` 这三个列表页的首页入口集成情况
 
-1. 阅读 docs\reports\vue2-route-navigation-map.md `维修工单流程模块` .
+1. 阅读 docs\vue2-route-navigation-map.md `维修工单流程模块` .
 2. 维修工单池 维修待办单 维修已办 这三个列表页，在旧项目内，是否有明确的上级页面？他们在工作台或首页入口内，是否有集成？请阅读旧代码并检索其逻辑。
 3. 首页或者是工作台内，没有专门针对维修报修工单模块的入口么？
 4. 请增加专门的`维修报修工单模块`模块的列表页入口。合理设计入口。

@@ -1041,15 +1041,15 @@ function handleLoadMore() {
 
 ### 11.1 参考文档
 
-| 文档名称                    | 路径                                        |
-| :-------------------------- | :------------------------------------------ |
-| Vue2 路由导航地图           | `docs\reports\vue2-route-navigation-map.md` |
-| Vue2 到 Vue3 路由迁移映射表 | `docs\prompts\route-migration-map.yml`      |
-| API 迁移子代理说明          | `.claude\agents\api-migration.md`           |
-| 代码迁移子代理说明          | `.claude\agents\code-migration.md`          |
-| 组件迁移子代理说明          | `.claude\agents\component-migration.md`     |
-| 路由迁移子代理说明          | `.claude\agents\route-migration.md`         |
-| 样式迁移子代理说明          | `.claude\agents\style-migration.md`         |
+| 文档名称                    | 路径                                    |
+| :-------------------------- | :-------------------------------------- |
+| Vue2 路由导航地图           | `docs\vue2-route-navigation-map.md`     |
+| Vue2 到 Vue3 路由迁移映射表 | `docs\prompts\route-migration-map.yml`  |
+| API 迁移子代理说明          | `.claude\agents\api-migration.md`       |
+| 代码迁移子代理说明          | `.claude\agents\code-migration.md`      |
+| 组件迁移子代理说明          | `.claude\agents\component-migration.md` |
+| 路由迁移子代理说明          | `.claude\agents\route-migration.md`     |
+| 样式迁移子代理说明          | `.claude\agents\style-migration.md`     |
 
 ### 11.2 旧项目文件路径
 
