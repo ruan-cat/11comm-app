@@ -46,10 +46,7 @@ const { loading, send: submitChangePwd } = useRequest(
   { immediate: false },
 )
   .onSuccess(() => {
-    uni.showToast({
-      title: '修改成功',
-      icon: 'none',
-    })
+    toast.success('修改成功')
     setTimeout(() => {
       uni.navigateBack({ delta: 1 })
     }, 600)

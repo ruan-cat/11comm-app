@@ -14,6 +14,7 @@ import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
 import { computed, ref } from 'vue'
 import { queryNotices } from '@/api/notice'
+import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
   style: {
@@ -21,6 +22,7 @@ definePage({
   },
 })
 
+const communityInfo = getCurrentCommunity()
 const noticeId = ref('')
 const notice = ref<NoticeItem | null>(null)
 
@@ -36,7 +38,7 @@ const { loading, send: loadNoticeDetail } = useRequest(
     queryNotices({
       page: 1,
       row: 1,
-      communityId: 'COMM_001',
+      communityId: communityInfo.communityId,
       noticeId: noticeId.value,
     }),
   { immediate: false },

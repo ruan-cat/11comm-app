@@ -13,6 +13,7 @@ import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
 import { queryNotices } from '@/api/notice'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
+import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
   style: {
@@ -22,6 +23,7 @@ definePage({
 
 type ZPagingRef = any
 
+const communityInfo = getCurrentCommunity()
 const pagingRef = ref<ZPagingRef>()
 const notices = ref<NoticeItem[]>([])
 
@@ -42,7 +44,7 @@ function handleQuery(pageNo: number, pageSize: number) {
   loadNotices({
     page: pageNo,
     row: pageSize,
-    communityId: 'COMM_001',
+    communityId: communityInfo.communityId,
     noticeTypeCd: '1001',
   })
 }
@@ -54,15 +56,15 @@ function formatNoticeTime(value: string): string {
   return dayjs(value).format('YYYY-MM-DD HH:mm')
 }
 
+onMounted(() => {
+  pagingRef.value?.reload()
+})
+
 function gotoDetail(item: NoticeItem) {
   uni.navigateTo({
     url: `/pages/notice/detail?noticeId=${item.noticeId}`,
   })
 }
-
-onMounted(() => {
-  pagingRef.value?.reload()
-})
 </script>
 
 <template>
