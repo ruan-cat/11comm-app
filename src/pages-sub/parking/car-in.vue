@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   车辆入场页
   功能：手工登记车辆进场
 
@@ -14,6 +14,8 @@ import { useRequest } from 'alova/client'
 import { reactive, ref } from 'vue'
 import { customCarInOut } from '@/api/parking'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
+import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
   style: {
@@ -21,6 +23,8 @@ definePage({
   },
 })
 
+const communityInfo = getCurrentCommunity()
+const toast = useGlobalToast()
 const LABEL_WIDTH = '88px'
 
 const formRef = ref<FormInstance>()
@@ -43,16 +47,13 @@ const { loading, send: submitIn } = useRequest(
   () =>
     customCarInOut({
       ...formModel,
-      communityId: 'COMM_001',
+      communityId: communityInfo.communityId,
       type: '1101',
     }),
   { immediate: false },
 )
   .onSuccess(() => {
-    uni.showToast({
-      title: '进场成功',
-      icon: 'none',
-    })
+    toast.success('进场成功')
     setTimeout(() => {
       uni.navigateBack({ delta: 1 })
     }, 800)

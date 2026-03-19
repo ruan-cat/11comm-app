@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   业主车辆页
   功能：显示业主车辆列表，支持多条件搜索
 
@@ -9,9 +9,10 @@
 <script setup lang="ts">
 import type { OwnerCar } from '@/types/parking'
 import { useRequest } from 'alova/client'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { queryOwnerCars } from '@/api/parking'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
+import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
   style: {
@@ -19,6 +20,7 @@ definePage({
   },
 })
 
+const communityInfo = getCurrentCommunity()
 const pagingRef = ref()
 const carList = ref<OwnerCar[]>([])
 const searchForm = reactive({
@@ -34,7 +36,7 @@ const { send: loadCars } = useRequest(
     queryOwnerCars({
       page: params.page,
       row: params.row,
-      communityId: 'COMM_001',
+      communityId: communityInfo.communityId,
       carNumLike: searchForm.carNumLike || undefined,
       ownerName: searchForm.ownerName || undefined,
       memberCarNumLike: searchForm.memberCarNumLike || undefined,
@@ -68,6 +70,10 @@ function callOwner(phone: string) {
     phoneNumber: phone,
   })
 }
+
+onMounted(() => {
+  pagingRef.value?.reload()
+})
 </script>
 
 <template>
