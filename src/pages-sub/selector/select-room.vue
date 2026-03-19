@@ -308,6 +308,8 @@ watch(searchValue, handleRealTimeSearch)
 
 // 页面挂载时的额外处理
 onMounted(() => {
+  pagingRef.value?.reload()
+
   // 监听网络状态变化
   uni.onNetworkStatusChange((res) => {
     if (!res.isConnected) {

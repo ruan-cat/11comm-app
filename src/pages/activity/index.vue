@@ -25,7 +25,6 @@ type ZPagingRef = any
 
 /** 页面配置 */
 definePage({
-  name: 'Activities',
   style: {
     navigationBarTitleText: '社区活动',
     navigationBarBackgroundColor: '#368CFE',
