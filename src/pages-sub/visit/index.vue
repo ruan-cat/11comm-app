@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import type { VisitRecord } from '@/types/visit'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getVisit } from '@/api/visit'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 
@@ -60,6 +60,10 @@ function openDetail(item: VisitRecord) {
     url: `/pages-sub/visit/detail?visitId=${item.visitId}&taskId=${item.taskId || ''}`,
   })
 }
+
+onMounted(() => {
+  pagingRef.value?.reload()
+})
 </script>
 
 <template>

@@ -9,9 +9,10 @@
 <script setup lang="ts">
 import type { ItemReleaseTask } from '@/types/item-release'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { queryFinishItemRelease, queryUndoItemRelease } from '@/api/item-release'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
+import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
   style: {
@@ -21,6 +22,7 @@ definePage({
 
 type ZPagingRef = any
 
+const communityInfo = getCurrentCommunity()
 const active = ref(0)
 const pagingRef = ref<ZPagingRef>()
 const releaseTasks = ref<ItemReleaseTask[]>([])
@@ -31,12 +33,12 @@ const { send: loadTaskList } = useRequest(
       ? queryUndoItemRelease({
           page: params.page,
           row: params.row,
-          communityId: 'COMM_001',
+          communityId: communityInfo.communityId,
         })
       : queryFinishItemRelease({
           page: params.page,
           row: params.row,
-          communityId: 'COMM_001',
+          communityId: communityInfo.communityId,
         })),
   { immediate: false },
 )
@@ -72,6 +74,10 @@ function openDetail(item: ItemReleaseTask) {
     url: `/pages-sub/item/release-detail?${query}`,
   })
 }
+
+onMounted(() => {
+  pagingRef.value?.reload()
+})
 </script>
 
 <template>

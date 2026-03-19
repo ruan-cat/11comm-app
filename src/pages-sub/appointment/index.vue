@@ -9,9 +9,11 @@
 <script setup lang="ts">
 import type { AppointmentOrder, AppointmentOrderQueryParams } from '@/types/appointment'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { listCommunitySpaceConfirmOrder, saveCommunitySpaceConfirmOrder } from '@/api/appointment'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
+import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
   style: {
@@ -21,6 +23,8 @@ definePage({
 
 type ZPagingRef = any
 
+const communityInfo = getCurrentCommunity()
+const toast = useGlobalToast()
 const pagingRef = ref<ZPagingRef>()
 const orders = ref<AppointmentOrder[]>([])
 const timeId = ref('')
@@ -41,15 +45,12 @@ const { loading: confirming, send: submitConfirm } = useRequest(
   () =>
     saveCommunitySpaceConfirmOrder({
       timeId: timeId.value,
-      communityId: 'COMM_001',
+      communityId: communityInfo.communityId,
     }),
   { immediate: false },
 )
   .onSuccess(() => {
-    uni.showToast({
-      title: '核销成功',
-      icon: 'none',
-    })
+    toast.success('核销成功')
     timeId.value = ''
     pagingRef.value?.reload()
   })
@@ -61,7 +62,7 @@ function handleQuery(pageNo: number, pageSize: number) {
   loadOrders({
     page: pageNo,
     row: pageSize,
-    communityId: 'COMM_001',
+    communityId: communityInfo.communityId,
     timeId: timeId.value.trim() || undefined,
   })
 }
@@ -72,10 +73,7 @@ function handleSearch() {
 
 function handleConfirm() {
   if (!timeId.value.trim()) {
-    uni.showToast({
-      title: '请输入核销码',
-      icon: 'none',
-    })
+    toast.warning('请输入核销码')
     return
   }
 
@@ -92,6 +90,10 @@ function openQueuePage() {
     },
   })
 }
+
+onMounted(() => {
+  pagingRef.value?.reload()
+})
 </script>
 
 <template>
