@@ -12,7 +12,7 @@
 import type { ResourceStore } from '@/api/purchase'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { listResourceStores } from '@/api/purchase'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { getCurrentCommunity } from '@/utils/user'
@@ -91,6 +91,10 @@ function handleSelectItem(item: ResourceStore) {
     })
   }
 }
+
+onMounted(() => {
+  pagingRef.value?.reload()
+})
 </script>
 
 <template>

@@ -12,7 +12,7 @@
 import type { OaWorkflowFormDataRecord } from '@/types/oa-workflow'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { queryOaWorkflowUserHisTaskFormData } from '@/api/oa-workflow'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
@@ -100,6 +100,10 @@ onLoad((options) => {
       title: `${flowName.value} - 已办`,
     })
   }
+})
+
+onMounted(() => {
+  pagingRef.value?.reload()
 })
 </script>
 

@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   工作流待办页
   功能：显示当前流程的待办工单，支持分页加载和进入详情处理
 
@@ -12,7 +12,7 @@
 import type { OaWorkflowFormDataRecord } from '@/types/oa-workflow'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { queryOaWorkflowUserTaskFormData } from '@/api/oa-workflow'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 
@@ -85,6 +85,10 @@ onLoad((options) => {
       title: `${flowName.value} - 待办`,
     })
   }
+})
+
+onMounted(() => {
+  pagingRef.value?.reload()
 })
 </script>
 
