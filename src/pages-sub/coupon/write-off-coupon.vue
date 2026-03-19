@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import type { CouponWriteOffOrder } from '@/types/coupon'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { listCouponPropertyUserDetail, writeOffCouponPropertyUser } from '@/api/coupon'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 
@@ -109,6 +109,10 @@ function openQueuePage() {
     },
   })
 }
+
+onMounted(() => {
+  pagingRef.value?.reload()
+})
 </script>
 
 <template>

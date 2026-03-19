@@ -14,7 +14,7 @@
 import type { FormRules } from 'wot-design-uni/components/wd-form/types'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { getChargeMachineList } from '@/api/fee'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
@@ -97,6 +97,10 @@ function handleDetail(machine: ChargeMachine) {
 
 onLoad((options) => {
   currentCommunityId.value = options?.communityId || communityInfo.communityId
+})
+
+onMounted(() => {
+  pagingRef.value?.reload()
 })
 </script>
 

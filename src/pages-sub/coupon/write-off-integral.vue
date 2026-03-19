@@ -12,7 +12,7 @@ import type { ColumnItem } from 'wot-design-uni/components/wd-picker-view/types'
 import type { IntegralSetting, IntegralWriteOffLog } from '@/types/coupon'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import {
   listIntegralSetting,
   listIntegralUserDetail,
@@ -179,6 +179,10 @@ function handleSubmit() {
 
 onLoad(() => {
   loadSetting()
+})
+
+onMounted(() => {
+  logPagingRef.value?.reload()
 })
 </script>
 
