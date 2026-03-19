@@ -2,11 +2,43 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+（本文件与仓库根目录 `AGENTS.md`、`GEMINI.md` 保持同步，便于不同 AI 工具读取同一套约定。）
+
+## 本项目的技能表
+
+以下清单为 `.claude/skills/` 下技能的索引；**具体触发条件、协同技能与禁止事项以各 `SKILL.md` 正文为准**。
+
+- `add-new-component` — `.claude/skills/add-new-component/SKILL.md` — 在 `src/components/common` 新建公共组件（结构、类型、文档、测试页）。
+- `api-error-handling` — `.claude/skills/api-error-handling/SKILL.md` — 基于 Alova useRequest / 全局拦截器的统一接口错误提示。
+- `api-migration` — `.claude/skills/api-migration/SKILL.md` — Java110Context + `uni.request` → Alova + TS + Mock。
+- `backend-nitro-drizzle` — `.claude/skills/backend-nitro-drizzle/SKILL.md` — Nitro v3 + Neon + Drizzle 后端与数据库访问。
+- `beautiful-component-design` — `.claude/skills/beautiful-component-design/SKILL.md` — 移动端页面美化、FormSectionTitle、选择器与弹层规范。
+- `code-migration` — `.claude/skills/code-migration/SKILL.md` — Vue2 Options API → Vue3 Composition API + TS。
+- `component-migration` — `.claude/skills/component-migration/SKILL.md` — ColorUI / 内置组件 → wot-design-uni。
+- `openspec-apply-change` — `.claude/skills/openspec-apply-change/SKILL.md` — 按 OpenSpec 变更实施任务。
+- `openspec-archive-change` — `.claude/skills/openspec-archive-change/SKILL.md` — 归档已完成变更。
+- `openspec-bulk-archive-change` — `.claude/skills/openspec-bulk-archive-change/SKILL.md` — 批量归档多个变更。
+- `openspec-continue-change` — `.claude/skills/openspec-continue-change/SKILL.md` — 继续 OpenSpec 工作流、生成下一工件。
+- `openspec-explore` — `.claude/skills/openspec-explore/SKILL.md` — 探索需求与方案（不重写实现代码，可产出规范类工件）。
+- `openspec-ff-change` — `.claude/skills/openspec-ff-change/SKILL.md` — 快进生成 OpenSpec 全套工件以进入实现。
+- `openspec-new-change` — `.claude/skills/openspec-new-change/SKILL.md` — 新建 OpenSpec 变更。
+- `openspec-onboard` — `.claude/skills/openspec-onboard/SKILL.md` — OpenSpec 入门引导与完整走查。
+- `openspec-sync-specs` — `.claude/skills/openspec-sync-specs/SKILL.md` — 将 delta spec 同步回主 spec。
+- `openspec-verify-change` — `.claude/skills/openspec-verify-change/SKILL.md` — 实现与变更工件对照校验。
+- `record-bug-fix-memory` — `.claude/skills/fix-bug/record-bug-fix-memory/SKILL.md` — bug 修复后的经验与事故记录沉淀（非调试流程本身）。
+- `route-migration` — `.claude/skills/route-migration/SKILL.md` — `pages.json` → 约定式路由与 TypedRouter。
+- `style-migration` — `.claude/skills/style-migration/SKILL.md` — ColorUI → UnoCSS + wot-design-uni。
+- `use-uniapp-dynamic-page-title` — `.claude/skills/use-uniapp-dynamic-page-title/SKILL.md` — `uni.setNavigationBarTitle` 动态标题。
+- `use-wd-form` — `.claude/skills/use-wd-form/SKILL.md` — `wd-form` / `wd-picker` / 校验与分区标题规范。
+- `z-paging-integration` — `.claude/skills/z-paging-integration/SKILL.md` — z-paging 与 useRequest / 列表分页。
+
+维护说明：新增或重命名技能时，请同步更新本节与「对话沟通术语表」中的简称（如有）。
+
 ## 1. 主动问询实施细节
 
 在我与你沟通并要求你具体实施更改时，难免会遇到很多模糊不清的事情。
 
-请你深度思考这些`遗漏点`，`缺漏点`，和`冲突相悖点`，**并主动的向我问询这些你不清楚的实施细节**。
+请你**深度思考**这些`遗漏点`，`缺漏点`，和`冲突相悖点`，**并主动的向我问询这些你不清楚的实施细节**。在 Claude Code 环境中请主动使用内置的 `AskUserQuestion` 工具，将不清楚的项设计成可选问题并向我确认；在其他 IDE 中则用对话逐条澄清。
 
 我会与你共同补充细化实现细节。我们先迭代出一轮完整完善的实施清单，然后再由你亲自落实实施下去。
 
@@ -34,6 +66,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `use-wd-form`： `使用 wd-form 表单组件编写表单页的实施规范` 技能。即 `.claude\skills\use-wd-form\SKILL.md` 文件。
 - `use-uniapp-dynamic-page-title`： `uni-app 动态页面标题设置` 技能。即 `.claude\skills\use-uniapp-dynamic-page-title\SKILL.md` 文件。
 - `add-new-component`： `新建公共组件规范` 技能。即 `.claude\skills\add-new-component\SKILL.md` 文件。
+- `record-bug-fix-memory`： bug 修复经验沉淀技能（非调试本身）。即 `.claude\skills\fix-bug\record-bug-fix-memory\SKILL.md` 文件。
 
 ### 2.2. 业务术语
 
@@ -700,18 +733,137 @@ src/
 4. 新增组件会自动注册，无需手动引入
 5. 使用 UnoCSS 进行样式开发，支持原子化 CSS
 
-## 16. 获取技术栈对应的上下文
+## 13. 编写测试用例规范
 
-### 16.1. 阅读 `wot-design-uni` 组件库的文档
+1. 请你使用 vitest 的 `import { test, describe } from "vitest";` 来编写。我希望测试用例格式为 describe 和 test。
+2. 测试用例的文件格式为 `*.test.ts` 。
+3. 测试用例的目录一般情况下为 `**/tests/` ，`**/src/tests/` 格式。
+4. 在对应 monorepo 的 tests 目录内，编写测试用例。如果你无法独立识别清楚到底在那个具体的 monorepo 子包内编写测试用例，请直接咨询我应该在那个目录下编写测试用例。
+
+## 14. 生成发版日志的操作规范
+
+在你生成发版日志时，按照以下规范来完成：
+
+1. 新建文件： 运行命令 `pnpm dlx @changesets/cli add --empty` ，该命令会在 `.changeset` 目录下，新建一个空的 markdown 文件，这个文件就是你要写入的发版日志。
+2. 发版日志文件重命名： 这个命令会新建一个随机名称的发版日志文件，请你按照报告的规格，换成日期加语义化更新内容的名称。比如 `2025-12-15-add-pnpm-workspace-yaml.md` 就是有意义的命名。
+3. yaml 区域写入 changeset 规格的发版信息： 写入发版包名，和`发版标签`的等级。
+4. 写入更新日志： 在正文内编写更新日志。
+5. 编写更新日志正文的行文规范：
+   - 禁止使用任何等级的 markdown 标题： 编写任何`发版标签`的更新日志时，不允许使用任何等级的 markdown 标题，比如一级标题、二级标题等。这会影响自动合并的 `CHANGELOG.md` 文档的美观度。必须使用 markdown 的序号语法。
+   - major： 详细，清晰。说明清楚 major 版本的重大变更。
+   - minor： 用有序序号，简明扼要的说明清楚更新日志即可。
+   - patch： 用有序序号，简明扼要的说明清楚更新日志即可。
+
+### 14.1. 发版日志相关术语
+
+- `生成更新日志` ： 指的是在 `.changeset` 目录内，编写面向 changeset 的更新日志文件。其`发版标签`分为 `major` `minor` `patch` 这三个档次。如果我在要求你生成更新日志时，没有说明清楚`发版标签`具体发版到那个等级，请及时询问我。要求我给你说明清楚。
+- `生成发版日志` ： `生成更新日志` 的别名，是同一个意思。
+
+## 15. 沟通协作要求
+
+### 15.1. `计划模式`
+
+在`计划模式`下，请你按照以下方式与我协作：
+
+1. 你不需要考虑任何向后兼容的设计，允许你做出破坏性的写法。请先设计一个合适的方案，和我沟通后再修改实施。
+2. 如果有疑惑，请询问我。
+3. 完成任务后，请告知我你做了那些破坏性变更。
+
+请注意，在绝大多数情况下，我不会要求你以这种 `计划模式` 来和我协作。
+
+## 16. 终端操作注意事项（防卡住）
+
+在 Windows PowerShell 环境下执行终端命令时，必须遵循以下规则，避免命令卡住浪费时间：
+
+### 16.1. 避免超长单行命令
+
+命令行参数过多（超过 200 字符）时，PowerShell 可能会挂起无响应。
+
+- **拆分命令**：每次传入 2~3 个文件路径，不要一次传入 5 个以上。
+- **使用通配符**：优先用 `git add scripts/.../src/*.ts` 替代逐个列举文件路径。
+
+### 16.2. 优先使用 `pnpm run` 而非 `npx`
+
+`npx` 在 Windows 上被终止时，会触发 `Terminate batch job (Y/N)?` 交互提示导致卡住。
+
+- **优先使用** `pnpm run build` 替代 `npx tsdown`。
+- **优先使用** `pnpm run test` 替代 `npx vitest run`。
+
+### 16.3. 及时止损，不要反复轮询
+
+当命令可能卡住时：
+
+1. 第 1 次状态检查等待 10~15 秒。
+2. 如果无输出且仍在运行 → **立即终止**，用新命令重试。
+3. **不要超过 2 次**状态检查仍无进展还继续等待。
+
+### 16.4. 合理的等待超时设置
+
+|         命令类型         | 建议等待时长 |
+| :----------------------: | :----------: |
+| `git add / status / log` |   5~10 秒    |
+|       `git commit`       |    10 秒     |
+| `pnpm run build / test`  |    30 秒     |
+|      `pnpm install`      |    60 秒     |
+
+## 17. 简单任务的高效执行原则
+
+当用户交代的任务范围明确清晰时，必须**直接行动**，禁止进行不必要的大范围侦察。
+
+### 17.1. 判断任务规模，选择正确的行动姿态
+
+| 任务信号                         | 正确行动               |
+| :------------------------------- | :--------------------- |
+| 用户通过 `@文件` 明确了操作范围  | 直接读该文件，立即动手 |
+| 用户说"帮我改这个"、"写个日志"   | 行动优先，缺什么补什么 |
+| 用户涉及多包架构改动、新功能设计 | 先侦察，再行动         |
+
+**核心原则**：用户提供的上下文（@文件引用、对话内容、当前打开文件）就是最直接的线索，优先使用，不要用命令重新发现已知信息。
+
+### 17.2. 禁止行为清单
+
+以下行为在**简单任务**（单文件改动、写 changeset、写提交信息等）中是被禁止的：
+
+- 禁止连续执行超过 3 次 `git log` 来"了解全貌"
+- 禁止在明确知道目标文件的情况下，仍去扫描整个项目目录
+- 禁止把"读遍所有相关文档"当作行动前置条件
+- 禁止在用户已给出 @文件 的情况下，用命令重新搜索文件位置
+
+### 17.3. 对用户纠偏提示立即响应
+
+当用户发出以下信号时，必须**立即停止对当前路径的死磕**，回归最小行动路径：
+
+- "太复杂了"
+- "不要反复查询"
+- "直接做就行"
+- "按要求做即可"
+
+正确反应：停止当前侦察行为 → 明确当前已知信息 → 直接执行最核心的操作步骤。
+
+### 17.4. 简单任务的标准执行路径
+
+以"为某文件修改编写更新日志"为例，正确路径只有 3 步：
+
+1. 读目标文件，理解改了什么
+2. 执行 `pnpm dlx @changesets/cli add --empty`，重命名文件，写入内容
+3. 提交
+
+不需要查 git log，不需要扫描全部 tags，不需要对比所有包的版本号。
+
+## 18. 获取技术栈对应的上下文
+
+在处理特定技术栈相关的问题时，你应该主动获取对应的上下文文档和最佳实践。
+
+### 18.1. 阅读 `wot-design-uni` 组件库的文档
 
 我们项目是移动端项目，高强度的使用了 `wot-design-uni` 组件库。你应该在编写 vue 组件时，主动地获取组件库的文档，及时使用正确的组件。
 
-#### 16.1.1. 文档资源
+#### 18.1.1. 文档资源
 
 - **官方文档**: https://wot-ui.cn/guide/quick-use.html （推荐优先查看）
 - **GitHub 文档**: https://github.com/Moonofweisheng/wot-design-uni/tree/master/docs/component
 
-#### 16.1.2. 类型导入的正确方式
+#### 18.1.2. 类型导入的正确方式
 
 ⚠️ **重要**：本项目使用 pnpm 安装 wot-design-uni，而不是 uni_modules 插件方式。
 
@@ -742,7 +894,7 @@ import type { XXX } from "wot-design-uni/components/wd-xxx/types";
 
 即：去掉 `@/uni_modules/` 前缀。
 
-#### 16.1.3. 常用组件的类型导入示例
+#### 18.1.3. 常用组件的类型导入示例
 
 |      组件      |                     导入路径                     |              常用类型              |
 | :------------: | :----------------------------------------------: | :--------------------------------: |
@@ -752,7 +904,7 @@ import type { XXX } from "wot-design-uni/components/wd-xxx/types";
 | wd-picker-view | `wot-design-uni/components/wd-picker-view/types` |            `ColumnItem`            |
 |  wd-textarea   |  `wot-design-uni/components/wd-textarea/types`   |          `TextareaProps`           |
 
-#### 16.1.4. 获取文档的方式
+#### 18.1.4. 获取文档的方式
 
 你可以使用以下工具查找文档：
 
@@ -761,13 +913,13 @@ import type { XXX } from "wot-design-uni/components/wd-xxx/types";
 
 **注意**：从 GitHub 获取的文档中的类型导入路径需要按照上述规则进行转换。
 
-### 16.3. z-paging 分页组件
+### 18.3. z-paging 分页组件
 
 - 仓库： https://github.com/SmileZXLee/uni-z-paging
 - 文档： https://z-paging.zxlee.cn/
 - 文档的仓库： https://github.com/SmileZXLee/uni-z-paging-doc
 
-### 16.2. claude code skill
+### 18.2. claude code skill
 
 - 编写语法与格式： https://code.claude.com/docs/zh-CN/skills
 - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
