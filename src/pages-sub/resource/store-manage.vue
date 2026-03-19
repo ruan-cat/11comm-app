@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { onShow } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { queryMyResourceStoreInfo } from '@/api/resource'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { getCurrentCommunity } from '@/utils/user'
@@ -75,6 +75,10 @@ onShow(() => {
   if (resourceList.value.length === 0) {
     pagingRef.value?.reload()
   }
+})
+
+onMounted(() => {
+  pagingRef.value?.reload()
 })
 </script>
 
