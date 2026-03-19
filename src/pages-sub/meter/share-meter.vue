@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   共享水表页
   功能：查看公摊抄表记录与公摊表列表，支持新增抄表和审核
 
@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import type { FloorShareMeter, FloorShareReading } from '@/types/meter'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { listFloorShareMeters, listFloorShareReadings } from '@/api/meter'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { getCurrentCommunity } from '@/utils/user'
@@ -88,6 +88,10 @@ function gotoAuditShareReading(readingId: string) {
     url: `/pages-sub/meter/audit-share-reading?readingId=${readingId}`,
   })
 }
+
+onMounted(() => {
+  readingPagingRef.value?.reload()
+})
 </script>
 
 <template>

@@ -9,9 +9,10 @@
 <script setup lang="ts">
 import type { MeterReading } from '@/types/meter'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { listMeterWaters } from '@/api/meter'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
+import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
   style: {
@@ -21,6 +22,7 @@ definePage({
 
 type ZPagingRef = any
 
+const communityInfo = getCurrentCommunity()
 const pagingRef = ref<ZPagingRef>()
 const meterReads = ref<MeterReading[]>([])
 const roomNum = ref('')
@@ -30,7 +32,7 @@ const { send: loadMeters } = useRequest(
     listMeterWaters({
       page: params.page,
       row: params.row,
-      communityId: 'COMM_001',
+      communityId: communityInfo.communityId,
       roomNum: roomNum.value.trim() || undefined,
     }),
   { immediate: false },
@@ -56,6 +58,10 @@ function gotoAddMeter() {
     url: '/pages-sub/meter/add-meter',
   })
 }
+
+onMounted(() => {
+  pagingRef.value?.reload()
+})
 </script>
 
 <template>

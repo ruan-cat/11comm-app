@@ -11,9 +11,10 @@ import type { ColumnItem } from 'wot-design-uni/components/wd-picker-view/types'
 import type { MonitorArea, MonitorMachine } from '@/types/video'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { listMonitorArea, listStaffMonitorMachine } from '@/api/video'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
+import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
   style: {
@@ -23,6 +24,7 @@ definePage({
 
 type ZPagingRef = any
 
+const communityInfo = getCurrentCommunity()
 const pagingRef = ref<ZPagingRef>()
 const machines = ref<MonitorMachine[]>([])
 
@@ -32,7 +34,7 @@ const areas = ref<MonitorArea[]>([])
 const areaColumns = ref<ColumnItem[]>([])
 
 const { send: loadAreas } = useRequest(
-  () => listMonitorArea({ page: 1, row: 100, communityId: 'COMM_001' }),
+  () => listMonitorArea({ page: 1, row: 100, communityId: communityInfo.communityId }),
   { immediate: false },
 )
   .onSuccess((event) => {
@@ -51,7 +53,7 @@ const { send: loadMachines } = useRequest(
     listStaffMonitorMachine({
       page: params.page,
       row: params.row,
-      communityId: 'COMM_001',
+      communityId: communityInfo.communityId,
       maId: areaId.value || undefined,
       machineNameLike: machineNameLike.value.trim() || undefined,
     }),
@@ -88,6 +90,10 @@ function openPlay(item: MonitorMachine) {
 
 onLoad(() => {
   loadAreas()
+})
+
+onMounted(() => {
+  pagingRef.value?.reload()
 })
 </script>
 
