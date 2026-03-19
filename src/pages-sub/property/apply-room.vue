@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import type { PropertyApplication, PropertyApplicationListParams } from '@/types/property-application'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getPropertyApplicationList, queryDictInfo } from '@/api/property-application'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { TypedRouter } from '@/router'
@@ -108,6 +108,10 @@ function applyStatesChange(e: { detail: { value: number } }) {
 function toApplyRoomDetail(item: PropertyApplication) {
   TypedRouter.toApplyRoomDetail(item.ardId, item.communityId)
 }
+
+onMounted(() => {
+  pagingRef.value?.reload()
+})
 </script>
 
 <template>

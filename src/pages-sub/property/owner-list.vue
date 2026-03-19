@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   业主列表页
   功能：显示业主列表，支持搜索、编辑和删除
 
@@ -13,6 +13,8 @@ import { useRequest } from 'alova/client'
 import { reactive, ref } from 'vue'
 import { deleteOwner, queryOwnerAndMembers } from '@/api/owner'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
+import { useGlobalToast } from '@/hooks/useGlobalToast'
+import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
   style: {
@@ -20,6 +22,8 @@ definePage({
   },
 })
 
+const communityInfo = getCurrentCommunity()
+const toast = useGlobalToast()
 const pagingRef = ref()
 const ownerList = ref<OwnerMember[]>([])
 const searchForm = reactive({
@@ -34,7 +38,7 @@ const { send: loadOwners } = useRequest(
     queryOwnerAndMembers({
       page: params.page,
       row: params.row,
-      communityId: 'COMM_001',
+      communityId: communityInfo.communityId,
       roomName: searchForm.roomName || undefined,
       name: searchForm.ownerName || undefined,
       link: searchForm.link || undefined,
@@ -50,14 +54,11 @@ const { send: loadOwners } = useRequest(
   })
 
 const { send: removeOwner } = useRequest(
-  () => deleteOwner({ memberId: deletingMemberId.value, communityId: 'COMM_001' }),
+  () => deleteOwner({ memberId: deletingMemberId.value, communityId: communityInfo.communityId }),
   { immediate: false },
 )
   .onSuccess(() => {
-    uni.showToast({
-      title: '删除成功',
-      icon: 'none',
-    })
+    toast.success('删除成功')
     pagingRef.value?.reload()
   })
   .onError((error) => {

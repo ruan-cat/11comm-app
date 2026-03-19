@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   装修管理列表页
   功能：显示装修申请列表，支持按房间号和状态筛选
 
@@ -14,6 +14,7 @@ import { reactive, ref } from 'vue'
 import { queryRoomRenovation } from '@/api/renovation'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { RENOVATION_STATE_OPTIONS } from '@/types/property-management'
+import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
   style: {
@@ -21,6 +22,7 @@ definePage({
   },
 })
 
+const communityInfo = getCurrentCommunity()
 const pagingRef = ref()
 const renovationList = ref<RenovationApplication[]>([])
 const searchForm = reactive({
@@ -37,7 +39,7 @@ const { send: loadRenovationList } = useRequest(
     queryRoomRenovation({
       page: params.page,
       row: params.row,
-      communityId: 'COMM_001',
+      communityId: communityInfo.communityId,
       roomName: searchForm.roomName || undefined,
       state: searchForm.state || undefined,
     }),

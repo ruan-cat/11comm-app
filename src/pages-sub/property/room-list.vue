@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   房间列表页
   功能：显示房间列表，支持按房间号搜索并进入详情
 
@@ -11,9 +11,10 @@
 import type { Room } from '@/types/selector'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getRoomList } from '@/api/room'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
+import { getCurrentCommunity } from '@/utils/user'
 
 definePage({
   style: {
@@ -21,7 +22,7 @@ definePage({
   },
 })
 
-const communityId = ref('COMM_001')
+const communityInfo = getCurrentCommunity()
 const floorId = ref('')
 const unitId = ref('')
 const roomNum = ref('')
@@ -33,7 +34,7 @@ const { send: queryRooms } = useRequest(
     getRoomList({
       page: params.page,
       row: params.row,
-      communityId: communityId.value,
+      communityId: communityInfo.communityId,
       floorId: floorId.value,
       unitId: unitId.value,
       roomNum: roomNum.value || undefined,
@@ -68,6 +69,10 @@ function openDetail(item: Room) {
 onLoad((options) => {
   floorId.value = options?.floorId || ''
   unitId.value = options?.unitId || ''
+})
+
+onMounted(() => {
+  pagingRef.value?.reload()
 })
 </script>
 

@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   单元列表页
   功能：显示单元列表，支持按单元编号搜索并进入房间列表
 
@@ -11,7 +11,7 @@
 import type { Unit } from '@/types/selector'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getUnitList } from '@/api/unit'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 
@@ -61,6 +61,10 @@ function openRoomList(item: Unit) {
 
 onLoad((options) => {
   floorId.value = options?.floorId || ''
+})
+
+onMounted(() => {
+  pagingRef.value?.reload()
 })
 </script>
 

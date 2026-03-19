@@ -11,7 +11,7 @@
 import type { ApplicationRecord, ApplicationRecordListParams, PropertyApplication } from '@/types/property-application'
 import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getApplicationRecordList } from '@/api/property-application'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { buildApplyFromParams, extractRecordDetailParams } from '@/hooks/property/use-property-apply-room'
@@ -109,6 +109,10 @@ onLoad((options: {
     }) as PropertyApplication
     console.log(applyRoomInfo.value)
   }
+})
+
+onMounted(() => {
+  pagingRef.value?.reload()
 })
 </script>
 

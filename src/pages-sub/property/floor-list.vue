@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   楼层列表页
   功能：显示楼层列表，支持按楼栋编号搜索并进入单元列表
 
@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import type { Floor } from '@/types/selector'
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getFloorList } from '@/api/floor'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 
@@ -54,6 +54,10 @@ function openUnitList(item: Floor) {
     url: `/pages-sub/property/unit-list?floorId=${item.floorId}`,
   })
 }
+
+onMounted(() => {
+  pagingRef.value?.reload()
+})
 </script>
 
 <template>
