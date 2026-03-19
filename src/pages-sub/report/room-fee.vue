@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import type { ColumnItem } from 'wot-design-uni/components/wd-picker-view/types'
 import { useRequest } from 'alova/client'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { getRoomFeeReport, queryDictInfo } from '@/api/fee'
 import { getFloorList } from '@/api/floor'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
@@ -123,6 +123,10 @@ function handleQuery(pageNo: number, pageSize: number) {
 // 初始加载
 loadFeeTypes()
 loadFloors()
+
+onMounted(() => {
+  pagingRef.value?.reload()
+})
 </script>
 
 <template>

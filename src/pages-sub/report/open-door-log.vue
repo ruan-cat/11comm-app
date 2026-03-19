@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { useRequest } from 'alova/client'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { getOpenDoorLogList } from '@/api/fee'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
@@ -83,6 +83,10 @@ function handleSearch() {
 function handleQuery(pageNo: number, pageSize: number) {
   loadLogs(pageNo, pageSize)
 }
+
+onMounted(() => {
+  pagingRef.value?.reload()
+})
 </script>
 
 <template>

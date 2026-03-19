@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { useRequest } from 'alova/client'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getChargeMachineOrderList } from '@/api/fee'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
@@ -76,6 +76,10 @@ const { send: loadOrders, loading: ordersLoading } = useRequest(
 function handleQuery(pageNo: number, pageSize: number) {
   loadOrders(pageNo, pageSize)
 }
+
+onMounted(() => {
+  pagingRef.value?.reload()
+})
 </script>
 
 <template>
