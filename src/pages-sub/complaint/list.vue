@@ -13,7 +13,7 @@
 import type { Complaint, QueryComplaintListParams } from '@/types/complaint'
 import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getTodoComplaintList } from '@/api/complaint'
 import ZPagingLoading from '@/components/common/z-paging-loading/index.vue'
 import { TypedRouter } from '@/router'
@@ -92,6 +92,10 @@ function handleDetail(complaint: Complaint) {
 function handleDispatch(complaint: Complaint) {
   TypedRouter.toComplaintHandle(complaint.complaintId)
 }
+
+onMounted(() => {
+  pagingRef.value?.reload()
+})
 </script>
 
 <template>

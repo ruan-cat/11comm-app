@@ -17,6 +17,7 @@ import { useRequest } from 'alova/client'
 import dayjs from 'dayjs'
 import { computed, reactive, ref } from 'vue'
 import { getUserComplaintHistory, saveComplaint } from '@/api/complaint'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { navigateToTyped, TypedRouter } from '@/router'
 import { ComplaintTypeCode } from '@/types/complaint'
@@ -445,9 +446,7 @@ function handleViewDetail(complaint: Complaint) {
     <view v-if="activeTab === 'submit'" class="submit-content">
       <wd-form ref="formRef" :model="model" :rules="formRules">
         <!-- 房屋信息 -->
-        <view class="section-title">
-          房屋信息
-        </view>
+        <FormSectionTitle title="房屋信息" />
         <wd-cell-group border>
           <wd-cell title="楼栋" :value="floorDisplay" is-link @click="handleSelectFloor">
             <template #icon>
@@ -469,9 +468,7 @@ function handleViewDetail(complaint: Complaint) {
         </wd-cell-group>
 
         <!-- 投诉信息 -->
-        <view class="section-title">
-          投诉信息
-        </view>
+        <FormSectionTitle title="投诉信息" />
         <wd-cell-group border>
           <!-- 投诉类型 -->
           <wd-picker
@@ -525,9 +522,7 @@ function handleViewDetail(complaint: Complaint) {
         </wd-cell-group>
 
         <!-- 图片上传 -->
-        <view class="section-title">
-          图片上传
-        </view>
+        <FormSectionTitle title="图片上传" />
         <view class="bg-white p-3">
           <view class="mb-3 flex items-center justify-between">
             <text class="text-sm text-gray-500">{{ imgList.length }}/4</text>

@@ -18,6 +18,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { useRequest } from 'alova/client'
 import { reactive, ref } from 'vue'
 import { replyAppraise } from '@/api/repair'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { getCurrentCommunity } from '@/utils/user'
 
@@ -112,9 +113,7 @@ onLoad((options) => {
   <view class="reply-appraise-page">
     <wd-form ref="formRef" :model="model" :rules="formRules">
       <!-- 回复说明 -->
-      <view class="section-title">
-        回复说明
-      </view>
+      <FormSectionTitle title="回复说明" />
       <wd-cell-group border>
         <wd-textarea
           v-model="model.reply"
