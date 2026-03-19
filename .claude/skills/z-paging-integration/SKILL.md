@@ -523,9 +523,22 @@ onMounted(() => {
 
 ## 13. 实战复用方法论（进页即自动加载）
 
+> **⚠️ 关于 `onMounted(() => reload())` 的说明**
+>
+> 根据 z-paging 官方文档，`auto` 属性默认为 `true`，组件挂载时会**自动触发** `@query` 事件加载首页数据。
+> 因此 `onMounted(() => pagingRef.value?.reload())` 在技术上是**略微冗余**的——它会导致组件挂载后产生一次重复请求。
+>
+> 但本项目仍然将此写法作为**统一规范**，理由如下：
+>
+> 1. 显式优于隐式，代码意图更清晰（明确表达"挂载后加载数据"的意图）
+> 2. 全项目保持一致的代码风格，降低维护心智负担
+> 3. 即使产生重复请求，对用户体验和性能的影响可忽略不计
+>
+> **所有使用 z-paging 的页面都必须包含 `onMounted(() => { pagingRef.value?.reload() })`。**
+
 ### 13.1 核心步骤
 
-1. **ref + reload 首屏加载**：定义 `pagingRef = ref()`，在 `onMounted(() => pagingRef.value?.reload())` 触发首屏请求。
+1. **ref + reload 首屏加载**：定义 `pagingRef = ref()`，在 `onMounted(() => pagingRef.value?.reload())` 触发首屏请求。**（注：虽然 z-paging 默认 auto 加载，但本项目统一要求显式调用，参见上方说明）**
 2. **useRequest 回调收口**：`immediate: false`，`onSuccess` 里调用 `pagingRef.value?.complete(list, total)`，`onError` 调用 `complete(false)`；不在 `@query` 中写 `await/try/catch`。
 3. **@query 只发请求**：`handleQuery(pageNo, pageSize)` 仅调用 `send({ page: pageNo, row: pageSize, ...filters })`，不触发 `reload/refresh`。
 4. **全局 props 自动生效**：`default-page-size`、`refresher-enabled`、`loading-more-enabled`、`show-scrollbar` 等常用 props 已全局配置（参见第 2 节），无需重复配置；仅在特殊场景下显式覆盖。根据需要补充 `:fixed`、`safe-area-inset-bottom` 等其他配置。
