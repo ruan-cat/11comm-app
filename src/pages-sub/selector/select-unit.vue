@@ -3,10 +3,10 @@
   功能：选择单元，支持搜索和分页加载
 
   访问方式: TypedRouter.toSelectUnit(floorId)
-  访问地址: http://localhost:9000/#/pages-sub/selector/select-unit?floorId=F_COMM_001_001
+  访问地址: http://localhost:3000/#/pages-sub/selector/select-unit?floorId=F_COMM_001_001
   必须参数: floorId - 楼栋ID（从选择楼栋页面获取）
 
-  完整示例: http://localhost:9000/#/pages-sub/selector/select-unit?floorId=F_COMM_001_001
+  完整示例: http://localhost:3000/#/pages-sub/selector/select-unit?floorId=F_COMM_001_001
 
   旧代码：gitee-example/pages/selectUnit/selectUnit.vue
 -->

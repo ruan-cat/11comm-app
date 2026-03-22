@@ -2,7 +2,7 @@
   维修录单
   功能：选择房屋并提交维修工单
 
-  访问地址: http://localhost:9000/#/pages-sub/repair/repair-add
+  访问地址: http://localhost:3000/#/pages-sub/repair/repair-add
 
   旧代码：未找到（待补充）
 -->
@@ -91,7 +91,7 @@ const selectionDetail = computed(() => {
     维修录单页面（测试用）
     功能：测试选择器模块的完整流程
 
-    访问地址: http://localhost:9000/#/pages-sub/repair/repair-add
+    访问地址: http://localhost:3000/#/pages-sub/repair/repair-add
   -->
 
   <view class="p-4">

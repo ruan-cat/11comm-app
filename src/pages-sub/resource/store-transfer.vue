@@ -2,7 +2,7 @@
   库存调拨（转赠）
   功能：选择物品，填写转赠数量，选择员工
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/store-transfer
+  访问地址: http://localhost:3000/#/pages-sub/resource/store-transfer
 -->
 
 <script setup lang="ts">

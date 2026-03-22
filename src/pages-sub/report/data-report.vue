@@ -2,10 +2,10 @@
   数据报表页面
   功能：查看各种数据统计报表
 
-  访问地址: http://localhost:9000/#/pages-sub/report/data-report
+  访问地址: http://localhost:3000/#/pages-sub/report/data-report
   建议携带参数: ?communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/report/data-report?communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/report/data-report?communityId=COMM_001
 
   旧代码：gitee-example/pages/report/dataReport.vue
 -->

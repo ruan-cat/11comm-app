@@ -3,12 +3,12 @@
   功能：选择房屋，支持搜索和分页加载
 
   访问方式: TypedRouter.toSelectRoom(floorId, unitId)
-  访问地址: http://localhost:9000/#/pages-sub/selector/select-room?floorId=F_COMM_001_001&unitId=U_001_01
+  访问地址: http://localhost:3000/#/pages-sub/selector/select-room?floorId=F_COMM_001_001&unitId=U_001_01
   必须参数:
     - floorId - 楼栋ID（从选择楼栋页面获取）
     - unitId - 单元ID（从选择单元页面获取）
 
-  完整示例: http://localhost:9000/#/pages-sub/selector/select-room?floorId=F_COMM_001_001&unitId=U_001_01
+  完整示例: http://localhost:3000/#/pages-sub/selector/select-room?floorId=F_COMM_001_001&unitId=U_001_01
 
   旧代码：gitee-example/pages/selectRoom/selectRoom.vue
 -->

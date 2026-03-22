@@ -2,7 +2,7 @@
   访客管理页
   功能：查看访客列表，支持全部/待审核筛选并进入详情审核
 
-  访问地址: http://localhost:9000/#/pages-sub/visit/index
+  访问地址: http://localhost:3000/#/pages-sub/visit/index
 
   旧代码：gitee-example/pages/visit/visit.vue
 -->

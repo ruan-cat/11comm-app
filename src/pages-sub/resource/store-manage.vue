@@ -2,7 +2,7 @@
   库存管理
   功能：显示个人物资库存列表，支持搜索和筛选
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/store-manage
+  访问地址: http://localhost:3000/#/pages-sub/resource/store-manage
 -->
 
 <script setup lang="ts">

@@ -3,10 +3,10 @@
   功能：选择楼栋，支持搜索和分页加载
 
   访问方式: TypedRouter.toSelectFloor()
-  访问地址: http://localhost:9000/#/pages-sub/selector/select-floor
+  访问地址: http://localhost:3000/#/pages-sub/selector/select-floor
   参数: 无
 
-  完整示例: http://localhost:9000/#/pages-sub/selector/select-floor
+  完整示例: http://localhost:3000/#/pages-sub/selector/select-floor
 
   级联选择流程:
     1. 选择楼栋 (当前页面) → 无参数

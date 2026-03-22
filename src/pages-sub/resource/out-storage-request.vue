@@ -2,7 +2,7 @@
   出库申请
   功能：填写出库申请，选择物品和数量
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/out-storage-request
+  访问地址: http://localhost:3000/#/pages-sub/resource/out-storage-request
 -->
 
 <script setup lang="ts">

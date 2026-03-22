@@ -2,10 +2,10 @@
   处理抄送工作单页面
   功能：处理抄送给我的工作单，可以查看任务项详情并提交评分
 
-  访问地址: http://localhost:9000/#/pages-sub/work/do-copy-work
+  访问地址: http://localhost:3000/#/pages-sub/work/do-copy-work
   建议携带参数: ?copyId=xxx
 
-  http://localhost:9000/#/pages-sub/work/do-copy-work?copyId=WC_001
+  http://localhost:3000/#/pages-sub/work/do-copy-work?copyId=WC_001
 
   旧代码：gitee-example/pages/work/doCopyWork.vue
 -->

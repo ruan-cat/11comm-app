@@ -2,7 +2,7 @@
   库存报废
   功能：选择物品，填写损耗数量，选择损耗类型
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/store-scrap
+  访问地址: http://localhost:3000/#/pages-sub/resource/store-scrap
 -->
 
 <script setup lang="ts">

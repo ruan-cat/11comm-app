@@ -2,10 +2,10 @@
   充电桩订单页面
   功能：查询充电桩订单列表
 
-  访问地址: http://localhost:9000/#/pages-sub/report/charge-machine-order
+  访问地址: http://localhost:3000/#/pages-sub/report/charge-machine-order
   建议携带参数: ?communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/report/charge-machine-order?communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/report/charge-machine-order?communityId=COMM_001
 
   旧代码：gitee-example/pages/report/chargeMachineOrder.vue
 -->

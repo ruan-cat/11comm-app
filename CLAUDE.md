@@ -341,7 +341,7 @@ export function successResponse<T>(data: T, message: string = "操作成功") {
   房屋申请列表页
   功能：显示房屋申请列表，支持搜索和筛选
 
-  访问地址: http://localhost:9000/#/pages-sub/property/apply-room
+  访问地址: http://localhost:3000/#/pages-sub/property/apply-room
 -->
 ```
 
@@ -350,10 +350,10 @@ export function successResponse<T>(data: T, message: string = "操作成功") {
   房屋申请详情页
   功能：显示房屋申请详细信息，支持验房和审核操作
 
-  访问地址: http://localhost:9000/#/pages-sub/property/apply-room-detail
+  访问地址: http://localhost:3000/#/pages-sub/property/apply-room-detail
   建议携带参数: ?ardId=xxx&communityId=xxx
 
-  http://localhost:9000/#/pages-sub/property/apply-room-detail?ardId=ARD_002&communityId=COMM_001
+  http://localhost:3000/#/pages-sub/property/apply-room-detail?ardId=ARD_002&communityId=COMM_001
 
 -->
 ```
@@ -570,7 +570,7 @@ pnpm install
 ### 11.2. 开发环境
 
 ```bash
-# H5 开发 (默认端口 9000)
+# H5 开发 (默认端口 3000)
 pnpm dev
 pnpm dev:h5
 
@@ -709,7 +709,7 @@ src/
 
 ### 12.7. 开发调试
 
-- **H5**: 访问 http://localhost:9000
+- **H5**: 访问 http://localhost:3000
 - **微信小程序**: 构建后导入 `dist/dev/mp-weixin` 到微信开发者工具
 - **APP**: 构建后导入 `dist/dev/app` 到 HBuilderX
 

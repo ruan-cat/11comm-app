@@ -2,7 +2,7 @@
   访客详情页
   功能：展示访客详情，待审核状态可执行审核
 
-  访问地址: http://localhost:9000/#/pages-sub/visit/detail
+  访问地址: http://localhost:3000/#/pages-sub/visit/detail
   建议携带参数: ?visitId=xxx
 
   旧代码：gitee-example/pages/visit/visitDetail.vue

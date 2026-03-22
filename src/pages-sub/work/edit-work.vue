@@ -2,10 +2,10 @@
   编辑工作单页面
   功能：编辑已有的工作单信息
 
-  访问地址: http://localhost:9000/#/pages-sub/work/edit-work
+  访问地址: http://localhost:3000/#/pages-sub/work/edit-work
   建议携带参数: ?orderId=xxx
 
-  http://localhost:9000/#/pages-sub/work/edit-work?orderId=WO_001
+  http://localhost:3000/#/pages-sub/work/edit-work?orderId=WO_001
 
   旧代码：gitee-example/pages/work/editWrok.vue
 -->

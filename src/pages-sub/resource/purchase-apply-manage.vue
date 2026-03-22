@@ -2,7 +2,7 @@
   采购申请管理
   功能：显示采购申请列表，支持搜索和筛选
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/purchase-apply-manage
+  访问地址: http://localhost:3000/#/pages-sub/resource/purchase-apply-manage
 
   旧代码：gitee-example/pages/resource/purchaseApplyManage.vue
 -->

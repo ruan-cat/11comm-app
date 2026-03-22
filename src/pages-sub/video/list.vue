@@ -2,7 +2,7 @@
   视频列表页
   功能：按监控区域和设备名称筛选视频设备，进入播放页
 
-  访问地址: http://localhost:9000/#/pages-sub/video/list
+  访问地址: http://localhost:3000/#/pages-sub/video/list
 
   旧代码：gitee-example/pages/video/videoList.vue
 -->

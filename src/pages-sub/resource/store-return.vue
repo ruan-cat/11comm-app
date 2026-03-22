@@ -2,7 +2,7 @@
   库存退货
   功能：选择物品，填写退还数量，选择退还仓库
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/store-return
+  访问地址: http://localhost:3000/#/pages-sub/resource/store-return
 -->
 
 <script setup lang="ts">

@@ -2,7 +2,7 @@
   视频播放页
   功能：根据设备信息拉取播放地址并加载视频
 
-  访问地址: http://localhost:9000/#/pages-sub/video/play
+  访问地址: http://localhost:3000/#/pages-sub/video/play
   建议携带参数: ?communityId=xxx&machineId=xxx&machineName=xxx
 
   旧代码：gitee-example/pages/video/playVideo.vue

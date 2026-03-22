@@ -2,10 +2,10 @@
   工作单审核页
   功能：审核工作单，支持通过和驳回
 
-  访问地址: http://localhost:9000/#/pages-sub/work/audit-work
+  访问地址: http://localhost:3000/#/pages-sub/work/audit-work
   建议携带参数: ?taskId=xxx
 
-  http://localhost:9000/#/pages-sub/work/audit-work?taskId=WT_001
+  http://localhost:3000/#/pages-sub/work/audit-work?taskId=WT_001
 
   旧代码：gitee-example/pages/work/doWorkAudit.vue
 -->

@@ -2,10 +2,10 @@
   房间费用报表页面
   功能：查询房间费用明细
 
-  访问地址: http://localhost:9000/#/pages-sub/report/room-fee
+  访问地址: http://localhost:3000/#/pages-sub/report/room-fee
   建议携带参数: ?communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/report/room-fee?communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/report/room-fee?communityId=COMM_001
 
   旧代码：gitee-example/pages/report/reportRoomFee.vue
 -->
