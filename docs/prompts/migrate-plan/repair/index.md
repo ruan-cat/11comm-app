@@ -390,7 +390,7 @@ src\pages-sub\repair\handle.vue
 
 在 `src\pages-sub\repair\order-detail.vue` 维修工单详情 内，这些 icon 标签的显示效果很差，和文本的大小不统一，且有错位的情况。请修改代码，确保 icon 显示效果整齐对齐。
 
-请使用谷歌浏览器 MCP 来访问 `http://localhost:9000/#/pages-sub/repair/order-detail?repairId=REP_001&storeId=STORE_001` 页面，自主检查这些 icon 对齐效果如何。
+请使用谷歌浏览器 MCP 来访问 `http://localhost:3000/#/pages-sub/repair/order-detail?repairId=REP_001&storeId=STORE_001` 页面，自主检查这些 icon 对齐效果如何。
 
 ### 02 处理图标大小和文本大小
 
@@ -408,7 +408,7 @@ src\pages-sub\repair\handle.vue
 ![2025-12-21-22-18-22](https://s2.loli.net/2025/12/21/F3eMGUSmanAcY7w.png)
 
 1. 在响应式场景下，文本应该和 icon 的大小相同。请处理。
-2. 启动本地服务器，然后用 谷歌浏览器 MCP 来访问 `http://localhost:9000/#/pages-sub/repair/order-detail?repairId=REP_001&storeId=STORE_001` 页面。自主检查。
+2. 启动本地服务器，然后用 谷歌浏览器 MCP 来访问 `http://localhost:3000/#/pages-sub/repair/order-detail?repairId=REP_001&storeId=STORE_001` 页面。自主检查。
 
 ## 033 编写完整的 skill 文件
 
@@ -447,9 +447,9 @@ src\pages-sub\repair\handle.vue
 
 ![2025-12-25-23-53-27](https://s2.loli.net/2025/12/25/RgwCLXxajNH7q82.png)
 
-我在从 `维修工单池` 的`src\pages-sub\repair\order-list.vue`文件内，选择一个待派单的工单进入`处理维修工单`页面，访问 `http://localhost:9000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_022&repairType=1004&preStaffId=undefined&preStaffName=undefined&repairObjType=undefined` 地址，结果发现无法选择任何有效的师傅。
+我在从 `维修工单池` 的`src\pages-sub\repair\order-list.vue`文件内，选择一个待派单的工单进入`处理维修工单`页面，访问 `http://localhost:3000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_022&repairType=1004&preStaffId=undefined&preStaffName=undefined&repairObjType=undefined` 地址，结果发现无法选择任何有效的师傅。
 
-在我会直接访问这个地址时，`http://localhost:9000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_001&repairType=%E6%B0%B4%E7%94%B5%E7%BB%B4%E4%BF%AE&repairObjType=001` ，如下图所示，我又可以选择有效的师傅了。
+在我会直接访问这个地址时，`http://localhost:3000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_001&repairType=%E6%B0%B4%E7%94%B5%E7%BB%B4%E4%BF%AE&repairObjType=001` ，如下图所示，我又可以选择有效的师傅了。
 
 ![2025-12-25-23-55-33](https://s2.loli.net/2025/12/25/PWIOdDFlwJz8c1L.png)
 
@@ -558,7 +558,7 @@ src\pages-sub\repair\handle.vue
    - `src\pages-sub\repair\add-order.vue`
    - `src\pages-sub\repair\handle.vue`
 4. 模仿学习其他页面是如何组织表单代码的，并修改 `选择维修物资` 页面。
-5. 用谷歌浏览器 MCP，访问 `http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001` 页面，自主测试几个表单项是否能正常选取。
+5. 用谷歌浏览器 MCP，访问 `http://localhost:3000/#/pages-sub/repair/select-resource?feeFlag=1001` 页面，自主测试几个表单项是否能正常选取。
 6. 修复完故障后，请你总结清楚组件使用的经验，更新以下文件，确保你以后再使用类似组件时，不会出现类似的错误。
    - `.claude\skills\use-wd-form\SKILL.md`
    - `.claude\agents\component-migration.md`
@@ -578,7 +578,7 @@ src\pages-sub\repair\handle.vue
 
 如图，我在 `选择维修物资` 页面，无法选择有效的下拉列表。我希望能够选择到有效的下拉列表数据。
 
-3. 请问是当前页面的 `http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001` feeFlag 参数影响了下拉列表的数据选择么？
+3. 请问是当前页面的 `http://localhost:3000/#/pages-sub/repair/select-resource?feeFlag=1001` feeFlag 参数影响了下拉列表的数据选择么？
 4. 请问是该页面对应的下拉选择接口有问题么？是对应的 mock 接口返回的数据不够么？如果是，请为 mock 接口增加数据，便于我实现有意义的下拉选择功能。
 5. 请问页面 `pages-sub/repair/select-resource` 的 feeFlag 参数还可以填写那些值呢？这个值在 `选择维修物资` 页面内，是如何使用的？
 6. 请阅读 `docs\vue2-route-navigation-map.md` 的 `维修工单流程模块` 部分，结合本项目跳路由的工具，告诉我。 `选择维修物资` 页面的上一级页面是从哪里进入的？我该怎么确保能够充分的进入到该页面的每一种情况，便于我自主测试？
@@ -597,7 +597,7 @@ TypeError: result.data is not iterable
 
 3. 我怀疑是你刚才更改的 `src\api\mock\repair.mock.ts` 文件写法有问题，检查该 mock 接口的写法。检查 `选择维修物资` 页面使用异步数据的写法。
 4. 请务必遵循 `.claude\agents\api-migration.md` 迁移规范的写法。
-5. 请你使用谷歌浏览器 MCP，访问地址 `http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001` 并自我测试。
+5. 请你使用谷歌浏览器 MCP，访问地址 `http://localhost:3000/#/pages-sub/repair/select-resource?feeFlag=1001` 并自我测试。
 
 ### 06 处理选择商品类型后出现的故障
 

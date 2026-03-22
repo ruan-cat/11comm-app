@@ -2,7 +2,7 @@
   共享水表页
   功能：查看公摊抄表记录与公摊表列表，支持新增抄表和审核
 
-  访问地址: http://localhost:9000/#/pages-sub/meter/share-meter
+  访问地址: http://localhost:3000/#/pages-sub/meter/share-meter
 
   旧代码：gitee-example/pages/meter/shareMeter.vue
 -->

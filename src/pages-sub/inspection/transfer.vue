@@ -2,10 +2,10 @@
   任务流转页面
   功能：将巡检任务流转给其他员工，填写流转原因和选择接收人
 
-  访问地址: http://localhost:9000/#/pages-sub/inspection/transfer
+  访问地址: http://localhost:3000/#/pages-sub/inspection/transfer
   建议携带参数: ?task=xxx (JSON字符串)
 
-  示例: http://localhost:9000/#/pages-sub/inspection/transfer?task={"taskId":"TASK_001",...}
+  示例: http://localhost:3000/#/pages-sub/inspection/transfer?task={"taskId":"TASK_001",...}
 
   旧代码： gitee-example/pages/inspectionTransfer/inspectionTransfer.vue
 -->

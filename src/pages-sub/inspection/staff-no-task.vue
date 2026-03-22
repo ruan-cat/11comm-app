@@ -2,10 +2,10 @@
   员工未巡检页面
   功能：显示特定员工的巡检情况详情
 
-  访问地址: http://localhost:9000/#/pages-sub/inspection/staff-no-task
+  访问地址: http://localhost:3000/#/pages-sub/inspection/staff-no-task
   建议携带参数: ?staffId=xxx&staffName=xxx&queryTime=xxx
 
-  示例: http://localhost:9000/#/pages-sub/inspection/staff-no-task?staffId=STAFF_001&staffName=张三&queryTime=2025-12-29
+  示例: http://localhost:3000/#/pages-sub/inspection/staff-no-task?staffId=STAFF_001&staffName=张三&queryTime=2025-12-29
 
   旧代码： gitee-example/pages/inspection/staffNoInspection.vue
 -->

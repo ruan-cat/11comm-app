@@ -2,7 +2,7 @@
   物资调拨申请
   功能：提交物资调拨申请
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/allocation-apply
+  访问地址: http://localhost:3000/#/pages-sub/resource/allocation-apply
 
   旧代码：gitee-example/pages/resource/allocationStorehouseApply.vue
 -->

@@ -381,7 +381,7 @@ src/pages/test-use/
   [组件名] 组件演示页
   功能：演示 [组件名] 组件的各种用法和效果
 
-  访问地址: http://localhost:9000/#/pages/test-use/[组件名]
+  访问地址: http://localhost:3000/#/pages/test-use/[组件名]
 -->
 
 <script setup lang="ts">

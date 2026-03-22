@@ -2,7 +2,7 @@
   抄表页
   功能：查询抄表记录，支持按房屋编号筛选并进入新增抄表
 
-  访问地址: http://localhost:9000/#/pages-sub/meter/reading
+  访问地址: http://localhost:3000/#/pages-sub/meter/reading
 
   旧代码：gitee-example/pages/meter/meterReading.vue
 -->

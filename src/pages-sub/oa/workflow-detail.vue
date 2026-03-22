@@ -2,7 +2,7 @@
   工作流详情页
   功能：显示流程单据明细、流转记录和流程图，支持编辑与审核跳转
 
-  访问地址: http://localhost:9000/#/pages-sub/oa/workflow-detail
+  访问地址: http://localhost:3000/#/pages-sub/oa/workflow-detail
   建议携带参数: ?flowId=FLOW_001&id=OA_001&action=Audit&taskId=TASK_001
 
   旧代码：gitee-example/pages/newOaWorkflowDetail/newOaWorkflowDetail.vue

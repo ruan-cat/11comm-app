@@ -2,10 +2,10 @@
   二维码缴费页面
   功能：生成二维码，用户扫码支付欠费
 
-  访问地址: http://localhost:9000/#/pages-sub/fee/pay-qrcode
+  访问地址: http://localhost:3000/#/pages-sub/fee/pay-qrcode
   建议携带参数: ?roomId=xxx&communityId=xxx&feeIds=xxx
 
-  完整示例: http://localhost:9000/#/pages-sub/fee/pay-qrcode?roomId=ROOM_001&communityId=COMM_001&feeIds=FEE_001,FEE_002
+  完整示例: http://localhost:3000/#/pages-sub/fee/pay-qrcode?roomId=ROOM_001&communityId=COMM_001&feeIds=FEE_001,FEE_002
 
   旧代码：gitee-example/pages/fee/payFeeByQrCode.vue
 -->

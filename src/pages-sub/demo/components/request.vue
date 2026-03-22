@@ -2,7 +2,7 @@
   分包示例请求组件
   功能：演示 useRequest 请求
 
-  访问地址: http://localhost:9000/#/pages-sub/demo/components/request
+  访问地址: http://localhost:3000/#/pages-sub/demo/components/request
 
   旧代码：未找到（待补充）
 -->

@@ -2,7 +2,7 @@
   单元列表页
   功能：显示单元列表，支持按单元编号搜索并进入房间列表
 
-  访问地址: http://localhost:9000/#/pages-sub/property/unit-list
+  访问地址: http://localhost:3000/#/pages-sub/property/unit-list
   建议携带参数: ?floorId=xxx
 
   旧代码：gitee-example/pages/unitList/unitList.vue

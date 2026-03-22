@@ -2,7 +2,7 @@
   二维码水表页
   功能：基于房屋/费用项快速录入抄表数据，适用于扫码后补录
 
-  访问地址: http://localhost:9000/#/pages-sub/meter/qrcode-meter
+  访问地址: http://localhost:3000/#/pages-sub/meter/qrcode-meter
   建议携带参数: ?roomId=ROOM_0001&configId=CFG_WATER_001&meterType=2020&roomName=1-1-101
 
   旧代码：gitee-example/pages/meter/qrcodeMeter.vue

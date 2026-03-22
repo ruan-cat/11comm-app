@@ -2,7 +2,7 @@
   装修记录处理页
   功能：新增装修跟踪记录，填写处理意见与是否违规
 
-  访问地址: http://localhost:9000/#/pages-sub/property/renovation-record-handle
+  访问地址: http://localhost:3000/#/pages-sub/property/renovation-record-handle
   建议携带参数: ?apply=JSON
 
   旧代码：gitee-example/pages/roomRenovationRecordHandle/roomRenovationRecordHandle.vue

@@ -3,11 +3,11 @@
   功能：业主对维修服务进行评分和评价
   表单页
 
-  访问地址: http://localhost:9000/#/pages-sub/repair/appraise
+  访问地址: http://localhost:3000/#/pages-sub/repair/appraise
   建议携带参数: ?repairId=REP_001&repairType=水电维修&communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/repair/appraise?repairId=REP_001&repairType=水电维修&communityId=COMM_001
-  上级页面: http://localhost:9000/#/pages-sub/repair/dispatch
+  完整示例: http://localhost:3000/#/pages-sub/repair/appraise?repairId=REP_001&repairType=水电维修&communityId=COMM_001
+  上级页面: http://localhost:3000/#/pages-sub/repair/dispatch
 
   旧代码：gitee-example/pages/appraiseRepair/appraiseRepair.vue
 -->

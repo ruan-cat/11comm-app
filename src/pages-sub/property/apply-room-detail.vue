@@ -2,10 +2,10 @@
   房屋申请详情页
   功能：显示房屋申请详细信息，支持验房和审核操作
 
-  访问地址: http://localhost:9000/#/pages-sub/property/apply-room-detail
+  访问地址: http://localhost:3000/#/pages-sub/property/apply-room-detail
   建议携带参数: ?ardId=xxx&communityId=xxx
 
-  http://localhost:9000/#/pages-sub/property/apply-room-detail?ardId=ARD_002&communityId=COMM_001
+  http://localhost:3000/#/pages-sub/property/apply-room-detail?ardId=ARD_002&communityId=COMM_001
 
   旧代码：gitee-example/pages/applyRoomDetail/applyRoomDetail.vue
 -->

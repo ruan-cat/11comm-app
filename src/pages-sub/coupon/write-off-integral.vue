@@ -2,7 +2,7 @@
   核销积分页
   功能：提交积分核销并查看积分核销记录
 
-  访问地址: http://localhost:9000/#/pages-sub/coupon/write-off-integral
+  访问地址: http://localhost:3000/#/pages-sub/coupon/write-off-integral
 
   旧代码：gitee-example/pages/coupon/writeOffIntegral.vue
 -->

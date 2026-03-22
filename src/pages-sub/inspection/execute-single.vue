@@ -3,10 +3,10 @@
   功能：执行单个巡检项，填写巡检结果、上传照片等
   表单页
 
-  访问地址: http://localhost:9000/#/pages-sub/inspection/execute-single
+  访问地址: http://localhost:3000/#/pages-sub/inspection/execute-single
   建议携带参数: ?taskDetailId=xxx&taskId=xxx&inspectionId=xxx&inspectionName=xxx&itemId=xxx
 
-  示例: http://localhost:9000/#/pages-sub/inspection/execute-single?taskDetailId=DETAIL_002&taskId=TASK_001&inspectionId=INSP_002&inspectionName=消防通道检查&itemId=ITEM_002
+  示例: http://localhost:3000/#/pages-sub/inspection/execute-single?taskDetailId=DETAIL_002&taskId=TASK_001&inspectionId=INSP_002&inspectionName=消防通道检查&itemId=ITEM_002
 
   旧代码： gitee-example/pages/excuteOneInspection/excuteOneInspection.vue
 -->

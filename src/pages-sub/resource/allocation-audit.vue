@@ -2,7 +2,7 @@
   调拨审核
   功能：显示调拨待审核列表，支持审核操作
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/allocation-audit
+  访问地址: http://localhost:3000/#/pages-sub/resource/allocation-audit
 
   旧代码：gitee-example/pages/resource/allocationStorehouseAuditOrders.vue
 -->

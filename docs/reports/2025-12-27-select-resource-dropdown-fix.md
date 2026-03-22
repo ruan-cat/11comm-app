@@ -8,7 +8,7 @@
 
 在 `选择维修物资` 页面 (`src\pages-sub\repair\select-resource.vue`) 中，用户无法选择有效的下拉列表数据。下拉选择器虽然可以打开，但只显示默认的提示文本 "请选择商品类型"，没有实际的选项数据可供选择。
 
-**访问地址**：`http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001`
+**访问地址**：`http://localhost:3000/#/pages-sub/repair/select-resource?feeFlag=1001`
 
 **故障截图分析**：
 
@@ -256,7 +256,7 @@ graph TB
 1. **访问维修待办单页面**：
 
    ```plain
-   http://localhost:9000/#/pages-sub/repair/dispatch
+   http://localhost:3000/#/pages-sub/repair/dispatch
    ```
 
 2. **选择一个工单** → 点击"处理"按钮 → 进入订单处理页面
@@ -267,13 +267,13 @@ graph TB
 
 ```bash
 # 有偿维修（显示价格输入框）
-http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001
+http://localhost:3000/#/pages-sub/repair/select-resource?feeFlag=1001
 
 # 无偿维修（不显示价格输入框）
-http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=0
+http://localhost:3000/#/pages-sub/repair/select-resource?feeFlag=0
 
 # 不传参数（默认不显示价格）
-http://localhost:9000/#/pages-sub/repair/select-resource
+http://localhost:3000/#/pages-sub/repair/select-resource
 ```
 
 #### 测试覆盖的场景
@@ -499,7 +499,7 @@ resourceTypes: [
 
 **步骤**：
 
-1. 访问 `http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001`
+1. 访问 `http://localhost:3000/#/pages-sub/repair/select-resource?feeFlag=1001`
 2. 点击"商品类型"选择器
 
 **预期结果**：
@@ -581,12 +581,12 @@ resourceTypes: [
 
 ### 测试场景 6：价格显示控制
 
-**步骤 A**：访问 `http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001`
+**步骤 A**：访问 `http://localhost:3000/#/pages-sub/repair/select-resource?feeFlag=1001`
 
 - ✅ 自定义商品的"自定义价格"输入框**显示**
 - ✅ 标准商品的"单价"输入框**显示**
 
-**步骤 B**：访问 `http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=0`
+**步骤 B**：访问 `http://localhost:3000/#/pages-sub/repair/select-resource?feeFlag=0`
 
 - ✅ 自定义商品的"自定义价格"输入框**隐藏**
 - ✅ 标准商品的"单价"输入框**隐藏**

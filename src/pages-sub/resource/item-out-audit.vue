@@ -2,7 +2,7 @@
   领用审核
   功能：显示领用待审核列表，支持审核操作
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/item-out-audit
+  访问地址: http://localhost:3000/#/pages-sub/resource/item-out-audit
 
   旧代码：gitee-example/pages/resource/itemOutAuditOrders.vue
 -->

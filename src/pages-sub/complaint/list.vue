@@ -2,9 +2,9 @@
   投诉受理单列表页面
   功能：显示需要处理的投诉工单列表
 
-  访问地址: http://localhost:9000/#/pages-sub/complaint/list
+  访问地址: http://localhost:3000/#/pages-sub/complaint/list
 
-  完整示例: http://localhost:9000/#/pages-sub/complaint/list
+  完整示例: http://localhost:3000/#/pages-sub/complaint/list
 
   旧代码：gitee-example/pages/complaintList/complaintList.vue
 -->

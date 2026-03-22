@@ -2,10 +2,10 @@
   单项保养页
   功能：执行单项保养，填写保养结果和上传照片
 
-  访问地址: http://localhost:9000/#/pages-sub/maintenance/execute-single
+  访问地址: http://localhost:3000/#/pages-sub/maintenance/execute-single
   建议携带参数: ?taskDetailId=xxx&taskId=xxx&itemName=xxx
 
-  示例: http://localhost:9000/#/pages-sub/maintenance/execute-single?taskDetailId=MTD_MT_001_01&taskId=MT_001&itemName=外观检查
+  示例: http://localhost:3000/#/pages-sub/maintenance/execute-single?taskDetailId=MTD_MT_001_01&taskId=MT_001&itemName=外观检查
 
   旧代码：gitee-example/pages/maintainance/excuteOneMaintainance.vue
 -->

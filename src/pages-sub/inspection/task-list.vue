@@ -2,7 +2,7 @@
   巡检打卡页面
   功能：显示巡检任务列表，支持开始巡检、任务流转、补检操作
 
-  访问地址: http://localhost:9000/#/pages-sub/inspection/task-list
+  访问地址: http://localhost:3000/#/pages-sub/inspection/task-list
 
   旧代码： gitee-example/pages/inspection/inspection.vue
 -->

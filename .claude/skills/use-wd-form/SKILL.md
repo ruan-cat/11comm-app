@@ -862,7 +862,7 @@ async function handleSubmit() {
 完整的表单页面实现示例，请参考：
 
 - **文件路径**: `src/pages-sub/repair/add-order.vue`
-- **访问地址**: http://localhost:9000/#/pages-sub/repair/add-order
+- **访问地址**: http://localhost:3000/#/pages-sub/repair/add-order
 
 该文件展示了：
 
@@ -916,10 +916,10 @@ async function handleSubmit() {
   表单页面名称
   功能：页面功能描述
 
-  访问地址: http://localhost:9000/#/pages-sub/xxx/xxx
+  访问地址: http://localhost:3000/#/pages-sub/xxx/xxx
   建议携带参数: ?param1=xxx&param2=xxx
 
-  完整示例: http://localhost:9000/#/pages-sub/xxx/xxx?param1=xxx&param2=xxx
+  完整示例: http://localhost:3000/#/pages-sub/xxx/xxx?param1=xxx&param2=xxx
 -->
 ```
 

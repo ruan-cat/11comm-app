@@ -2,7 +2,7 @@
   公告详情页
   功能：展示公告详细内容
 
-  访问地址: http://localhost:9000/#/pages/notice/detail
+  访问地址: http://localhost:3000/#/pages/notice/detail
   建议携带参数: ?noticeId=NOTICE_0001
 
   旧代码：gitee-example/pages/notice/detail/noticeDetail.vue

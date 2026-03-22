@@ -186,7 +186,7 @@ API 调用 → Mock 接口 → successResponse 包装 → 页面接收
 
 ### 4.1 测试环境
 
-- 访问地址: `http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001`
+- 访问地址: `http://localhost:3000/#/pages-sub/repair/select-resource?feeFlag=1001`
 - 测试工具: Chrome DevTools MCP
 
 ### 4.2 测试结果

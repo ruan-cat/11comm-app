@@ -2,7 +2,7 @@
   登录页
   功能：模拟登录，支持重定向跳转
 
-  访问地址: http://localhost:9000/#/pages/login/login
+  访问地址: http://localhost:3000/#/pages/login/login
 
   旧代码：gitee-example/pages/login/login.vue
 -->

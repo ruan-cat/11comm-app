@@ -2,7 +2,7 @@
   装修管理列表页
   功能：显示装修申请列表，支持按房间号和状态筛选
 
-  访问地址: http://localhost:9000/#/pages-sub/property/renovation
+  访问地址: http://localhost:3000/#/pages-sub/property/renovation
 
   旧代码：gitee-example/pages/roomRenovation/roomRenovation.vue
 -->

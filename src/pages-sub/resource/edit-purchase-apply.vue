@@ -2,7 +2,7 @@
   采购申请编辑
   功能：编辑采购申请信息
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/edit-purchase-apply
+  访问地址: http://localhost:3000/#/pages-sub/resource/edit-purchase-apply
   建议携带参数: ?applyOrderId=xxx&resOrderType=xxx
 
   旧代码：gitee-example/pages/resource/editPurchaseApply.vue

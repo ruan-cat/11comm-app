@@ -2,10 +2,10 @@
   开门记录页面
   功能：查询开门记录列表
 
-  访问地址: http://localhost:9000/#/pages-sub/report/open-door-log
+  访问地址: http://localhost:3000/#/pages-sub/report/open-door-log
   建议携带参数: ?communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/report/open-door-log?communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/report/open-door-log?communityId=COMM_001
 
   旧代码：gitee-example/pages/report/openDoorLog.vue
 -->

@@ -12,7 +12,7 @@
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │  uni-app (前端)              Nitro (后端)                   │
-│  http://localhost:9000       http://localhost:3000          │
+│  http://localhost:3000       http://localhost:3000          │
 │       │                            │                        │
 │       │     HTTP API 请求          │                        │
 │       ├───────────────────────────▶│                        │
@@ -261,7 +261,7 @@ export const deleteRepairApi = (id: string) => {
 <script setup lang="ts">
 <!--
   维修工单列表页 (连接后端版本)
-  访问地址: http://localhost:9000/#/pages-sub/repair/list
+  访问地址: http://localhost:3000/#/pages-sub/repair/list
 -->
 import { ref } from "vue";
 import { useRequest } from "alova/client";
@@ -347,7 +347,7 @@ function handleFilterChange() {
 <script setup lang="ts">
 <!--
   维修工单详情页 (连接后端版本)
-  访问地址: http://localhost:9000/#/pages-sub/repair/detail?id=xxx
+  访问地址: http://localhost:3000/#/pages-sub/repair/detail?id=xxx
 -->
 import { ref, onMounted } from "vue";
 import { useRequest } from "alova/client";
@@ -438,7 +438,7 @@ async function handleStatusChange(newStatus: string) {
 <script setup lang="ts">
 <!--
   创建维修工单页 (连接后端版本)
-  访问地址: http://localhost:9000/#/pages-sub/repair/create
+  访问地址: http://localhost:3000/#/pages-sub/repair/create
 -->
 import { ref, reactive } from "vue";
 import { useRequest } from "alova/client";
@@ -562,7 +562,7 @@ routeRules: {
   "/api/**": {
     cors: true,
     headers: {
-      "Access-Control-Allow-Origin": "http://localhost:9000",
+      "Access-Control-Allow-Origin": "http://localhost:3000",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
     },

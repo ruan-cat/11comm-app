@@ -2,10 +2,10 @@
   创建费用
   功能：创建新的费用记录，支持选择收费类型、收费项目、计费时间等
 
-  访问地址: http://localhost:9000/#/pages-sub/fee/create
+  访问地址: http://localhost:3000/#/pages-sub/fee/create
   建议携带参数: ?payerObjId=xxx&payerObjName=xxx&communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/fee/create?payerObjId=ROOM_001&payerObjName=1栋101室&communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/fee/create?payerObjId=ROOM_001&payerObjName=1栋101室&communityId=COMM_001
 
   旧代码：gitee-example/pages/fee/createFee.vue
 -->

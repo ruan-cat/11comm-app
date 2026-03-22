@@ -2,7 +2,7 @@
   个人中心
   功能：展示个人信息与登录入口
 
-  访问地址: http://localhost:9000/#/pages/me/me
+  访问地址: http://localhost:3000/#/pages/me/me
 
   旧代码：gitee-example/pages/my/my.vue
 -->

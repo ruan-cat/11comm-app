@@ -2,10 +2,10 @@
   巡检过程页面
   功能：显示巡检任务的详细内容，展示各巡检项的完成情况
 
-  访问地址: http://localhost:9000/#/pages-sub/inspection/execute
+  访问地址: http://localhost:3000/#/pages-sub/inspection/execute
   建议携带参数: ?taskId=xxx&inspectionPlanName=xxx
 
-  示例: http://localhost:9000/#/pages-sub/inspection/execute?taskId=TASK_001&inspectionPlanName=小区日常巡检
+  示例: http://localhost:3000/#/pages-sub/inspection/execute?taskId=TASK_001&inspectionPlanName=小区日常巡检
 
   旧代码： gitee-example/pages/excuteInspection/excuteInspection.vue
 -->

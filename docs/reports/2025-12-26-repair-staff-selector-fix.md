@@ -170,7 +170,7 @@ if (params.repairType) {
 **测试 URL**：
 
 ```log
-http://localhost:9000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_022&repairType=1004&repairObjType=001
+http://localhost:3000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_022&repairType=1004&repairObjType=001
 ```
 
 预期结果：能够看到王师傅（擅长 `空调维修`、`电梯维修`）在选择列表中。

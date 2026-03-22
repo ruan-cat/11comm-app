@@ -2,7 +2,7 @@
   关于页
   功能：展示平台信息与跳转示例
 
-  访问地址: http://localhost:9000/#/pages/about/about
+  访问地址: http://localhost:3000/#/pages/about/about
 
   旧代码：未找到（待补充）
 -->

@@ -2,7 +2,7 @@
   切换小区页
   功能：查询并切换当前工作小区
 
-  访问地址: http://localhost:9000/#/pages/profile/change-community
+  访问地址: http://localhost:3000/#/pages/profile/change-community
 
   旧代码：gitee-example/pages/changeCommunity/changeCommunity.vue
 -->

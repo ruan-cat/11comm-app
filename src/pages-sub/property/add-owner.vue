@@ -2,7 +2,7 @@
   新增业主页
   功能：新增业主成员信息
 
-  访问地址: http://localhost:9000/#/pages-sub/property/add-owner
+  访问地址: http://localhost:3000/#/pages-sub/property/add-owner
 
   旧代码：gitee-example/pages/owner/addOwner.vue
 -->

@@ -2,7 +2,7 @@
   物品发布页
   功能：查看物品放行待办与已办任务，支持进入详情处理
 
-  访问地址: http://localhost:9000/#/pages-sub/item/release
+  访问地址: http://localhost:3000/#/pages-sub/item/release
 
   旧代码：gitee-example/pages/itemRelease/itemRelease.vue
 -->

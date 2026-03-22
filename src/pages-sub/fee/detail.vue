@@ -2,10 +2,10 @@
   费用详情页面
   功能：显示费用详细信息和缴费历史
 
-  访问地址: http://localhost:9000/#/pages-sub/fee/detail
+  访问地址: http://localhost:3000/#/pages-sub/fee/detail
   建议携带参数: ?feeId=xxx&communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/fee/detail?feeId=FEE_001&communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/fee/detail?feeId=FEE_001&communityId=COMM_001
 
   旧代码：gitee-example/pages/feeDetail/feeDetail.vue
 -->

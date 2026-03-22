@@ -2,7 +2,7 @@
   领用管理
   功能：显示领用申请列表
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/item-out-manage
+  访问地址: http://localhost:3000/#/pages-sub/resource/item-out-manage
 
   旧代码：gitee-example/pages/resource/itemOutManage.vue
 -->

@@ -2,7 +2,7 @@
   关于-样式变量示例
   功能：演示 v-bind CSS 变量
 
-  访问地址: http://localhost:9000/#/pages/about/components/VBindCss
+  访问地址: http://localhost:3000/#/pages/about/components/VBindCss
 
   旧代码：未找到（待补充）
 -->

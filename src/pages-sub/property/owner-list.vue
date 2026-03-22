@@ -2,7 +2,7 @@
   业主列表页
   功能：显示业主列表，支持搜索、编辑和删除
 
-  访问地址: http://localhost:9000/#/pages-sub/property/owner-list
+  访问地址: http://localhost:3000/#/pages-sub/property/owner-list
 
   旧代码：gitee-example/pages/owner/owner.vue
 -->

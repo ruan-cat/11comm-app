@@ -2,7 +2,7 @@
   核销优惠券页
   功能：输入或扫码核销码，执行优惠券核销并查看核销记录
 
-  访问地址: http://localhost:9000/#/pages-sub/coupon/write-off-coupon
+  访问地址: http://localhost:3000/#/pages-sub/coupon/write-off-coupon
 
   旧代码：gitee-example/pages/coupon/writeOffCoupon.vue
 -->

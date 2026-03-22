@@ -2,7 +2,7 @@
   调拨入库
   功能：调拨入库操作
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/allocation-enter
+  访问地址: http://localhost:3000/#/pages-sub/resource/allocation-enter
   建议携带参数: ?applyOrderId=xxx
 
   旧代码：gitee-example/pages/resource/allocationEnterDo.vue

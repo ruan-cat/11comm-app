@@ -3,10 +3,10 @@
   功能：显示维修工单列表，支持搜索和筛选
   列表页
 
-  访问地址: http://localhost:9000/#/pages-sub/repair/order-list
+  访问地址: http://localhost:3000/#/pages-sub/repair/order-list
   建议携带参数: ?statusCd=10001&page=1&row=10
 
-  完整示例: http://localhost:9000/#/pages-sub/repair/order-list?statusCd=10001&page=1&row=10
+  完整示例: http://localhost:3000/#/pages-sub/repair/order-list?statusCd=10001&page=1&row=10
 
   旧代码： gitee-example/pages/repairOrder/repairOrder.vue
 -->

@@ -2,7 +2,7 @@
   repair-status-tag 组件演示页
   功能：演示维修状态标签组件的各种用法和效果
 
-  访问地址: http://localhost:9000/#/pages/test-use/repair-status-tag
+  访问地址: http://localhost:3000/#/pages/test-use/repair-status-tag
 -->
 <script setup lang="ts">
 import RepairStatusTag from '@/components/common/repair-status-tag/index.vue'

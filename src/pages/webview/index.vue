@@ -2,7 +2,7 @@
   网页视图页
   功能：承载外部 H5 页面并支持动态标题
 
-  访问地址: http://localhost:9000/#/pages/webview/index
+  访问地址: http://localhost:3000/#/pages/webview/index
   建议携带参数: ?url=xxx&title=xxx
 
   旧代码：gitee-example/pages/hcWebView/hcWebView.vue

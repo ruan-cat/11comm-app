@@ -2,7 +2,7 @@
   采购进度
   功能：显示采购进度列表，包含待处理、接单中、已完成三个Tab
 
-  访问地址: http://localhost:9000/#/pages-sub/purchase/schedule
+  访问地址: http://localhost:3000/#/pages-sub/purchase/schedule
 
   旧代码：gitee-example/pages/purchasingSchedule/purchasingSchedule.vue
 -->

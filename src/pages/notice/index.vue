@@ -2,7 +2,7 @@
   公告列表页
   功能：展示公告列表，支持分页浏览并进入详情
 
-  访问地址: http://localhost:9000/#/pages/notice/index
+  访问地址: http://localhost:3000/#/pages/notice/index
 
   旧代码：gitee-example/pages/notice/notice.vue
 -->

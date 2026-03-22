@@ -2,10 +2,10 @@
   充电桩详情页面
   功能：显示充电桩信息、订单记录和插座状态
 
-  访问地址: http://localhost:9000/#/pages-sub/fee/charge-detail
+  访问地址: http://localhost:3000/#/pages-sub/fee/charge-detail
   建议携带参数: ?machineId=xxx&machineName=xxx&communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/fee/charge-detail?machineId=MACHINE_001&machineName=充电桩1&communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/fee/charge-detail?machineId=MACHINE_001&machineName=充电桩1&communityId=COMM_001
 
   旧代码：gitee-example/pages/charge/chargeDetail.vue
 -->

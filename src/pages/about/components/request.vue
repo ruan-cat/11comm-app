@@ -2,7 +2,7 @@
   关于-请求示例组件
   功能：演示 useRequest 请求示例
 
-  访问地址: http://localhost:9000/#/pages/about/components/request
+  访问地址: http://localhost:3000/#/pages/about/components/request
 
   旧代码：未找到（待补充）
 -->

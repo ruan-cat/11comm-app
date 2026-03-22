@@ -2,10 +2,10 @@
   填写欠费催缴页面
   功能：登记欠费催缴信息，选择要催缴的费用项目
 
-  访问地址: http://localhost:9000/#/pages-sub/fee/write-owe-callable
+  访问地址: http://localhost:3000/#/pages-sub/fee/write-owe-callable
   建议携带参数: ?roomId=xxx&roomName=xxx&communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/fee/write-owe-callable?roomId=ROOM_001&roomName=1栋101室&communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/fee/write-owe-callable?roomId=ROOM_001&roomName=1栋101室&communityId=COMM_001
 
   旧代码：gitee-example/pages/fee/writeOweFeeCallable.vue
 -->

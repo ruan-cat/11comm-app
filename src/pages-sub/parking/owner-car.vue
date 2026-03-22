@@ -2,7 +2,7 @@
   业主车辆页
   功能：显示业主车辆列表，支持多条件搜索
 
-  访问地址: http://localhost:9000/#/pages-sub/parking/owner-car
+  访问地址: http://localhost:3000/#/pages-sub/parking/owner-car
 
   旧代码：gitee-example/pages/car/ownerCar.vue
 -->

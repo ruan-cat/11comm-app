@@ -2,7 +2,7 @@
   调拨管理
   功能：显示调拨申请列表
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/allocation-manage
+  访问地址: http://localhost:3000/#/pages-sub/resource/allocation-manage
 
   旧代码：gitee-example/pages/resource/allocationStorehouseManage.vue
 -->

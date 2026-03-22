@@ -2,7 +2,7 @@
   首页
   功能：工作入口，展示常用待办入口
 
-  访问地址: http://localhost:9000/#/pages/index/index
+  访问地址: http://localhost:3000/#/pages/index/index
 
   旧代码：gitee-example/pages/index/index.vue
 -->

@@ -2,7 +2,7 @@
   z-paging-loading 组件测试页面
   功能：展示 z-paging-loading 组件的各种使用场景和配置
 
-  访问地址: http://localhost:9000/#/pages/test-use/z-paging-loading
+  访问地址: http://localhost:3000/#/pages/test-use/z-paging-loading
 -->
 
 <script setup lang="ts">

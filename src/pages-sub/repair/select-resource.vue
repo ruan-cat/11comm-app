@@ -3,20 +3,20 @@
   功能：选择维修所需的物品/资源，支持标准商品和自定义商品
   表单页
 
-  访问地址: http://localhost:9000/#/pages-sub/repair/select-resource
+  访问地址: http://localhost:3000/#/pages-sub/repair/select-resource
   建议携带参数: ?feeFlag=1001
 
-  完整示例: http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001
-  上级页面: http://localhost:9000/#/pages-sub/repair/handle 处理维修工单页面
+  完整示例: http://localhost:3000/#/pages-sub/repair/select-resource?feeFlag=1001
+  上级页面: http://localhost:3000/#/pages-sub/repair/handle 处理维修工单页面
 
   有偿维修（显示价格输入框）
-  http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=1001
+  http://localhost:3000/#/pages-sub/repair/select-resource?feeFlag=1001
 
   无偿维修（不显示价格输入框）
-  http://localhost:9000/#/pages-sub/repair/select-resource?feeFlag=0
+  http://localhost:3000/#/pages-sub/repair/select-resource?feeFlag=0
 
   不传参数（默认不显示价格）
-  http://localhost:9000/#/pages-sub/repair/select-resource
+  http://localhost:3000/#/pages-sub/repair/select-resource
 
   旧代码：gitee-example/pages/repairHandle/selectResource.vue
 -->

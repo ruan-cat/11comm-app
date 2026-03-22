@@ -2,10 +2,10 @@
   欠费催缴列表页面
   功能：查询房屋欠费催缴记录列表
 
-  访问地址: http://localhost:9000/#/pages-sub/fee/owe-callable
+  访问地址: http://localhost:3000/#/pages-sub/fee/owe-callable
   建议携带参数: ?communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/fee/owe-callable?communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/fee/owe-callable?communityId=COMM_001
 
   旧代码：gitee-example/pages/fee/oweFeeCallable.vue
 -->

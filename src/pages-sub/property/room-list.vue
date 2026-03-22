@@ -2,7 +2,7 @@
   房间列表页
   功能：显示房间列表，支持按房间号搜索并进入详情
 
-  访问地址: http://localhost:9000/#/pages-sub/property/room-list
+  访问地址: http://localhost:3000/#/pages-sub/property/room-list
   建议携带参数: ?floorId=xxx&unitId=xxx
 
   旧代码：gitee-example/pages/roomList/roomList.vue

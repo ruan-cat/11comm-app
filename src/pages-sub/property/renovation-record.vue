@@ -2,7 +2,7 @@
   装修记录页
   功能：显示装修跟踪记录，支持新增和查看详情
 
-  访问地址: http://localhost:9000/#/pages-sub/property/renovation-record
+  访问地址: http://localhost:3000/#/pages-sub/property/renovation-record
   建议携带参数: ?apply=JSON
 
   旧代码：gitee-example/pages/roomRenovationRecord/roomRenovationRecord.vue

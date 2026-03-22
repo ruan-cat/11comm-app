@@ -2,7 +2,7 @@
   员工考勤页
   功能：按月份查看员工每日上下班考勤记录
 
-  访问地址: http://localhost:9000/#/pages/profile/attendance
+  访问地址: http://localhost:3000/#/pages/profile/attendance
 
   旧代码：gitee-example/pages/my/staffDetailAttendance.vue
 -->

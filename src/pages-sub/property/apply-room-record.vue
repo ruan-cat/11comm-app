@@ -2,7 +2,7 @@
   房屋申请记录页
   功能：显示房屋申请的跟踪记录列表
 
-  访问地址: http://localhost:9000/#/pages-sub/property/apply-room-record
+  访问地址: http://localhost:3000/#/pages-sub/property/apply-room-record
   建议携带参数: ?apply=JSON.stringify(applyRoomInfo)
 
   旧代码：gitee-example/pages/applyRoomRecord/applyRoomRecord.vue

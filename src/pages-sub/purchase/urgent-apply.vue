@@ -2,7 +2,7 @@
   紧急采购申请
   功能：提交紧急采购申请，选择多个商品并填写详细信息
 
-  访问地址: http://localhost:9000/#/pages-sub/purchase/urgent-apply
+  访问地址: http://localhost:3000/#/pages-sub/purchase/urgent-apply
 
   旧代码：gitee-example/pages/urgentPurchaseApplyStep/urgentPurchaseApplyStep.vue
 -->

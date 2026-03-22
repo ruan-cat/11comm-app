@@ -2,7 +2,7 @@
   调拨详情
   功能：显示调拨申请详细信息
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/allocation-detail
+  访问地址: http://localhost:3000/#/pages-sub/resource/allocation-detail
   建议携带参数: ?allocationId=xxx
 
   旧代码：gitee-example/pages/resource/allocationStorehouseApplyDetail.vue

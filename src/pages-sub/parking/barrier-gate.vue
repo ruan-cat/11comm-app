@@ -2,7 +2,7 @@
   道闸管理页
   功能：选择停车场，管理道闸设备并查看出入场/收费明细
 
-  访问地址: http://localhost:9000/#/pages-sub/parking/barrier-gate
+  访问地址: http://localhost:3000/#/pages-sub/parking/barrier-gate
 
   旧代码：gitee-example/pages/car/barrierGate.vue
 -->

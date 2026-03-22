@@ -2,10 +2,10 @@
   费用汇总报表页面
   功能：查询费用汇总统计数据
 
-  访问地址: http://localhost:9000/#/pages-sub/report/fee-summary
+  访问地址: http://localhost:3000/#/pages-sub/report/fee-summary
   建议携带参数: ?communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/report/fee-summary?communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/report/fee-summary?communityId=COMM_001
 
   旧代码：gitee-example/pages/report/reportFeeSummary.vue
 -->

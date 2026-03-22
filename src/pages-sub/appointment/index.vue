@@ -2,7 +2,7 @@
   预约管理页
   功能：查询预约核销订单，支持扫码或输入核销码执行核销
 
-  访问地址: http://localhost:9000/#/pages-sub/appointment/index
+  访问地址: http://localhost:3000/#/pages-sub/appointment/index
 
   旧代码：gitee-example/pages/appointment/appointment.vue
 -->

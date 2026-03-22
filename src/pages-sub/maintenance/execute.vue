@@ -2,10 +2,10 @@
   保养执行页
   功能：显示保养任务详情和执行项列表，支持开始/完成保养
 
-  访问地址: http://localhost:9000/#/pages-sub/maintenance/execute
+  访问地址: http://localhost:3000/#/pages-sub/maintenance/execute
   建议携带参数: ?taskId=xxx
 
-  示例: http://localhost:9000/#/pages-sub/maintenance/execute?taskId=MT_001
+  示例: http://localhost:3000/#/pages-sub/maintenance/execute?taskId=MT_001
 
   旧代码：gitee-example/pages/maintainance/excuteMaintainance.vue
 -->

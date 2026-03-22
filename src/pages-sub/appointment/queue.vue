@@ -2,7 +2,7 @@
   排队预约页
   功能：扫码或手动输入核销码，并回填到预约管理页
 
-  访问地址: http://localhost:9000/#/pages-sub/appointment/queue
+  访问地址: http://localhost:3000/#/pages-sub/appointment/queue
 
   旧代码：gitee-example/pages/appointment/hou_one.vue
 -->

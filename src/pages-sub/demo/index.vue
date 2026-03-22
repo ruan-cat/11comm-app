@@ -2,7 +2,7 @@
   分包示例页
   功能：展示分包页面与组件示例
 
-  访问地址: http://localhost:9000/#/pages-sub/demo/index
+  访问地址: http://localhost:3000/#/pages-sub/demo/index
 
   旧代码：未找到（待补充）
 -->
@@ -21,7 +21,7 @@ definePage({
 <template>
   <view class="text-center">
     <view class="m-8">
-      http://localhost:9000/#/pages-sub/demo/index
+      http://localhost:3000/#/pages-sub/demo/index
     </view>
     <view class="my-4 text-green-500">
       分包页面demo

@@ -2,7 +2,7 @@
   活动列表页
   功能：展示社区活动列表，支持分页浏览
 
-  访问地址: http://localhost:9000/#/pages/activity/index
+  访问地址: http://localhost:3000/#/pages/activity/index
   建议参数: ?currentCommunityId=COMM_001
 
   旧代码：gitee-example/pages/activityes/activityes.vue

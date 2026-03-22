@@ -3,10 +3,10 @@
   详情页
   功能：显示维修工单详细信息，包括基本信息、图片和流转时间轴
 
-  访问地址: http://localhost:9000/#/pages-sub/repair/order-detail
+  访问地址: http://localhost:3000/#/pages-sub/repair/order-detail
   建议携带参数: ?repairId=REP_001&storeId=STORE_001
 
-  完整示例: http://localhost:9000/#/pages-sub/repair/order-detail?repairId=REP_001&storeId=STORE_001
+  完整示例: http://localhost:3000/#/pages-sub/repair/order-detail?repairId=REP_001&storeId=STORE_001
 
   旧代码：gitee-example/pages/repairDetail/repairDetail.vue
 -->

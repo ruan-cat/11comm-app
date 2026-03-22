@@ -2,7 +2,7 @@
   新增水表页
   功能：录入房屋抄表信息，支持费用类型、收费项目、抄表类型和房屋选择
 
-  访问地址: http://localhost:9000/#/pages-sub/meter/add-meter
+  访问地址: http://localhost:3000/#/pages-sub/meter/add-meter
 
   旧代码：gitee-example/pages/meter/addmeter.vue
 -->

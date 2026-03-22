@@ -2,7 +2,7 @@
   物品详情页
   功能：展示物品放行详情、物品明细和审批流，支持待办任务审核
 
-  访问地址: http://localhost:9000/#/pages-sub/item/release-detail
+  访问地址: http://localhost:3000/#/pages-sub/item/release-detail
   建议携带参数: ?irId=xxx&flowId=xxx&action=Audit&taskId=xxx
 
   旧代码：gitee-example/pages/itemRelease/itemReleaseDetail.vue

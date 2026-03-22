@@ -2,7 +2,7 @@
   领用申请
   功能：提交物品领用申请
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/add-item-out
+  访问地址: http://localhost:3000/#/pages-sub/resource/add-item-out
 
   旧代码：gitee-example/pages/resource/addItemOut.vue
 -->

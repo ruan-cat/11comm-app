@@ -2,7 +2,7 @@
   工作台页面
   功能：展示按分类组织的功能入口网格，快速进入各个业务功能模块
 
-  访问地址: http://localhost:9000/#/pages/work-dashboard/index
+  访问地址: http://localhost:3000/#/pages/work-dashboard/index
 
   旧代码：gitee-example/pages/index/work.vue
 -->

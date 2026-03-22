@@ -2,7 +2,7 @@
   装修详情页
   功能：显示装修详情，支持审核、验收、装修完成和查看跟踪记录
 
-  访问地址: http://localhost:9000/#/pages-sub/property/renovation-detail
+  访问地址: http://localhost:3000/#/pages-sub/property/renovation-detail
   建议携带参数: ?apply=JSON
 
   旧代码：gitee-example/pages/roomRenovationDetail/roomRenovationDetail.vue

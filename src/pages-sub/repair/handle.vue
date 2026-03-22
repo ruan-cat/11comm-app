@@ -3,22 +3,22 @@
   功能：处理维修工单，支持派单/转单/退单/办结
   表单页
 
-  访问地址: http://localhost:9000/#/pages-sub/repair/handle
+  访问地址: http://localhost:3000/#/pages-sub/repair/handle
   建议携带参数: ?action=DISPATCH&repairId=REP_001&repairType=水电维修
   action 传参： DISPATCH-派单, TRANSFER-转单, BACK-回退, RETURN-退单, FINISH-办结
 
-  完整示例: http://localhost:9000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_001&repairType=水电维修&repairObjType=001
-  上级页面：http://localhost:9000/#/pages-sub/repair/dispatch 从各种待处理的工单列表内，进入页面
+  完整示例: http://localhost:3000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_001&repairType=水电维修&repairObjType=001
+  上级页面：http://localhost:3000/#/pages-sub/repair/dispatch 从各种待处理的工单列表内，进入页面
 
   旧代码：gitee-example/pages/repairHandle/repairHandle.vue
 -->
 
 <!--
   动态标题测试路径
-  - 派单: http://localhost:9000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_001
-  - 转单: http://localhost:9000/#/pages-sub/repair/handle?action=TRANSFER&repairId=REP_001
-  - 退单: http://localhost:9000/#/pages-sub/repair/handle?action=RETURN&repairId=REP_001
-  - 办结: http://localhost:9000/#/pages-sub/repair/handle?action=FINISH&repairId=REP_001
+  - 派单: http://localhost:3000/#/pages-sub/repair/handle?action=DISPATCH&repairId=REP_001
+  - 转单: http://localhost:3000/#/pages-sub/repair/handle?action=TRANSFER&repairId=REP_001
+  - 退单: http://localhost:3000/#/pages-sub/repair/handle?action=RETURN&repairId=REP_001
+  - 办结: http://localhost:3000/#/pages-sub/repair/handle?action=FINISH&repairId=REP_001
 -->
 
 <!-- 基本完成检查审核 -->

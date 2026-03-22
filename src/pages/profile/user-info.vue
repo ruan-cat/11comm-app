@@ -2,7 +2,7 @@
   用户信息页
   功能：展示商户信息和员工信息
 
-  访问地址: http://localhost:9000/#/pages/profile/user-info
+  访问地址: http://localhost:3000/#/pages/profile/user-info
 
   旧代码：gitee-example/pages/userInfo/userInfo.vue
 -->

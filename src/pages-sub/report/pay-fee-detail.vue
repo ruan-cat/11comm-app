@@ -2,10 +2,10 @@
   缴费明细报表页面
   功能：查询缴费明细列表
 
-  访问地址: http://localhost:9000/#/pages-sub/report/pay-fee-detail
+  访问地址: http://localhost:3000/#/pages-sub/report/pay-fee-detail
   建议携带参数: ?communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/report/pay-fee-detail?communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/report/pay-fee-detail?communityId=COMM_001
 
   旧代码：gitee-example/pages/report/reportPayFeeDetail.vue
 -->

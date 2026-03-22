@@ -63,7 +63,7 @@
 - src/pages/activity/index.vue 本项目。即将被更改的代码写法。
 
 3. `src/pages/activity/index.vue` 是活动列表页，但是目前的代码写法是回退到原生的写法了，没有完全的按照子代理的要求来做。我要求你主动使用 `style-migration` 和 `component-migration` 子代理，将活动列表页的代码写法，改成满足子代理要求的写法。并同时满足 UI 样式不发生任何变化的要求。
-4. 请你主动使用 `chrome-devtools` mcp 工具，以 H5 方式启动项目，预期在 `http://localhost:9000/#/pages/activity/index?currentCommunityId=COMM_001` 这个访问地址内，访问到活动列表页。请你在 `chrome-devtools` mcp 工具的帮助下，阅读代码显示效果。并确保 UI 样式在代码重构的时候，不发生任何变化。
+4. 请你主动使用 `chrome-devtools` mcp 工具，以 H5 方式启动项目，预期在 `http://localhost:3000/#/pages/activity/index?currentCommunityId=COMM_001` 这个访问地址内，访问到活动列表页。请你在 `chrome-devtools` mcp 工具的帮助下，阅读代码显示效果。并确保 UI 样式在代码重构的时候，不发生任何变化。
 
 ### 01
 
@@ -144,7 +144,7 @@
 1. `活动状态标签` 显示太小了。文本显示的太小了。请将其放大一些。
 2. `查看详情按钮` 显示太小了。文本显示的太小了。请将其放大一些。
 
-请你主动使用 `chrome-devtools` mcp 工具，以 H5 方式启动项目，预期在 `http://localhost:9000/#/pages/activity/index?currentCommunityId=COMM_001` 这个访问地址内，访问到活动列表页。请你在 `chrome-devtools` mcp 工具的帮助下，阅读代码显示效果。并确保只修改我所说的部分的样式，其他部分的样式不作处理。
+请你主动使用 `chrome-devtools` mcp 工具，以 H5 方式启动项目，预期在 `http://localhost:3000/#/pages/activity/index?currentCommunityId=COMM_001` 这个访问地址内，访问到活动列表页。请你在 `chrome-devtools` mcp 工具的帮助下，阅读代码显示效果。并确保只修改我所说的部分的样式，其他部分的样式不作处理。
 
 ## 009 优化 `活动详情页` 的显示效果
 
@@ -165,7 +165,7 @@
 
 请你在 `style-migration` 和 `component-migration` 这两个子代理的约束下，完成任务。
 
-请你主动使用 `chrome-devtools` mcp 工具，针对具体的一个活动详情，其 `活动详情页` 的访问地址为： `http://localhost:9000/#/pages/activity/index?currentCommunityId=COMM_001` 。请访问该地址来检验 UI 样式风格。
+请你主动使用 `chrome-devtools` mcp 工具，针对具体的一个活动详情，其 `活动详情页` 的访问地址为： `http://localhost:3000/#/pages/activity/index?currentCommunityId=COMM_001` 。请访问该地址来检验 UI 样式风格。
 
 ### 01 避免出现滥用 unocss 的 shortcuts 功能的情况
 
@@ -182,7 +182,7 @@
 
 1. 将这些组件的命名风格改掉。严格遵循短横杠规范，并移除掉冗余多余的文件名单词。
 2. 对这些 vue 组件使用 `style-migration` 子代理，用 `style-migration` 子代理实现对这些组件的样式优化。集中使用 unocss，避免出现组件长度过长的情况。简化优化 css 实现。请你认真思考，该如何将 css 样式逐步改写成 unocss，且不更改掉原有的样式。
-3. 请主动使用 `chrome-devtools` mcp 工具，自主检查其 `活动详情页` 的样式情况。其 `活动详情页` 的访问地址为： `http://localhost:9000/#/pages/activity/index?currentCommunityId=COMM_001` 。请访问该地址来检验 UI 样式风格。避免出现在改造成 unocss 时，页面整体样式出现大幅度的扭曲变化的情况。
+3. 请主动使用 `chrome-devtools` mcp 工具，自主检查其 `活动详情页` 的样式情况。其 `活动详情页` 的访问地址为： `http://localhost:3000/#/pages/activity/index?currentCommunityId=COMM_001` 。请访问该地址来检验 UI 样式风格。避免出现在改造成 unocss 时，页面整体样式出现大幅度的扭曲变化的情况。
 
 ### 03 代码重构
 

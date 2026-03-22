@@ -2,7 +2,7 @@
   新增共享抄表页
   功能：对指定公摊表录入本期抄表数据
 
-  访问地址: http://localhost:9000/#/pages-sub/meter/add-share-reading
+  访问地址: http://localhost:3000/#/pages-sub/meter/add-share-reading
   建议携带参数: ?fsmId=FSM_0001
 
   旧代码：gitee-example/pages/meter/addShareReading.vue

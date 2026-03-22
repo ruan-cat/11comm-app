@@ -3,10 +3,10 @@
   功能：新增维修工单，支持选择楼栋/单元/房屋
   表单页
 
-  访问地址: http://localhost:9000/#/pages-sub/repair/add-order
+  访问地址: http://localhost:3000/#/pages-sub/repair/add-order
   建议携带参数: ?communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/repair/add-order?communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/repair/add-order?communityId=COMM_001
 
   旧代码：gitee-example/pages/repairAdd/repairAdd.vue
 -->

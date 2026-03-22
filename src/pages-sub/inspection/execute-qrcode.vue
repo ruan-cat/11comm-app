@@ -2,10 +2,10 @@
   二维码巡检页面
   功能：通过扫描二维码快速定位到对应的巡检项
 
-  访问地址: http://localhost:9000/#/pages-sub/inspection/execute-qrcode
+  访问地址: http://localhost:3000/#/pages-sub/inspection/execute-qrcode
   建议携带参数: ?inspectionId=xxx&inspectionName=xxx&itemId=xxx
 
-  示例: http://localhost:9000/#/pages-sub/inspection/execute-qrcode?inspectionId=INSP_002&inspectionName=消防通道检查&itemId=ITEM_002
+  示例: http://localhost:3000/#/pages-sub/inspection/execute-qrcode?inspectionId=INSP_002&inspectionName=消防通道检查&itemId=ITEM_002
 
   旧代码： gitee-example/pages/excuteOneQrCodeInspection/excuteOneQrCodeInspection.vue
 -->

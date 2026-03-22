@@ -2,7 +2,7 @@
   车辆入场页
   功能：手工登记车辆进场
 
-  访问地址: http://localhost:9000/#/pages-sub/parking/car-in
+  访问地址: http://localhost:3000/#/pages-sub/parking/car-in
   建议携带参数: ?machineId=xxx&machineCode=xxx&paId=xxx&paNum=xxx&boxId=xxx
 
   旧代码：gitee-example/pages/car/carInParkingArea.vue

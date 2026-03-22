@@ -2,10 +2,10 @@
   投诉单详情页面
   功能：显示投诉工单详细信息，包括基本信息、流转时间轴和评价
 
-  访问地址: http://localhost:9000/#/pages-sub/complaint/detail
+  访问地址: http://localhost:3000/#/pages-sub/complaint/detail
   建议携带参数: ?complaintId=COMP_001
 
-  完整示例: http://localhost:9000/#/pages-sub/complaint/detail?complaintId=COMP_001
+  完整示例: http://localhost:3000/#/pages-sub/complaint/detail?complaintId=COMP_001
 
   旧代码：gitee-example/pages/complaintOrderDetail/complaintOrderDetail.vue
 -->

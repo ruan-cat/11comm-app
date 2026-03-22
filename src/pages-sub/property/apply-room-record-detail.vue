@@ -2,7 +2,7 @@
   房屋申请记录详情页
   功能：显示房屋申请记录的详细信息，支持删除操作
 
-  访问地址: http://localhost:9000/#/pages-sub/property/apply-room-record-detail
+  访问地址: http://localhost:3000/#/pages-sub/property/apply-room-record-detail
   建议携带参数: ?apply=JSON.stringify(recordInfo)
 
   旧代码：gitee-example/pages/applyRoomRecordDetail/applyRoomRecordDetail.vue

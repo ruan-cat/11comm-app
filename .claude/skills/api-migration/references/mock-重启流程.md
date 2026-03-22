@@ -40,8 +40,8 @@ async function handleMockFileChange(filePath: string) {
 # Windows 平台
 tasklist | findstr /I "node.exe" | findstr /I "pnpm"
 
-# 或者检查端口占用情况（默认 9000 端口）
-netstat -ano | findstr :9000
+# 或者检查端口占用情况（默认 3000 端口）
+netstat -ano | findstr :3000
 ```
 
 ## 停止开发服务器
@@ -70,12 +70,12 @@ pnpm dev
 # 方式1: 检查端口是否可访问
 # 循环检查直到端口可用或超时（最多等待 30 秒）
 for i in {1..30}; do
-  netstat -ano | findstr :9000 && break
+  netstat -ano | findstr :3000 && break
   sleep 1
 done
 
 # 方式2: 使用 curl/wget 检查 HTTP 响应
-# 等待 http://localhost:9000 返回正常响应
+# 等待 http://localhost:3000 返回正常响应
 ```
 
 ## 刷新浏览器页面

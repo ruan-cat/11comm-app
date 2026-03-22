@@ -2,10 +2,10 @@
   充电桩列表页面
   功能：查询并选择充电桩，进入充电桩详情
 
-  访问地址: http://localhost:9000/#/pages-sub/fee/charge
+  访问地址: http://localhost:3000/#/pages-sub/fee/charge
   建议携带参数: ?communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/fee/charge?communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/fee/charge?communityId=COMM_001
 
   旧代码：gitee-example/pages/charge/charge.vue
 -->

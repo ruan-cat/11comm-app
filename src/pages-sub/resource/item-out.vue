@@ -2,7 +2,7 @@
   物品出库
   功能：领用出库，填写发放数量
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/item-out
+  访问地址: http://localhost:3000/#/pages-sub/resource/item-out
   建议携带参数: ?applyOrderId=xxx&resOrderType=xxx&taskId=xxx
 
   旧代码：gitee-example/pages/resource/itemOutDo.vue

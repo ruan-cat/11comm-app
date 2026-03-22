@@ -2,10 +2,10 @@
   房间缴费页面
   功能：查询房屋信息，显示欠费缴费和缴费记录
 
-  访问地址: http://localhost:9000/#/pages-sub/fee/room-pay
+  访问地址: http://localhost:3000/#/pages-sub/fee/room-pay
   建议携带参数: ?communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/fee/room-pay?communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/fee/room-pay?communityId=COMM_001
 
   旧代码：gitee-example/pages/fee/roomPayFee.vue
 -->

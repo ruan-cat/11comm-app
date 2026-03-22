@@ -2,7 +2,7 @@
   我的页面
   功能：展示个人入口菜单，支持进入个人信息、考勤、切换小区和修改密码
 
-  访问地址: http://localhost:9000/#/pages/profile/index
+  访问地址: http://localhost:3000/#/pages/profile/index
 
   旧代码：gitee-example/pages/my/my.vue
 -->

@@ -2,7 +2,7 @@
   审核共享抄表页
   功能：审核公摊抄表记录并填写审核说明
 
-  访问地址: http://localhost:9000/#/pages-sub/meter/audit-share-reading
+  访问地址: http://localhost:3000/#/pages-sub/meter/audit-share-reading
   建议携带参数: ?readingId=FSR_0001
 
   旧代码：gitee-example/pages/meter/auditShareReading.vue

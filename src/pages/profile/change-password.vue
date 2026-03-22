@@ -2,7 +2,7 @@
   修改密码页
   功能：修改当前账号密码
 
-  访问地址: http://localhost:9000/#/pages/profile/change-password
+  访问地址: http://localhost:3000/#/pages/profile/change-password
 
   旧代码：gitee-example/pages/changePwd/changePwd.vue
 -->

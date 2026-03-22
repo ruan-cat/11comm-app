@@ -2,7 +2,7 @@
   核销预约页
   功能：输入或扫码预约核销码，完成预约核销并查看核销记录
 
-  访问地址: http://localhost:9000/#/pages-sub/coupon/write-off-reserve
+  访问地址: http://localhost:3000/#/pages-sub/coupon/write-off-reserve
 
   旧代码：gitee-example/pages/coupon/wirteOffReserve.vue
 -->

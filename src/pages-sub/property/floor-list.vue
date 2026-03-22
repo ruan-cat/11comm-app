@@ -2,7 +2,7 @@
   楼层列表页
   功能：显示楼层列表，支持按楼栋编号搜索并进入单元列表
 
-  访问地址: http://localhost:9000/#/pages-sub/property/floor-list
+  访问地址: http://localhost:3000/#/pages-sub/property/floor-list
 
   旧代码：gitee-example/pages/floorList/floorList.vue
 -->

@@ -2,7 +2,7 @@
   采购申请
   功能：提交采购申请，选择商品并填写采购数量和说明
 
-  访问地址: http://localhost:9000/#/pages-sub/resource/add-purchase-apply
+  访问地址: http://localhost:3000/#/pages-sub/resource/add-purchase-apply
 
   旧代码：gitee-example/pages/resource/addPurchaseApply.vue
 -->

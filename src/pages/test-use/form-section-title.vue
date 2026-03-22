@@ -2,7 +2,7 @@
   表单分区标题组件演示页
   功能：演示 form-section-title 组件的各种用法和效果
 
-  访问地址: http://localhost:9000/#/pages/test-use/form-section-title
+  访问地址: http://localhost:3000/#/pages/test-use/form-section-title
 -->
 
 <script setup lang="ts">

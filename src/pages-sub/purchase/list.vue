@@ -2,7 +2,7 @@
   采购列表
   功能：展示商品列表，供采购申请时选择商品
 
-  访问地址: http://localhost:9000/#/pages-sub/purchase/list
+  访问地址: http://localhost:3000/#/pages-sub/purchase/list
   建议携带参数: ?communityId=COMM_001
 
   旧代码：gitee-example/pages/purchaseList/purchaseList.vue

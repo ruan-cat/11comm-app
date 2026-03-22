@@ -2,7 +2,7 @@
   编辑业主页
   功能：编辑业主成员信息
 
-  访问地址: http://localhost:9000/#/pages-sub/property/edit-owner
+  访问地址: http://localhost:3000/#/pages-sub/property/edit-owner
   建议携带参数: ?memberId=xxx
 
   旧代码：gitee-example/pages/owner/editOwner.vue

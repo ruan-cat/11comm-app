@@ -2,7 +2,7 @@
   道闸视频页
   功能：展示道闸摄像头视频流
 
-  访问地址: http://localhost:9000/#/pages-sub/parking/barrier-video
+  访问地址: http://localhost:3000/#/pages-sub/parking/barrier-video
   建议携带参数: ?machineId=xxx&communityId=xxx
 
   旧代码：gitee-example/pages/car/barrierVideo.vue

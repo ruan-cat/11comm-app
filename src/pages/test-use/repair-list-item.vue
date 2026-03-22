@@ -2,7 +2,7 @@
   repair-list-item 组件演示页
   功能：演示 repair-list-item 组件的各种用法和效果
 
-  访问地址: http://localhost:9000/#/pages/test-use/repair-list-item
+  访问地址: http://localhost:3000/#/pages/test-use/repair-list-item
 -->
 
 <script setup lang="ts">

@@ -616,7 +616,7 @@ function handleLoadMore() {
     选择楼栋页面
     功能：选择楼栋，支持搜索和分页加载
 
-    访问地址: http://localhost:9000/#/pages-sub/selector/select-floor
+    访问地址: http://localhost:3000/#/pages-sub/selector/select-floor
   -->
 	<view class="h-screen flex flex-col bg-gray-50">
 		<!-- 搜索栏 -->

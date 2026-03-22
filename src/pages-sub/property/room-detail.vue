@@ -2,7 +2,7 @@
   房间详情页
   功能：查询并显示房间与业主信息
 
-  访问地址: http://localhost:9000/#/pages-sub/property/room-detail
+  访问地址: http://localhost:3000/#/pages-sub/property/room-detail
   建议携带参数: ?roomId=xxx
 
   旧代码：gitee-example/pages/roomDetail/roomDetail.vue

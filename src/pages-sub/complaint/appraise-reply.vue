@@ -2,10 +2,10 @@
   回复投诉评价页面
   功能：物业人员回复业主的投诉评价
 
-  访问地址: http://localhost:9000/#/pages-sub/complaint/appraise-reply
+  访问地址: http://localhost:3000/#/pages-sub/complaint/appraise-reply
   建议携带参数: ?appraiseId=APPR_COMP_001_1&communityId=COMM_001
 
-  完整示例: http://localhost:9000/#/pages-sub/complaint/appraise-reply?appraiseId=APPR_COMP_001_1&communityId=COMM_001
+  完整示例: http://localhost:3000/#/pages-sub/complaint/appraise-reply?appraiseId=APPR_COMP_001_1&communityId=COMM_001
 
   旧代码：gitee-example/pages/complaintOrderDetail/replyComplainAppraise.vue
 -->
