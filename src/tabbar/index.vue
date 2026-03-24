@@ -132,6 +132,7 @@ function getImageByIndex(index: number, item: CustomTabBarItem) {
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 998;
 
   border-top: 1px solid #eee;
   box-sizing: border-box;
