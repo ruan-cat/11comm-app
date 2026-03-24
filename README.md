@@ -61,6 +61,13 @@
 - Vue Official>=2.1.10
 - TypeScript>=5.0
 
+**依赖升级约束（重要）**
+
+- 截止 `2026-03-24`，即使执行 `pnpm dlx @dcloudio/uvm@latest --manager pnpm`，uni-app 主插件链也只会升级到较新的 `@dcloudio/* 5.04` 版本线，不会把 `vite` 一并提升到 `6/7/8`。
+- 当前主链的关键约束是：`@dcloudio/vite-plugin-uni` 仍然声明 `peerDependencies.vite = "5.2.8"`，并且依赖 `@vitejs/plugin-vue 5.2.4`；`@uni-helper/vite-plugin-uni-pages` 也仍然只支持 `vite ^5`。
+- 这意味着主仓库内不允许直接把 `vite` 升到 `6/7/8` 再假定 H5 可构建。这样做会让 `vitest@4`、`vite` 和 uni-app 主插件链之间出现硬性不兼容。
+- 如果必须验证 `vite@8`，请在项目内的 `.worktrees/` 隔离目录里做实验分支，并分别验证 `pnpm build:h5` 与本地 preview；不要在主开发工作区直接覆盖主插件链。
+
 ## &#x1F4C2; 快速开始
 
 执行 `pnpm create unibest` 创建项目

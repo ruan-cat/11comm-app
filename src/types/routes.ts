@@ -14,6 +14,7 @@ export type PageRoute
     | '/pages/address/list'
     | '/pages/activity/index'
     | '/pages/activity/detail'
+    | '/pages/notice/index'
 	/** 分包页面 */
 	/** 维修管理模块 (10个页面) */
     | '/pages-sub/repair/order-list' // 维修工单池
@@ -31,6 +32,7 @@ export type PageRoute
     | '/pages-sub/complaint/detail'
     | '/pages-sub/complaint/handle'
     | '/pages-sub/complaint/order' // 投诉录单
+    | '/pages-sub/complaint/finish' // 投诉已办
     | '/pages-sub/complaint/appraise-reply' // 回复评价
 	/** 巡检管理模块 (8个页面) */
     | '/pages-sub/inspection/task-list' // 巡检任务列表
@@ -46,6 +48,9 @@ export type PageRoute
     | '/pages-sub/property/apply-room-record'
     | '/pages-sub/property/apply-room-record-handle'
     | '/pages-sub/property/apply-room-record-detail'
+    | '/pages-sub/property/renovation'
+    | '/pages-sub/property/owner-list'
+    | '/pages-sub/meter/reading'
 	/** 选择器模块 (3个页面) - 级联选择功能 */
     | '/pages-sub/selector/select-floor' // 选择楼栋 (无参数)
     | '/pages-sub/selector/select-unit' // 选择单元 (需要 floorId 参数)
@@ -64,6 +69,16 @@ export type PageRoute
     | '/pages-sub/work/copy-work' // 抄送工作单 ← gitee-example/pages/work/copyWork.vue
     | '/pages-sub/work/do-copy-work' // 处理抄送工作单 ← gitee-example/pages/work/doCopyWork.vue
     | '/pages-sub/work/audit-work' // 工作单审核 ← gitee-example/pages/work/doWorkAudit.vue
+	/** OA 工作流模块 */
+    | '/pages-sub/oa/workflow'
+	/** 资源管理模块 */
+    | '/pages-sub/resource/purchase-apply-manage'
+    | '/pages-sub/resource/purchase-apply-audit'
+    | '/pages-sub/resource/item-out-manage'
+    | '/pages-sub/resource/item-out-audit'
+    | '/pages-sub/resource/allocation-manage'
+    | '/pages-sub/resource/allocation-audit'
+    | '/pages-sub/resource/store-manage'
 	/** 费用管理模块 (6个页面) */
     | '/pages-sub/fee/charge' // 充电桩列表 ← gitee-example/pages/charge/charge.vue
     | '/pages-sub/fee/charge-detail' // 充电桩详情 ← gitee-example/pages/charge/chargeDetail.vue
@@ -71,6 +86,23 @@ export type PageRoute
     | '/pages-sub/fee/owe-callable' // 欠费催缴列表 ← gitee-example/pages/fee/oweFeeCallable.vue
     | '/pages-sub/fee/write-owe-callable' // 填写欠费催缴 ← gitee-example/pages/fee/writeOweFeeCallable.vue
     | '/pages-sub/fee/room-pay' // 房间缴费 ← gitee-example/pages/fee/roomPayFee.vue
+	/** 停车业务模块 */
+    | '/pages-sub/parking/owner-car'
+    | '/pages-sub/parking/barrier-gate'
+	/** 核销业务模块 */
+    | '/pages-sub/appointment/index'
+    | '/pages-sub/coupon/write-off-coupon'
+    | '/pages-sub/coupon/write-off-reserve'
+	/** 访客放行模块 */
+    | '/pages-sub/visit/index'
+    | '/pages-sub/item/release'
+	/** 报表统计模块 */
+    | '/pages-sub/report/data-report'
+    | '/pages-sub/report/pay-fee-detail'
+    | '/pages-sub/report/room-fee'
+    | '/pages-sub/report/fee-summary'
+    | '/pages-sub/report/open-door-log'
+    | '/pages-sub/report/charge-machine-order'
 
 /** Tab页面路由类型 */
 export type TabRoute = '/pages/index/index' | '/pages/work-dashboard/index' | '/pages/address/list' | '/pages/me/me'
@@ -92,6 +124,7 @@ export interface PageParams {
     activitiesId: string
     currentCommunityId: string
   }
+  '/pages/notice/index': {}
   /** 维修管理模块参数 (10个页面) */
   '/pages-sub/repair/order-list': {
     statusCd?: string /** 工单状态代码（如 10001=待派单, 10002=已派单） */
@@ -156,6 +189,10 @@ export interface PageParams {
     complaintId: string
   }
   '/pages-sub/complaint/order': {} // 投诉录单，无参数
+  '/pages-sub/complaint/finish': {
+    page?: number
+    row?: number
+  }
   '/pages-sub/complaint/appraise-reply': {
     appraiseId: string
     communityId: string
@@ -220,6 +257,9 @@ export interface PageParams {
     state: string
     stateName: string
   }
+  '/pages-sub/property/renovation': {}
+  '/pages-sub/property/owner-list': {}
+  '/pages-sub/meter/reading': {}
   /** 选择器模块参数 - 级联选择页面参数 */
   '/pages-sub/selector/select-floor': {} // 选择楼栋页面，无需参数
   '/pages-sub/selector/select-unit': {
@@ -264,6 +304,16 @@ export interface PageParams {
   '/pages-sub/work/audit-work': {
     taskId: string // 任务ID
   }
+  /** OA 工作流模块参数 */
+  '/pages-sub/oa/workflow': {}
+  /** 资源管理模块参数 */
+  '/pages-sub/resource/purchase-apply-manage': {}
+  '/pages-sub/resource/purchase-apply-audit': {}
+  '/pages-sub/resource/item-out-manage': {}
+  '/pages-sub/resource/item-out-audit': {}
+  '/pages-sub/resource/allocation-manage': {}
+  '/pages-sub/resource/allocation-audit': {}
+  '/pages-sub/resource/store-manage': {}
   /** 费用管理模块参数 (6个页面) */
   '/pages-sub/fee/charge': {
     communityId?: string // 小区ID
@@ -287,6 +337,35 @@ export interface PageParams {
   }
   '/pages-sub/fee/room-pay': {
     communityId?: string // 小区ID
+  }
+  /** 停车业务模块参数 */
+  '/pages-sub/parking/owner-car': {}
+  '/pages-sub/parking/barrier-gate': {}
+  /** 核销业务模块参数 */
+  '/pages-sub/appointment/index': {}
+  '/pages-sub/coupon/write-off-coupon': {}
+  '/pages-sub/coupon/write-off-reserve': {}
+  /** 访客放行模块参数 */
+  '/pages-sub/visit/index': {}
+  '/pages-sub/item/release': {}
+  /** 报表统计模块参数 */
+  '/pages-sub/report/data-report': {
+    communityId?: string
+  }
+  '/pages-sub/report/pay-fee-detail': {
+    communityId?: string
+  }
+  '/pages-sub/report/room-fee': {
+    communityId?: string
+  }
+  '/pages-sub/report/fee-summary': {
+    communityId?: string
+  }
+  '/pages-sub/report/open-door-log': {
+    communityId?: string
+  }
+  '/pages-sub/report/charge-machine-order': {
+    communityId?: string
   }
 }
 

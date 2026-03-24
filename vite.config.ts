@@ -35,17 +35,14 @@ export default ({ command, mode }) => {
   // console.log(mode === process.env.NODE_ENV) // true
 
   // mode: 区分生产环境还是开发环境
-  console.log('command, mode -> ', command, mode)
-  // pnpm dev:h5 时得到 => serve development
-  // pnpm build:h5 时得到 => build production
-  // pnpm dev:mp-weixin 时得到 => build development (注意区别，command为build)
-  // pnpm build:mp-weixin 时得到 => build production
-  // pnpm dev:app 时得到 => build development (注意区别，command为build)
-  // pnpm build:app 时得到 => build production
-  // dev 和 build 命令可以分别使用 .env.development 和 .env.production 的环境变量
-
+  // pnpm dev:h5 => serve development
+  // pnpm build:h5 => build production
+  // pnpm dev:mp-weixin => build development（注意 command 仍然是 build）
+  // pnpm build:mp-weixin => build production
+  // pnpm dev:app => build development（注意 command 仍然是 build）
+  // pnpm build:app => build production
   const { UNI_PLATFORM } = process.env
-  console.log('UNI_PLATFORM -> ', UNI_PLATFORM) // 得到 mp-weixin, h5, app 等
+  console.log('UNI_PLATFORM -> ', UNI_PLATFORM) // 常见值：mp-weixin、h5、app
 
   const env = loadEnv(mode, path.resolve(process.cwd(), 'env'))
   const {
@@ -60,24 +57,22 @@ export default ({ command, mode }) => {
   console.log('环境变量 env -> ', env)
 
   return defineConfig({
-    envDir: './env', // 自定义env目录
+    envDir: './env', // 自定义 env 目录
     base: VITE_APP_PUBLIC_BASE,
     plugins: [
       UniPages({
         exclude: ['**/components/**/**.*'],
-        // homePage 通过 vue 文件的 route-block 的type="home"来设定
-        // pages 目录为 src/pages，分包目录不能配置在pages目录下
-        subPackages: ['src/pages-sub'], // 是个数组，可以配置多个，但是不能为pages里面的目录
+        // `pages` 目录固定为 `src/pages`，分包页面由 `src/pages-sub` 注入
+        subPackages: ['src/pages-sub'],
         dts: 'src/types/uni-pages.d.ts',
       }),
       UniLayouts(),
       UniPlatform(),
       UniManifest(),
-      // UniXXX 需要在 Uni 之前引入
+      // Uni 系列插件需要在 Uni() 之前注册
       {
-        // 临时解决 dcloudio 官方的 @dcloudio/uni-mp-compiler 出现的编译 BUG
-        // 参考 github issue: https://github.com/dcloudio/uni-app/issues/4952
-        // 自定义插件禁用 vite:vue 插件的 devToolsEnabled，强制编译 vue 模板时 inline 为 true
+        // 临时规避 dcloud 官方 @dcloudio/uni-mp-compiler 的编译问题
+        // 参考：https://github.com/dcloudio/uni-app/issues/4952
         name: 'fix-vite-plugin-vue',
         configResolved(config) {
           const plugin = config.plugins.find(p => p.name === 'vite:vue')
@@ -93,10 +88,10 @@ export default ({ command, mode }) => {
         dirs: ['src/hooks'], // 自动导入 hooks
         vueTemplate: true, // default false
       }),
-      // Optimization 插件需要 page.json 文件，故应在 UniPages 插件之后执行
+      // Optimization 依赖 pages.json，顺序必须在 UniPages 之后
       Optimization({
         enable: {
-          'optimization': true,
+          optimization: true,
           'async-import': true,
           'async-component': true,
         },
@@ -105,37 +100,39 @@ export default ({ command, mode }) => {
         },
         logger: false,
       }),
-
       ViteRestart({
-        // 通过这个插件，在修改vite.config.js文件则不需要重新运行也生效配置
+        // 修改 vite.config.js 时自动重启开发服务器
         restart: ['vite.config.js'],
       }),
 
-      // Mock 开发服务器插件，仅在开发环境启用
+      // 开发态保留 mock 服务；preview 预览态禁用，避免 vite@6 下触发 mock 插件兼容异常
       command === 'serve'
+      && process.env.VITE_PREVIEW !== 'true'
       && mockDevServerPlugin({
-        dir: 'src/api/mock', // 指定 Mock 文件目录,
+        dir: 'src/api/mock',
       }),
-      // Mock 开发服务器插件，仅在生产环境启用
+      // 构建态临时关闭 mock 产物生成，规避 vite@6 实验链路下的尾部兼容异常
       command === 'build'
       && mockDevServerPlugin({
-        dir: 'src/api/mock', // 指定 Mock 文件目录,
+        dir: 'src/api/mock',
+        enabled: false,
         build:
-						mode === 'production'
-						  ? {
-						      dist: 'mock',
-						    }
-						  : false,
+          mode === 'production'
+            ? {
+                dist: 'mock',
+              }
+            : false,
       }),
 
-      // h5环境增加 BUILD_TIME 和 BUILD_BRANCH
-      UNI_PLATFORM === 'h5' && {
+      // h5 环境增加 BUILD_TIME
+      UNI_PLATFORM === 'h5'
+      && {
         name: 'html-transform',
         transformIndexHtml(html) {
           return html.replace('%BUILD_TIME%', dayjs().format('YYYY-MM-DD HH:mm:ss'))
         },
       },
-      // 打包分析插件，h5 + 生产环境才弹出
+      // 打包分析插件：仅 h5 + 生产环境启用
       UNI_PLATFORM === 'h5'
       && mode === 'production'
       && visualizer({
@@ -144,16 +141,14 @@ export default ({ command, mode }) => {
         gzipSize: true,
         brotliSize: true,
       }),
-      // 只有在 app 平台时才启用 copyNativeRes 插件
-      // UNI_PLATFORM === 'app' && copyNativeRes(),
       Components({
         extensions: ['vue'],
-        deep: true, // 是否递归扫描子目录，
-        directoryAsNamespace: false, // 是否把目录名作为命名空间前缀，true 时组件名为 目录名+组件名，
-        dts: 'src/types/components.d.ts', // 自动生成的组件类型声明文件路径（用于 TypeScript 支持）
+        deep: true, // 递归扫描组件目录
+        directoryAsNamespace: false, // 不把目录名合并进组件名
+        dts: 'src/types/components.d.ts', // 自动生成组件类型声明
         resolvers: [WotResolver()],
       }),
-      // 若存在改变 pages.json 的插件，请将 UniKuRoot 放置其后
+      // 若存在会改写 pages.json 的插件，UniKuRoot 需要放在其后
       UniKuRoot(),
       Uni(),
     ],
@@ -165,7 +160,6 @@ export default ({ command, mode }) => {
       postcss: {
         plugins: [
           // autoprefixer({
-          //   // 指定目标浏览器
           //   overrideBrowserslist: ['> 1%', 'last 2 versions'],
           // }),
         ],
@@ -183,7 +177,7 @@ export default ({ command, mode }) => {
       hmr: true,
       port: Number.parseInt(VITE_APP_PORT, 10),
       open: true,
-      // 仅 H5 端生效，其他端不生效（其他端走build，不走devServer)
+      // 仅 H5 开发服务器需要代理，其它端通常直接走 build 流程
       proxy: JSON.parse(VITE_APP_PROXY_ENABLE)
         ? {
             [VITE_APP_PROXY_PREFIX]: {
@@ -199,10 +193,9 @@ export default ({ command, mode }) => {
     },
     build: {
       sourcemap: false,
-      // 方便非h5端调试
-      // sourcemap: VITE_SHOW_SOURCEMAP === 'true', // 默认是false
+      // sourcemap: VITE_SHOW_SOURCEMAP === 'true',
       target: 'es6',
-      // 开发环境不用压缩
+      // 开发环境不压缩
       minify: mode === 'development' ? false : 'esbuild',
     },
   })

@@ -52,3 +52,8 @@ pnpm-lock.yaml
 
 # 忽略本地缓存目录
 local_cache/
+
+# 项目内本地 git worktree 目录，用于隔离依赖升级与构建实验。
+# 优先使用 `.worktrees/`；同时保留 `worktrees/` 作为历史兜底目录并一并忽略。
+.worktrees/
+worktrees/

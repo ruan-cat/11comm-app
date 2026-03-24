@@ -4,6 +4,7 @@
 
 import type { PageParams, PageRoute, TabRoute } from '@/types/routes'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
+import { getCurrentCommunity } from '@/utils/user'
 
 /** 类型安全的路由跳转函数 */
 export function navigateToTyped<T extends keyof PageParams>(
@@ -144,6 +145,10 @@ export class TypedRouter {
     return navigateToTyped('/pages-sub/complaint/order', {})
   }
 
+  static toComplaintFinish(params?: PageParams['/pages-sub/complaint/finish']) {
+    return navigateToTyped('/pages-sub/complaint/finish', params)
+  }
+
   static toComplaintAppraiseReply(appraiseId: string, communityId: string) {
     return navigateToTyped('/pages-sub/complaint/appraise-reply', { appraiseId, communityId })
   }
@@ -195,8 +200,17 @@ export class TypedRouter {
     return navigateToTyped('/pages/login/login', { redirect })
   }
 
+  static toActivityList() {
+    const community = getCurrentCommunity()
+    return navigateToTyped('/pages/activity/index', { currentCommunityId: community.communityId })
+  }
+
   static toActivityDetail(activitiesId: string, currentCommunityId: string) {
     return navigateToTyped('/pages/activity/detail', { activitiesId, currentCommunityId })
+  }
+
+  static toNoticeList() {
+    return navigateToTyped('/pages/notice/index', {})
   }
 
   /** Tab页面切换 */
@@ -239,6 +253,103 @@ export class TypedRouter {
 
   static toApplyRoomRecordDetail(params: PageParams['/pages-sub/property/apply-room-record-detail']) {
     return navigateToTyped('/pages-sub/property/apply-room-record-detail', params)
+  }
+
+  static toPropertyRenovation() {
+    return navigateToTyped('/pages-sub/property/renovation', {})
+  }
+
+  static toOwnerList() {
+    return navigateToTyped('/pages-sub/property/owner-list', {})
+  }
+  static toMeterReading() {
+    return navigateToTyped('/pages-sub/meter/reading', {})
+  }
+
+  static toPurchaseApplyManage() {
+    return navigateToTyped('/pages-sub/resource/purchase-apply-manage', {})
+  }
+
+  static toPurchaseApplyAudit() {
+    return navigateToTyped('/pages-sub/resource/purchase-apply-audit', {})
+  }
+
+  static toItemOutManage() {
+    return navigateToTyped('/pages-sub/resource/item-out-manage', {})
+  }
+
+  static toItemOutAudit() {
+    return navigateToTyped('/pages-sub/resource/item-out-audit', {})
+  }
+
+  static toAllocationManage() {
+    return navigateToTyped('/pages-sub/resource/allocation-manage', {})
+  }
+
+  static toAllocationAudit() {
+    return navigateToTyped('/pages-sub/resource/allocation-audit', {})
+  }
+
+  static toResourceStoreManage() {
+    return navigateToTyped('/pages-sub/resource/store-manage', {})
+  }
+
+  static toOwnerCar() {
+    return navigateToTyped('/pages-sub/parking/owner-car', {})
+  }
+
+  static toBarrierGate() {
+    return navigateToTyped('/pages-sub/parking/barrier-gate', {})
+  }
+
+  static toAppointment() {
+    return navigateToTyped('/pages-sub/appointment/index', {})
+  }
+
+  static toWriteOffCoupon() {
+    return navigateToTyped('/pages-sub/coupon/write-off-coupon', {})
+  }
+
+  static toWriteOffReserve() {
+    return navigateToTyped('/pages-sub/coupon/write-off-reserve', {})
+  }
+
+  static toVisitList() {
+    return navigateToTyped('/pages-sub/visit/index', {})
+  }
+
+  static toItemRelease() {
+    return navigateToTyped('/pages-sub/item/release', {})
+  }
+
+  static toDataReport() {
+    const community = getCurrentCommunity()
+    return navigateToTyped('/pages-sub/report/data-report', { communityId: community.communityId })
+  }
+
+  static toPayFeeDetail() {
+    const community = getCurrentCommunity()
+    return navigateToTyped('/pages-sub/report/pay-fee-detail', { communityId: community.communityId })
+  }
+
+  static toRoomFeeReport() {
+    const community = getCurrentCommunity()
+    return navigateToTyped('/pages-sub/report/room-fee', { communityId: community.communityId })
+  }
+
+  static toFeeSummary() {
+    const community = getCurrentCommunity()
+    return navigateToTyped('/pages-sub/report/fee-summary', { communityId: community.communityId })
+  }
+
+  static toOpenDoorLog() {
+    const community = getCurrentCommunity()
+    return navigateToTyped('/pages-sub/report/open-door-log', { communityId: community.communityId })
+  }
+
+  static toChargeMachineOrder() {
+    const community = getCurrentCommunity()
+    return navigateToTyped('/pages-sub/report/charge-machine-order', { communityId: community.communityId })
   }
 
   /** 选择器模块导航 - 级联选择功能 */
@@ -314,6 +425,10 @@ export class TypedRouter {
    */
   static toMaintenanceTransfer(taskId: string) {
     return navigateToTyped('/pages-sub/maintenance/transfer', { taskId })
+  }
+
+  static toOaWorkflow() {
+    return navigateToTyped('/pages-sub/oa/workflow', {})
   }
 
   /** 工作单模块导航 (8个页面) */
@@ -478,6 +593,8 @@ export function isValidRoute(path: string): path is PageRoute {
     '/pages/address/list',
     '/pages/activity/index',
     '/pages/activity/detail',
+    '/pages/about/about',
+    '/pages/notice/index',
     // 维修管理模块
     '/pages-sub/repair/order-list',
     '/pages-sub/repair/dispatch',
@@ -494,6 +611,7 @@ export function isValidRoute(path: string): path is PageRoute {
     '/pages-sub/complaint/detail',
     '/pages-sub/complaint/handle',
     '/pages-sub/complaint/order',
+    '/pages-sub/complaint/finish',
     '/pages-sub/complaint/appraise-reply',
     // 巡检管理模块
     '/pages-sub/inspection/task-list',
@@ -510,6 +628,9 @@ export function isValidRoute(path: string): path is PageRoute {
     '/pages-sub/property/apply-room-record',
     '/pages-sub/property/apply-room-record-handle',
     '/pages-sub/property/apply-room-record-detail',
+    '/pages-sub/property/renovation',
+    '/pages-sub/property/owner-list',
+    '/pages-sub/meter/reading',
     // 选择器模块 - 级联选择功能
     '/pages-sub/selector/select-floor',
     '/pages-sub/selector/select-unit',
@@ -519,6 +640,7 @@ export function isValidRoute(path: string): path is PageRoute {
     '/pages-sub/maintenance/execute',
     '/pages-sub/maintenance/execute-single',
     '/pages-sub/maintenance/transfer',
+    '/pages-sub/work/task-list',
     // 工作单模块
     '/pages-sub/work/task-list',
     '/pages-sub/work/start-work',
@@ -528,6 +650,14 @@ export function isValidRoute(path: string): path is PageRoute {
     '/pages-sub/work/copy-work',
     '/pages-sub/work/do-copy-work',
     '/pages-sub/work/audit-work',
+    '/pages-sub/oa/workflow',
+    '/pages-sub/resource/purchase-apply-manage',
+    '/pages-sub/resource/purchase-apply-audit',
+    '/pages-sub/resource/item-out-manage',
+    '/pages-sub/resource/item-out-audit',
+    '/pages-sub/resource/allocation-manage',
+    '/pages-sub/resource/allocation-audit',
+    '/pages-sub/resource/store-manage',
     // 费用管理模块
     '/pages-sub/fee/charge',
     '/pages-sub/fee/charge-detail',
@@ -535,6 +665,19 @@ export function isValidRoute(path: string): path is PageRoute {
     '/pages-sub/fee/owe-callable',
     '/pages-sub/fee/write-owe-callable',
     '/pages-sub/fee/room-pay',
+    '/pages-sub/parking/owner-car',
+    '/pages-sub/parking/barrier-gate',
+    '/pages-sub/appointment/index',
+    '/pages-sub/coupon/write-off-coupon',
+    '/pages-sub/coupon/write-off-reserve',
+    '/pages-sub/visit/index',
+    '/pages-sub/item/release',
+    '/pages-sub/report/data-report',
+    '/pages-sub/report/pay-fee-detail',
+    '/pages-sub/report/room-fee',
+    '/pages-sub/report/fee-summary',
+    '/pages-sub/report/open-door-log',
+    '/pages-sub/report/charge-machine-order',
   ]
 
   return validRoutes.includes(path as PageRoute)
