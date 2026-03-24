@@ -1,12 +1,18 @@
-# 构建 VitePress 站点并将其部署到 GitHub Pages 的示例工作流程
+# -----------------------------------------------------------------------------
+# VitePress 文档站点 → GitHub Pages
 #
+# 为什么不默认使用：
+# - 仓库默认 CI（ci.yml）仅校验 H5 应用生产构建，不在 GitHub 上自动构建文档，以缩短 CI 时间、避免文档与主应用耦合失败。
+# - 文档可在本地执行：pnpm run docs:dev / pnpm run docs:build
+#
+# 何时使用本工作流：
+# - 仅在需要把 VitePress 产物发布到 GitHub Pages 时，到 Actions 中手动「Run workflow」触发（workflow_dispatch）。
+# -----------------------------------------------------------------------------
+
 name: Deploy VitePress site to Pages
 
 on:
-  push:
-    branches: [main]
-
-  # 允许你从 Actions 选项卡手动运行此工作流程
+  # 已取消 push 自动触发；需要发布文档时请手动运行本工作流
   workflow_dispatch:
 
 # 设置 GITHUB_TOKEN 的权限，以允许部署到 GitHub Pages

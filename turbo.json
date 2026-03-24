@@ -12,7 +12,7 @@
     },
     "do-build": {
       "cache": true,
-      "dependsOn": ["build:h5:prod", "docs:build"]
+      "dependsOn": ["build:h5:prod"]
     }
   }
 }

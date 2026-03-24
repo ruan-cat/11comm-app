@@ -60,5 +60,6 @@ jobs:
       - name: 安装项目依赖（使用官方源）
         run: pnpm install --registry ${{ env.REGISTRY_URL }}
 
-      - name: turbo并发打包全部子项目
+      # CI 仅校验 H5 生产构建（turbo do-build → build:h5:prod）；文档请本地执行 pnpm run docs:build
+      - name: turbo 并发打包（H5 生产构建）
         run: pnpm run ci
