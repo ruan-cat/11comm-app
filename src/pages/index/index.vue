@@ -292,40 +292,40 @@ function handleEntryClick(entry: HomeMenuEntry) {
 }
 
 .featured-card {
-  padding: 24rpx;
+  padding: 22rpx 22rpx 18rpx;
 }
 
 .featured-card-top {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12rpx;
+  gap: 10rpx;
 }
 
 .featured-icon-shell {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 92rpx;
-  height: 92rpx;
-  border-radius: 26rpx;
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 24rpx;
 }
 
 .featured-arrow {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48rpx;
-  height: 48rpx;
+  width: 44rpx;
+  height: 44rpx;
   background: #f5f8ff;
-  border-radius: 16rpx;
+  border-radius: 14rpx;
 }
 
 .featured-copy {
   display: flex;
   flex-direction: column;
-  gap: 8rpx;
-  margin-top: 28rpx;
+  gap: 4rpx;
+  margin-top: 8rpx;
 }
 
 .featured-title {
@@ -342,7 +342,11 @@ function handleEntryClick(entry: HomeMenuEntry) {
 }
 
 .section-card {
-  padding: 22rpx 20rpx;
+  padding: 20rpx 18rpx;
+  background: linear-gradient(180deg, #f4f8ff 0%, #edf3ff 100%);
+  box-shadow:
+    0 12rpx 30rpx rgba(15, 23, 42, 0.06),
+    inset 0 0 0 2rpx rgba(255, 255, 255, 0.88);
 }
 
 .section-card + .section-card {
@@ -353,7 +357,7 @@ function handleEntryClick(entry: HomeMenuEntry) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 18rpx;
+  margin-bottom: 14rpx;
 }
 
 .section-title-wrap {
@@ -378,7 +382,7 @@ function handleEntryClick(entry: HomeMenuEntry) {
 
 .entry-grid {
   display: grid;
-  gap: 12rpx;
+  gap: 10rpx;
 }
 
 .entry-grid-4 {
@@ -393,9 +397,12 @@ function handleEntryClick(entry: HomeMenuEntry) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12rpx;
+  gap: 10rpx;
   padding: 18rpx 10rpx 16rpx;
-  background: #f8fbff;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  box-shadow:
+    0 6rpx 18rpx rgba(47, 124, 255, 0.06),
+    inset 0 0 0 2rpx rgba(47, 124, 255, 0.06);
   border-radius: 22rpx;
 }
 
