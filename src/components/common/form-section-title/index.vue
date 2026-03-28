@@ -7,7 +7,7 @@
   - 支持呼吸动效
   - 支持图标和必填标记
   - 支持 wot-design-uni 内置图标和 UnoCSS Iconify 图标
-  - 淡灰色背景与白色表单项形成对比
+  - 支持透明背景模式，适配渐变卡片场景
 -->
 
 <script setup lang="ts">
@@ -15,6 +15,7 @@ import type { FormSectionTitleProps } from './types'
 import { computed } from 'vue'
 
 const props = withDefaults(defineProps<FormSectionTitleProps>(), {
+  background: 'default',
   required: false,
   animated: true,
   icon: '',
@@ -22,28 +23,42 @@ const props = withDefaults(defineProps<FormSectionTitleProps>(), {
   subtitle: '',
 })
 
-/** 判断是否为 Iconify 图标（以 'i-' 开头） */
+/** 判断是否为 Iconify 图标 */
 const isIconifyIcon = computed(() => props.icon.startsWith('i-'))
+
+/** 组件根样式变量 */
+const sectionTitleStyle = computed(() => {
+  if (props.background === 'transparent') {
+    return {
+      '--form-section-title-bg': 'transparent',
+      '--form-section-title-overlay': 'transparent',
+      'background': 'transparent',
+      'backgroundColor': 'transparent',
+      'backgroundImage': 'none',
+    }
+  }
+
+  return {
+    '--form-section-title-bg': 'linear-gradient(135deg, #f5f7fa 0%, #f0f2f5 100%)',
+    '--form-section-title-overlay': 'linear-gradient(90deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%)',
+  }
+})
 </script>
 
 <template>
-  <wd-cell custom-class="form-section-title-cell">
+  <wd-cell custom-class="form-section-title-cell" :style="sectionTitleStyle">
     <template #title>
       <view class="flex items-center gap-2">
-        <!-- 左侧装饰条 -->
         <view
           class="h-4 w-1 flex-shrink-0 rounded-full"
           :class="animated ? 'animate-pulse bg-gradient-to-b from-blue-400 to-blue-600' : 'bg-blue-500'"
         />
 
-        <!-- 图标（可选） -->
-        <!-- Iconify 图标（以 'i-' 开头） -->
         <view
           v-if="icon && isIconifyIcon"
           :class="[icon, iconClass || 'text-blue-500']"
           class="flex-shrink-0 text-lg"
         />
-        <!-- wot-design-uni 内置图标 -->
         <wd-icon
           v-else-if="icon"
           :name="icon"
@@ -52,7 +67,6 @@ const isIconifyIcon = computed(() => props.icon.startsWith('i-'))
           custom-style="flex-shrink: 0;"
         />
 
-        <!-- 主标题（不换行） -->
         <view class="flex flex-shrink-0 items-center gap-1">
           <text
             class="whitespace-nowrap text-base font-semibold"
@@ -60,11 +74,9 @@ const isIconifyIcon = computed(() => props.icon.startsWith('i-'))
           >
             {{ title }}
           </text>
-          <!-- 必填标记 -->
           <text v-if="required" class="text-base text-red-500">*</text>
         </view>
 
-        <!-- 副标题（可选，同行显示） -->
         <text v-if="subtitle" class="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-xs text-gray-400">
           {{ subtitle }}
         </text>
@@ -74,15 +86,13 @@ const isIconifyIcon = computed(() => props.icon.startsWith('i-'))
 </template>
 
 <style scoped>
-/* 自定义 wd-cell 样式 */
 :deep(.form-section-title-cell) {
-  background: linear-gradient(135deg, #f5f7fa 0%, #f0f2f5 100%);
+  background: var(--form-section-title-bg);
   padding: 12px 16px;
   margin-bottom: 2px;
   border-radius: 0;
 }
 
-/* 呼吸动效增强 */
 @keyframes breathe {
   0%,
   100% {
@@ -96,11 +106,8 @@ const isIconifyIcon = computed(() => props.icon.startsWith('i-'))
 :deep(.form-section-title-cell)::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
+  inset: 0;
+  background: var(--form-section-title-overlay);
   animation: breathe 3s ease-in-out infinite;
   pointer-events: none;
 }

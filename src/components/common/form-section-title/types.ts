@@ -6,6 +6,8 @@
 export interface FormSectionTitleProps {
   /** 标题文本 */
   title: string
+  /** 标题背景样式 */
+  background?: 'default' | 'transparent'
   /** 是否显示必填标记 */
   required?: boolean
   /** 是否启用呼吸动效 */
