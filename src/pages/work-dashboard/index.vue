@@ -8,13 +8,14 @@
 -->
 
 <script setup lang="ts">
+import type { WorkbenchMenu } from './menu-config'
 import { storeToRefs } from 'pinia'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
 import { TypedRouter } from '@/router'
 import { useUserStore } from '@/store'
 import { getCurrentCommunity } from '@/utils/user'
-import { type WorkbenchMenu, workbenchCategories } from './menu-config'
+import { workbenchCategories } from './menu-config'
 import { createWorkbenchMenuNavigators } from './navigation'
 
 definePage({

@@ -1,251 +1,181 @@
 <!--
   首页
-  功能：工作入口，展示常用待办入口
+  功能：作为物业业务首页，聚合主任务卡片与常用业务入口
 
   访问地址: http://localhost:3000/#/pages/index/index
 
   旧代码：gitee-example/pages/index/index.vue
 -->
 
-<script lang="ts" setup>
+<script setup lang="ts">
+import type { HomeMenuEntry } from './home-menu-config'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
-import { TypedRouter } from '@/router/helpers'
-
-/** 导入顶部入口图标 */
-import iComplaint from '@/static/image/index/i_complaint.png'
-import iInspection from '@/static/image/index/i_inspection.png'
-import iMachine from '@/static/image/index/i_machine.png'
-import iRepair from '@/static/image/index/i_repair.png'
-
-import indexAllocation from '@/static/image/index_allocation.png'
-/** 导入工作待办图标 */
-import indexApplyAudit from '@/static/image/index_apply_audit.png'
-import indexComplaint from '@/static/image/index_complaint.png'
-import indexItemoutAudit from '@/static/image/index_itemout_audit.png'
-import indexRepair from '@/static/image/index_repair.png'
-
-defineOptions({
-  name: 'Home',
-})
+import { createWorkbenchMenuNavigators } from '@/pages/work-dashboard/navigation'
+import { TypedRouter } from '@/router'
+import { getCurrentCommunity, getUserInfo } from '@/utils/user'
+import { homeFeaturedEntries, homeHeaderSubtitle, homeHeaderTitle, homeSections } from './home-menu-config'
 
 definePage({
   type: 'home',
   style: {
     navigationStyle: 'custom',
     navigationBarTitleText: '首页',
+    backgroundColor: '#F5F7FB',
   },
 })
 
 const toast = useGlobalToast()
+const currentCommunity = getCurrentCommunity()
+const currentUser = getUserInfo()
 
-/** 顶部入口配置 */
-interface HeaderEntry {
-  id: string
-  name: string
-  icon: string
-  route?: string
-  disabled?: boolean
+/** 构建首页 iconify 图标类名 */
+function getEntryIconClass(entry: HomeMenuEntry, size: 'feature' | 'grid') {
+  const sizeClass = size === 'feature'
+    ? 'w-44rpx h-44rpx text-44rpx'
+    : 'w-36rpx h-36rpx text-36rpx'
+
+  return `${entry.icon} ${entry.iconClass} ${sizeClass} flex items-center justify-center flex-shrink-0`
 }
 
-/** 待办入口配置 */
-interface TodoEntry {
-  id: string
-  name: string
-  icon?: string
-  route?: string
-  disabled?: boolean
+/** 获取当前小区 ID */
+function getCurrentCommunityId() {
+  return currentCommunity.communityId
 }
 
-/** 工作单入口配置 */
-interface WorkOrderEntry {
-  id: string
-  name: string
-  label: string
-  route?: string
-  disabled?: boolean
-}
+/** 首页入口导航映射 */
+const homeMenuNavigators = createWorkbenchMenuNavigators({
+  toActivityList: () => TypedRouter.toActivityList(),
+  toAllocationAudit: () => TypedRouter.toAllocationAudit(),
+  toAllocationManage: () => TypedRouter.toAllocationManage(),
+  toAppointment: () => TypedRouter.toAppointment(),
+  toApplyRoomList: () => TypedRouter.toApplyRoomList(),
+  toBarrierGate: () => TypedRouter.toBarrierGate(),
+  toChargeMachineOrder: () => TypedRouter.toChargeMachineOrder(),
+  toComplaintFinish: () => TypedRouter.toComplaintFinish(),
+  toComplaintList: () => TypedRouter.toComplaintList(),
+  toComplaintOrder: () => TypedRouter.toComplaintOrder(),
+  toDataReport: () => TypedRouter.toDataReport(),
+  toFeeRoomPay: () => TypedRouter.toFeeRoomPay({ communityId: getCurrentCommunityId() }),
+  toFeeSummary: () => TypedRouter.toFeeSummary(),
+  toInspectionTaskList: () => TypedRouter.toInspectionTaskList(),
+  toItemOutAudit: () => TypedRouter.toItemOutAudit(),
+  toItemOutManage: () => TypedRouter.toItemOutManage(),
+  toItemRelease: () => TypedRouter.toItemRelease(),
+  toMaintenanceTaskList: () => TypedRouter.toMaintenanceTaskList(),
+  toMeterReading: () => TypedRouter.toMeterReading(),
+  toNoticeList: () => TypedRouter.toNoticeList(),
+  toOaWorkflow: () => TypedRouter.toOaWorkflow(),
+  toOpenDoorLog: () => TypedRouter.toOpenDoorLog(),
+  toOwnerCar: () => TypedRouter.toOwnerCar(),
+  toOwnerList: () => TypedRouter.toOwnerList(),
+  toPayFeeDetail: () => TypedRouter.toPayFeeDetail(),
+  toPropertyRenovation: () => TypedRouter.toPropertyRenovation(),
+  toPurchaseApplyAudit: () => TypedRouter.toPurchaseApplyAudit(),
+  toPurchaseApplyManage: () => TypedRouter.toPurchaseApplyManage(),
+  toRepairDispatch: () => TypedRouter.toRepairDispatch(),
+  toRepairFinish: () => TypedRouter.toRepairFinish(),
+  toRepairList: () => TypedRouter.toRepairList(),
+  toResourceStoreManage: () => TypedRouter.toResourceStoreManage(),
+  toRoomFeeReport: () => TypedRouter.toRoomFeeReport(),
+  toVisitList: () => TypedRouter.toVisitList(),
+  toWorkCopy: () => TypedRouter.toWorkCopy(),
+  toWorkDo: () => TypedRouter.toWorkDo(),
+  toWorkStart: () => TypedRouter.toWorkStart(),
+  toWriteOffCoupon: () => TypedRouter.toWriteOffCoupon(),
+  toWriteOffReserve: () => TypedRouter.toWriteOffReserve(),
+  toAddRepair: () => TypedRouter.toAddRepair(getCurrentCommunityId()),
+})
 
-/** 顶部入口列表 */
-const headerEntries: HeaderEntry[] = [
-  { id: 'complaint', name: '投诉待办', icon: iComplaint, route: '/pages-sub/complaint/list' },
-  { id: 'repair', name: '报修待办', icon: iRepair, route: '/pages-sub/repair/dispatch' },
-  { id: 'inspection', name: '巡检打卡', icon: iInspection, route: '/pages-sub/inspection/task-list' },
-  { id: 'maintenance', name: '设备保养', icon: iMachine, disabled: true },
-]
+/** 处理首页入口点击 */
+function handleEntryClick(entry: HomeMenuEntry) {
+  const navigate = homeMenuNavigators[entry.navigationKey]
 
-/** 工作待办入口列表 */
-const todoEntries: TodoEntry[] = [
-  { id: 'purchase-audit', name: '采购待办', icon: indexApplyAudit, disabled: true },
-  { id: 'item-out-audit', name: '领用待办', icon: indexItemoutAudit, disabled: true },
-  { id: 'allocation-audit', name: '调拨待办', icon: indexAllocation, disabled: true },
-  { id: 'release', name: '物品放行', icon: indexComplaint, disabled: true },
-  { id: 'visit', name: '访客待办', icon: indexRepair, disabled: true },
-]
-
-/** 工作单入口列表 */
-const workOrderEntries: WorkOrderEntry[] = [
-  { id: 'work-start', name: '工作单', label: '发', disabled: true },
-  { id: 'work-do', name: '工作单', label: '办', disabled: true },
-  { id: 'work-copy', name: '抄送', label: '抄', disabled: true },
-]
-
-/** 维修报修入口配置 */
-interface RepairEntry {
-  id: string
-  name: string
-  icon?: string
-  route?: string
-  disabled?: boolean
-}
-
-/** 维修报修入口列表 */
-const repairEntries: RepairEntry[] = [
-  { id: 'repair-order', name: '维修工单池', icon: indexRepair, route: '/pages-sub/repair/order-list' },
-  { id: 'repair-dispatch', name: '维修待办单', icon: iRepair, route: '/pages-sub/repair/dispatch' },
-  { id: 'repair-finish', name: '维修已办', icon: indexComplaint, route: '/pages-sub/repair/finish' },
-]
-
-/** 处理顶部入口点击 */
-function handleHeaderClick(entry: HeaderEntry) {
-  if (entry.disabled) {
-    toast.info('功能开发中')
+  if (!navigate) {
+    toast.warning('暂未配置对应入口')
     return
   }
 
-  switch (entry.id) {
-    case 'complaint':
-      TypedRouter.toComplaintList()
-      break
-    case 'repair':
-      TypedRouter.toRepairDispatch()
-      break
-    case 'inspection':
-      TypedRouter.toInspectionTaskList()
-      break
-    default:
-      toast.info('功能开发中')
-  }
-}
-
-/** 处理工作待办入口点击 */
-function handleTodoClick(entry: TodoEntry) {
-  if (entry.disabled) {
-    toast.info('功能开发中')
-    return
-  }
-
-  // 根据 id 跳转到对应页面
-  toast.info('功能开发中')
-}
-
-/** 处理工作单入口点击 */
-function handleWorkOrderClick(entry: WorkOrderEntry) {
-  if (entry.disabled) {
-    toast.info('功能开发中')
-    return
-  }
-
-  // 根据 id 跳转到对应页面
-  toast.info('功能开发中')
-}
-
-/** 处理维修报修入口点击 */
-function handleRepairClick(entry: RepairEntry) {
-  if (entry.disabled) {
-    toast.info('功能开发中')
-    return
-  }
-
-  switch (entry.id) {
-    case 'repair-order':
-      TypedRouter.toRepairList()
-      break
-    case 'repair-dispatch':
-      TypedRouter.toRepairDispatch()
-      break
-    case 'repair-finish':
-      TypedRouter.toRepairFinish()
-      break
-    default:
-      toast.info('功能开发中')
-  }
+  navigate()
 }
 </script>
 
 <template>
-  <view class="home-contant">
-    <!-- 顶部入口区域 -->
-    <view class="title-head">
-      <view
-        v-for="entry in headerEntries"
-        :key="entry.id"
-        class="header-entry"
-        :class="{ 'opacity-60': entry.disabled }"
-        @click="handleHeaderClick(entry)"
-      >
-        <image class="title-ico" :src="entry.icon" mode="aspectFit" />
-        <view>{{ entry.name }}</view>
-      </view>
-    </view>
-
-    <!-- 工作待办 -->
-    <view class="work-todo">
-      <view class="work-todo-title">
-        工作待办
-      </view>
-
-      <view class="work-item">
-        <view
-          v-for="entry in todoEntries"
-          :key="entry.id"
-          class="work-item-content"
-          :class="{ 'opacity-60': entry.disabled }"
-          @click="handleTodoClick(entry)"
-        >
-          <image class="work-ico" :src="entry.icon" mode="aspectFit" />
-          <view>{{ entry.name }}</view>
-        </view>
-      </view>
-    </view>
-
-    <!-- 工作单 -->
-    <view class="work-todo">
-      <view class="work-todo-title">
-        工作单
-      </view>
-
-      <view class="work-item">
-        <view
-          v-for="entry in workOrderEntries"
-          :key="entry.id"
-          class="work-item-content"
-          :class="{ 'opacity-60': entry.disabled }"
-          @click="handleWorkOrderClick(entry)"
-        >
-          <view class="work-font">
-            {{ entry.label }}
+  <view class="home-page">
+    <view class="home-header">
+      <view class="header-bar">
+        <view class="brand-block">
+          <view class="brand-icon-shell">
+            <view class="i-carbon-building text-white text-36rpx" />
           </view>
-          <view>{{ entry.name }}</view>
+
+          <view class="brand-copy">
+            <text class="brand-title">{{ homeHeaderTitle }}</text>
+            <text class="brand-subtitle">{{ currentCommunity.communityName || homeHeaderSubtitle }}</text>
+          </view>
+        </view>
+
+        <view class="user-chip">
+          <view class="i-carbon-user-avatar text-white text-24rpx" />
+          <text class="user-chip-text">{{ currentUser.userName }}</text>
         </view>
       </view>
     </view>
 
-    <!-- 维修报修 -->
-    <view class="work-todo">
-      <view class="work-todo-title">
-        维修报修
+    <view class="home-content">
+      <view class="featured-grid">
+        <view
+          v-for="entry in homeFeaturedEntries"
+          :key="entry.id"
+          class="featured-card"
+          @click="handleEntryClick(entry)"
+        >
+          <view class="featured-card-top">
+            <view class="featured-icon-shell" :class="entry.bgClass">
+              <wd-icon
+                name=""
+                :custom-class="getEntryIconClass(entry, 'feature')"
+              />
+            </view>
+
+            <view class="featured-arrow">
+              <view class="i-carbon-arrow-up-right text-blue-500 text-20rpx" />
+            </view>
+          </view>
+
+          <view class="featured-copy">
+            <text class="featured-title">{{ entry.name }}</text>
+            <text v-if="entry.meta" class="featured-meta">{{ entry.meta }}</text>
+          </view>
+        </view>
       </view>
 
-      <view class="work-item">
-        <view
-          v-for="entry in repairEntries"
-          :key="entry.id"
-          class="work-item-content"
-          :class="{ 'opacity-60': entry.disabled }"
-          @click="handleRepairClick(entry)"
-        >
-          <image class="work-ico" :src="entry.icon" mode="aspectFit" />
-          <view>{{ entry.name }}</view>
+      <view
+        v-for="section in homeSections"
+        :key="section.id"
+        class="section-card"
+      >
+        <view class="section-head">
+          <view class="section-title-wrap">
+            <view class="section-mark" />
+            <text class="section-title">{{ section.title }}</text>
+          </view>
+        </view>
+
+        <view class="entry-grid" :class="`entry-grid-${section.columns}`">
+          <view
+            v-for="entry in section.entries"
+            :key="entry.id"
+            class="entry-item"
+            @click="handleEntryClick(entry)"
+          >
+            <view class="entry-icon-shell" :class="entry.bgClass">
+              <wd-icon
+                name=""
+                :custom-class="getEntryIconClass(entry, 'grid')"
+              />
+            </view>
+            <text class="entry-name">{{ entry.name }}</text>
+          </view>
         </view>
       </view>
     </view>
@@ -253,77 +183,236 @@ function handleRepairClick(entry: RepairEntry) {
 </template>
 
 <style scoped lang="scss">
-.home-contant {
-  height: 100vh;
-  width: 100vw;
-  background-color: #f1f1f1;
+.home-page {
+  min-height: 100vh;
+  padding-bottom: calc(28rpx + env(safe-area-inset-bottom));
+  background: #f5f7fb;
 }
 
-.title-head {
-  background-color: #368bff;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  padding-left: 20px;
-  padding-right: 20px;
+.home-header {
+  padding: calc(18rpx + env(safe-area-inset-top)) 24rpx 78rpx;
+  background: linear-gradient(180deg, #2f7cff 0%, #5f9fff 100%);
+}
+
+.header-bar {
   display: flex;
-  gap: 50px;
-  color: #fff;
-  font-size: 12px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
 }
 
-.header-entry {
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  min-width: 0;
+}
+
+.brand-icon-shell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72rpx;
+  height: 72rpx;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 22rpx;
+  flex-shrink: 0;
+}
+
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  min-width: 0;
+}
+
+.brand-title {
+  color: #fff;
+  font-size: 34rpx;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.brand-subtitle {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 22rpx;
+  line-height: 1.2;
+}
+
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 12rpx 18rpx;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 9999rpx;
+  flex-shrink: 0;
+}
+
+.user-chip-text {
+  max-width: 160rpx;
+  font-size: 22rpx;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.home-content {
+  margin-top: -42rpx;
+  padding: 0 24rpx 24rpx;
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18rpx;
+  margin-bottom: 20rpx;
+}
+
+.featured-card,
+.section-card {
+  background: #fff;
+  border-radius: 28rpx;
+  box-shadow: 0 12rpx 32rpx rgba(15, 23, 42, 0.08);
+}
+
+.featured-card,
+.entry-item {
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.featured-card:active,
+.entry-item:active {
+  opacity: 0.86;
+  transform: scale(0.985);
+}
+
+.featured-card {
+  padding: 24rpx;
+}
+
+.featured-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12rpx;
+}
+
+.featured-icon-shell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 92rpx;
+  height: 92rpx;
+  border-radius: 26rpx;
+}
+
+.featured-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48rpx;
+  height: 48rpx;
+  background: #f5f8ff;
+  border-radius: 16rpx;
+}
+
+.featured-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  margin-top: 28rpx;
+}
+
+.featured-title {
+  color: #16233b;
+  font-size: 32rpx;
+  font-weight: 800;
+  line-height: 1.28;
+}
+
+.featured-meta {
+  color: #72819a;
+  font-size: 22rpx;
+  line-height: 1.3;
+}
+
+.section-card {
+  padding: 22rpx 20rpx;
+}
+
+.section-card + .section-card {
+  margin-top: 18rpx;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18rpx;
+}
+
+.section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.section-mark {
+  width: 8rpx;
+  height: 28rpx;
+  background: #2f7cff;
+  border-radius: 9999rpx;
+}
+
+.section-title {
+  color: #18263f;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.entry-grid {
+  display: grid;
+  gap: 12rpx;
+}
+
+.entry-grid-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.entry-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.entry-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  cursor: pointer;
-
-  &:active {
-    opacity: 0.8;
-  }
+  gap: 12rpx;
+  padding: 18rpx 10rpx 16rpx;
+  background: #f8fbff;
+  border-radius: 22rpx;
 }
 
-.title-ico {
-  height: 45px;
-  width: 45px;
-}
-
-.work-todo {
-  height: auto;
-  margin-top: 20px;
-  background-color: #fff;
-  flex-direction: column;
+.entry-icon-shell {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 74rpx;
+  height: 74rpx;
+  border-radius: 22rpx;
 }
 
-.work-todo-title {
+.entry-name {
+  color: #42506a;
+  font-size: 22rpx;
   font-weight: 500;
-  padding: 10px;
-  border-bottom: 1px solid #f1f1f1;
-}
-
-.work-item {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  line-height: 1.35;
   text-align: center;
-}
-
-.work-ico {
-  width: 45px;
-  height: 45px;
-}
-
-.work-item-content {
-  padding: 20px;
-  border: 1px solid #f1f1f1;
-  cursor: pointer;
-
-  &:active {
-    background-color: #f5f5f5;
-  }
-}
-
-.work-font {
-  font-size: 30px;
-  color: #378cfe;
 }
 </style>
