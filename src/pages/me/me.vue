@@ -11,6 +11,7 @@
 import type { IUploadSuccessInfo } from '@/api/types/login'
 import { storeToRefs } from 'pinia'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
+import { resolveUploadBaseUrl } from '@/http/runtime-base'
 import { LOGIN_PAGE } from '@/router/config'
 import { TypedRouter } from '@/router/helpers'
 import { useUserStore } from '@/store'
@@ -24,6 +25,7 @@ definePage({
 })
 
 const toast = useGlobalToast()
+const uploadBaseUrl = resolveUploadBaseUrl(import.meta.env)
 
 const userStore = useUserStore()
 const tokenStore = useTokenStore()
@@ -33,7 +35,7 @@ const { userInfo } = storeToRefs(userStore)
 // #ifndef MP-WEIXIN
 /** 上传头像 */
 const { run: uploadAvatar } = useUpload<IUploadSuccessInfo>(
-  import.meta.env.VITE_UPLOAD_BASEURL,
+  uploadBaseUrl,
   {},
   {
     onSuccess: (res) => {
@@ -63,7 +65,7 @@ function onChooseAvatar(e: any) {
   console.log('选择头像', e.detail)
   const { avatarUrl } = e.detail
   const { run } = useUpload<IUploadSuccessInfo>(
-    import.meta.env.VITE_UPLOAD_BASEURL,
+    uploadBaseUrl,
     {},
     {
       onSuccess: (res) => {

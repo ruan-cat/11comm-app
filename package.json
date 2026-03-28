@@ -26,6 +26,12 @@
   },
   "scripts": {
     "dev": "pnpm run dev:h5",
+    "dev:h5:mock": "uni --mode development",
+    "dev:h5:nitro": "node ./scripts/dev-h5-nitro.mjs",
+    "dev:nitro": "cross-env NITRO_BUILDER=rollup NITRO_APP_MODE=development-nitro-api nitro dev",
+    "build:nitro": "cross-env NITRO_BUILDER=rollup NODE_ENV=production NITRO_APP_MODE=production VITE_API_RUNTIME=nitro-standalone NITRO_DATA_SOURCE=mock nitro build",
+    "preview:nitro": "cross-env NODE_ENV=production NITRO_APP_MODE=production VITE_API_RUNTIME=nitro-standalone NITRO_DATA_SOURCE=mock NITRO_PORT=3101 node .output/server/index.mjs",
+    "dev:mp-weixin:nitro": "node ./scripts/dev-mp-weixin-nitro.mjs",
     "dev:mp": "uni -p mp-weixin",
     "uvm": "npx @dcloudio/uvm@latest",
     "uvm-rm": "node ./scripts/postupgrade.js",
@@ -39,7 +45,7 @@
     "dev:fuzha": "node --experimental-loader ./scripts/window-path-loader.js node_modules/@dcloudio/vite-plugin-uni/bin/uni.js",
     "dev:test": "uni --mode test",
     "dev:prod": "uni --mode production",
-    "dev:h5": "uni",
+    "dev:h5": "pnpm run dev:h5:mock",
     "dev:h5:test": "uni --mode test",
     "dev:h5:prod": "uni --mode production",
     "dev:h5:ssr": "uni --ssr",
@@ -175,6 +181,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
     "miniprogram-api-typings": "^4.1.0",
+    "nitro": "3.0.260311-beta",
     "openapi-ts-request": "^1.7.3",
     "oxlint": "^1.38.0",
     "postcss": "^8.5.6",
@@ -190,7 +197,7 @@
     "unocss": "66.0.0",
     "unplugin-auto-import": "^20.1.0",
     "vite": "6.4.1",
-    "vite-plugin-mock-dev-server": "^2.0.1",
+    "vite-plugin-mock-dev-server": "2.1.1",
     "vite-plugin-restart": "^1.0.0",
     "vitepress": "^1.6.4",
     "vitepress-plugin-llms": "^1.7.5",
@@ -201,6 +208,9 @@
     "overrides": {
       "@vitejs/plugin-vue-jsx": "5.1.5",
       "vue-router": "4.5.1"
+    },
+    "patchedDependencies": {
+      "vite-plugin-mock-dev-server@2.1.1": "patches/vite-plugin-mock-dev-server@2.1.1.patch"
     }
   },
   "resolutions": {

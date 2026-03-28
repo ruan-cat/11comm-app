@@ -5,7 +5,6 @@
 
 import type { ApiResponse } from '@/types/api'
 import dayjs from 'dayjs'
-import { createDefineMock } from 'vite-plugin-mock-dev-server'
 // FIXME: 无法使用路径别名 出现路径识别错误 编译失败
 // import { ResultEnum } from '@/http/tools/enum'
 // 使用相对路径导入，避免别名路径问题
@@ -47,7 +46,7 @@ export const ResultEnumMap = {
  * 处理 vite 代理配置和 alova baseURL 的双重前缀问题
  */
 export const defineUniAppMock = createDefineMock((mock) => {
-  const prefix = import.meta.env.VITE_APP_PROXY_PREFIX || ''
+  const prefix = import.meta.env?.VITE_APP_PROXY_PREFIX || ''
 
   /**
    * 为什么这里要加两次 prefix？
@@ -56,6 +55,18 @@ export const defineUniAppMock = createDefineMock((mock) => {
    */
   mock.url = `${prefix}${prefix}${mock.url}`
 })
+
+function createDefineMock<T extends { url: string }>(
+  transformer: (mock: T) => T | void,
+) {
+  return (mock: T | T[]) => {
+    if (Array.isArray(mock)) {
+      return mock.map(item => transformer(item) || item)
+    }
+
+    return transformer(mock) || mock
+  }
+}
 
 /** 模拟请求延迟 */
 export const delay = (ms: number = 300) => new Promise(resolve => setTimeout(resolve, ms))

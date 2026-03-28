@@ -15,6 +15,8 @@ interface ImportMetaEnv {
   readonly VITE_SERVER_PORT: string
   /** 后台接口地址 */
   readonly VITE_SERVER_BASEURL: string
+  /** 当前接口运行时 */
+  readonly VITE_API_RUNTIME: 'mock' | 'nitro-vite' | 'nitro-standalone'
   /** H5是否需要代理 */
   readonly VITE_APP_PROXY_ENABLE: 'true' | 'false'
   /** H5是否需要代理，需要的话有个前缀 */
@@ -23,6 +25,12 @@ interface ImportMetaEnv {
   readonly VITE_AUTH_MODE: 'single' | 'double'
   /** 上传图片地址 */
   readonly VITE_UPLOAD_BASEURL: string
+  /** Nitro 数据源 */
+  readonly NITRO_DATA_SOURCE: 'mock' | 'neon'
+  /** Nitro 端口 */
+  readonly NITRO_PORT: string
+  /** 第二请求域名 */
+  readonly VITE_API_SECONDARY_URL: string
   /** 是否清除console */
   readonly VITE_DELETE_CONSOLE: string
   // 更多环境变量...

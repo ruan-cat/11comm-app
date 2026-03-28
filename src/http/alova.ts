@@ -4,12 +4,13 @@ import AdapterUniapp from '@alova/adapter-uniapp'
 import { createAlova } from 'alova'
 import { createServerTokenAuthentication } from 'alova/client'
 import VueHook from 'alova/vue'
+import { resolveHttpBaseUrl } from '@/http/runtime-base'
 import { LOGIN_PAGE } from '@/router/config'
 import { ContentTypeEnum, ResultEnum, ShowMessage } from './tools/enum'
 
 // 配置动态Tag
 export const API_DOMAINS = {
-  DEFAULT: import.meta.env.VITE_SERVER_BASEURL,
+  DEFAULT: resolveHttpBaseUrl(import.meta.env) || import.meta.env.VITE_SERVER_BASEURL,
   SECONDARY: import.meta.env.VITE_API_SECONDARY_URL,
 }
 
@@ -41,7 +42,7 @@ const { onAuthRequired, onResponseRefreshToken } = createServerTokenAuthenticati
  * alova 请求实例
  */
 const alovaInstance = createAlova({
-  baseURL: import.meta.env.VITE_APP_PROXY_PREFIX,
+  baseURL: resolveHttpBaseUrl(import.meta.env),
   ...AdapterUniapp(),
   timeout: 5000,
   statesHook: VueHook,

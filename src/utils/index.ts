@@ -1,3 +1,4 @@
+import { resolveApiRuntime, resolveHttpBaseUrl, resolveUploadBaseUrl } from '@/http/runtime-base'
 import { pages, subPackages } from '@/pages.json'
 import { isMpWeixin } from './platform'
 
@@ -119,7 +120,12 @@ export function getCurrentPageI18nKey() {
  */
 export function getEnvBaseUrl() {
   // 请求基准地址
-  let baseUrl = import.meta.env.VITE_SERVER_BASEURL
+  let baseUrl = resolveHttpBaseUrl(import.meta.env)
+  const apiRuntime = resolveApiRuntime(import.meta.env)
+
+  if (apiRuntime === 'nitro-standalone') {
+    return baseUrl
+  }
 
   // # 有些同学可能需要在微信小程序里面根据 develop、trial、release 分别设置上传地址，参考代码如下。
   const VITE_SERVER_BASEURL__WEIXIN_DEVELOP = 'https://ukw0y1.laf.run'
@@ -153,7 +159,12 @@ export function getEnvBaseUrl() {
  */
 export function getEnvBaseUploadUrl() {
   // 请求基准地址
-  let baseUploadUrl = import.meta.env.VITE_UPLOAD_BASEURL
+  let baseUploadUrl = resolveUploadBaseUrl(import.meta.env)
+  const apiRuntime = resolveApiRuntime(import.meta.env)
+
+  if (apiRuntime === 'nitro-vite' || apiRuntime === 'nitro-standalone') {
+    return baseUploadUrl
+  }
 
   const VITE_UPLOAD_BASEURL__WEIXIN_DEVELOP = 'https://ukw0y1.laf.run/upload'
   const VITE_UPLOAD_BASEURL__WEIXIN_TRIAL = 'https://ukw0y1.laf.run/upload'

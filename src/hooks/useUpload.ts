@@ -1,8 +1,8 @@
 import { ref } from 'vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
-import { getEnvBaseUploadUrl } from '@/utils'
+import { resolveUploadBaseUrl } from '@/http/runtime-base'
 
-const VITE_UPLOAD_BASEURL = `${getEnvBaseUploadUrl()}`
+const VITE_UPLOAD_BASEURL = resolveUploadBaseUrl(import.meta.env)
 
 type TfileType = 'image' | 'file'
 type TImage = 'png' | 'jpg' | 'jpeg' | 'webp' | '*'

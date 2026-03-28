@@ -1,4 +1,5 @@
 import { useGlobalToast } from '@/hooks/useGlobalToast'
+import { resolveUploadBaseUrl } from '@/http/runtime-base'
 
 /**
  * 文件上传钩子函数使用示例
@@ -21,7 +22,7 @@ import { useGlobalToast } from '@/hooks/useGlobalToast'
  */
 export const uploadFileUrl = {
   /** 用户头像上传地址 */
-  USER_AVATAR: `${import.meta.env.VITE_SERVER_BASEURL}/user/avatar`,
+  USER_AVATAR: `${resolveUploadBaseUrl(import.meta.env)}/user/avatar`,
 }
 
 /**

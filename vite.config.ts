@@ -21,6 +21,7 @@ import Optimization from '@uni-ku/bundle-optimizer'
 // https://github.com/uni-ku/root
 import UniKuRoot from '@uni-ku/root'
 import dayjs from 'dayjs'
+import { nitro } from 'nitro/vite'
 import { visualizer } from 'rollup-plugin-visualizer'
 import UnoCSS from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -53,8 +54,13 @@ export default ({ command, mode }) => {
     VITE_APP_PUBLIC_BASE,
     VITE_APP_PROXY_ENABLE,
     VITE_APP_PROXY_PREFIX,
+    VITE_API_RUNTIME,
+    NITRO_PORT,
   } = env
   console.log('环境变量 env -> ', env)
+
+  const isMockRuntime = !VITE_API_RUNTIME || VITE_API_RUNTIME === 'mock'
+  const isNitroViteRuntime = VITE_API_RUNTIME === 'nitro-vite'
 
   return defineConfig({
     envDir: './env', // 自定义 env 目录
@@ -91,7 +97,7 @@ export default ({ command, mode }) => {
       // Optimization 依赖 pages.json，顺序必须在 UniPages 之后
       Optimization({
         enable: {
-          optimization: true,
+          'optimization': true,
           'async-import': true,
           'async-component': true,
         },
@@ -104,15 +110,18 @@ export default ({ command, mode }) => {
         // 修改 vite.config.js 时自动重启开发服务器
         restart: ['vite.config.js'],
       }),
+      isNitroViteRuntime && nitro(),
 
       // 开发态保留 mock 服务；preview 预览态禁用，避免 vite@6 下触发 mock 插件兼容异常
       command === 'serve'
+      && isMockRuntime
       && process.env.VITE_PREVIEW !== 'true'
       && mockDevServerPlugin({
         dir: 'src/api/mock',
       }),
       // 构建态临时关闭 mock 产物生成，规避 vite@6 实验链路下的尾部兼容异常
       command === 'build'
+      && isMockRuntime
       && mockDevServerPlugin({
         dir: 'src/api/mock',
         enabled: false,
@@ -178,7 +187,7 @@ export default ({ command, mode }) => {
       port: Number.parseInt(VITE_APP_PORT, 10),
       open: true,
       // 仅 H5 开发服务器需要代理，其它端通常直接走 build 流程
-      proxy: JSON.parse(VITE_APP_PROXY_ENABLE)
+      proxy: isMockRuntime && JSON.parse(VITE_APP_PROXY_ENABLE)
         ? {
             [VITE_APP_PROXY_PREFIX]: {
               target: VITE_SERVER_BASEURL,
@@ -187,6 +196,13 @@ export default ({ command, mode }) => {
             },
           }
         : undefined,
+    },
+    nitro: {
+      serverDir: './server',
+      scanDirs: ['./server'],
+      devServer: {
+        port: Number.parseInt(NITRO_PORT || '3101', 10),
+      },
     },
     esbuild: {
       drop: VITE_DELETE_CONSOLE === 'true' ? ['console', 'debugger'] : ['debugger'],
