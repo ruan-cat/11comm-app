@@ -1,4 +1,7 @@
-<!-- TODO: 长期任务，未完成改造接入 -->
+<!-- TODO: 长期任务，未完成改造接入
+  继续执行 openspec add-nitro-api-runtime 任务
+  继续迭代 docs\plan\2026-03-28-add-nitro-api-runtime.md 计划文件；
+-->
 
 # 使用 nitro 接口作为真实的接口
 
@@ -54,3 +57,58 @@ nitro v3
 ## 在独立的 git worktree 内完成开发
 
 这是一种重大的，全面的改造，为了避免出错，需要你在现在的 dev 分支内，新建一个独立的 git 工作区。
+
+---
+
+## 001 <!-- TODO: --> 补全更新 README 文档
+
+补全更新 README 文档，说明清楚项目启动时使用的运行命令，以及 nitro 接口的使用情况，说明这个巨大的变更设计。
+
+## 002 <!-- TODO: --> 解决在 `dev:h5:nitro` 的情况下，开发环境接口出现跨域的情况
+
+我们现在使用了 nitro 接口来实现页面的接口请求，但是出现了跨域错误：
+
+![2026-03-28-23-46-01](https://gh-img-store.ruan-cat.com/img/2026-03-28-23-46-01.png)
+
+比如请求接口 `http://127.0.0.1:3101/app/dict.queryRepairStates` 出现跨域问题。
+
+我需要你处理这个本地端口不一致而导致的前端开发跨域问题。
+
+相关的 log 如下：
+
+```log
+ ERROR  [request error] [OPTIONS] http://127.0.0.1:3101/app/ownerRepair.listOwnerRepairs?page=1&row=15&statusCd=&storeId=STORE_001&userId=USER_001&communityId=COMM_001&repairName=&reqSource=mobile
+
+
+ℹ HTTPError: Endpoint not found: OPTIONS /app/ownerRepair.listOwnerRepairs
+
+ ⁃ at dispatchEndpoint (D:/code/github-desktop-store/001-Smart-Community__nwt-q/.worktrees/add-nitro-api-runtime/node_modules/.nitro/dev/index.mjs:175:17)
+
+   170 ┃  }
+   171 ┃  /** 分发共享 endpoint 请求 */
+   172 ┃  async function dispatchEndpoint(registry, input) {
+   173 ┃        const definition = findEndpointDefinition(registry, input.method, input.path);
+   174 ┃        if (!definition) {
+ ❯ 175 ┃                const error = new Error(Endpoint not found: ${input.method} ${input.path});
+   176 ┃                error.statusCode = 404;
+   177 ┃                throw error;
+   178 ┃        }
+   179 ┃        const query = input.query || {};
+   180 ┃        const body = input.body || {};
+
+ ⁃ (D:/code/github-desktop-store/001-Smart-Community__nwt-q/.worktrees/add-nitro-api-runtime/node_modules/.nitro/dev/index.mjs:2780:15)
+ ⁃ at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[CAUSE]
+Error {
+  stack: 'Endpoint not found: OPTIONS /app/ownerRepair.listOwnerRepairs\n' +
+  'at dispatchEndpoint (D:/code/github-desktop-store/001-Smart-Community__nwt-q/.worktrees/add-nitro-api-runtime/node_modules/.nitro/dev/index.mjs:175:17)\n'
++
+  'at D:/code/github-desktop-store/001-Smart-Community__nwt-q/.worktrees/add-nitro-api-runtime/node_modules/.nitro/dev/index.mjs:2780:15)\n' +
+  '    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)',
+  message: 'Endpoint not found: OPTIONS /app/ownerRepair.listOwnerRepairs',
+  statusCode: 404,
+}
+```
+
+## 099 <!-- TODO: --> 全面改造落后的 skills 文档，记录清楚如何编写 nitro 接口和本地 mock 接口
