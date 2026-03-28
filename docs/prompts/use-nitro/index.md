@@ -1,6 +1,7 @@
 <!-- TODO: 长期任务，未完成改造接入
   继续执行 openspec add-nitro-api-runtime 任务
   继续迭代 docs\plan\2026-03-28-add-nitro-api-runtime.md 计划文件；
+  2026-03-29 更新：add-nitro-api-runtime 已从历史 worktree 全量回填到当前 dev 主工作区，后续继续推进时不要再回到 .worktrees/add-nitro-api-runtime。
 -->
 
 # 使用 nitro 接口作为真实的接口
@@ -54,9 +55,11 @@ nitro v3
 
 务必投入大量的时间和 token 预算，全面调研，学习这个项目的 nitro 接入做法。
 
-## 在独立的 git worktree 内完成开发
+## 关于 git worktree 的阶段性说明
 
-这是一种重大的，全面的改造，为了避免出错，需要你在现在的 dev 分支内，新建一个独立的 git 工作区。
+这条要求已经在首轮实施时执行完成：相关改造最初确实在独立 worktree 中隔离落地。
+
+截至 `2026-03-29`，全部实现已经回填到当前 `dev` 主工作区，后续继续执行 `add-nitro-api-runtime` 时，应直接在主工作区推进，不要再把 `.worktrees/add-nitro-api-runtime` 当作持续开发位置。
 
 ---
 
@@ -75,6 +78,8 @@ nitro v3
 我需要你处理这个本地端口不一致而导致的前端开发跨域问题。
 
 相关的 log 如下：
+
+> 说明：下面日志里的 `.worktrees/add-nitro-api-runtime` 路径来自历史 worktree 联调现场，只用于保留当时的报错上下文；当前继续开发时，应把它理解为主工作区生成的 `.nitro/dev/index.mjs`，不要再据此回到旧 worktree。
 
 ```log
  ERROR  [request error] [OPTIONS] http://127.0.0.1:3101/app/ownerRepair.listOwnerRepairs?page=1&row=15&statusCd=&storeId=STORE_001&userId=USER_001&communityId=COMM_001&repairName=&reqSource=mobile
