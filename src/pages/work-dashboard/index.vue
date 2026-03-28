@@ -8,7 +8,7 @@
 -->
 
 <script setup lang="ts">
-import type { WorkbenchMenu } from './menu-config'
+import type { WorkbenchCategory, WorkbenchMenu } from './menu-config'
 import { storeToRefs } from 'pinia'
 import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
@@ -16,13 +16,12 @@ import { TypedRouter } from '@/router'
 import { useUserStore } from '@/store'
 import { getCurrentCommunity } from '@/utils/user'
 import { workbenchCategories } from './menu-config'
+import { getSurfaceThemeVars, resolveSurfaceTheme } from './menu-surface-theme'
 import { createWorkbenchMenuNavigators } from './navigation'
 
 definePage({
   style: {
-    navigationBarTitleText: '工作台',
-    navigationBarBackgroundColor: '#0081FF',
-    navigationBarTextStyle: 'white',
+    navigationStyle: 'custom',
     backgroundColor: '#F3F4F6',
   },
 })
@@ -91,24 +90,33 @@ function handleMenuClick(menu: WorkbenchMenu) {
 
   navigate()
 }
+
+/** 获取分类卡片的渐变底色 */
+function getCategoryCardStyle(category: WorkbenchCategory) {
+  return getSurfaceThemeVars(resolveSurfaceTheme(category.iconClass))
+}
 </script>
 
 <template>
   <view class="workbench-page min-h-screen bg-gray-100">
-    <view class="header relative overflow-hidden pb-16 pt-2 bg-gradient-blue">
-      <view class="relative z-10 flex items-center px-4 py-4">
-        <view class="avatar-wrapper mr-3">
-          <image
-            class="h-full w-full"
-            :src="userInfo.avatar || '/static/images/default-avatar.png'"
-            mode="aspectFill"
-          />
-        </view>
-        <view class="flex flex-1 flex-col text-white">
-          <text class="mb-1 text-lg font-bold">{{ userInfo.nickname || userInfo.username || '物业人员' }}</text>
-          <view class="flex items-center opacity-90">
-            <view class="i-carbon-building mr-1 text-sm" />
-            <text class="text-xs">智慧社区</text>
+    <view class="header relative overflow-hidden pb-20 pt-2 bg-gradient-blue">
+      <view class="workbench-shell">
+        <view class="hero-panel relative z-10 px-4 py-4">
+          <view class="hero-main">
+            <view class="avatar-wrapper mr-3">
+              <image
+                class="h-full w-full"
+                :src="userInfo.avatar || '/static/images/default-avatar.png'"
+                mode="aspectFill"
+              />
+            </view>
+            <view class="flex flex-1 flex-col text-white">
+              <text class="mb-1 text-lg font-bold">{{ userInfo.nickname || userInfo.username || '物业人员' }}</text>
+              <view class="flex items-center opacity-90">
+                <view class="i-carbon-building mr-1 text-sm" />
+                <text class="text-xs">智慧社区</text>
+              </view>
+            </view>
           </view>
         </view>
       </view>
@@ -116,33 +124,37 @@ function handleMenuClick(menu: WorkbenchMenu) {
       <view class="decor-circle-2" />
     </view>
 
-    <view class="relative z-10 px-3 -mt-10">
-      <view
-        v-for="category in workbenchCategories"
-        :key="category.title"
-        class="category-card mb-3"
-      >
-        <FormSectionTitle
-          :title="category.title"
-          :icon="category.icon"
-          :icon-class="category.iconClass"
-          :animated="true"
-        />
+    <view class="relative z-10 px-3 -mt-12">
+      <view class="workbench-shell">
+        <view
+          v-for="category in workbenchCategories"
+          :key="category.title"
+          class="category-card mb-3"
+          :style="getCategoryCardStyle(category)"
+        >
+          <FormSectionTitle
+            :title="category.title"
+            :icon="category.icon"
+            :icon-class="category.iconClass"
+            :animated="true"
+            background="transparent"
+          />
 
-        <view class="menu-grid">
-          <view
-            v-for="menu in category.menus"
-            :key="menu.id"
-            class="menu-item"
-            @click="handleMenuClick(menu)"
-          >
-            <view class="icon-wrapper" :class="menu.bgClass">
-              <view :class="[menu.icon, menu.iconClass]" class="text-2xl" />
-              <view v-if="menu.badge" class="badge">
-                {{ menu.badge > 99 ? '99+' : menu.badge }}
+          <view class="menu-grid">
+            <view
+              v-for="menu in category.menus"
+              :key="menu.id"
+              class="menu-item"
+              @click="handleMenuClick(menu)"
+            >
+              <view class="icon-wrapper" :class="menu.bgClass">
+                <view :class="[menu.icon, menu.iconClass]" class="text-2xl" />
+                <view v-if="menu.badge" class="badge">
+                  {{ menu.badge > 99 ? '99+' : menu.badge }}
+                </view>
               </view>
+              <text class="menu-name">{{ menu.name }}</text>
             </view>
-            <text class="menu-name">{{ menu.name }}</text>
           </view>
         </view>
       </view>
@@ -154,7 +166,47 @@ function handleMenuClick(menu: WorkbenchMenu) {
 
 <style scoped lang="scss">
 .workbench-page {
+  background:
+    radial-gradient(circle at top left, rgba(91, 153, 255, 0.14), transparent 30%),
+    linear-gradient(180deg, #eff5ff 0%, #f7f9fc 45%, #fafbfc 100%);
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+.workbench-shell {
+  width: min(100%, 1360px);
+  margin: 0 auto;
+}
+
+.hero-panel {
+  overflow: hidden;
+  margin: 0 8rpx;
+  padding: 22rpx 24rpx 30rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.14);
+  border-radius: 32rpx;
+  background: linear-gradient(145deg, rgba(18, 78, 179, 0.14), rgba(255, 255, 255, 0.06));
+  box-shadow: 0 24rpx 50rpx rgba(16, 54, 125, 0.14);
+  backdrop-filter: blur(18rpx);
+}
+
+.hero-panel::after {
+  content: '';
+  position: absolute;
+  top: -40rpx;
+  right: -20rpx;
+  width: 220rpx;
+  height: 220rpx;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 68%);
+  pointer-events: none;
+}
+
+.hero-main {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-main {
+  display: flex;
+  align-items: center;
 }
 
 .avatar-wrapper {
@@ -189,9 +241,11 @@ function handleMenuClick(menu: WorkbenchMenu) {
 
 .category-card {
   overflow: hidden;
-  background: #fff;
   border-radius: 24rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+  background: linear-gradient(135deg, var(--surface-start) 0%, var(--surface-end) 100%);
+  border: 2rpx solid var(--surface-border);
+  box-shadow: 0 18rpx 40rpx var(--surface-shadow);
+  backdrop-filter: blur(18rpx);
 }
 
 :deep(.form-section-title-cell) {
@@ -202,6 +256,7 @@ function handleMenuClick(menu: WorkbenchMenu) {
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  gap: 12rpx;
   padding: 24rpx 16rpx;
 }
 
@@ -210,7 +265,11 @@ function handleMenuClick(menu: WorkbenchMenu) {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16rpx 8rpx;
+  padding: 18rpx 10rpx;
+  background: linear-gradient(180deg, var(--tile-start) 0%, var(--tile-end) 100%);
+  border: 2rpx solid var(--tile-border);
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 18rpx rgba(15, 23, 42, 0.05);
   transition: opacity 0.2s;
 
   &:active {
@@ -254,6 +313,8 @@ function handleMenuClick(menu: WorkbenchMenu) {
 .menu-name {
   font-size: 24rpx;
   font-weight: 500;
-  color: #666;
+  color: #46556f;
+  text-align: center;
+  line-height: 1.4;
 }
 </style>

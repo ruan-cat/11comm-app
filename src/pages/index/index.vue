@@ -1,6 +1,6 @@
 <!--
   首页
-  功能：作为物业业务首页，聚合主任务卡片与常用业务入口
+  功能：作为物业业务首页，聚合重点待办与常用业务入口
 
   访问地址: http://localhost:3000/#/pages/index/index
 
@@ -9,11 +9,14 @@
 
 <script setup lang="ts">
 import type { HomeMenuEntry } from './home-menu-config'
+import type { MenuSurfaceTheme } from '@/pages/work-dashboard/menu-surface-theme'
+import FormSectionTitle from '@/components/common/form-section-title/index.vue'
 import { useGlobalToast } from '@/hooks/useGlobalToast'
+import { getSurfaceThemeVars, resolveSurfaceTheme } from '@/pages/work-dashboard/menu-surface-theme'
 import { createWorkbenchMenuNavigators } from '@/pages/work-dashboard/navigation'
 import { TypedRouter } from '@/router'
 import { getCurrentCommunity, getUserInfo } from '@/utils/user'
-import { homeFeaturedEntries, homeHeaderSubtitle, homeHeaderTitle, homeSections } from './home-menu-config'
+import { homeFeaturedEntries, homeHeaderSubtitle, homeSections } from './home-menu-config'
 
 definePage({
   type: 'home',
@@ -97,84 +100,141 @@ function handleEntryClick(entry: HomeMenuEntry) {
 
   navigate()
 }
+
+/** 获取重点待办卡片的渐变底色 */
+function getFeaturedCardStyle(entry: HomeMenuEntry) {
+  return getSurfaceThemeVars(resolveSurfaceTheme(entry.iconClass))
+}
+
+/** 获取分区卡片的渐变底色 */
+function getSectionCardStyle(sectionId: string) {
+  const sectionThemeMap: Record<string, MenuSurfaceTheme> = {
+    quick: 'blue',
+    repair: 'cyan',
+    work: 'green',
+  }
+
+  return getSurfaceThemeVars(sectionThemeMap[sectionId] ?? 'blue')
+}
+
+/** 获取首页分区标题图标 */
+function getSectionTitleIcon(sectionId: string) {
+  const sectionIconMap: Record<string, string> = {
+    quick: 'i-carbon-grid',
+    repair: 'i-carbon-tools',
+    work: 'i-carbon-flow-data',
+  }
+
+  return sectionIconMap[sectionId] ?? 'i-carbon-grid'
+}
+
+/** 获取首页分区标题图标颜色 */
+function getSectionTitleIconClass(sectionId: string) {
+  const sectionIconClassMap: Record<string, string> = {
+    quick: 'text-colorui-blue',
+    repair: 'text-colorui-cyan',
+    work: 'text-colorui-green',
+  }
+
+  return sectionIconClassMap[sectionId] ?? 'text-colorui-blue'
+}
 </script>
 
 <template>
   <view class="home-page">
     <view class="home-header">
-      <view class="header-bar">
-        <view class="brand-block">
-          <view class="brand-icon-shell">
-            <view class="i-carbon-building text-white text-36rpx" />
-          </view>
+      <view class="home-shell">
+        <view class="header-panel">
+          <view class="header-bar">
+            <view class="brand-block">
+              <view class="brand-icon-shell">
+                <view class="i-carbon-building text-white text-36rpx" />
+              </view>
 
-          <view class="brand-copy">
-            <text class="brand-title">{{ homeHeaderTitle }}</text>
-            <text class="brand-subtitle">{{ currentCommunity.communityName || homeHeaderSubtitle }}</text>
-          </view>
-        </view>
+              <view class="brand-copy">
+                <text class="brand-title">{{ currentCommunity.communityName || homeHeaderSubtitle }}</text>
+                <text class="brand-subtitle">{{ currentUser.userName }}</text>
+              </view>
+            </view>
 
-        <view class="user-chip">
-          <view class="i-carbon-user-avatar text-white text-24rpx" />
-          <text class="user-chip-text">{{ currentUser.userName }}</text>
+            <view class="user-chip">
+              <view class="i-carbon-user-avatar text-white text-24rpx" />
+              <text class="user-chip-text">{{ currentUser.userName }}</text>
+            </view>
+          </view>
         </view>
       </view>
     </view>
 
     <view class="home-content">
-      <view class="featured-grid">
+      <view class="home-shell">
+        <view class="section-card priority-card" :style="getSectionCardStyle('quick')">
+          <FormSectionTitle
+            title="重点待办"
+            icon="i-carbon-flash"
+            icon-class="text-colorui-blue"
+            background="transparent"
+          />
+
+          <view class="featured-grid">
+            <view
+              v-for="entry in homeFeaturedEntries"
+              :key="entry.id"
+              class="featured-card"
+              :style="getFeaturedCardStyle(entry)"
+              @click="handleEntryClick(entry)"
+            >
+              <view class="featured-card-top">
+                <view class="featured-icon-shell" :class="entry.bgClass">
+                  <wd-icon
+                    name=""
+                    :custom-class="getEntryIconClass(entry, 'feature')"
+                  />
+                </view>
+
+                <view class="featured-arrow">
+                  <view class="i-carbon-arrow-up-right text-blue-500 text-20rpx" />
+                </view>
+              </view>
+
+              <view class="featured-copy">
+                <text class="featured-title">{{ entry.name }}</text>
+                <text v-if="entry.meta" class="featured-meta">{{ entry.meta }}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
         <view
-          v-for="entry in homeFeaturedEntries"
-          :key="entry.id"
-          class="featured-card"
-          @click="handleEntryClick(entry)"
+          v-for="section in homeSections"
+          :key="section.id"
+          class="section-card"
+          :style="getSectionCardStyle(section.id)"
         >
-          <view class="featured-card-top">
-            <view class="featured-icon-shell" :class="entry.bgClass">
-              <wd-icon
-                name=""
-                :custom-class="getEntryIconClass(entry, 'feature')"
-              />
+          <FormSectionTitle
+            :title="section.title"
+            :icon="getSectionTitleIcon(section.id)"
+            :icon-class="getSectionTitleIconClass(section.id)"
+            background="transparent"
+          />
+
+          <view class="section-body">
+            <view class="entry-grid" :class="`entry-grid-${section.columns}`">
+              <view
+                v-for="entry in section.entries"
+                :key="entry.id"
+                class="entry-item"
+                @click="handleEntryClick(entry)"
+              >
+                <view class="entry-icon-shell" :class="entry.bgClass">
+                  <wd-icon
+                    name=""
+                    :custom-class="getEntryIconClass(entry, 'grid')"
+                  />
+                </view>
+                <text class="entry-name">{{ entry.name }}</text>
+              </view>
             </view>
-
-            <view class="featured-arrow">
-              <view class="i-carbon-arrow-up-right text-blue-500 text-20rpx" />
-            </view>
-          </view>
-
-          <view class="featured-copy">
-            <text class="featured-title">{{ entry.name }}</text>
-            <text v-if="entry.meta" class="featured-meta">{{ entry.meta }}</text>
-          </view>
-        </view>
-      </view>
-
-      <view
-        v-for="section in homeSections"
-        :key="section.id"
-        class="section-card"
-      >
-        <view class="section-head">
-          <view class="section-title-wrap">
-            <view class="section-mark" />
-            <text class="section-title">{{ section.title }}</text>
-          </view>
-        </view>
-
-        <view class="entry-grid" :class="`entry-grid-${section.columns}`">
-          <view
-            v-for="entry in section.entries"
-            :key="entry.id"
-            class="entry-item"
-            @click="handleEntryClick(entry)"
-          >
-            <view class="entry-icon-shell" :class="entry.bgClass">
-              <wd-icon
-                name=""
-                :custom-class="getEntryIconClass(entry, 'grid')"
-              />
-            </view>
-            <text class="entry-name">{{ entry.name }}</text>
           </view>
         </view>
       </view>
@@ -186,14 +246,46 @@ function handleEntryClick(entry: HomeMenuEntry) {
 .home-page {
   min-height: 100vh;
   padding-bottom: calc(28rpx + env(safe-area-inset-bottom));
-  background: #f5f7fb;
+  background:
+    radial-gradient(circle at top left, rgba(91, 153, 255, 0.16), transparent 28%),
+    linear-gradient(180deg, #eef4ff 0%, #f6f8fc 42%, #f8fafc 100%);
+}
+
+.home-shell {
+  width: min(100%, 1360px);
+  margin: 0 auto;
 }
 
 .home-header {
-  padding: calc(18rpx + env(safe-area-inset-top)) 24rpx 78rpx;
-  background: linear-gradient(180deg, #2f7cff 0%, #5f9fff 100%);
+  padding: calc(18rpx + env(safe-area-inset-top)) 24rpx 92rpx;
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.14), transparent 30%),
+    linear-gradient(135deg, #2576f8 0%, #40a2ff 52%, #4fc3c8 100%);
 }
 
+.header-panel {
+  position: relative;
+  overflow: hidden;
+  padding: 26rpx 28rpx 30rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.14);
+  border-radius: 34rpx;
+  background: linear-gradient(145deg, rgba(18, 78, 179, 0.18), rgba(255, 255, 255, 0.06));
+  box-shadow: 0 24rpx 50rpx rgba(16, 54, 125, 0.18);
+  backdrop-filter: blur(22rpx);
+}
+
+.header-panel::after {
+  content: '';
+  position: absolute;
+  top: -60rpx;
+  right: -10rpx;
+  width: 220rpx;
+  height: 220rpx;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 68%);
+  pointer-events: none;
+}
+
+.header-bar,
 .header-bar {
   display: flex;
   align-items: center;
@@ -228,13 +320,13 @@ function handleEntryClick(entry: HomeMenuEntry) {
 
 .brand-title {
   color: #fff;
-  font-size: 34rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   line-height: 1.2;
 }
 
 .brand-subtitle {
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.74);
   font-size: 22rpx;
   line-height: 1.2;
 }
@@ -260,7 +352,7 @@ function handleEntryClick(entry: HomeMenuEntry) {
 }
 
 .home-content {
-  margin-top: -42rpx;
+  margin-top: -54rpx;
   padding: 0 24rpx 24rpx;
 }
 
@@ -268,14 +360,35 @@ function handleEntryClick(entry: HomeMenuEntry) {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18rpx;
+  padding: 18rpx;
+}
+
+.section-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28rpx;
+  background: linear-gradient(135deg, var(--surface-start) 0%, var(--surface-end) 100%);
+  border: 2rpx solid var(--surface-border);
+  box-shadow: 0 18rpx 44rpx var(--surface-shadow);
+  backdrop-filter: blur(20rpx);
+}
+
+.section-card::after {
+  content: '';
+  position: absolute;
+  inset: auto -80rpx -120rpx auto;
+  width: 260rpx;
+  height: 260rpx;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 70%);
+  pointer-events: none;
+}
+
+.priority-card {
   margin-bottom: 20rpx;
 }
 
-.featured-card,
-.section-card {
-  background: #fff;
-  border-radius: 28rpx;
-  box-shadow: 0 12rpx 32rpx rgba(15, 23, 42, 0.08);
+.section-card + .section-card {
+  margin-top: 18rpx;
 }
 
 .featured-card,
@@ -292,7 +405,13 @@ function handleEntryClick(entry: HomeMenuEntry) {
 }
 
 .featured-card {
+  position: relative;
+  min-height: 188rpx;
   padding: 22rpx 22rpx 18rpx;
+  background: linear-gradient(180deg, var(--tile-start) 0%, var(--tile-end) 100%);
+  border: 2rpx solid var(--tile-border);
+  border-radius: 24rpx;
+  box-shadow: 0 10rpx 24rpx rgba(15, 23, 42, 0.06);
 }
 
 .featured-card-top {
@@ -317,7 +436,7 @@ function handleEntryClick(entry: HomeMenuEntry) {
   justify-content: center;
   width: 44rpx;
   height: 44rpx;
-  background: #f5f8ff;
+  background: rgba(255, 255, 255, 0.82);
   border-radius: 14rpx;
 }
 
@@ -325,7 +444,7 @@ function handleEntryClick(entry: HomeMenuEntry) {
   display: flex;
   flex-direction: column;
   gap: 4rpx;
-  margin-top: 8rpx;
+  margin-top: 10rpx;
 }
 
 .featured-title {
@@ -341,43 +460,8 @@ function handleEntryClick(entry: HomeMenuEntry) {
   line-height: 1.3;
 }
 
-.section-card {
-  padding: 20rpx 18rpx;
-  background: linear-gradient(180deg, #f4f8ff 0%, #edf3ff 100%);
-  box-shadow:
-    0 12rpx 30rpx rgba(15, 23, 42, 0.06),
-    inset 0 0 0 2rpx rgba(255, 255, 255, 0.88);
-}
-
-.section-card + .section-card {
-  margin-top: 18rpx;
-}
-
-.section-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14rpx;
-}
-
-.section-title-wrap {
-  display: flex;
-  align-items: center;
-  gap: 12rpx;
-}
-
-.section-mark {
-  width: 8rpx;
-  height: 28rpx;
-  background: #2f7cff;
-  border-radius: 9999rpx;
-}
-
-.section-title {
-  color: #18263f;
-  font-size: 28rpx;
-  font-weight: 700;
-  line-height: 1.2;
+.section-body {
+  padding: 18rpx;
 }
 
 .entry-grid {
@@ -399,10 +483,9 @@ function handleEntryClick(entry: HomeMenuEntry) {
   align-items: center;
   gap: 10rpx;
   padding: 18rpx 10rpx 16rpx;
-  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
-  box-shadow:
-    0 6rpx 18rpx rgba(47, 124, 255, 0.06),
-    inset 0 0 0 2rpx rgba(47, 124, 255, 0.06);
+  background: linear-gradient(180deg, var(--tile-start) 0%, var(--tile-end) 100%);
+  border: 2rpx solid var(--tile-border);
+  box-shadow: 0 8rpx 18rpx rgba(15, 23, 42, 0.05);
   border-radius: 22rpx;
 }
 
@@ -421,5 +504,15 @@ function handleEntryClick(entry: HomeMenuEntry) {
   font-weight: 500;
   line-height: 1.35;
   text-align: center;
+}
+
+.section-card :deep(.form-section-title-cell) {
+  backdrop-filter: blur(16rpx);
+}
+
+@media (max-width: 960px) {
+  .featured-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
