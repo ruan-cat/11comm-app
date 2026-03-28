@@ -81,7 +81,17 @@ export async function dispatchEndpoint(
   registry: EndpointDefinition[],
   input: EndpointDispatchInput,
 ): Promise<any> {
-  const definition = findEndpointDefinition(registry, input.method, input.path)
+  const normalizedMethod = normalizeMethod(input.method)
+
+  /**
+   * CORS preflight requests only need a successful empty response.
+   * They should not participate in business endpoint matching.
+   */
+  if (normalizedMethod === 'OPTIONS') {
+    return null
+  }
+
+  const definition = findEndpointDefinition(registry, normalizedMethod, input.path)
 
   if (!definition) {
     const error = new Error(`Endpoint not found: ${input.method} ${input.path}`) as Error & {
@@ -95,7 +105,7 @@ export async function dispatchEndpoint(
   const body = input.body || {}
 
   return await definition.handler({
-    method: normalizeMethod(input.method),
+    method: normalizedMethod,
     path: input.path,
     query,
     body,

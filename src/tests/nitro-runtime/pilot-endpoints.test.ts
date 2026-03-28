@@ -30,4 +30,13 @@ describe('pilot endpoints', () => {
       },
     })
   })
+
+  test('allows CORS preflight requests for legacy nitro endpoints', async () => {
+    const registry = createEndpointRegistry(pilotEndpointDefinitions)
+
+    await expect(dispatchEndpoint(registry, {
+      method: 'OPTIONS',
+      path: '/app/ownerRepair.listOwnerRepairs',
+    })).resolves.toBeNull()
+  })
 })
