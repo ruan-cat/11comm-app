@@ -4,9 +4,80 @@
  * 支持从 ColorUI 到 UnoCSS + wot-design-uni 的完整样式迁移
  */
 
+import fs from 'node:fs'
+import path from 'node:path'
+import process from 'node:process'
+import { icons as carbonIcons } from '@iconify-json/carbon'
 // https://www.npmjs.com/package/@uni-helper/unocss-preset-uni
 import { presetUni } from '@uni-helper/unocss-preset-uni'
 import { defineConfig, presetAttributify, presetIcons, transformerDirectives, transformerVariantGroup } from 'unocss'
+
+/** 递归收集目录下的所有文件路径 */
+function collectFiles(dir: string) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const fullPath = path.join(dir, entry.name)
+
+    if (entry.isDirectory()) {
+      return collectFiles(fullPath)
+    }
+
+    return fullPath
+  })
+}
+
+/** 从源码中提取静态使用的 carbon 图标类名 */
+function collectCarbonIconSafelist() {
+  const sourceFiles = collectFiles(path.resolve(process.cwd(), 'src'))
+    .filter(file => /\.(?:vue|ts)$/.test(file))
+
+  const icons = new Set<string>()
+
+  for (const file of sourceFiles) {
+    const content = fs.readFileSync(file, 'utf8')
+    const matches = content.match(/i-carbon-[a-z0-9-]+/g) ?? []
+
+    for (const icon of matches) {
+      if (!icon.endsWith('-')) {
+        icons.add(icon)
+      }
+    }
+  }
+
+  return [...icons].sort()
+}
+
+/** 从源码中提取动态颜色类名 */
+function collectColorUtilitySafelist() {
+  const sourceFiles = collectFiles(path.resolve(process.cwd(), 'src'))
+    .filter(file => /\.(?:vue|ts)$/.test(file))
+
+  const classNames = new Set<string>()
+
+  for (const file of sourceFiles) {
+    const content = fs.readFileSync(file, 'utf8')
+    const matches = content.match(/(?:text|bg|border)-colorui-[a-z-]+(?:\/\d+)?/g) ?? []
+
+    for (const className of matches) {
+      classNames.add(className)
+    }
+  }
+
+  return [...classNames].sort()
+}
+
+const carbonCompatCollection = {
+  ...carbonIcons,
+  aliases: {
+    ...(carbonIcons.aliases ?? {}),
+    'door-open': { parent: 'login' },
+    'gate': { parent: 'gateway-public' },
+    'history': { parent: 'recently-viewed' },
+    'task-approval': { parent: 'task-approved' },
+  },
+}
+
+const carbonIconSafelist = collectCarbonIconSafelist()
+const colorUtilitySafelist = collectColorUtilitySafelist()
 
 export default defineConfig({
   /**
@@ -20,6 +91,9 @@ export default defineConfig({
     presetIcons({
       scale: 1.2,
       warn: true,
+      collections: {
+        carbon: () => carbonCompatCollection,
+      },
       extraProperties: {
         'display': 'inline-block',
         'vertical-align': 'middle',
@@ -59,6 +133,7 @@ export default defineConfig({
       'colorui-yellow': '#fbbd08',
       'colorui-orange': '#f37b1d',
       'colorui-purple': '#6739b6',
+      'colorui-cyan': '#1cbbb4',
       'colorui-brown': '#a5673f',
 
       /** 现代化语义色彩扩展 */
@@ -303,37 +378,9 @@ export default defineConfig({
    * 防止动态生成的类名被 PurgeCSS 误删
    */
   safelist: [
-    // 图标安全列表
-    'i-carbon-code',
-    'i-carbon-search',
-    'i-carbon-phone',
-    'i-carbon-user',
-    'i-carbon-user-avatar',
-    'i-carbon-home',
-    'i-carbon-settings',
-    'i-carbon-building',
-    'i-carbon-box',
-    'i-carbon-copy',
-    'i-carbon-delivery',
-    'i-carbon-grid',
-    'i-carbon-time',
-    'i-carbon-edit',
-    'i-carbon-ticket',
-    'i-carbon-location',
-    'i-carbon-document',
-    'i-carbon-image',
-    'i-carbon-shopping-cart',
-    'i-carbon-tools',
-    'i-carbon-arrows-horizontal',
-    'i-carbon-checkmark-outline',
-    'i-carbon-trash-can',
-    'i-carbon-arrow-up',
-    'i-carbon-arrow-left',
-    'i-carbon-warning',
-    'i-carbon-checkmark',
-    'i-carbon-add',
-    'i-carbon-checkmark-filled',
-    'i-carbon-chevron-right',
+    ...carbonIconSafelist,
+    ...colorUtilitySafelist,
+    'i-carbon-chevron-up',
 
     // 动态类名安全列表
     'text-primary',
