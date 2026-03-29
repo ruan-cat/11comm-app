@@ -29,26 +29,33 @@
 
 注意使用获取别名的方式，获取到具体的配置。
 
-## 004 <!-- TODO: --> 拓展增强 codex 通知能力
+## 004 <!-- 已完成 --> 拓展增强 codex 通知能力
 
-找到本机的的全局 codex 用户配置：
+前置条件：本机已安装可执行 `claude-notifier`（例如全局安装 `@ruan-cat/claude-notifier`，并确保 Codex 拉起 PowerShell 时的 `PATH` 能解析到该命令；若通知无效果，可在脚本内改为 `claude-notifier` 的绝对路径）。脚本建议保存为 **UTF-8（含 BOM）**，以便中文 Windows 默认环境下的 Windows PowerShell 5.1 正确解析；拼接省略号请使用 **单引号** `'...'`，避免 `+ "..."` 在 5.1 下触发解析错误。
+
+找到本机的全局 Codex 用户配置（Windows 通常为 `%USERPROFILE%\\.codex\\config.toml`），合并或新增以下片段；将 `你的用户名` 替换为实际账户目录名（即 `%USERPROFILE%` 末段）：
 
 ```toml
 notify = ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "C:\\Users\\你的用户名\\.codex\\codex-notify-ccntf.ps1"]
 
 [tui]
-notifications = true
+notifications = ["approval-requested", "agent-turn-complete"]
 notification_method = "auto"
 ```
 
-codex-notify-ccntf.ps1
+在 `C:\\Users\\你的用户名\\.codex\\` 目录下新建 `codex-notify-ccntf.ps1`，内容如下：
 
-```bash
+```powershell
 param(
-    [string]$PayloadJson
+    [Parameter(Position = 0)]
+    [string]$PayloadJson = ""
 )
 
 $ErrorActionPreference = "SilentlyContinue"
+
+if ([string]::IsNullOrWhiteSpace($PayloadJson) -and $args.Count -gt 0) {
+    $PayloadJson = [string]$args[0]
+}
 
 if ([string]::IsNullOrWhiteSpace($PayloadJson)) {
     exit 0
@@ -60,32 +67,90 @@ try {
     exit 0
 }
 
+# Codex notify 当前明确支持的事件
 if ($payload.type -ne "agent-turn-complete") {
     exit 0
 }
 
+# 取消息（带连字符的 JSON 字段用单引号属性名，兼容 Windows PowerShell 5.1）
 $message = ""
-if ($payload."last-assistant-message") {
-    $message = [string]$payload."last-assistant-message"
-} elseif ($payload."input-messages") {
-    $message = [string]::Join(" ", $payload."input-messages")
+$lam = $payload.'last-assistant-message'
+$ims = $payload.'input-messages'
+if ($lam) {
+    $message = [string]$lam
+} elseif ($ims) {
+    $message = [string]::Join(' ', @($ims))
 } else {
-    $message = "Codex 任务已完成，请回到终端查看。"
+    $message = 'Codex 已完成当前处理，请回到终端查看。'
 }
 
-if ($message.Length -gt 120) {
-    $message = $message.Substring(0, 120) + "..."
-}
+$message = $message.Trim()
 
+# 取项目路径 / 工作目录
 $taskDescription = ""
 if ($payload.cwd) {
     $taskDescription = [string]$payload.cwd
 }
 
-@ruan-cat/claude-notifier task-complete `
-  --title "Codex" `
-  --message $message `
-  --task-description $taskDescription `
-  --sound success `
-  --icon success
+# 截断过长内容；省略号用单引号，避免 5.1 下 + "..." 解析异常
+$shortMessage = $message
+if ($shortMessage.Length -gt 120) {
+    $shortMessage = $shortMessage.Substring(0, 120) + '...'
+}
+
+# 启发式判断：这轮是否更像需要用户回来处理
+$needsInteraction = $false
+
+$interactionPatterns = @(
+    '\?',
+    '请确认',
+    '请提供',
+    '请回复',
+    '请回答',
+    '请选择',
+    '需要你的',
+    '需要您',
+    '等待你的',
+    '等待您',
+    '还需要',
+    '缺少',
+    '无法继续',
+    '需要审批',
+    '需要批准',
+    'approve',
+    'approval',
+    'confirm',
+    'choose',
+    'select',
+    'please provide',
+    'please confirm',
+    'need your input',
+    'waiting for your input',
+    'cannot continue'
+)
+
+foreach ($pattern in $interactionPatterns) {
+    if ($message -match $pattern) {
+        $needsInteraction = $true
+        break
+    }
+}
+
+if ($needsInteraction) {
+    claude-notifier interaction-needed `
+      --title 'Codex - 需要你处理' `
+      --message 'Codex 正在等你回来处理' `
+      --interaction-details $shortMessage `
+      --sound warning `
+      --icon alice/timeout.gif
+} else {
+    claude-notifier task-complete `
+      --title 'Codex' `
+      --message $shortMessage `
+      --task-description $taskDescription `
+      --sound success `
+      --icon success
+}
+
+exit 0
 ```
