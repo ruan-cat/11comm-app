@@ -10,8 +10,8 @@ import { ContentTypeEnum, ResultEnum, ShowMessage } from './tools/enum'
 
 // 配置动态Tag
 export const API_DOMAINS = {
-  DEFAULT: resolveHttpBaseUrl(import.meta.env) || import.meta.env.VITE_SERVER_BASEURL,
-  SECONDARY: import.meta.env.VITE_API_SECONDARY_URL,
+  DEFAULT: resolveHttpBaseUrl(import.meta.env),
+  SECONDARY: import.meta.env.VITE_API_SECONDARY_URL || resolveHttpBaseUrl(import.meta.env),
 }
 
 /**

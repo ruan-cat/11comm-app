@@ -1,3 +1,5 @@
+import { resolve11CommNitroServerBaseUrl } from '@/config/project-domains'
+
 export type ApiRuntime = 'mock' | 'nitro-vite' | 'nitro-standalone'
 
 export interface RuntimeBaseEnv {
@@ -33,7 +35,7 @@ export function resolveHttpBaseUrl(env: RuntimeBaseEnv): string {
   }
 
   if (runtime === 'nitro-standalone') {
-    return env.VITE_SERVER_BASEURL || ''
+    return env.VITE_SERVER_BASEURL || resolve11CommNitroServerBaseUrl()
   }
 
   if (isMockProxyEnabled(env)) {

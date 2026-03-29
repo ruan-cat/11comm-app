@@ -1,3 +1,4 @@
+import { getDomains } from '@ruan-cat/domains'
 import { describe, expect, test } from 'vitest'
 import {
   prependRuntimeBaseUrl,
@@ -7,6 +8,11 @@ import {
 } from '@/http/runtime-base'
 
 describe('runtime base url', () => {
+  const nitroStandaloneDomain = getDomains({
+    projectName: '11comm',
+    projectAlias: '11commAppNitroServer',
+  })[0]
+
   test('defaults to mock runtime when env is missing', () => {
     expect(resolveApiRuntime({})).toBe('mock')
   })
@@ -44,6 +50,14 @@ describe('runtime base url', () => {
     ).toBe('')
   })
 
+  test('falls back to domains package alias in standalone runtime when base url env is missing', () => {
+    expect(
+      resolveHttpBaseUrl({
+        VITE_API_RUNTIME: 'nitro-standalone',
+      }),
+    ).toBe(`https://${nitroStandaloneDomain}`)
+  })
+
   test('prefixes relative urls and leaves absolute urls untouched', () => {
     const env = {
       VITE_API_RUNTIME: 'nitro-standalone',
@@ -63,5 +77,13 @@ describe('runtime base url', () => {
         VITE_UPLOAD_BASEURL: 'http://127.0.0.1:3101/upload',
       }),
     ).toBe('/upload')
+  })
+
+  test('derives upload base url from domains package alias in standalone runtime when upload env is missing', () => {
+    expect(
+      resolveUploadBaseUrl({
+        VITE_API_RUNTIME: 'nitro-standalone',
+      }),
+    ).toBe(`https://${nitroStandaloneDomain}/upload`)
   })
 })

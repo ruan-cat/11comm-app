@@ -127,6 +127,7 @@
     "@dcloudio/uni-mp-weixin": "3.0.0-5000520260324001",
     "@dcloudio/uni-mp-xhs": "3.0.0-5000520260324001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-5000520260324001",
+    "@ruan-cat/domains": "2.2.0",
     "@ruan-cat/utils": "^4.20.0",
     "@tanstack/vue-query": "^5.87.4",
     "abortcontroller-polyfill": "^1.7.8",

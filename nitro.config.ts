@@ -1,6 +1,7 @@
 import path from 'node:path'
 import process from 'node:process'
 import { defineConfig } from 'nitro'
+import { resolve11CommNitroServerBaseUrl } from './src/config/project-domains'
 import { loadEnv } from 'vite'
 
 const nitroMode = process.env.NITRO_APP_MODE || 'development-nitro-api'
@@ -26,7 +27,7 @@ export default defineConfig({
     nitroDataSource: process.env.NITRO_DATA_SOURCE || 'mock',
     public: {
       apiRuntime: process.env.VITE_API_RUNTIME || 'nitro-standalone',
-      serverBaseUrl: process.env.VITE_SERVER_BASEURL || '',
+      serverBaseUrl: process.env.VITE_SERVER_BASEURL || resolve11CommNitroServerBaseUrl(),
     },
   },
   routeRules: {
