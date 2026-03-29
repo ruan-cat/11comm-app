@@ -2,7 +2,7 @@
 
 各类杂七杂八的提示词，不一定和本项目有关。
 
-## 001 <!-- TODO: --> 处理 cursor 无法识别读取 claude code 插件商城 sh 脚本并反复打开的问题
+## 001 <!-- 该任务迁移到monorepo项目处置了 --> 处理 cursor 无法识别读取 claude code 插件商城 sh 脚本并反复打开的问题
 
 我在 cursor 每次实现对话时，每次都会自动打开 C:\Users\pc.claude\plugins\cache\ruan-cat-tools\common-tools\3.2.0\scripts\user-prompt-logger.sh 和 C:\Users\pc.claude\plugins\cache\ruan-cat-tools\common-tools\3.2.0\scripts\task-complete-notifier.sh 文件，我知道我在 cursor 内配置了读取是被 claude code 的插件商城，读取识别了全局的 hooks 并执行，但是我很不满意这个自动打开文件的做法。这导致页面不断的打开最新发布的 claude code 插件商城 sh 脚本，打断了我开发的心流状态。很影响我的开发状态；
 
