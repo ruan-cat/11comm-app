@@ -1,3 +1,5 @@
+<!-- 已完成 -->
+
 # 2026-03-29 Vercel 双项目部署与 Nitro Vercel 构建计划
 
 ## 1. 文档定位与约束
@@ -68,15 +70,15 @@
 
 ## 4. Vercel 项目映射
 
-|      维度       |         H5 生产项目         |                    Nitro 生产项目                     |
-| :-------------: | :-------------------------: | :---------------------------------------------------: |
-|    项目名称     |       `11comm-app-h5`       |               `11comm-app-nitro-server`               |
-|    Git 仓库     | `nwt-q/001-Smart-Community` |              `nwt-q/001-Smart-Community`              |
-| Production 分支 |            `dev`            |                         `dev`                         |
-|    构建命令     |    `pnpm build:h5:prod`     |               `pnpm build:nitro:vercel`               |
-|    输出目录     |       `dist/build/h5`       | 使用 Nitro `vercel` preset 自动生成的 Vercel 构建输出 |
-|    生产域名     |  `01s-11-app.ruan-cat.com`  |           `01s-11-app-server.ruan-cat.com`            |
-|    部署职责     |   只部署前端 H5 静态站点    |               只部署独立 Nitro API 服务               |
+|      维度       |        H5 生产项目        |                    Nitro 生产项目                     |
+| :-------------: | :-----------------------: | :---------------------------------------------------: |
+|    项目名称     |      `11comm-app-h5`      |               `11comm-app-nitro-server`               |
+|    Git 仓库     |   `ruan-cat/11comm-app`   |                 `ruan-cat/11comm-app`                 |
+| Production 分支 |           `dev`           |                         `dev`                         |
+|    构建命令     |   `pnpm build:h5:prod`    |               `pnpm build:nitro:vercel`               |
+|    输出目录     |      `dist/build/h5`      | 使用 Nitro `vercel` preset 自动生成的 Vercel 构建输出 |
+|    生产域名     | `01s-11-app.ruan-cat.com` |           `01s-11-app-server.ruan-cat.com`            |
+|    部署职责     |  只部署前端 H5 静态站点   |               只部署独立 Nitro API 服务               |
 
 ## 5. 仓库内实施拆分
 
@@ -237,7 +239,7 @@
 ### 6.1. H5 项目
 
 - 在 team `ruancat-projects` 下创建项目 `11comm-app-h5`。
-- 绑定 GitHub 仓库 `nwt-q/001-Smart-Community`。
+- 绑定 GitHub 仓库 `ruan-cat/11comm-app`。
 - 把 Production Branch 改为 `dev`，不接受 `main`。
 - 构建设置：
   - Install Command：`pnpm install`
@@ -248,7 +250,7 @@
 ### 6.2. Nitro 项目
 
 - 在 team `ruancat-projects` 下创建项目 `11comm-app-nitro-server`。
-- 绑定 GitHub 仓库 `nwt-q/001-Smart-Community`。
+- 绑定 GitHub 仓库 `ruan-cat/11comm-app`。
 - 把 Production Branch 改为 `dev`，不接受 `main`。
 - 构建设置：
   - Install Command：`pnpm install`

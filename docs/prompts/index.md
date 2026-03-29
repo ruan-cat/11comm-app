@@ -13,3 +13,10 @@
 我要修改的事 cursor 配置？还是去合理的修改这两个 .sh 的逻辑呢？
 
 这两个 .sh 实际上来自于： D:\code\github-desktop-store\gh.ruancat.monorepo\ai-plugins\common-tools\scripts 项目提供的 sh 脚本。你看看是不是有写法不兼容的问题，导致 cursor 无法实现默认识别读取的故障？
+
+## 002 全面重构项目的远程 github 链接（canonical 已迁移）
+
+本项目的 GitHub 托管已由 `https://github.com/nwt-q/001-Smart-Community` 迁移至 **`https://github.com/ruan-cat/11comm-app`**（nwt-q 将权限移交给 ruan-cat）。
+
+- **本地**：`origin` 应使用 `https://github.com/ruan-cat/11comm-app.git`（若仍为旧 URL，请执行 `git remote set-url origin https://github.com/ruan-cat/11comm-app.git`）。
+- **说明**：GitHub 可能对旧仓库保留重定向，但文档、CI 与 Vercel 绑定的仓库\_slug 应以新地址为准。
