@@ -87,7 +87,9 @@
 |    H5 Nitro 联调入口    |    `pnpm dev:h5:nitro`     | 当前在 `Vite 6` 下会自动回退为 “standalone Nitro + H5” 双进程联调 |
 |   独立 Nitro API 开发   |      `pnpm dev:nitro`      |              只启动 Nitro API 服务，默认端口 `3101`               |
 | 微信小程序 + Nitro 联调 | `pnpm dev:mp-weixin:nitro` |         先确保 Nitro health ready，再启动微信小程序编译链         |
-|   独立 Nitro 产物构建   |     `pnpm build:nitro`     |                 构建独立部署用的 Nitro Node 服务                  |
+|  默认 Nitro Node 构建   |     `pnpm build:nitro`     |            默认别名，当前等价于 `pnpm build:nitro:node`            |
+|  显式 Nitro Node 构建   |   `pnpm build:nitro:node`   |                 构建独立部署用的 Nitro Node 服务                  |
+| Vercel Nitro 产物构建 | `pnpm build:nitro:vercel` |           构建用于 `Vercel` 平台部署的 Nitro 生产产物            |
 |   独立 Nitro 本地预览   |    `pnpm preview:nitro`    |     直接运行 `.output/server/index.mjs`，不走 `nitro preview`     |
 
 ### 1.5. Nitro 接口的当前使用情况
@@ -120,6 +122,16 @@ http://127.0.0.1:3101/__nitro/health
 - `NITRO_DATA_SOURCE=neon` 目前仍然只是预留边界，尚未真正接通 `Neon + Drizzle`。
 - `pnpm preview:nitro` 当前直接运行 `.output/server/index.mjs`，这是为了规避当前 Nitro beta 组合下 `nitro preview` 的稳定性问题。
 - 为了保证引入 Nitro 后 H5 mock 链路仍然可用，仓库额外保留了 `patches/vite-plugin-mock-dev-server@2.1.1.patch` 这个兼容补丁。
+
+### 1.7. Vercel 双项目生产部署约定
+
+|       Vercel 项目       |           生产构建命令            |              生产域名               | Production Branch |
+| :---------------------: | :-------------------------------: | :---------------------------------: | :---------------: |
+|     `11comm-app-h5`     |       `pnpm build:h5:prod`        |     `01s-11-app.ruan-cat.com`      |       `dev`       |
+| `11comm-app-nitro-server` | `pnpm build:nitro:vercel` | `01s-11-app-server.ruan-cat.com` |       `dev`       |
+
+- H5 生产环境固定直连 Nitro 生产域名，不再依赖本地 proxy。
+- GitHub Actions 里的 `pnpm run ci` 只做构建健壮性自检，不承担任何 Vercel 部署职责。
 
 ## 2. 平台兼容性
 
@@ -173,8 +185,9 @@ http://127.0.0.1:3101/__nitro/health
 - web 平台： `pnpm build:h5`，打包后的文件在 `dist/build/h5`，可以放到 web 服务器，如 nginx 运行。如果最终不是放在根目录，可以在 `manifest.config.ts` 文件的 `h5.router.base` 属性进行修改。
 - weixin 平台：`pnpm build:mp`，打包后的文件在 `dist/build/mp-weixin`，然后通过微信开发者工具导入，并点击右上角的“上传”按钮进行上传。
 - APP 平台：`pnpm build:app`，然后打开 `HBuilderX`，导入刚刚生成的 `dist/build/app` 文件夹，选择发行 - APP 云打包。(如果是 `安卓` 和 `鸿蒙` 平台，则不用这个方式，可以把整个 unibest 项目导入到 hbx，通过 hbx 的菜单来发行到对应的平台。)
-- 独立 Nitro 服务构建：`pnpm build:nitro`，构建完成后产物位于 `.output/` 目录。
-- 独立 Nitro 服务预览：`pnpm preview:nitro`，当前通过直接运行 `.output/server/index.mjs` 进行本地预览。
+- 独立 Nitro Node 服务构建：`pnpm build:nitro` 或 `pnpm build:nitro:node`，构建完成后产物位于 `.output/` 目录。
+- Vercel Nitro 服务构建：`pnpm build:nitro:vercel`，构建完成后使用 Nitro `vercel` preset 生成 Vercel 所需产物。
+- 独立 Nitro 服务预览：`pnpm preview:nitro`，当前通过直接运行 `.output/server/index.mjs` 进行本地预览；它面向 Node 产物，不对应 Vercel 产物预览。
 
 ## 7. License
 
@@ -202,6 +215,7 @@ Copyright (c) 2025 菲鸽
 - 参考系统的文档： http://www.homecommunity.cn/pages/demo/demo_cn.html
 - Nitro 改造提示文档： `docs/prompts/use-nitro/index.md`
 - Nitro 改造实施计划： `docs/plan/2026-03-28-add-nitro-api-runtime.md`
+- Vercel 双项目部署计划： `docs/plan/2026-03-29-vercel-dual-project-deployment.md`
 
 ### 10.1. 参考 app 的账号与密码
 
