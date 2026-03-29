@@ -16,7 +16,6 @@ for (const [key, value] of Object.entries(loadedEnv)) {
 const nitroPort = Number.parseInt(process.env.NITRO_PORT || '3101', 10)
 
 export default defineConfig({
-  preset: 'node',
   serverDir: './server',
   scanDirs: ['./server'],
   devServer: {
