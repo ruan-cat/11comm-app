@@ -14,7 +14,7 @@
 
 这两个 .sh 实际上来自于： D:\code\github-desktop-store\gh.ruancat.monorepo\ai-plugins\common-tools\scripts 项目提供的 sh 脚本。你看看是不是有写法不兼容的问题，导致 cursor 无法实现默认识别读取的故障？
 
-## 002 全面重构项目的远程 github 链接（canonical 已迁移）
+## 002 <!--（canonical 已迁移） --> 全面重构项目的远程 github 链接
 
 本项目的 GitHub 托管已由 `https://github.com/nwt-q/001-Smart-Community` 迁移至 **`https://github.com/ruan-cat/11comm-app`**（nwt-q 将权限移交给 ruan-cat）。
 
