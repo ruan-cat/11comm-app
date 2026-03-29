@@ -10,9 +10,9 @@ const buildTime = dayjs().format("YYYY-MM-DD HH:mm:ss");
  * @description
  * 因为文档项目默认部署到 github page 上，所以base 取值为仓库名称。
  *
- * - https://github.com/nwt-q/001-Smart-Community
+ * - https://github.com/ruan-cat/11comm-app
  */
-const base = "/001-Smart-Community/";
+const base = "/11comm-app/";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({

@@ -104,7 +104,7 @@
     "format": "prettier --experimental-cli --write '**/*.{js,jsx,ts,tsx,mts,json,css,scss,md,yml,yaml,html}'",
     "up-taze": "pnpm up @ruan-cat/taze-config -L && npx taze",
     "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs --base=/001-Smart-Community/",
+    "docs:build": "vitepress build docs --base=/11comm-app/",
     "preinstall": "npx only-allow pnpm",
     "ci": "turbo do-build"
   },
