@@ -18,7 +18,7 @@
 - 为当前仓库提供 2 个彼此独立的 Vercel 生产项目：
   - H5 生产站点：`11comm-app-h5`
   - Nitro API 生产服务：`11comm-app-nitro-server`
-- H5 生产构建继续使用 `pnpm build:h5:prod`，但其生产环境请求基址必须指向 Nitro 生产域名 `https://01s-11-app-server.ruan-cat.com`。
+- H5 生产构建继续使用 `pnpm build:h5:prod`，但其生产环境请求基址必须指向 `@ruan-cat/domains` 中 `11commAppNitroServer` 别名解析出的 Nitro 生产域名。
 - Nitro 独立构建继续保留默认 Node 产物命令，同时新增基于 `NITRO_PRESET=vercel` 的 Vercel 专用构建命令。
 - GitHub Actions 的 `pnpm run ci` 需要在原有 H5 生产构建自检基础上，新增 `build:nitro:vercel` 的构建自检。
 - README 需要补全新命令与 Vercel 双项目部署方式，方便团队成员理解后续维护方式。
@@ -56,15 +56,11 @@
 - 原因有 3 点：
   - 域名本身不是敏感信息。
   - 本地 `pnpm build:h5:prod` 与 Vercel Git 构建需要拿到一致的生产配置。
-  - 这更符合“适当在环境变量内存储两个生产环境域名”的原始要求。
+- 生产环境不再在 env 文件内写死域名，而是由运行时通过 `@ruan-cat/domains` 的 `11commAppNitroServer` 别名统一解析。
 - H5 生产环境需要显式写入：
-  - `VITE_SERVER_BASEURL=https://01s-11-app-server.ruan-cat.com`
-  - `VITE_UPLOAD_BASEURL=https://01s-11-app-server.ruan-cat.com/upload`
   - `VITE_API_RUNTIME=nitro-standalone`
   - `VITE_APP_PROXY_ENABLE=false`
 - Nitro 生产环境文件需要显式写入：
-  - `VITE_SERVER_BASEURL=https://01s-11-app-server.ruan-cat.com`
-  - `VITE_UPLOAD_BASEURL=https://01s-11-app-server.ruan-cat.com/upload`
   - `VITE_API_RUNTIME=nitro-standalone`
   - `NITRO_DATA_SOURCE=mock`
 
@@ -77,7 +73,7 @@
 | Production 分支 |           `dev`           |                         `dev`                         |
 |    构建命令     |   `pnpm build:h5:prod`    |               `pnpm build:nitro:vercel`               |
 |    输出目录     |      `dist/build/h5`      | 使用 Nitro `vercel` preset 自动生成的 Vercel 构建输出 |
-|    生产域名     | `01s-11-app.ruan-cat.com` |           `01s-11-app-server.ruan-cat.com`            |
+|    生产域名     | `resolve11CommH5BaseUrl()` / `11commAppH5` | `resolve11CommNitroServerBaseUrl()` / `11commAppNitroServer` |
 |    部署职责     |  只部署前端 H5 静态站点   |               只部署独立 Nitro API 服务               |
 
 ## 5. 仓库内实施拆分
@@ -245,7 +241,7 @@
   - Install Command：`pnpm install`
   - Build Command：`pnpm build:h5:prod`
   - Output Directory：`dist/build/h5`
-- 绑定生产域名 `01s-11-app.ruan-cat.com`。
+- 绑定 `@ruan-cat/domains` 中 `11commAppH5` 别名对应的生产域名。
 
 ### 6.2. Nitro 项目
 
@@ -256,7 +252,7 @@
   - Install Command：`pnpm install`
   - Build Command：`pnpm build:nitro:vercel`
   - Output Directory：保持 Vercel / Nitro 默认自动识别，不额外手填静态目录
-- 绑定生产域名 `01s-11-app-server.ruan-cat.com`。
+- 绑定 `@ruan-cat/domains` 中 `11commAppNitroServer` 别名对应的生产域名。
 
 ### 6.3. 平台行为依据
 

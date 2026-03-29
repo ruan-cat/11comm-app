@@ -44,3 +44,4 @@
 - [ ] 6.2 [修改] `src/http/interceptor.ts` - 让旧 `uni.request` 请求链复用统一运行时基址解析逻辑
 - [ ] 6.3 [修改] `src/utils/uploadFile.ts` - 让上传相关地址解析与统一运行时基址逻辑保持一致
 - [ ] 6.4 [修改] `docs/plan/2026-03-28-add-nitro-api-runtime.md` - 回填首批实现进展与偏差说明
+- [x] 6.5 [修改] `src/config/project-domains.ts`、`src/http/runtime-base.ts`、`src/http/alova.ts`、`nitro.config.ts`、`env/.env.production*`、`README.md`、`docs/prompts/*`、`docs/plan/2026-03-29-vercel-dual-project-deployment.md` - 将 11comm H5 与 Nitro 生产域名改为通过 `@ruan-cat/domains` 的 `11commAppH5` / `11commAppNitroServer` 别名统一解析，并移除生产 env 文件中的直写域名

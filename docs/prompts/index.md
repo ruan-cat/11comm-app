@@ -20,3 +20,72 @@
 
 - **本地**：`origin` 应使用 `https://github.com/ruan-cat/11comm-app.git`（若仍为旧 URL，请执行 `git remote set-url origin https://github.com/ruan-cat/11comm-app.git`）。
 - **说明**：GitHub 可能对旧仓库保留重定向，但文档、CI 与 Vercel 绑定的仓库\_slug 应以新地址为准。
+
+## 003 <!-- 已完成 --> 优化项目对 `11commAppH5` 和 `11commAppNitroServer` 域名别名的使用
+
+我们项目存在写死的域名地址，我希望现在全部改写，全部改成从 `@ruan-cat/domains` 内获取，从 `https://dm.ruancat6312.top/` 获取 `@ruan-cat/domains` 包的使用方式。
+
+具体别名： https://github.com/ruan-cat/monorepo/pull/99
+
+注意使用获取别名的方式，获取到具体的配置。
+
+## 004 <!-- TODO: --> 拓展增强 codex 通知能力
+
+找到本机的的全局 codex 用户配置：
+
+```toml
+notify = ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "C:\\Users\\你的用户名\\.codex\\codex-notify-ccntf.ps1"]
+
+[tui]
+notifications = true
+notification_method = "auto"
+```
+
+codex-notify-ccntf.ps1
+
+```bash
+param(
+    [string]$PayloadJson
+)
+
+$ErrorActionPreference = "SilentlyContinue"
+
+if ([string]::IsNullOrWhiteSpace($PayloadJson)) {
+    exit 0
+}
+
+try {
+    $payload = $PayloadJson | ConvertFrom-Json
+} catch {
+    exit 0
+}
+
+if ($payload.type -ne "agent-turn-complete") {
+    exit 0
+}
+
+$message = ""
+if ($payload."last-assistant-message") {
+    $message = [string]$payload."last-assistant-message"
+} elseif ($payload."input-messages") {
+    $message = [string]::Join(" ", $payload."input-messages")
+} else {
+    $message = "Codex 任务已完成，请回到终端查看。"
+}
+
+if ($message.Length -gt 120) {
+    $message = $message.Substring(0, 120) + "..."
+}
+
+$taskDescription = ""
+if ($payload.cwd) {
+    $taskDescription = [string]$payload.cwd
+}
+
+@ruan-cat/claude-notifier task-complete `
+  --title "Codex" `
+  --message $message `
+  --task-description $taskDescription `
+  --sound success `
+  --icon success
+```

@@ -127,10 +127,10 @@ http://127.0.0.1:3101/__nitro/health
 
 |        Vercel 项目        |       生产构建命令        |             生产域名             | Production Branch |
 | :-----------------------: | :-----------------------: | :------------------------------: | :---------------: |
-|      `11comm-app-h5`      |   `pnpm build:h5:prod`    |    `01s-11-app.ruan-cat.com`     |       `dev`       |
-| `11comm-app-nitro-server` | `pnpm build:nitro:vercel` | `01s-11-app-server.ruan-cat.com` |       `dev`       |
+|      `11comm-app-h5`      |   `pnpm build:h5:prod`    | `resolve11CommH5BaseUrl()` / `11commAppH5` |       `dev`       |
+| `11comm-app-nitro-server` | `pnpm build:nitro:vercel` | `resolve11CommNitroServerBaseUrl()` / `11commAppNitroServer` |       `dev`       |
 
-- H5 生产环境固定直连 Nitro 生产域名，不再依赖本地 proxy。
+- H5 生产环境固定直连 `@ruan-cat/domains` 中 `11commAppNitroServer` 别名解析出的 Nitro 生产域名，不再依赖本地 proxy。
 - GitHub Actions 里的 `pnpm run ci` 只做构建健壮性自检，不承担任何 Vercel 部署职责。
 
 ## 2. 平台兼容性
