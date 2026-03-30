@@ -79,7 +79,13 @@
     // #ifdef H5
     {
       "path": "pages/address/list",
-      "type": "page"
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "员工通讯录",
+        "disableScroll": true,
+        "enablePullDownRefresh": true,
+        "onReachBottomDistance": 50
+      }
     },
     // #endif
     {
