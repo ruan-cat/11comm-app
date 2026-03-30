@@ -140,4 +140,10 @@ Error {
 
 ---
 
-## 099 <!-- TODO: --> 全面改造落后的 skills 文档，记录清楚如何编写 nitro 接口和本地 mock 接口
+## 004 <!-- TODO: --> 全面改造落后的 skills 文档，记录清楚如何编写 nitro 接口和本地 mock 接口
+
+我们重构了全部的 mock 接口，改写成 nitro 接口，并且从 server 目录内分发了基于 endpoints 和 repository 架构的代码入口和存储的模拟数据。
+
+但是我们的 api-error-handling 和 api-migration 这两款 skill，明显跟不上了，内容明显脱节。需要迭代更新。说明清楚在新的场景内，如何编写 API 接口。
+
+另外，还需要你全局的查看，那些 mock 接口写法存在过时的误导。也一同地完成更改。
