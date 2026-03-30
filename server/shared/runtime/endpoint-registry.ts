@@ -24,6 +24,11 @@ export interface EndpointDefinition {
   url: string
 }
 
+interface EndpointMatchResult {
+  definition: EndpointDefinition
+  pathParams: Record<string, string>
+}
+
 /**
  * dispatcher 的最小输入结构。
  *
@@ -61,13 +66,7 @@ export function findEndpointDefinition(
   method: string,
   path: string,
 ): EndpointDefinition | undefined {
-  const normalizedMethod = normalizeMethod(method)
-
-  return registry.find((definition) => {
-    const methods = normalizeMethods(definition.method)
-
-    return definition.url === path && methods.includes(normalizedMethod)
-  })
+  return matchEndpointDefinition(registry, method, path)?.definition
 }
 
 /**
@@ -91,9 +90,9 @@ export async function dispatchEndpoint(
     return null
   }
 
-  const definition = findEndpointDefinition(registry, normalizedMethod, input.path)
+  const match = matchEndpointDefinition(registry, normalizedMethod, input.path)
 
-  if (!definition) {
+  if (!match) {
     const error = new Error(`Endpoint not found: ${input.method} ${input.path}`) as Error & {
       statusCode: number
     }
@@ -104,7 +103,7 @@ export async function dispatchEndpoint(
   const query = input.query || {}
   const body = input.body || {}
 
-  return await definition.handler({
+  return await match.definition.handler({
     method: normalizedMethod,
     path: input.path,
     query,
@@ -112,6 +111,7 @@ export async function dispatchEndpoint(
     params: {
       ...query,
       ...body,
+      ...match.pathParams,
     },
   })
 }
@@ -126,4 +126,73 @@ function normalizeMethods(method: string | string[]): string[] {
   const methods = Array.isArray(method) ? method : [method]
 
   return methods.map(normalizeMethod)
+}
+
+/** 查找与当前请求 method/path 匹配的 endpoint 及其动态路径参数。 */
+function matchEndpointDefinition(
+  registry: EndpointDefinition[],
+  method: string,
+  path: string,
+): EndpointMatchResult | undefined {
+  const normalizedMethod = normalizeMethod(method)
+
+  for (const definition of registry) {
+    const methods = normalizeMethods(definition.method)
+    if (!methods.includes(normalizedMethod)) {
+      continue
+    }
+
+    const pathParams = matchPathPattern(definition.url, path)
+    if (pathParams) {
+      return {
+        definition,
+        pathParams,
+      }
+    }
+  }
+
+  return undefined
+}
+
+/**
+ * 匹配静态路径与 `:param` 动态路径。
+ *
+ * 这里只实现现有 mock 所需的最小能力：
+ * - 静态段必须完全一致
+ * - 动态段使用 `:name` 提取单段参数
+ */
+function matchPathPattern(pattern: string, actualPath: string): Record<string, string> | undefined {
+  if (pattern === actualPath) {
+    return {}
+  }
+
+  const patternSegments = splitPath(pattern)
+  const actualSegments = splitPath(actualPath)
+
+  if (patternSegments.length !== actualSegments.length) {
+    return undefined
+  }
+
+  const pathParams: Record<string, string> = {}
+
+  for (let index = 0; index < patternSegments.length; index += 1) {
+    const patternSegment = patternSegments[index]
+    const actualSegment = actualSegments[index]
+
+    if (patternSegment.startsWith(':')) {
+      pathParams[patternSegment.slice(1)] = actualSegment
+      continue
+    }
+
+    if (patternSegment !== actualSegment) {
+      return undefined
+    }
+  }
+
+  return pathParams
+}
+
+/** 把路径拆成不含前后空段的 segment 数组。 */
+function splitPath(path: string): string[] {
+  return path.split('/').filter(Boolean)
 }

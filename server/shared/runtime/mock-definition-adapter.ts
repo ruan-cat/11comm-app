@@ -1,4 +1,4 @@
-import type { EndpointDefinition } from './endpoint-registry'
+import type { EndpointDefinition } from './endpoint-registry.ts'
 
 /**
  * 旧版 Vite mock 定义的最小形态。
@@ -7,7 +7,12 @@ import type { EndpointDefinition } from './endpoint-registry'
  * 而是先通过 adapter 把旧定义接到共享 registry 上，控制首批改造范围。
  */
 export interface LegacyMockDefinition {
-  body: (context: { body?: Record<string, any>, query?: Record<string, any> }) => any
+  body: (context: {
+    body?: Record<string, any>
+    params?: Record<string, any>
+    query?: Record<string, any>
+  }) => any
+  delay?: number | [number, number]
   method: string | string[]
   url: string
 }
@@ -26,10 +31,37 @@ export function adaptLegacyMockDefinitions(
   return definitions.map(definition => ({
     url: stripLegacyPrefix(definition.url, prefix),
     method: definition.method,
-    handler: ({ query, body }) =>
+    handler: ({ query, body, params }) =>
       definition.body({
         query,
         body,
+        params,
+      }),
+  }))
+}
+
+/**
+ * 把共享 endpoint 定义重新映射成 Vite mock 可消费的定义。
+ *
+ * 这让已经抽到 `server/modules/**` 的共享端点，仍然可以通过
+ * `defineUniAppMock` 继续服务于 H5 mock 模式，避免形成两套实现。
+ */
+export function createLegacyMockDefinitionsFromEndpoints(
+  definitions: EndpointDefinition[],
+): LegacyMockDefinition[] {
+  return definitions.map(definition => ({
+    url: definition.url,
+    method: definition.method,
+    body: ({ query, body, params }) =>
+      definition.handler({
+        method: normalizeLegacyMethod(definition.method),
+        path: definition.url,
+        query,
+        body,
+        params: params || {
+          ...(query || {}),
+          ...(body || {}),
+        },
       }),
   }))
 }
@@ -55,4 +87,9 @@ function stripLegacyPrefix(url: string, prefix: string): string {
   }
 
   return url
+}
+
+/** 为 legacy mock 包装层挑选一个稳定的默认 method。 */
+function normalizeLegacyMethod(method: string | string[]): string {
+  return Array.isArray(method) ? method[0] : method
 }
