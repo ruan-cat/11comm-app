@@ -154,3 +154,7 @@ Error {
 1. `api-migration` 与 `api-error-handling` 已改写为当前仓库真实架构：`src/api/*.ts` + `server/modules/*/{repository,endpoints}.ts` + `src/api/mock/*.mock.ts` 薄包装层。
 2. `api-migration/references/*` 已同步更新，不再继续教授“把数据库对象和业务逻辑直接写进 `*.mock.ts`”的旧模式。
 3. `src/api/mock/README.md`、`README.md` 及相关引用文档已补充当前双运行时约定。
+
+## 005 <!-- 已完成 --> 增加接口根地址的输出接口
+
+nitro 接口的生产环境，现在 `https://01s-11-app-server.ruan-cat.com/` 直接访问是没有任何结果的。我希望实现一个 get 请求，默认访问根地址时，可以实现将本项目全部的 mock 接口地址，全部的 url 地址信息，全部列举出来。相当于一个文档列表一样。
