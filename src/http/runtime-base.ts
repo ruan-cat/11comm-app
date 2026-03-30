@@ -57,6 +57,10 @@ export function prependRuntimeBaseUrl(url: string, env: RuntimeBaseEnv): string 
     return url
   }
 
+  if (url === baseUrl || url.startsWith(`${baseUrl}/`)) {
+    return url
+  }
+
   if (!url.startsWith('/')) {
     return `${baseUrl}/${url}`
   }

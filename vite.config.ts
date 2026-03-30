@@ -29,6 +29,44 @@ import { defineConfig, loadEnv } from 'vite'
 import { mockDevServerPlugin } from 'vite-plugin-mock-dev-server'
 import ViteRestart from 'vite-plugin-restart'
 
+/** Mock compiler only needs the local aliases referenced by `src/api/mock` and `server/**`. */
+function createMockRuntimeAliasEntries(root: string) {
+  return [
+    { find: '@', replacement: path.join(root, './src') },
+    { find: '@img', replacement: path.join(root, './src/static/images') },
+  ]
+}
+
+/**
+ * Narrow aliases only while `vite-plugin-mock-dev-server` snapshots config.
+ * This keeps the mock compiler away from extra Vite/uni aliases, then restores them immediately.
+ */
+function createMockRuntimeAliasLifecycle() {
+  let originalAliases: any
+
+  return {
+    prepare: {
+      name: 'mock-runtime-alias-prepare',
+      apply: 'serve',
+      enforce: 'pre',
+      configResolved(config) {
+        originalAliases = config.resolve.alias
+        config.resolve.alias = createMockRuntimeAliasEntries(config.root)
+      },
+    },
+    restore: {
+      name: 'mock-runtime-alias-restore',
+      apply: 'serve',
+      enforce: 'post',
+      configResolved(config) {
+        if (originalAliases) {
+          config.resolve.alias = originalAliases
+        }
+      },
+    },
+  }
+}
+
 // https://vitejs.dev/config/
 export default ({ command, mode }) => {
   // @see https://unocss.dev/
@@ -61,6 +99,7 @@ export default ({ command, mode }) => {
 
   const isMockRuntime = !VITE_API_RUNTIME || VITE_API_RUNTIME === 'mock'
   const isNitroViteRuntime = VITE_API_RUNTIME === 'nitro-vite'
+  const mockRuntimeAliasLifecycle = createMockRuntimeAliasLifecycle()
 
   return defineConfig({
     envDir: './env', // 自定义 env 目录
@@ -116,9 +155,17 @@ export default ({ command, mode }) => {
       command === 'serve'
       && isMockRuntime
       && process.env.VITE_PREVIEW !== 'true'
+      && mockRuntimeAliasLifecycle.prepare,
+      command === 'serve'
+      && isMockRuntime
+      && process.env.VITE_PREVIEW !== 'true'
       && mockDevServerPlugin({
         dir: 'src/api/mock',
       }),
+      command === 'serve'
+      && isMockRuntime
+      && process.env.VITE_PREVIEW !== 'true'
+      && mockRuntimeAliasLifecycle.restore,
       // 构建态临时关闭 mock 产物生成，规避 vite@6 实验链路下的尾部兼容异常
       command === 'build'
       && isMockRuntime
@@ -199,7 +246,7 @@ export default ({ command, mode }) => {
     },
     nitro: {
       serverDir: './server',
-      scanDirs: ['./server'],
+      ignore: ['modules/**/*'],
       devServer: {
         port: Number.parseInt(NITRO_PORT || '3101', 10),
       },

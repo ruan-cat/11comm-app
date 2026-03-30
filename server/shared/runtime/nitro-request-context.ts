@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import type { EndpointDispatchInput } from './endpoint-registry'
+import type { EndpointDispatchInput } from './endpoint-registry.ts'
 import { getMethod, getQuery, getRequestURL, readBody } from 'h3'
 
 /**

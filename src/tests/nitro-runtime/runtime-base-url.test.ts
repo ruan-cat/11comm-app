@@ -70,6 +70,16 @@ describe('runtime base url', () => {
     expect(prependRuntimeBaseUrl('https://example.com/file.png', env)).toBe('https://example.com/file.png')
   })
 
+  test('does not prepend the mock proxy prefix twice', () => {
+    expect(
+      prependRuntimeBaseUrl('/dev-api/app/activities.listActivitiess', {
+        VITE_API_RUNTIME: 'mock',
+        VITE_APP_PROXY_ENABLE: 'true',
+        VITE_APP_PROXY_PREFIX: '/dev-api',
+      }),
+    ).toBe('/dev-api/app/activities.listActivitiess')
+  })
+
   test('keeps upload requests same-origin in nitro-vite runtime', () => {
     expect(
       resolveUploadBaseUrl({

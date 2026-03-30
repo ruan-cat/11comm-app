@@ -18,7 +18,7 @@ const nitroPort = Number.parseInt(process.env.NITRO_PORT || '3101', 10)
 
 export default defineConfig({
   serverDir: './server',
-  scanDirs: ['./server'],
+  ignore: ['modules/**/*'],
   devServer: {
     port: nitroPort,
     watch: ['./server/**/*.ts'],

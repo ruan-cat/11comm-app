@@ -68,10 +68,13 @@ async function getInstalledViteMajorVersion() {
  * 2. Windows 下保留 `shell: true`，避免 `pnpm` 命令在 PowerShell / cmd 环境中行为不一致。
  * 3. 所有子进程都要登记到 `children`，这样脚本异常退出时可以统一回收。
  */
-function startChild(command, args) {
+function startChild(command, args, extraEnv = {}) {
   const child = spawn(command, args, {
     cwd: process.cwd(),
-    env: process.env,
+    env: {
+      ...process.env,
+      ...extraEnv,
+    },
     stdio: 'inherit',
     shell: process.platform === 'win32',
   })
@@ -109,7 +112,13 @@ async function ensureNitroServer() {
     return null
   }
 
-  const nitroProcess = startChild('pnpm', ['exec', 'cross-env', 'NITRO_BUILDER=rollup', 'NITRO_APP_MODE=development-nitro-api', 'nitro', 'dev'])
+  const nitroProcess = startChild(
+    'pnpm',
+    ['exec', 'cross-env', 'NITRO_BUILDER=rollup', 'NITRO_APP_MODE=development-nitro-api', 'nitro', 'dev'],
+    {
+      NODE_OPTIONS: mergeNodeOptions(process.env.NODE_OPTIONS, '--experimental-strip-types'),
+    },
+  )
   await waitForNitro(healthUrl, nitroProcess)
   return nitroProcess
 }
@@ -175,6 +184,19 @@ async function waitForExit(child, label) {
 /** 简单休眠工具，专用于健康检查轮询。 */
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+/** Ensure the Nitro child process can load TypeScript sources directly under Node 22. */
+function mergeNodeOptions(currentValue, requiredFlag) {
+  const parts = String(currentValue || '')
+    .split(/\s+/u)
+    .filter(Boolean)
+
+  if (!parts.includes(requiredFlag)) {
+    parts.push(requiredFlag)
+  }
+
+  return parts.join(' ')
 }
 
 /**
