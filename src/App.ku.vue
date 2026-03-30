@@ -6,7 +6,7 @@ import GlobalMessage from '@/components/global/message/global-message.vue'
 import GlobalToast from '@/components/global/toast/global-toast.vue'
 import { useThemeStore } from '@/store'
 import FgTabbar from '@/tabbar/index.vue'
-import { isPageTabbar } from './tabbar/store'
+import { shouldShowCustomTabbar } from './tabbar/store'
 import { currRoute } from './utils'
 
 const themeStore = useThemeStore()
@@ -15,7 +15,7 @@ const isCurrentPageTabbar = ref(true)
 onShow(() => {
   console.log('App.ku.vue onShow', currRoute())
   const { path } = currRoute()
-  isCurrentPageTabbar.value = isPageTabbar(path)
+  isCurrentPageTabbar.value = shouldShowCustomTabbar(path)
 })
 
 const helloKuRoot = ref('Hello AppKuVue')

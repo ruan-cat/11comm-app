@@ -105,25 +105,28 @@ onShow(() => {
 
 <template>
   <view class="page">
-    <view class="search-wrap">
-      <wd-input v-model="searchForm.roomName" label="房屋" placeholder="输入楼栋-单元-房屋" clearable />
-      <wd-input v-model="searchForm.ownerName" label="业主" placeholder="输入业主名称" clearable />
-      <wd-input v-model="searchForm.link" label="手机号" placeholder="输入手机号" clearable />
-      <view class="action-row">
-        <wd-button plain @click="handleSearch">
-          搜索
-        </wd-button>
-        <wd-button type="success" @click="openAddOwner">
-          添加
-        </wd-button>
-      </view>
-    </view>
-
     <z-paging
       ref="pagingRef"
       v-model="ownerList"
+      class="owner-list-paging"
       @query="handleQuery"
     >
+      <template #top>
+        <view class="search-wrap">
+          <wd-input v-model="searchForm.roomName" label="房屋" placeholder="输入楼栋-单元-房屋" clearable />
+          <wd-input v-model="searchForm.ownerName" label="业主" placeholder="输入业主名称" clearable />
+          <wd-input v-model="searchForm.link" label="手机号" placeholder="输入手机号" clearable />
+          <view class="action-row">
+            <wd-button plain @click="handleSearch">
+              搜索
+            </wd-button>
+            <wd-button type="success" @click="openAddOwner">
+              添加
+            </wd-button>
+          </view>
+        </view>
+      </template>
+
       <template #loading>
         <ZPagingLoading
           icon="user-avatar"
@@ -174,9 +177,19 @@ onShow(() => {
 </template>
 
 <style scoped>
+/* 预留自定义 TabBar 高度（与 tabbar/index.vue 中 h-50px + safe-area 一致） */
 .page {
-  min-height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
   background: #f5f5f5;
+}
+
+.owner-list-paging {
+  flex: 1;
+  min-height: 0;
 }
 
 .search-wrap {

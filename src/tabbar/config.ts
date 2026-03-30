@@ -60,6 +60,14 @@ export interface CustomTabBarItem {
 }
 // TODO: 3/3. 使用 CUSTOM_TABBAR(2,3) 时，更新下面的 tabbar 配置
 // 如果需要配置鼓包，需要在 'tabbar/store.ts' 里面设置，最后在 `tabbar/index.vue` 里面更改鼓包的图片
+/**
+ * 非 Tab 根页面仍需展示自定义底部栏的路由（与 tabbarList 的 pagePath 相同：以 `/` 开头）。
+ * 默认仅 Tab 四页会显示 FgTabbar；分包业务页需在此登记，否则导航与 H5 表现一致地隐藏底栏。
+ */
+export const customTabbarExtraVisiblePaths: string[] = [
+  '/pages-sub/property/owner-list',
+]
+
 export const customTabbarList: CustomTabBarItem[] = [
   {
     text: '首页',

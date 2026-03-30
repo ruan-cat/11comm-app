@@ -2,7 +2,7 @@ import type { CustomTabBarItem, CustomTabBarItemBadge } from './config'
 import { reactive } from 'vue'
 
 import { FG_LOG_ENABLE } from '@/router/interceptor'
-import { tabbarList as _tabbarList, customTabbarEnable } from './config'
+import { tabbarList as _tabbarList, customTabbarEnable, customTabbarExtraVisiblePaths } from './config'
 
 // TODO 1/2: 中间的鼓包tabbarItem的开关
 const BULGE_ENABLE = false
@@ -24,8 +24,27 @@ if (customTabbarEnable && BULGE_ENABLE) {
   } as CustomTabBarItem)
 }
 
+/** 与原生 Tab 页路径一致（含前导 `/`） */
+function normalizeRoutePath(path: string) {
+  if (!path)
+    return ''
+  return path.startsWith('/') ? path : `/${path}`
+}
+
+/** 是否为 Tab 根页面之一（登录页等逻辑仍用此项，勿与底栏展示混用） */
 export function isPageTabbar(path: string) {
-  return tabbarList.some(item => item.pagePath === path)
+  const p = normalizeRoutePath(path)
+  return tabbarList.some(item => item.pagePath === p)
+}
+
+/**
+ * 是否显示自定义底部栏：Tab 根页面 + {@link customTabbarExtraVisiblePaths} 登记的分包页等
+ */
+export function shouldShowCustomTabbar(path: string) {
+  if (!customTabbarEnable)
+    return false
+  const p = normalizeRoutePath(path)
+  return isPageTabbar(p) || customTabbarExtraVisiblePaths.includes(p)
 }
 
 /**
