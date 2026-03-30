@@ -1,5 +1,4 @@
 description = "Continue working on a change - create the next artifact (Experimental)"
-
 prompt = """
 Continue working on a change by creating the next artifact.
 
