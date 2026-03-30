@@ -155,7 +155,7 @@ if ($needsInteraction) {
 exit 0
 ```
 
-## 005 <!-- TODO: 未来该任务应该迁移到 ruan-cat/monorepo 项目内完成处理 --> 处理 codex 在 `approval-requested` 事件内，对 `codex-notify-ccntf.ps1` 的处理能细节不合适的情况
+## 005 <!-- 已迁移到 ruan-cat/monorepo 项目内完成处理 --> 处理 codex 在 `approval-requested` 事件内，对 `codex-notify-ccntf.ps1` 的处理能细节不合适的情况
 
 如图，我每次在 codex vscode plugin 新开启一个对话，并且开始实现对话时，就出现以下情况。claude-notifier 调用失败了。显示的效果不好。
 
