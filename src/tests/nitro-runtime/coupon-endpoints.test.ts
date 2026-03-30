@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createCouponEndpointDefinitions } from '../../../server/modules/coupon/endpoints'
+import { createCouponMockRepository } from '../../../server/modules/coupon/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createCouponEndpointDefinitions } from '../../../server/modules/coupon/endpoints'
-import { createCouponMockRepository } from '../../../server/modules/coupon/repository'
 
 describe('coupon endpoints', () => {
   test('registers shared coupon endpoints', () => {

@@ -1,13 +1,13 @@
 import { describe, expect, test } from 'vitest'
 import {
+  createRepairEndpointDefinitions,
+} from '../../../server/modules/repair/endpoints'
+import { createRepairMockRepository } from '../../../server/modules/repair/repository'
+import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import {
-  createRepairEndpointDefinitions,
-} from '../../../server/modules/repair/endpoints'
-import { createRepairMockRepository } from '../../../server/modules/repair/repository'
 
 describe('repair endpoints', () => {
   test('registers shared repair endpoints including compatibility URLs', () => {

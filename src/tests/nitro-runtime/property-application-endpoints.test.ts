@@ -1,14 +1,14 @@
 import { describe, expect, test } from 'vitest'
 import {
-  createEndpointRegistry,
-  dispatchEndpoint,
-  findEndpointDefinition,
-} from '../../../server/shared/runtime/endpoint-registry'
-import {
   createPropertyApplicationEndpointDefinitions,
   propertyApplicationRuntimeEndpointDefinitions,
 } from '../../../server/modules/property-application/endpoints'
 import { createPropertyApplicationMockRepository } from '../../../server/modules/property-application/repository'
+import {
+  createEndpointRegistry,
+  dispatchEndpoint,
+  findEndpointDefinition,
+} from '../../../server/shared/runtime/endpoint-registry'
 
 describe('property-application endpoints', () => {
   test('registers shared property-application endpoints', () => {

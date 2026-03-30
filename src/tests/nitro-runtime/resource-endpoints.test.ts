@@ -1,14 +1,14 @@
 import { describe, expect, test } from 'vitest'
 import {
-  createEndpointRegistry,
-  dispatchEndpoint,
-  findEndpointDefinition,
-} from '../../../server/shared/runtime/endpoint-registry'
-import {
   createResourceEndpointDefinitions,
   resourceRuntimeEndpointDefinitions,
 } from '../../../server/modules/resource/endpoints'
 import { createResourceMockRepository } from '../../../server/modules/resource/repository'
+import {
+  createEndpointRegistry,
+  dispatchEndpoint,
+  findEndpointDefinition,
+} from '../../../server/shared/runtime/endpoint-registry'
 
 describe('resource endpoints', () => {
   test('registers shared resource endpoints', () => {

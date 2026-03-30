@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createTestEndpointDefinitions } from '../../../server/modules/test/endpoints'
+import { createTestMockRepository } from '../../../server/modules/test/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createTestEndpointDefinitions } from '../../../server/modules/test/endpoints'
-import { createTestMockRepository } from '../../../server/modules/test/repository'
 
 describe('test endpoints', () => {
   test('registers the legacy test endpoints', () => {

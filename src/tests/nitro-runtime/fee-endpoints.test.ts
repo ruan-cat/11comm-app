@@ -1,14 +1,14 @@
 import { describe, expect, test } from 'vitest'
 import {
-  createEndpointRegistry,
-  dispatchEndpoint,
-  findEndpointDefinition,
-} from '../../../server/shared/runtime/endpoint-registry'
-import {
   createFeeEndpointDefinitions,
   feeRuntimeEndpointDefinitions,
 } from '../../../server/modules/fee/endpoints'
 import { createFeeMockRepository } from '../../../server/modules/fee/repository'
+import {
+  createEndpointRegistry,
+  dispatchEndpoint,
+  findEndpointDefinition,
+} from '../../../server/shared/runtime/endpoint-registry'
 
 describe('fee endpoints', () => {
   test('registers shared fee endpoints', () => {

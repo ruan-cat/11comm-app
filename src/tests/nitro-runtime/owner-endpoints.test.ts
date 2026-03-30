@@ -1,13 +1,13 @@
 import { describe, expect, test } from 'vitest'
 import {
+  createOwnerEndpointDefinitions,
+} from '../../../server/modules/owner/endpoints'
+import { createOwnerMockRepository } from '../../../server/modules/owner/repository'
+import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import {
-  createOwnerEndpointDefinitions,
-} from '../../../server/modules/owner/endpoints'
-import { createOwnerMockRepository } from '../../../server/modules/owner/repository'
 
 describe('owner endpoints', () => {
   test('registers the legacy owner list and CRUD URLs', () => {

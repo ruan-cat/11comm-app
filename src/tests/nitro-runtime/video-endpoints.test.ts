@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createVideoEndpointDefinitions } from '../../../server/modules/video/endpoints'
+import { createVideoMockRepository } from '../../../server/modules/video/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createVideoEndpointDefinitions } from '../../../server/modules/video/endpoints'
-import { createVideoMockRepository } from '../../../server/modules/video/repository'
 
 describe('video endpoints', () => {
   test('registers the legacy video endpoints', () => {

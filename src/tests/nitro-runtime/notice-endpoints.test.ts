@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createNoticeEndpointDefinitions } from '../../../server/modules/notice/endpoints'
+import { createNoticeMockRepository } from '../../../server/modules/notice/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createNoticeEndpointDefinitions } from '../../../server/modules/notice/endpoints'
-import { createNoticeMockRepository } from '../../../server/modules/notice/repository'
 
 describe('notice endpoints', () => {
   test('registers the legacy notice endpoint', () => {

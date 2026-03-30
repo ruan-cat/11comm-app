@@ -1,14 +1,14 @@
 import { describe, expect, test } from 'vitest'
 import {
-  createEndpointRegistry,
-  dispatchEndpoint,
-  findEndpointDefinition,
-} from '../../../server/shared/runtime/endpoint-registry'
-import {
   createPurchaseEndpointDefinitions,
   purchaseRuntimeEndpointDefinitions,
 } from '../../../server/modules/purchase/endpoints'
 import { createPurchaseMockRepository } from '../../../server/modules/purchase/repository'
+import {
+  createEndpointRegistry,
+  dispatchEndpoint,
+  findEndpointDefinition,
+} from '../../../server/shared/runtime/endpoint-registry'
 
 describe('purchase endpoints', () => {
   test('registers shared purchase endpoints', () => {

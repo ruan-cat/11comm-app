@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createMeterEndpointDefinitions } from '../../../server/modules/meter/endpoints'
+import { createMeterMockRepository } from '../../../server/modules/meter/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createMeterEndpointDefinitions } from '../../../server/modules/meter/endpoints'
-import { createMeterMockRepository } from '../../../server/modules/meter/repository'
 
 describe('meter endpoints', () => {
   test('registers shared meter endpoints', () => {

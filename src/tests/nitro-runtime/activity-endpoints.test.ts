@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createActivityEndpointDefinitions } from '../../../server/modules/activity/endpoints'
+import { createActivityMockRepository } from '../../../server/modules/activity/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createActivityEndpointDefinitions } from '../../../server/modules/activity/endpoints'
-import { createActivityMockRepository } from '../../../server/modules/activity/repository'
 
 describe('activity endpoints', () => {
   test('registers shared activity endpoints', () => {

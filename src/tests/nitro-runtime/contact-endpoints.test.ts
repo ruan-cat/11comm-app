@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createContactEndpointDefinitions } from '../../../server/modules/contact/endpoints'
+import { createContactMockRepository } from '../../../server/modules/contact/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createContactEndpointDefinitions } from '../../../server/modules/contact/endpoints'
-import { createContactMockRepository } from '../../../server/modules/contact/repository'
 
 describe('contact endpoints', () => {
   test('registers the legacy contact endpoints', () => {

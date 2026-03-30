@@ -1,13 +1,13 @@
 import { describe, expect, test } from 'vitest'
 import {
+  createUnitEndpointDefinitions,
+} from '../../../server/modules/unit/endpoints'
+import { createUnitMockRepository } from '../../../server/modules/unit/repository'
+import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import {
-  createUnitEndpointDefinitions,
-} from '../../../server/modules/unit/endpoints'
-import { createUnitMockRepository } from '../../../server/modules/unit/repository'
 
 describe('unit endpoints', () => {
   test('registers the legacy unit list and detail URLs', () => {

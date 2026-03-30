@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createInspectionEndpointDefinitions } from '../../../server/modules/inspection/endpoints'
+import { createInspectionMockRepository } from '../../../server/modules/inspection/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createInspectionEndpointDefinitions } from '../../../server/modules/inspection/endpoints'
-import { createInspectionMockRepository } from '../../../server/modules/inspection/repository'
 
 describe('inspection endpoints', () => {
   test('registers shared inspection endpoints', () => {

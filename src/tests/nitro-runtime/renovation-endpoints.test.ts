@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createRenovationEndpointDefinitions } from '../../../server/modules/renovation/endpoints'
+import { createRenovationMockRepository } from '../../../server/modules/renovation/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createRenovationEndpointDefinitions } from '../../../server/modules/renovation/endpoints'
-import { createRenovationMockRepository } from '../../../server/modules/renovation/repository'
 
 describe('renovation endpoints', () => {
   test('registers shared renovation endpoints', () => {

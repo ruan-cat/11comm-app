@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createStaffEndpointDefinitions } from '../../../server/modules/staff/endpoints'
+import { createStaffMockRepository } from '../../../server/modules/staff/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createStaffEndpointDefinitions } from '../../../server/modules/staff/endpoints'
-import { createStaffMockRepository } from '../../../server/modules/staff/repository'
 
 describe('staff endpoints', () => {
   test('keeps literal routes ahead of the dynamic staff detail route', () => {

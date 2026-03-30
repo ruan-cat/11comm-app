@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createItemReleaseEndpointDefinitions } from '../../../server/modules/item-release/endpoints'
+import { createItemReleaseMockRepository } from '../../../server/modules/item-release/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createItemReleaseEndpointDefinitions } from '../../../server/modules/item-release/endpoints'
-import { createItemReleaseMockRepository } from '../../../server/modules/item-release/repository'
 
 describe('item-release endpoints', () => {
   test('registers shared item-release endpoints', () => {

@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createOaWorkflowEndpointDefinitions } from '../../../server/modules/oa-workflow/endpoints'
+import { createOaWorkflowMockRepository } from '../../../server/modules/oa-workflow/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createOaWorkflowEndpointDefinitions } from '../../../server/modules/oa-workflow/endpoints'
-import { createOaWorkflowMockRepository } from '../../../server/modules/oa-workflow/repository'
 
 describe('oa-workflow endpoints', () => {
   test('registers shared oa-workflow endpoints', () => {

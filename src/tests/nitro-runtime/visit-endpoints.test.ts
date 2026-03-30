@@ -1,13 +1,13 @@
 import { describe, expect, test } from 'vitest'
 import {
+  createVisitEndpointDefinitions,
+} from '../../../server/modules/visit/endpoints'
+import { createVisitMockRepository } from '../../../server/modules/visit/repository'
+import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import {
-  createVisitEndpointDefinitions,
-} from '../../../server/modules/visit/endpoints'
-import { createVisitMockRepository } from '../../../server/modules/visit/repository'
 
 describe('visit endpoints', () => {
   test('registers the legacy visit list, detail, and audit URLs', () => {

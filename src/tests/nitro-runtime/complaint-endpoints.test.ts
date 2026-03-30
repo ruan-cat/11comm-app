@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createComplaintEndpointDefinitions } from '../../../server/modules/complaint/endpoints'
+import { createComplaintMockRepository } from '../../../server/modules/complaint/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createComplaintEndpointDefinitions } from '../../../server/modules/complaint/endpoints'
-import { createComplaintMockRepository } from '../../../server/modules/complaint/repository'
 
 describe('complaint endpoints', () => {
   test('registers shared complaint endpoints', () => {

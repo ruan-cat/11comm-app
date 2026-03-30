@@ -1,13 +1,13 @@
 import { describe, expect, test } from 'vitest'
 import {
+  createFloorEndpointDefinitions,
+} from '../../../server/modules/floor/endpoints'
+import { createFloorMockRepository } from '../../../server/modules/floor/repository'
+import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import {
-  createFloorEndpointDefinitions,
-} from '../../../server/modules/floor/endpoints'
-import { createFloorMockRepository } from '../../../server/modules/floor/repository'
 
 describe('floor endpoints', () => {
   test('registers the legacy floor list and detail URLs', () => {

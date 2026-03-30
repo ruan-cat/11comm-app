@@ -1,13 +1,13 @@
 import { describe, expect, test } from 'vitest'
 import {
+  createWorkOrderEndpointDefinitions,
+} from '../../../server/modules/work-order/endpoints'
+import { createWorkOrderMockRepository } from '../../../server/modules/work-order/repository'
+import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import {
-  createWorkOrderEndpointDefinitions,
-} from '../../../server/modules/work-order/endpoints'
-import { createWorkOrderMockRepository } from '../../../server/modules/work-order/repository'
 
 describe('work-order endpoints', () => {
   test('registers shared work-order endpoints', () => {

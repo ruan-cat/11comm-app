@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createAppointmentEndpointDefinitions } from '../../../server/modules/appointment/endpoints'
+import { createAppointmentMockRepository } from '../../../server/modules/appointment/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createAppointmentEndpointDefinitions } from '../../../server/modules/appointment/endpoints'
-import { createAppointmentMockRepository } from '../../../server/modules/appointment/repository'
 
 describe('appointment endpoints', () => {
   test('registers shared appointment endpoints', () => {

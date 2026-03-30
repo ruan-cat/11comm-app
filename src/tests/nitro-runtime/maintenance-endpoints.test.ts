@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createMaintenanceEndpointDefinitions } from '../../../server/modules/maintenance/endpoints'
+import { createMaintenanceMockRepository } from '../../../server/modules/maintenance/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createMaintenanceEndpointDefinitions } from '../../../server/modules/maintenance/endpoints'
-import { createMaintenanceMockRepository } from '../../../server/modules/maintenance/repository'
 
 describe('maintenance endpoints', () => {
   test('registers shared maintenance endpoints', () => {

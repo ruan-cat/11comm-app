@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createProfileEndpointDefinitions } from '../../../server/modules/profile/endpoints'
+import { createProfileMockRepository } from '../../../server/modules/profile/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createProfileEndpointDefinitions } from '../../../server/modules/profile/endpoints'
-import { createProfileMockRepository } from '../../../server/modules/profile/repository'
 
 describe('profile endpoints', () => {
   test('registers the legacy profile endpoints', () => {

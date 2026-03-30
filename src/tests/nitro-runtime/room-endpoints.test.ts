@@ -1,13 +1,13 @@
 import { describe, expect, test } from 'vitest'
 import {
+  createRoomEndpointDefinitions,
+} from '../../../server/modules/room/endpoints'
+import { createRoomMockRepository } from '../../../server/modules/room/repository'
+import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import {
-  createRoomEndpointDefinitions,
-} from '../../../server/modules/room/endpoints'
-import { createRoomMockRepository } from '../../../server/modules/room/repository'
 
 describe('room endpoints', () => {
   test('registers the legacy room list and detail URLs', () => {

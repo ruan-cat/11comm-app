@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
+import { createParkingEndpointDefinitions } from '../../../server/modules/parking/endpoints'
+import { createParkingMockRepository } from '../../../server/modules/parking/repository'
 import {
   createEndpointRegistry,
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
-import { createParkingEndpointDefinitions } from '../../../server/modules/parking/endpoints'
-import { createParkingMockRepository } from '../../../server/modules/parking/repository'
 
 describe('parking endpoints', () => {
   test('registers shared parking endpoints', () => {
