@@ -58,9 +58,15 @@ export function createLegacyMockDefinitionsFromEndpoints(
         path: definition.url,
         query,
         body,
-        params: params || {
+        /**
+         * 与 `dispatchEndpoint` 一致：query、body 合并进 params，再由路径 params 覆盖同名键。
+         * vite-plugin-mock-dev-server 在静态路径下常传 `params: {}`，若写 `params || {…}` 会因 `{}` 为 truthy
+         * 而跳过合并，导致 GET 的 `name` 等 query 永远进不了共享 handler（H5 mock 搜索失效）。
+         */
+        params: {
           ...(query || {}),
           ...(body || {}),
+          ...(params || {}),
         },
       }),
   }))
