@@ -146,8 +146,8 @@ export default ({ command, mode }) => {
         logger: false,
       }),
       ViteRestart({
-        // 修改 vite.config.js 时自动重启开发服务器
-        restart: ['vite.config.js'],
+        // 修改 Vite 主配置时自动重启开发服务器（与仓库实际文件名一致）
+        restart: ['vite.config.ts', 'vite.config.js'],
       }),
       isNitroViteRuntime && nitro(),
 
@@ -161,6 +161,12 @@ export default ({ command, mode }) => {
       && process.env.VITE_PREVIEW !== 'true'
       && mockDevServerPlugin({
         dir: 'src/api/mock',
+        /**
+         * mock 文件变更后插件会重载内存中的路由与数据；默认不向浏览器发信号。
+         * `reload: true` 在 mock:update-end 时通过 Vite WS 触发 full-reload，便于立刻看到新接口行为。
+         * @see https://github.com/pengzhanbo/vite-plugin-mock-dev-server/blob/main/README.md#reload
+         */
+        reload: true,
       }),
       command === 'serve'
       && isMockRuntime
