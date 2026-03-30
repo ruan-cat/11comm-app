@@ -1,8 +1,8 @@
 import path from 'node:path'
 import process from 'node:process'
 import { defineConfig } from 'nitro'
-import { resolve11CommNitroServerBaseUrl } from './src/config/project-domains'
 import { loadEnv } from 'vite'
+import { resolve11CommNitroServerBaseUrl } from './src/config/project-domains'
 
 const nitroMode = process.env.NITRO_APP_MODE || 'development-nitro-api'
 const envDir = path.resolve(process.cwd(), 'env')

@@ -23,6 +23,7 @@ export default uniHelper(
       'src/manifest.json',
       // 忽略自动生成文件
       'src/service/app/**',
+      'src/utils/systemInfo.ts',
       // 忽略掉 vitepress 文档的全部文件
       'docs/.vitepress/**',
       // 完全忽略所有 markdown 文件，由 prettier 单独处理

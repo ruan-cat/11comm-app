@@ -78,6 +78,7 @@
     "src/pages.json",
     "src/manifest.json",
     "src/service/app/**",
+    "src/utils/systemInfo.ts",
     "docs/.vitepress/**",
     "**/manifest.json",
     "**/pages.json"
