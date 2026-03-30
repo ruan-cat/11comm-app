@@ -8,6 +8,34 @@ import store from './store'
 import '@/style/index.scss'
 import 'virtual:uno.css'
 
+type H5ProcessShim = {
+  env?: Record<string, string | undefined>
+}
+
+/** H5 production bundles can evaluate `process?.env.UNI_APP_X` in the browser. */
+function ensureH5ProcessShim() {
+  // #ifdef H5
+  const runtimeGlobal = globalThis as typeof globalThis & Record<string, unknown>
+  const processShim = (Reflect.get(runtimeGlobal, 'process') as H5ProcessShim | undefined) ?? {
+    env: {
+      UNI_APP_X: 'false',
+    },
+  }
+
+  if (!processShim.env) {
+    processShim.env = {}
+  }
+
+  if (typeof processShim.env.UNI_APP_X === 'undefined') {
+    processShim.env.UNI_APP_X = 'false'
+  }
+
+  Reflect.set(runtimeGlobal, 'process', processShim)
+  // #endif
+}
+
+ensureH5ProcessShim()
+
 /**
  * 全局配置 z-paging 组件
  * @see https://z-paging.zxlee.cn/api/props/global-config.html
