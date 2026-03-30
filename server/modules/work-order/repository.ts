@@ -169,7 +169,7 @@ class WorkOrderMockRepository implements WorkOrderModuleRepository {
     const detail: WorkOrderDetail = {
       ...newOrder,
       attachments: params.attachments,
-      copyUsers: params.copyUserIds?.map((id) => ({
+      copyUsers: params.copyUserIds?.map(id => ({
         userId: id,
         userName: generateChineseName(),
       })),

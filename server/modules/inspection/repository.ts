@@ -220,7 +220,7 @@ class InspectionDatabase implements InspectionModuleRepository {
     detail.state = completedStatus.value as string
     detail.stateName = completedStatus.label
     detail.description = data.description
-    detail.photos = data.photos.map((url) => ({
+    detail.photos = data.photos.map(url => ({
       url,
       fileId: generateId('FILE'),
     }))

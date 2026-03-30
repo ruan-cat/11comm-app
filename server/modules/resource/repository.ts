@@ -1,7 +1,6 @@
 import type {
   AllocationItem,
   ApplyItem,
-  AuditReq,
   AuditTask,
   ResourceStore,
   ResourceStoreType,

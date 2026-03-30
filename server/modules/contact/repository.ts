@@ -225,7 +225,7 @@ function groupContactsByDepartment(contacts: Contact[]) {
 
   return Object.keys(grouped)
     .sort()
-    .map(departmentName => {
+    .map((departmentName) => {
       const departmentContacts = grouped[departmentName as DepartmentType]
       departmentContacts.sort((left, right) => left.name.localeCompare(right.name))
 

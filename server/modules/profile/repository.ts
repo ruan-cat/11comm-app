@@ -1,5 +1,5 @@
-import dayjs from 'dayjs'
 import type { AttendanceDayRecord, CommunityInfo, ProfileInfo } from '../../../src/types/profile.ts'
+import dayjs from 'dayjs'
 
 export interface ProfileModuleRepository {
   changeCommunity: (communityId: string) => boolean

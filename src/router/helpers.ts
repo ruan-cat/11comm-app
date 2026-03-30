@@ -262,6 +262,7 @@ export class TypedRouter {
   static toOwnerList() {
     return navigateToTyped('/pages-sub/property/owner-list', {})
   }
+
   static toMeterReading() {
     return navigateToTyped('/pages-sub/meter/reading', {})
   }
