@@ -11,8 +11,7 @@
 import { useUserStore } from '@/store/user'
 import { tabbarList } from '@/tabbar/config'
 import { isPageTabbar } from '@/tabbar/store'
-import { ensureDecodeURIComponent } from '@/utils'
-import { parseUrlToObj } from '@/utils/index'
+import { ensureDecodeURIComponent, parseUrlToObj } from '@/utils'
 
 definePage({
   style: {

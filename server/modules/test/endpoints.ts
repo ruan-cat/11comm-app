@@ -1,6 +1,7 @@
 import type { EndpointDefinition } from '../../shared/runtime/endpoint-registry.ts'
+import type { TestModuleRepository } from './repository.ts'
 import { errorResponse, successResponse } from '../../shared/runtime/response-builder.ts'
-import { testMockRepository, type TestModuleRepository } from './repository.ts'
+import { testMockRepository } from './repository.ts'
 
 /** 创建 `test` 模块的共享 endpoint 定义。 */
 export function createTestEndpointDefinitions(
@@ -40,5 +41,5 @@ function optionalString(value: unknown): string | undefined {
   }
 
   const text = `${value}`.trim()
-  return text ? text : undefined
+  return text || undefined
 }

@@ -1,6 +1,7 @@
 import type { EndpointDefinition } from '../../shared/runtime/endpoint-registry.ts'
+import type { VideoModuleRepository } from './repository.ts'
 import { successResponse } from '../../shared/runtime/response-builder.ts'
-import { videoMockRepository, type VideoModuleRepository } from './repository.ts'
+import { videoMockRepository } from './repository.ts'
 
 /** 创建 `video` 模块的共享 endpoint 定义。 */
 export function createVideoEndpointDefinitions(
@@ -42,5 +43,5 @@ function optionalString(value: unknown): string | undefined {
   }
 
   const text = `${value}`.trim()
-  return text ? text : undefined
+  return text || undefined
 }

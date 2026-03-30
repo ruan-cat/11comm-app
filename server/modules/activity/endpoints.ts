@@ -1,7 +1,6 @@
 import type { EndpointDefinition } from '../../shared/runtime/endpoint-registry.ts'
 import type { ActivityModuleRepository } from './repository.ts'
-import { successResponse } from '../../shared/runtime/response-builder.ts'
-import { errorResponse } from '../../shared/runtime/response-builder.ts'
+import { errorResponse, successResponse } from '../../shared/runtime/response-builder.ts'
 import { activityMockRepository } from './repository.ts'
 
 /** 创建 `activity` 模块的共享 endpoint 定义。 */

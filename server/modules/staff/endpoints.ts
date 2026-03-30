@@ -1,6 +1,7 @@
 import type { EndpointDefinition } from '../../shared/runtime/endpoint-registry.ts'
+import type { StaffModuleRepository } from './repository.ts'
 import { errorResponse, successResponse } from '../../shared/runtime/response-builder.ts'
-import { staffMockRepository, type StaffModuleRepository } from './repository.ts'
+import { staffMockRepository } from './repository.ts'
 
 /** 创建 `staff` 模块的共享 endpoint 定义。 */
 export function createStaffEndpointDefinitions(
@@ -155,7 +156,7 @@ function optionalString(value: unknown): string | undefined {
   }
 
   const text = `${value}`.trim()
-  return text ? text : undefined
+  return text || undefined
 }
 
 function toBoolean(value: unknown): boolean {

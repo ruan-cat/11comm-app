@@ -1,6 +1,7 @@
 import type { EndpointDefinition } from '../../shared/runtime/endpoint-registry.ts'
+import type { ProfileModuleRepository } from './repository.ts'
 import { errorResponse, successResponse } from '../../shared/runtime/response-builder.ts'
-import { profileMockRepository, type ProfileModuleRepository } from './repository.ts'
+import { profileMockRepository } from './repository.ts'
 
 /** 创建 `profile` 模块的共享 endpoint 定义。 */
 export function createProfileEndpointDefinitions(
@@ -67,7 +68,7 @@ function optionalString(value: unknown): string | undefined {
   }
 
   const text = `${value}`.trim()
-  return text ? text : undefined
+  return text || undefined
 }
 
 function currentMonth(): string {

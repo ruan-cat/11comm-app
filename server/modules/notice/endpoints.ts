@@ -1,6 +1,7 @@
 import type { EndpointDefinition } from '../../shared/runtime/endpoint-registry.ts'
+import type { NoticeModuleRepository } from './repository.ts'
 import { successResponse } from '../../shared/runtime/response-builder.ts'
-import { noticeMockRepository, type NoticeModuleRepository } from './repository.ts'
+import { noticeMockRepository } from './repository.ts'
 
 /** 创建 `notice` 模块的共享 endpoint 定义。 */
 export function createNoticeEndpointDefinitions(
@@ -31,5 +32,5 @@ function optionalString(value: unknown): string | undefined {
   }
 
   const text = `${value}`.trim()
-  return text ? text : undefined
+  return text || undefined
 }

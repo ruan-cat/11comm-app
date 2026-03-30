@@ -1,6 +1,7 @@
 import type { EndpointDefinition } from '../../shared/runtime/endpoint-registry.ts'
+import type { ContactModuleRepository } from './repository.ts'
 import { errorResponse, successResponse } from '../../shared/runtime/response-builder.ts'
-import { contactMockRepository, type ContactModuleRepository } from './repository.ts'
+import { contactMockRepository } from './repository.ts'
 
 /** 创建 `contact` 模块的共享 endpoint 定义。 */
 export function createContactEndpointDefinitions(
@@ -112,7 +113,7 @@ function optionalString(value: unknown): string | undefined {
   }
 
   const text = `${value}`.trim()
-  return text ? text : undefined
+  return text || undefined
 }
 
 function toBoolean(value: unknown): boolean {
