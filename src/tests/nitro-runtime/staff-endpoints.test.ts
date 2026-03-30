@@ -40,4 +40,85 @@ describe('staff endpoints', () => {
       id: staffId,
     })
   })
+
+  test('query.staff.infos applies fuzzy search for name (substring, tel digits, orgName param)', async () => {
+    const registry = createEndpointRegistry(createStaffEndpointDefinitions(createStaffMockRepository()))
+
+    const full = await dispatchEndpoint(registry, {
+      method: 'GET',
+      path: '/app/query.staff.infos',
+      query: { page: 1, row: 1000 },
+    })
+    const sample = full.data.staffs[0] as { name: string, tel: string, orgName: string }
+
+    const nameSub = sample.name.slice(0, 1)
+    const byNameSub = await dispatchEndpoint(registry, {
+      method: 'GET',
+      path: '/app/query.staff.infos',
+      query: { page: 1, row: 1000, name: nameSub },
+    })
+    expect(byNameSub.data.staffs.some((s: { name: string }) => s.name === sample.name)).toBe(true)
+
+    const last4 = sample.tel.replace(/\D/g, '').slice(-4)
+    const byTel = await dispatchEndpoint(registry, {
+      method: 'GET',
+      path: '/app/query.staff.infos',
+      query: { page: 1, row: 1000, name: last4 },
+    })
+    expect(byTel.data.staffs.some((s: { tel: string }) => s.tel === sample.tel)).toBe(true)
+
+    const orgSub = sample.orgName.slice(0, 2)
+    const byOrgFuzzy = await dispatchEndpoint(registry, {
+      method: 'GET',
+      path: '/app/query.staff.infos',
+      query: { page: 1, row: 1000, orgName: orgSub },
+    })
+    expect(
+      byOrgFuzzy.data.staffs.every((s: { orgName: string }) => s.orgName.includes(orgSub)),
+    ).toBe(true)
+  })
+
+  test('query.staff.infos name supports pinyin-pro (initials, full spell, dept pinyin)', async () => {
+    const repo = createStaffMockRepository()
+    repo.addStaff({
+      name: '张三',
+      tel: '13900000001',
+      orgName: '客服部',
+      position: '客服专员',
+      initials: 'Z',
+      email: 'zs@test.com',
+      isOnline: true,
+    })
+    const registry = createEndpointRegistry(createStaffEndpointDefinitions(repo))
+
+    const byInitials = await dispatchEndpoint(registry, {
+      method: 'GET',
+      path: '/app/query.staff.infos',
+      query: { page: 1, row: 200, name: 'zs' },
+    })
+    expect(byInitials.data.staffs.some((s: { name: string }) => s.name === '张三')).toBe(true)
+
+    const byFull = await dispatchEndpoint(registry, {
+      method: 'GET',
+      path: '/app/query.staff.infos',
+      query: { page: 1, row: 200, name: 'zhangsan' },
+    })
+    expect(byFull.data.staffs.some((s: { name: string }) => s.name === '张三')).toBe(true)
+
+    const byDeptPinyin = await dispatchEndpoint(registry, {
+      method: 'GET',
+      path: '/app/query.staff.infos',
+      query: { page: 1, row: 200, name: 'kefu' },
+    })
+    expect(byDeptPinyin.data.staffs.some((s: { name: string }) => s.name === '张三')).toBe(true)
+
+    const byOrgParamPinyin = await dispatchEndpoint(registry, {
+      method: 'GET',
+      path: '/app/query.staff.infos',
+      query: { page: 1, row: 200, orgName: 'kfb' },
+    })
+    expect(byOrgParamPinyin.data.staffs.some((s: { orgName: string }) => s.orgName === '客服部')).toBe(
+      true,
+    )
+  })
 })
