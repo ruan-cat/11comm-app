@@ -8,7 +8,8 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import type { Staff } from '@/types/staff'
+import { computed, getCurrentInstance, nextTick, ref, watch } from 'vue'
 import { useAddressList } from '@/hooks/useAddressList'
 
 /** 页面配置 */
@@ -62,6 +63,107 @@ const {
 const addressScrollIntoViewId = computed((): string | undefined =>
   listCurID.value ? `indexes-${listCurID.value}` : undefined,
 )
+
+/** 当前高亮的员工行（点击行或电话图标后保持，直至列表数据变化） */
+const selectedStaffKey = ref('')
+
+/** 生成列表行选中判定的稳定键 */
+function staffRowKey(staff: Staff) {
+  return staff.id || `${staff.tel}:${staff.name}`
+}
+
+/** 是否当前选中的员工行 */
+function isStaffRowSelected(staff: Staff) {
+  return selectedStaffKey.value === staffRowKey(staff)
+}
+
+/** 根据列表滚动位置推断的当前分组字母（右侧索引游标） */
+const scrollSpyInitials = ref('')
+
+/** 最近一次 scrollTop，与 rAF 合并避免丢尾帧 */
+const latestAddressScrollTop = ref(0)
+let addressScrollRafId = 0
+/** 忽略 SelectorQuery 乱序返回的旧回调，只应用最后一次测量 */
+let scrollSpyQueryId = 0
+
+/**
+ * 根据 scrollTop 与各分组锚点位置，更新 scrollSpyInitials。
+ * 使用 O_i = rect_i.top - scrollViewRect.top + scrollTop，取满足 O_i <= scrollTop 的最后一个分组。
+ */
+function updateScrollSpyFromScrollTop(scrollTop: number) {
+  if (!list.value.length)
+    return
+
+  const myId = ++scrollSpyQueryId
+  const vm = getCurrentInstance()?.proxy
+  const q = vm ? uni.createSelectorQuery().in(vm) : uni.createSelectorQuery()
+  q.select('.address-scroll').boundingClientRect()
+  for (const g of list.value) {
+    q.select(`#indexes-${g.initials}`).boundingClientRect()
+  }
+  q.exec((raw) => {
+    if (myId !== scrollSpyQueryId)
+      return
+    const res = Array.isArray(raw) ? raw : []
+    const sv = res[0] as { top?: number } | undefined
+    if (!sv || typeof sv.top !== 'number')
+      return
+
+    let activeIdx = 0
+    const st = scrollTop
+    for (let i = 0; i < list.value.length; i++) {
+      const r = res[i + 1] as { top?: number } | undefined
+      if (!r || typeof r.top !== 'number')
+        continue
+      const offsetInContent = r.top - sv.top + st
+      if (offsetInContent <= st + 2)
+        activeIdx = i
+    }
+    const next = list.value[activeIdx]?.initials ?? ''
+    if (next && scrollSpyInitials.value !== next)
+      scrollSpyInitials.value = next
+  })
+}
+
+/** scroll-view 滚动：驱动右侧字母与可视区分组同步 */
+function onAddressScroll(e: { detail?: { scrollTop?: number } }) {
+  latestAddressScrollTop.value = Number(e.detail?.scrollTop ?? 0)
+  if (addressScrollRafId)
+    return
+  addressScrollRafId = requestAnimationFrame(() => {
+    addressScrollRafId = 0
+    updateScrollSpyFromScrollTop(latestAddressScrollTop.value)
+  })
+}
+
+/**
+ * 索引字母高亮：手指在索引条上时以 listCur 为准；否则以滚动推断的 scrollSpy 为准（点击索引跳转后也会随滚动对齐）。
+ */
+function isIndexLetterActive(initials: string) {
+  if (!hidden.value && listCur.value)
+    return listCur.value === initials
+  return scrollSpyInitials.value === initials
+}
+
+/** 点击员工行：先标记选中再拨号 */
+function onStaffRowTap(staff: Staff) {
+  selectedStaffKey.value = staffRowKey(staff)
+  callPhone(staff.tel)
+}
+
+/** 点击电话图标：同步选中状态 */
+function onStaffPhoneTap(staff: Staff) {
+  selectedStaffKey.value = staffRowKey(staff)
+  callPhone(staff.tel)
+}
+
+watch(list, () => {
+  selectedStaffKey.value = ''
+  scrollSpyInitials.value = list.value[0]?.initials ?? ''
+  void nextTick(() => {
+    updateScrollSpyFromScrollTop(0)
+  })
+})
 </script>
 
 <template>
@@ -140,6 +242,7 @@ const addressScrollIntoViewId = computed((): string | undefined =>
         :scroll-into-view="addressScrollIntoViewId"
         :scroll-with-animation="true"
         :enable-back-to-top="true"
+        @scroll="onAddressScroll"
       >
         <block v-for="(item, index) in list" :key="index">
           <view
@@ -152,17 +255,22 @@ const addressScrollIntoViewId = computed((): string | undefined =>
               {{ item.initials }}
               <text class="ml-2 text-xs text-gray-400">({{ item.staffs.length }}人)</text>
             </view>
-            <!-- 员工列表 -->
-            <view class="bg-white">
+            <!-- 员工列表：默认浅底 + 选中块，避免通篇纯白无边沁 -->
+            <view class="overflow-hidden rounded-none bg-gray-50">
               <!-- 单个员工项 -->
               <view
                 v-for="(staff, staffIndex) in item.staffs"
                 :key="staffIndex"
-                class="flex items-center border-b border-gray-100 px-4 py-3 transition-colors active:bg-blue-50 hover:bg-gray-50"
-                @click="callPhone(staff.tel)"
+                class="address-staff-row flex items-center border-b border-gray-200/80 px-4 py-3 transition-colors active:opacity-90"
+                :class="
+                  isStaffRowSelected(staff)
+                    ? 'address-staff-row--selected'
+                    : 'address-staff-row--idle'
+                "
+                @click="onStaffRowTap(staff)"
               >
                 <!-- 头像 -->
-                <view class="mr-3 h-12 w-12 flex items-center justify-center rounded-full from-blue-500 to-blue-600 bg-gradient-to-br text-lg text-white font-semibold shadow-sm">
+                <view class="mr-3 h-12 w-12 flex items-center justify-center rounded-full from-slate-500 to-slate-600 bg-gradient-to-br text-lg text-white font-semibold shadow-sm">
                   {{ staff.name[0] }}
                 </view>
                 <!-- 员工信息 -->
@@ -193,9 +301,9 @@ const addressScrollIntoViewId = computed((): string | undefined =>
                   <wd-icon
                     name="phone-filled"
                     size="20"
-                    color="#0081FF"
+                    color="var(--wot-color-theme, #1890ff)"
                     class="cursor-pointer text-2xl transition-transform active:scale-90"
-                    @click.stop="callPhone(staff.tel)"
+                    @click.stop="onStaffPhoneTap(staff)"
                   />
                 </view>
               </view>
@@ -219,7 +327,8 @@ const addressScrollIntoViewId = computed((): string | undefined =>
             v-for="(item, index) in list"
             :id="index"
             :key="index"
-            class="indexBar-item h-10 w-10 flex cursor-pointer items-center justify-center rounded-lg text-xs text-gray-600 font-medium transition-all duration-200 hover:bg-blue-50 hover:text-primary"
+            class="indexBar-item h-10 w-10 flex cursor-pointer items-center justify-center rounded-lg text-xs text-gray-600 font-medium transition-all duration-200"
+            :class="isIndexLetterActive(item.initials) ? 'indexBar-item--active' : 'indexBar-item--idle'"
             @touchstart="getCur"
             @touchend="setCur"
           >
@@ -295,24 +404,43 @@ const addressScrollIntoViewId = computed((): string | undefined =>
   min-height: 0;
 }
 
-/** 索引条布局由模板 inset-y-0 + flex items-center 约束，不再使用 fixed + 手写 top/height */
+/** 员工行：默认浅灰底，选中后浅主题色底，避免整列表粘在白板上 */
+.address-staff-row--idle {
+  background-color: rgb(249 250 251);
+}
+
+.address-staff-row--selected {
+  background-color: rgb(239 246 255);
+  box-shadow: inset 3px 0 0 0 var(--wot-color-theme, #1890ff);
+}
+
+/** 索引条布局由模板 inset-y-0 + flex items-center 约束，不再使用 fixed + 手写 top/高度 */
 
 // ==================== 交互效果增强 ====================
 
-// 索引栏项目交互
+// 索引栏项目交互（去掉强蓝 hover，去掉装饰性竖条后靠 active 类表达当前字母）
 .indexBar-item {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &:hover {
-    color: var(--wot-color-theme, #0957de);
-    background-color: rgba(9, 87, 222, 0.08);
-    transform: scale(1.05);
-  }
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 
   &:active {
-    transform: scale(0.92);
-    background-color: rgba(9, 87, 222, 0.12);
+    transform: scale(0.95);
   }
+}
+
+.indexBar-item--idle {
+  &:hover {
+    background-color: rgb(243 244 246);
+    color: rgb(55 65 81);
+  }
+}
+
+.indexBar-item--active {
+  background-color: rgb(239 246 255);
+  color: var(--wot-color-theme, #1890ff);
+  font-weight: 600;
 }
 
 // 电话按钮点击效果
@@ -399,24 +527,6 @@ const addressScrollIntoViewId = computed((): string | undefined =>
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-// 索引栏滑动指示器
-.indexBar-box {
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: 8px;
-    transform: translateY(-50%);
-    width: 2px;
-    height: 30%;
-    background: linear-gradient(180deg, transparent, var(--wot-color-theme, #0957de), transparent);
-    border-radius: 1px;
-    opacity: 0.6;
   }
 }
 
@@ -519,12 +629,26 @@ const addressScrollIntoViewId = computed((): string | undefined =>
     border-color: rgba(255, 255, 255, 0.1);
   }
 
-  .indexBar-item {
+  .indexBar-item--idle {
     color: rgba(255, 255, 255, 0.8);
 
     &:hover {
-      background-color: rgba(9, 87, 222, 0.2);
+      background-color: rgba(255, 255, 255, 0.08);
     }
+  }
+
+  .indexBar-item--active {
+    background-color: rgba(59, 130, 246, 0.22);
+    color: rgb(191 219 254);
+  }
+
+  .address-staff-row--idle {
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .address-staff-row--selected {
+    background-color: rgba(59, 130, 246, 0.18);
+    box-shadow: inset 3px 0 0 0 rgb(96 165 250);
   }
 
   .staff-item:hover {
