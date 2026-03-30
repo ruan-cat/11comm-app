@@ -1,247 +1,154 @@
-# Mock 接口实现完整指南
+# 本地 Mock 实现完整指南
 
-## ⚠️ 编写前必读（Critical）
+## 1. 先判断你写的是哪一种 mock
 
-**🚨 禁止直接编写 Mock 代码！必须先完成：**
+当前仓库存在两种状态：
 
-1. ✅ **必须先阅读**：`src/api/mock/repair.mock.ts`（标准参考实现）
-2. ✅ **完全模仿**：严格按照 `repair.mock.ts` 的代码结构编写
-3. ✅ **禁止使用**：标准 vite-plugin-mock-dev-server 的 `response` 字段
-4. ✅ **必须使用**：项目自定义的 `body` 字段和解构参数
+1. **共享化模块**
+   业务逻辑在 `server/modules/*/{repository,endpoints}.ts`
+2. **遗留模块**
+   还没完成共享化，只能暂时继续维护 legacy `*.mock.ts`
 
-**核心差异对比：**
+新需求默认按第 1 种处理，不要再把第 2 种写法当成首选模板。
 
-|     标准插件写法（禁用）      |         项目自定义写法（必须）         |
-| :---------------------------: | :------------------------------------: |
-| `response: async (req) => {}` | `body: async ({ query, body }) => {}`  |
-|  `const params = req.query`   | `const params = { ...query, ...body }` |
-|        `method: 'GET'`        |       `method: ['GET', 'POST']`        |
+## 2. 共享化模块的标准结构
 
-## Mock 数据库对象定义
-
-每个 `*.mock.ts` 文件必须包含完整的数据库对象:
-
-```typescript
-// src/api/mock/maintainance.mock.ts
-import { defineUniAppMock, successResponse, errorResponse, mockLog, ResultEnumMap } from "./shared/utils";
-import type { RepairOrder, RepairListParams, RepairStatus } from "@/types/repair";
-import type { PaginationResponse } from "@/types/api";
-
-// 🔴 必须：Mock 数据库对象定义
-const mockRepairDatabase = {
-	// 直接在此文件内定义模拟数据
-	repairs: [
-		{
-			repairId: "REP_001",
-			title: "水电维修",
-			description: "业主报修：水电出现问题",
-			ownerName: "业主001",
-			ownerPhone: "13812345678",
-			address: "1栋101A室",
-			repairType: "水电维修",
-			status: "PENDING" as RepairStatus,
-			priority: "HIGH" as const,
-			createTime: "2024-01-15T10:30:00Z",
-			updateTime: "2024-01-20T14:20:00Z",
-			// ... 更多字段
-		},
-		// ... 更多模拟数据
-	] as RepairOrder[], // 强制类型注解
-
-	// 数据生成工具方法
-	createMockRepair(id: string): RepairOrder {
-		return {
-			repairId: `REP_${id}`,
-			title: `维修工单${id}`,
-			// ... 其他字段
-		};
-	},
-
-	// 初始化更多数据
-	initMoreData() {
-		if (this.repairs.length < 50) {
-			const additionalData = Array.from({ length: 48 }, (_, index) =>
-				this.createMockRepair((index + 3).toString().padStart(3, "0")),
-			);
-			this.repairs.push(...additionalData);
-		}
-	},
-
-	// 获取工单详情
-	getRepairById(repairId: string): RepairOrder | undefined {
-		return this.repairs.find((repair) => repair.repairId === repairId);
-	},
-
-	// 获取工单列表 - 支持筛选和分页
-	getRepairList(params: RepairListParams): PaginationResponse<RepairOrder> {
-		let filteredRepairs = [...this.repairs];
-
-		// 状态筛选
-		if (params.status) {
-			filteredRepairs = filteredRepairs.filter((repair) => repair.status === params.status);
-		}
-
-		// 分页处理
-		const total = filteredRepairs.length;
-		const start = (params.page - 1) * params.row;
-		const end = start + params.row;
-		const list = filteredRepairs.slice(start, end);
-
-		return {
-			list,
-			total,
-			page: params.page,
-			pageSize: params.row,
-			hasMore: end < total,
-		};
-	},
-
-	// 添加工单
-	addRepair(repair: RepairOrder): RepairOrder {
-		this.repairs.unshift(repair);
-		return repair;
-	},
-
-	// 更新工单状态
-	updateRepairStatus(repairId: string, status: RepairStatus): RepairOrder | null {
-		const repair = this.getRepairById(repairId);
-		if (repair) {
-			repair.status = status;
-			repair.updateTime = new Date().toISOString();
-			return repair;
-		}
-		return null;
-	},
-};
+```plain
+server/modules/{module}/repository.ts
+server/modules/{module}/endpoints.ts
+src/api/mock/{module}.mock.ts
 ```
 
-## Mock 接口路由定义
+### 2.1. repository.ts 放什么
+
+- 内存数据源
+- CRUD / 状态流转
+- 分页筛选
+- 字典映射
+
+### 2.2. endpoints.ts 放什么
+
+- URL
+- method
+- 参数收敛
+- `successResponse` / `errorResponse`
+
+### 2.3. `*.mock.ts` 放什么
+
+只放 Vite mock 包装层，不放主要业务逻辑。
+
+## 3. 标准代码模板
+
+### 3.1. repository.ts 模板
 
 ```typescript
-// 模拟请求延迟
-const delay = (ms: number = 300) => new Promise((resolve) => setTimeout(resolve, ms));
+export interface ExampleRepository {
+	getById: (id: string) => ExampleItem | undefined;
+	list: (params: ExampleListParams) => ExampleListResult;
+}
 
-// 🔴 必须：使用 defineUniAppMock 定义接口路由
-export default defineUniAppMock([
-	// 1. 获取维修工单列表
+export function createExampleMockRepository(): ExampleRepository {
+	const items: ExampleItem[] = [];
+
+	return {
+		getById(id) {
+			return items.find((item) => item.id === id);
+		},
+		list(params) {
+			return buildListResult(items, params);
+		},
+	};
+}
+
+export const exampleMockRepository = createExampleMockRepository();
+```
+
+### 3.2. endpoints.ts 模板
+
+```typescript
+import type { EndpointDefinition } from "../../shared/runtime/endpoint-registry.ts";
+import { errorResponse, successResponse } from "../../shared/runtime/response-builder.ts";
+import { exampleMockRepository } from "./repository.ts";
+
+export const exampleEndpointDefinitions: EndpointDefinition[] = [
 	{
-		url: "/app/ownerRepair.listOwnerRepairs",
+		url: "/app/example.listExamples",
 		method: ["GET", "POST"],
-		delay: [300, 800],
-		body: async ({ query, body }) => {
-			await delay();
-
-			const params = { ...query, ...body } as RepairListParams;
-			const result = mockRepairDatabase.getRepairList({
+		handler: ({ params }) => {
+			const result = exampleMockRepository.list({
 				page: Number(params.page) || 1,
 				row: Number(params.row) || 10,
-				status: params.status,
-				repairType: params.repairType,
-			});
+			} as any);
 
-			// 🔴 必须：使用 mockLog 输出日志
-			mockLog("listOwnerRepairs", params);
-			mockLog("listOwnerRepairs result", `${result.list.length} items`);
-
-			// 🔴 必须：使用 successResponse 包装返回值
 			return successResponse(
 				{
-					ownerRepairs: result.list,
+					examples: result.list,
 					total: result.total,
-					page: result.page,
-					row: result.pageSize,
 				},
 				"查询成功",
 			);
 		},
 	},
-
-	// 2. 获取维修任务详情
 	{
-		url: "/app/ownerRepair.getOwnerRepair",
+		url: "/app/example.queryExample",
 		method: ["GET", "POST"],
-		delay: 200,
-		body: async ({ query, body }) => {
-			const params = { ...query, ...body };
-			mockLog("getOwnerRepair", params);
-
-			const task = mockRepairDatabase.getRepairById(params.repairId);
-
-			// 🔴 必须：失败情况使用 errorResponse
-			if (!task) {
-				return errorResponse("维修工单不存在", ResultEnumMap.NotFound);
+		handler: ({ params }) => {
+			const id = String(params.id || "").trim();
+			if (!id) {
+				return errorResponse("ID不能为空", "400");
 			}
 
-			mockLog("getOwnerRepair result", task.title);
-			return successResponse(task, "查询成功");
-		},
-	},
-
-	// 3. 更新维修任务
-	{
-		url: "/app/ownerRepair.updateOwnerRepair",
-		method: "POST",
-		delay: 600,
-		body: async ({ body }) => {
-			const data = body as UpdateRepairReq;
-			mockLog("updateOwnerRepair", data);
-
-			const updatedTask = mockRepairDatabase.updateRepairStatus(data.repairId, data.status);
-
-			if (!updatedTask) {
-				return errorResponse("更新失败，维修工单不存在", ResultEnumMap.Error);
+			const item = exampleMockRepository.getById(id);
+			if (!item) {
+				return errorResponse("资源不存在", "404");
 			}
 
-			mockLog("updateOwnerRepair result", updatedTask.title);
-			return successResponse(updatedTask, "更新成功");
+			return successResponse({ example: item }, "查询成功");
 		},
 	},
-]);
+];
 ```
 
-## 高级 Mock 特性
-
-### 条件响应和数据验证
+### 3.3. `*.mock.ts` 模板
 
 ```typescript
-// 条件响应示例
-{
-  url: "/app/task/conditional",
-  method: "POST",
-  validator: { body: { type: "urgent" } },
-  body: ({ body }) => {
-    mockLog("conditional task", { type: body.type });
-    return successResponse(
-      {
-        message: "紧急任务处理",
-        priority: "HIGH",
-      },
-      "紧急任务创建成功"
-    );
-  },
-}
+import { exampleEndpointDefinitions } from "../../../server/modules/example/endpoints";
+import { createLegacyMockDefinitionsFromEndpoints } from "../../../server/shared/runtime/mock-definition-adapter";
+import { defineUniAppMock } from "./shared/utils";
+
+export default defineUniAppMock(createLegacyMockDefinitionsFromEndpoints(exampleEndpointDefinitions));
 ```
 
-### 文件上传模拟
+## 4. 遗留模块的临时写法
 
-```typescript
-{
-  url: "/api/upload/image",
-  method: "POST",
-  delay: 1000,
-  body: ({ body }) => {
-    mockLog("uploadImage", { name: body.name });
+如果你维护的是尚未共享化的旧模块，才允许直接在 `*.mock.ts` 里写 mock 定义。
 
-    const fileId = `FILE_${Date.now()}`;
-    const result = {
-      fileId,
-      url: `https://picsum.photos/400/300?random=${Date.now()}`,
-      size: Math.floor(Math.random() * 1000000) + 50000,
-      originalName: body.name || "uploaded_file.jpg",
-    };
+但这只是过渡态，不是推荐态。
 
-    mockLog("uploadImage result", fileId);
-    return successResponse(result, "文件上传成功");
-  },
-}
-```
+过渡态至少要满足：
+
+- 使用 `defineUniAppMock`
+- URL 与前端 API 完全一致
+- 返回值遵守统一响应结构
+
+## 5. 常见误区
+
+### 5.1. 误区一：在 `*.mock.ts` 里维护数据库对象
+
+这是旧方案。当前共享化模块不应继续这样做。
+
+### 5.2. 误区二：为了 Nitro 再写一套接口
+
+Nitro 通过 `legacy-dispatch` 复用共享 endpoint，不需要重复造一套 `/api/**`。
+
+### 5.3. 误区三：手工补 `/dev-api`
+
+`defineUniAppMock` 会处理代理前缀，URL 只写真实业务路径即可。
+
+## 6. 自检清单
+
+- [ ] 业务逻辑已写入 `repository.ts`
+- [ ] endpoint 已写入 `endpoints.ts`
+- [ ] `*.mock.ts` 只保留薄包装
+- [ ] 没有新写第二套分叉逻辑
+- [ ] Nitro 与 H5 mock 共用同一份 endpoint 定义

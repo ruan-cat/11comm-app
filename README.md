@@ -68,7 +68,7 @@
 - `nitro.config.ts` 中负责独立 Nitro 服务的配置、端口、CORS 和旧业务路径挂载。
 - `server/handlers/legacy-dispatch.ts` 统一承接 `/app/**` 与 `/callComponent/**`，避免首轮就为每个旧接口平铺一堆文件路由。
 - `server/shared/runtime/*` 提供共享 endpoint registry、legacy mock adapter、memory repository 和 Nitro request context 转换层。
-- 当前只把 `repair` 与 `work-order` 作为首批 Nitro 试点模块接进共享运行时。
+- `repair`、`work-order` 是最早完成验证的试点模块；当前实际共享化范围请以 `server/modules/*` 目录为准，现已不止这两个模块。
 
 ### 1.3. 当前三套接口运行时
 
@@ -125,9 +125,9 @@ http://127.0.0.1:3101/__nitro/health
 
 ### 1.7. Vercel 双项目生产部署约定
 
-|        Vercel 项目        |       生产构建命令        |             生产域名             | Production Branch |
-| :-----------------------: | :-----------------------: | :------------------------------: | :---------------: |
-|      `11comm-app-h5`      |   `pnpm build:h5:prod`    | `resolve11CommH5BaseUrl()` / `11commAppH5` |       `dev`       |
+|        Vercel 项目        |       生产构建命令        |                           生产域名                           | Production Branch |
+| :-----------------------: | :-----------------------: | :----------------------------------------------------------: | :---------------: |
+|      `11comm-app-h5`      |   `pnpm build:h5:prod`    |          `resolve11CommH5BaseUrl()` / `11commAppH5`          |       `dev`       |
 | `11comm-app-nitro-server` | `pnpm build:nitro:vercel` | `resolve11CommNitroServerBaseUrl()` / `11commAppNitroServer` |       `dev`       |
 
 - H5 生产环境固定直连 `@ruan-cat/domains` 中 `11commAppNitroServer` 别名解析出的 Nitro 生产域名，不再依赖本地 proxy。

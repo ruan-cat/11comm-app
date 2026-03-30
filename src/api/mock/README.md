@@ -1,65 +1,76 @@
 # Mock API 开发说明
 
-本目录用于管理 `vite-plugin-mock-dev-server` 的模拟接口文件。
+本目录用于管理 `vite-plugin-mock-dev-server` 的 H5 本地 mock 包装层。
 
-## 📁 目录结构
+## 1. 当前目录的真实职责
+
+这里已经不是“每个 `*.mock.ts` 文件自己维护数据库对象 + 业务逻辑”的主战场。
+
+当前推荐架构是：
+
+```plain
+src/api/{module}.ts
+server/modules/{module}/repository.ts
+server/modules/{module}/endpoints.ts
+src/api/mock/{module}.mock.ts
+```
+
+含义如下：
+
+|                  文件                   |        职责         |
+| :-------------------------------------: | :-----------------: |
+|          `src/api/{module}.ts`          | 前端 Alova 接口定义 |
+| `server/modules/{module}/repository.ts` | 内存数据与仓储行为  |
+| `server/modules/{module}/endpoints.ts`  | 共享 endpoint 映射  |
+|     `src/api/mock/{module}.mock.ts`     |  H5 mock 薄包装层   |
+
+## 2. 当前目录结构
 
 ```plain
 src/api/mock/
 ├── shared/
-│   ├── utils.ts        # Mock 工具函数
-│   └── mockData.ts     # 通用模拟数据生成器
-├── test.mock.ts        # 测试 Mock 文件
-├── activity.mock.ts    # 活动模块 Mock 接口
-├── maintainance.mock.ts # 维修模块 Mock 接口
-└── README.md           # 本说明文件
+│   ├── types.ts
+│   └── utils.ts
+├── repair.mock.ts
+├── activity.mock.ts
+├── complaint.mock.ts
+└── README.md
 ```
 
-## 📋 文件命名规范
+说明：
 
-- **业务模块**: `{模块名}.mock.ts`（如：`activity.mock.ts`、`maintainance.mock.ts`）
-- **共享数据**: `shared/mockData.ts`
-- **工具函数**: `shared/utils.ts`
+1. `shared/utils.ts` 现在主要承担 Vite mock 包装层工具职责
+2. 主要业务逻辑应优先写到 `server/modules/**`
+3. 多数 `*.mock.ts` 都应当是薄包装文件
 
-## 🔧 Mock 文件格式
-
-所有 Mock 文件必须使用 `*.mock.ts` 格式，并使用 `defineUniAppMock()` 函数：
+## 3. 标准写法
 
 ```typescript
+/**
+ * 维修工单模块 Mock 接口
+ * 共享业务逻辑已迁移到 `server/modules/repair`，这里仅保留 Vite mock 包装层。
+ */
+
+import { repairEndpointDefinitions } from "../../../server/modules/repair/endpoints";
+import { createLegacyMockDefinitionsFromEndpoints } from "../../../server/shared/runtime/mock-definition-adapter";
 import { defineUniAppMock } from "./shared/utils";
 
-export default defineUniAppMock([
-	{
-		url: "/api/your-endpoint",
-		method: ["GET", "POST"],
-		delay: 300,
-		body: {
-			success: true,
-			data: {},
-		},
-	},
-]);
+export default defineUniAppMock(createLegacyMockDefinitionsFromEndpoints(repairEndpointDefinitions));
 ```
 
-## 🚀 使用说明
+## 4. 什么时候允许直接写 legacy mock
 
-1. **创建 Mock 文件**: 在 `src/api/mock` 目录下创建 `*.mock.ts` 文件
-2. **定义接口**: 使用 `defineUniAppMock()` 函数定义 Mock 接口
-3. **启动开发服务器**: 运行 `pnpm dev` 启动开发服务器
-4. **访问 Mock 接口**: 发送请求到配置的接口路径
+只有在模块尚未共享化时，才允许直接在 `*.mock.ts` 中维护 legacy mock 定义。
 
-## 🧪 测试接口
+即便如此，也要遵守：
 
-启动开发服务器后，可以测试以下接口：
+1. URL 继续使用真实业务路径，如 `/app/**`
+2. 不要手工补 `/dev-api`
+3. 不要为 Nitro 再维护一套分叉逻辑
 
-- `GET /api/test` - 基础测试
-- `GET /api/test/params?name=test` - 参数测试
-- `GET /api/test/error?trigger=error` - 错误测试
-
-## ⚠️ 重要提醒
+## 5. 重要提醒
 
 - Mock 文件必须放在 `src/api/mock` 目录下
-- Mock 文件与 API 接口文件在同一目录层级，便于管理和维护
-- 使用 `defineUniAppMock()` 而非 `defineMock()` 函数
-- Mock 接口仅在开发环境生效
-- 通过 `vite.config.ts` 中的 `dir: 'src/api/mock'` 配置指定目录
+- `defineUniAppMock()` 仍然是 H5 mock 包装入口
+- 新模块优先新增 `server/modules/{module}`，不是优先膨胀 `*.mock.ts`
+- `src/api/mock` 只在 H5 Vite mock 运行时生效

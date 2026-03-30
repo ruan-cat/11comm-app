@@ -1,543 +1,314 @@
 ---
 name: api-migration
 description: |
-  专业的接口请求迁移专家，从 Java110Context + uni.request 迁移到 Alova + TypeScript + Mock 接口 - 提供 API 定义、Mock 实现、类型安全的完整迁移方案。
+  专业的接口迁移与编写专家。从 Java110Context + uni.request 迁移到 Alova + TypeScript，并同时适配当前仓库的 Nitro / Vite mock 双运行时架构。
 
   触发条件（满足任意一项即触发）：
-  - 需要实现 API 接口迁移（从 Vue2 到 Vue3）
-  - 需要编写 Mock 接口（*.mock.ts 文件）
-  - 需要定义接口类型（TypeScript 类型定义）
-  - 需要处理 useRequest 集成（Alova 请求管理）
-  - 用户提及"API 迁移"、"接口定义"、"Mock 数据"、"useRequest"等关键词
-  - 需要查阅旧项目接口地址（gitee-example/constant/url.js）
-  - 需要实现分页接口（PaginationParams、PaginationResponse）
+  - 需要新增或修改 `src/api/*.ts` 接口定义
+  - 需要新增或修改 `server/modules/*/{endpoints,repository}.ts`
+  - 需要为 H5 mock / Nitro 双运行时补齐同一份接口实现
+  - 需要从旧项目 `gitee-example/constant/url.js` 迁移接口地址
+  - 需要维护 `src/api/mock/*.mock.ts` 本地 mock 包装层
+  - 用户提及“API 迁移”“接口定义”“Nitro 接口”“本地 mock”“useRequest”等关键词
 
   必须协同的技能：
-  - api-error-handling（错误提示处理，几乎总是需要）
-  - z-paging-integration（分页功能时）
+  - api-error-handling（几乎所有接口调用都需要）
+  - z-paging-integration（分页列表时）
   - use-wd-form（表单提交时）
-  - code-migration（从 Vue2 迁移时）
+  - code-migration（从 Vue2 页面迁移时）
 
   禁止项：
-  - 禁止使用 try/catch 包装 send() 函数
-  - 禁止使用 immediate: true（必须手动触发请求）
-  - 禁止在 Mock 文件中使用 ResultEnum（应使用 ResultEnumMap）
-  - 禁止 API 函数泛型包裹 ApiResponse（拦截器已自动解包）
-  - 禁止 Mock 接口 URL 包含 /api 前缀（应直接使用 /app 等路径）
-  - 禁止使用 defineMock（应使用 defineUniAppMock）
+  - 禁止为已共享化模块把业务数据和 CRUD 逻辑继续堆回 `src/api/mock/*.mock.ts`
+  - 禁止把迁移后的前端接口统一改成 `/api/**`，应继续兼容旧业务路径
+  - 禁止在 API 泛型里包裹 `ApiResponse`
+  - 禁止使用 `try/catch` 包装 `send()`
+  - 禁止在 `server/**` 运行时代码中使用 `@/` alias 或省略相对导入 `.ts` 扩展名
+  - 禁止为了写 H5 mock 再维护一套与 Nitro 分叉的业务实现
 
-  覆盖场景：所有 API 接口调用，包括列表查询、详情查询、创建、更新、删除、状态变更等 CRUD 操作。
+  覆盖场景：列表、详情、创建、更新、状态流转、字典查询、分页接口，以及双运行时下的接口复用。
 context: fork
 ---
 
 # 接口请求迁移专家
 
-## ⚠️ 多技能协同
+## 1. 多技能协同
 
 常见组合场景：
 
 - 表单提交接口：`use-wd-form` + `api-error-handling`
 - 列表分页接口：`z-paging-integration` + `api-error-handling`
-- Vue2 迁移 API：`code-migration` + `api-error-handling`
+- Vue2 页面迁移接口：`code-migration` + `api-error-handling`
 
 参阅 `.claude/skills/check-trigger.md` 了解完整的技能触发检查流程。
 
 ---
 
-## 核心文档与参考
+## 2. 实施前必读
 
-必读文件：
+必须先阅读下面这些真实实现文件，再开始写接口：
 
-- `gitee-example/constant/url.js` - **旧项目接口地址常量文件（迁移时必须参考）**
-- `src/api/mock/repair.mock.ts` - 最完整、最标准的参考实现
-- `src/http/alova.ts` - **响应拦截器配置（理解 ApiResponse 自动解包机制）**
-- `.claude/skills/api-migration/references/接口地址迁移.md` - **接口地址迁移规范（新增）**
-- `.claude/skills/api-migration/references/api-定义示例.md` - **API 函数定义规范（重要：不使用 ApiResponse 包裹）**
-- `.claude/skills/api-migration/references/mock-实现指南.md`
-- `.claude/skills/api-migration/references/mock-规范.md`
-- `.claude/skills/api-migration/references/mock-响应格式.md`
+- `gitee-example/constant/url.js`
+- `src/api/repair.ts`
+- `src/http/alova.ts`
+- `src/http/runtime-base.ts`
+- `server/modules/repair/endpoints.ts`
+- `server/modules/repair/repository.ts`
+- `src/api/mock/repair.mock.ts`
+- `server/shared/runtime/mock-definition-adapter.ts`
+- `server/handlers/legacy-dispatch.ts`
 
-关键要求：
+配套参考文档：
 
-- **迁移前必须查阅** `gitee-example/constant/url.js` 获取正确的接口地址
-- **必须理解响应拦截器机制**：`src/http/alova.ts` 已自动解包 `ApiResponse`，API 函数泛型直接使用业务数据类型
-- 使用 `{ query, body }` 解构参数
-- method 必须是数组：`['GET', 'POST']`
-- 必须设置 `delay: [300, 800]`
-- Mock 文件使用 `ResultEnumMap`，非 `ResultEnum`
+- [references/api-定义示例.md](references/api-定义示例.md)
+- [references/mock-实现指南.md](references/mock-实现指南.md)
+- [references/mock-规范.md](references/mock-规范.md)
+- [references/mock-响应格式.md](references/mock-响应格式.md)
+- [references/接口地址迁移.md](references/接口地址迁移.md)
 
-## 核心原则
+---
 
-- **参考优先**：以现有 Mock 文件为标准，不以通用插件文档为准
-- **完全模仿**：100% 按照 `repair.mock.ts` 的代码结构编写
-- **类型安全**：所有 `ColumnItem.value` 赋值时添加 `as string` 断言
-- **响应格式**：强制使用 `successResponse`/`errorResponse`/`mockLog`
-- **⚠️ 响应拦截器自动解包**：`src/http/alova.ts` 已自动解包 `ApiResponse`，API 函数泛型直接使用业务数据类型，不需要包裹 `ApiResponse`
+## 3. 当前仓库的真实架构
 
-## 响应拦截器自动解包机制
+### 3.1. 核心结论
 
-**🔴 核心理解**：项目的 Alova 响应拦截器（`src/http/alova.ts` 第 116 行）已经自动解包了 `ApiResponse`，因此：
+当前仓库已经不是“每个 `*.mock.ts` 文件自己维护数据库对象 + 接口逻辑”的模式了。
 
-1. **Mock 返回**：`successResponse({ list: [...], total: 10 })` → 生成 `{ code: 0, message: "成功", data: { list: [...], total: 10 } }`
-2. **拦截器处理**：提取 `data` 字段 → 返回 `{ list: [...], total: 10 }`
-3. **API 函数泛型**：直接写业务数据类型，不需要包裹 `ApiResponse`
+对于已经共享化的业务模块，标准落点是：
 
-**正确示例**：
+```plain
+src/api/{module}.ts                     # 前端 Alova 接口定义
+server/modules/{module}/repository.ts   # 业务数据与仓储行为
+server/modules/{module}/endpoints.ts    # 共享 endpoint 定义
+src/api/mock/{module}.mock.ts           # H5 Vite mock 薄包装层
+```
+
+### 3.2. 双运行时分工
+
+|                  层                  |                       当前职责                       |                说明                 |
+| :----------------------------------: | :--------------------------------------------------: | :---------------------------------: |
+|            `src/api/*.ts`            |                 前端统一接口入口定义                 |  始终保持旧业务路径，如 `/app/**`   |
+|   `server/modules/*/repository.ts`   |            内存数据、筛选、聚合、状态流转            | H5 mock 与 Nitro 共用同一份业务逻辑 |
+|   `server/modules/*/endpoints.ts`    |             把旧业务 URL 映射到 handler              | 返回统一响应结构，供两个运行时复用  |
+|       `src/api/mock/*.mock.ts`       |           调用 adapter 输出 Vite mock 定义           |        不再承载主要业务实现         |
+| `server/handlers/legacy-dispatch.ts` | Nitro 下承接 `/app/**`、`/callComponent/**` 等旧路径 |        不要求你平铺文件路由         |
+
+### 3.3. 你必须遵守的实施准则
+
+1. 新增共享化模块时，业务逻辑优先写进 `server/modules/*/{repository,endpoints}.ts`。
+2. `src/api/mock/*.mock.ts` 只负责把共享 endpoint 转成 Vite mock 可消费的定义。
+3. 前端接口仍然继续调用旧业务路径，不要自作主张替换成 `/api/**`。
+4. `src/http/alova.ts` 已自动解包响应；API 泛型写业务数据类型即可。
+5. `server/**` 可能被 standalone Nitro / Node 直接执行，运行时代码必须使用相对路径并显式补 `.ts`。
+
+---
+
+## 4. 标准实施流程
+
+### 4.1. 第一步：从旧项目确认接口地址
+
+先在 `gitee-example/constant/url.js` 查到旧接口，再提取真实路径，例如：
 
 ```typescript
-// ✅ 正确 - 直接使用业务数据类型
+listOwnerRepairs: baseUrl + "app/ownerRepair.listOwnerRepairs";
+```
+
+提取后在新项目中使用：
+
+```typescript
+"/app/ownerRepair.listOwnerRepairs";
+```
+
+### 4.2. 第二步：补齐 TypeScript 类型
+
+优先在 `src/types/{module}.ts` 中定义请求参数和业务返回结构。分页接口优先复用基础类型，业务字段单独声明。
+
+### 4.3. 第三步：编写前端 API 定义
+
+在 `src/api/{module}.ts` 中：
+
+- 继续使用旧业务路径
+- 泛型直接写业务数据
+- 查询参数放 `{ params }`
+- 提交参数直接传 body
+
+### 4.4. 第四步：编写共享 repository
+
+在 `server/modules/{module}/repository.ts` 中：
+
+- 维护内存数据源或仓储行为
+- 处理筛选、分页、字典映射、状态流转
+- 统一返回纯业务数据，不直接关心 Alova
+
+### 4.5. 第五步：编写共享 endpoints
+
+在 `server/modules/{module}/endpoints.ts` 中：
+
+- 把旧路径映射成 `EndpointDefinition[]`
+- 统一参数收敛
+- 用 `successResponse` / `errorResponse` 返回标准结构
+- 让 H5 mock 与 Nitro 共用同一份 endpoint 逻辑
+
+### 4.6. 第六步：补齐 H5 mock 薄包装
+
+在 `src/api/mock/{module}.mock.ts` 中：
+
+- 导入共享的 `*EndpointDefinitions`
+- 通过 `createLegacyMockDefinitionsFromEndpoints(...)` 输出 Vite mock 定义
+- 用 `defineUniAppMock(...)` 包装
+
+### 4.7. 第七步：页面侧接入 useRequest
+
+页面层的 `useRequest` 规范交由 `api-error-handling` 负责，但这里有两条硬约束：
+
+1. 必须 `immediate: false`
+2. 禁止 `try/catch` 包 `send()`
+
+---
+
+## 5. API 定义硬性规则
+
+### 5.1. 响应解包规则
+
+`src/http/alova.ts` 已经自动处理：
+
+1. HTTP 状态码异常
+2. 业务码非成功时的错误提示
+3. 成功时只返回 `rawData.data`
+
+因此 API 定义必须写成：
+
+```typescript
+/** 查询维修工单详情 */
 export function getRepairDetail(params: { repairId: string }) {
-	return http.Get<{ ownerRepair: RepairOrder }>("/api/repair/detail", { params });
-}
-
-export function getRepairList(params: RepairListParams) {
-	return http.Get<PaginationResponse<RepairOrder>>("/api/repair/list", { params });
-}
-
-// ❌ 错误 - 不需要包裹 ApiResponse（拦截器已经解包了）
-export function getRepairDetail(params: { repairId: string }) {
-	return http.Get<ApiResponse<{ ownerRepair: RepairOrder }>>("/api/repair/detail", { params });
+	return http.Get<{ ownerRepair?: RepairOrder }>("/app/ownerRepair.queryOwnerRepair", {
+		params,
+	});
 }
 ```
 
-**详细说明**：参阅 [references/api-定义示例.md](references/api-定义示例.md)
-
-## 迁移概述
-
-从 Vue2 项目的 **Java110Context + uni.request** 网络请求架构迁移到 Vue3 项目的 **Alova + TypeScript + 模拟接口** 现代化开发架构。
-
-**⚠️ 重要说明**: 严格遵循 CLAUDE.md 无登录原则,完全移除认证逻辑,采用纯模拟接口方式。
-
-## 核心设计原则
-
-1. **🎯 类型安全优先**: 使用 TypeScript 完整的类型定义
-2. **📦 统一基础类型**: 强制使用 `src/types/api.ts` 中的基础业务类型
-3. **🔄 保持接口兼容性**: 与旧项目的接口 URL 和数据结构保持兼容
-4. **🚀 现代化架构**: 采用 Alova + Composition API 的现代化请求模式
-
-## Mock 数据存储新规范
-
-**强制执行的核心规则**:
-
-1. **📁 单文件完整性**: 每个 `*.mock.ts` 文件必须包含**数据库对象** + **接口定义**
-2. **💾 内联数据存储**: 模拟业务数据直接存储在各自的 `*.mock.ts` 文件的数据库对象内
-3. **🎯 业务类型使用**: 强制使用 `src/types` 文件夹内拆分后的业务类型
-4. **🌐 URL 前缀规范**: Mock 接口的 URL 必须**移除** `/api` 前缀,直接使用 `/app` 等路径
-
-> **💡 详细规范**: 关于 Mock 数据字典、日期格式、URL 前缀等详细规范,参阅 [references/mock-规范.md](references/mock-规范.md)
-
-## Mock 接口返回值格式规范
-
-**🔴 强制要求**: 所有 Mock 接口的返回值必须使用统一的响应格式函数:
+而不是：
 
 ```typescript
-import { successResponse, errorResponse, mockLog, ResultEnumMap } from "./shared/utils";
-
-// ✅ 成功响应
-return successResponse(data, "操作成功");
-
-// ✅ 错误响应
-return errorResponse("资源不存在", ResultEnumMap.NotFound);
-
-// ✅ 日志输出
-mockLog("apiName", params);
+// 错误示例
+return http.Get<ApiResponse<{ ownerRepair?: RepairOrder }>>(...)
 ```
 
-**⚠️ 禁止使用 ResultEnum 枚举**: 在 `*.mock.ts` 文件内,**禁止**直接以路径别名方式导入 ResultEnum,必须使用 ResultEnumMap。
+### 5.2. URL 规则
 
-> **📖 响应格式详解**: 关于 successResponse、errorResponse、mockLog 的详细用法,参阅 [references/mock-响应格式.md](references/mock-响应格式.md)
+- 保留旧业务路径，如 `/app/**`、`/callComponent/**`
+- 不要在迁移后的 API 上加 `/api`
+- `defineUniAppMock` 会在 H5 mock 运行时补齐代理前缀，你不需要手工写 `/dev-api`
 
-## useRequest 组合式 API 使用规范
+### 5.3. 分页规则
 
-**🔴 核心原则**: 使用 Alova 的 `useRequest` Hook 管理接口请求状态,替代手动管理 loading、error、data。
+分页接口返回什么，前端就按什么写类型，不要为了追求统一强行改旧字段名。
 
-**🔴 默认规范**: 所有 `useRequest` 必须设置 `immediate: false`,禁止自动运行请求。
-
-**核心状态说明**:
-
-|   状态名    |           类型            |         说明          |
-| :---------: | :-----------------------: | :-------------------: |
-|  `loading`  |      `Ref<boolean>`       | 请求加载状态,自动管理 |
-|   `data`    |   `Ref<T \| undefined>`   |   响应数据,类型安全   |
-|   `error`   | `Ref<Error \| undefined>` |       错误信息        |
-|   `send`    | `(...args) => Promise<T>` |   手动触发请求函数    |
-| `onSuccess` |   `(callback) => void`    |     成功回调钩子      |
-|  `onError`  |   `(callback) => void`    |     失败回调钩子      |
-
-> **📚 详细用法**: 关于标准请求、表单提交、分页加载、静默请求、错误处理等,参阅 `api-error-handling` Skill
-
-## useRequest 链式回调写法规范
-
-**🔴 强制要求**: 必须使用链式回调写法,禁止使用组合式解构写法。
-
-### 1. 核心原则
-
-链式回调写法将 `useRequest` 的回调处理直接链式调用,保持代码紧凑、可读性强,避免变量命名冲突和代码分散。
-
-### 2. 写法对比
-
-#### ✅ 推荐：链式回调写法（紧凑型）
+例如维修模块当前返回：
 
 ```typescript
-/** 加载维修状态字典 */
-const { send: loadStates } = useRequest(() => getRepairStates(), {
-	immediate: false,
-})
-	.onSuccess((event) => {
-		const result = event.data;
-		if (result && result.length > 0) {
-			stateOptions.value = [
-				{ label: "全部状态", value: "" },
-				...result.map((item) => ({
-					label: item.name || "",
-					value: item.statusCd || "",
-				})),
-			];
-		}
-	})
-	.onError((error) => {
-		console.error("加载状态字典失败:", error);
-		stateOptions.value = [...defaultStateOptions];
-	});
-```
-
-**优点**:
-
-- ✅ 代码紧凑,逻辑集中
-- ✅ 不需要重命名解构出来的变量
-- ✅ 回调与请求定义在同一代码块,关联性强
-- ✅ 符合函数式编程的链式调用风格
-- ✅ 减少变量污染,避免命名冲突
-
-#### ❌ 禁止：组合式解构写法（冗长型）
-
-```typescript
-import { useGlobalToast } from "@/hooks/useGlobalToast";
-const toast = useGlobalToast();
-
-/** 暂停维修 */
-const {
-	send: stopRepair,
-	onSuccess: onStopSuccess,
-	onError: onStopError,
-} = useRequest((params: { repairId: string; communityId: string; remark: string }) => repairStop(params), {
-	immediate: false,
-});
-
-onStopSuccess(() => {
-	toast.success("暂停成功");
-
-	setTimeout(() => {
-		pagingRef.value?.reload();
-	}, 1000);
-});
-
-onStopError((error) => {
-	toast.error(error.error || "暂停失败");
-});
-```
-
-**缺点**:
-
-- ❌ 需要解构出 `onSuccess`, `onError`- ❌ 必须重命名为 `onStopSuccess`, `onStopError` 避免命名冲突
-- ❌ 回调逻辑与请求定义分离,代码分散
-- ❌ 变量命名冗长,降低代码可读性
-- ❌ 容易产生多个类似命名的变量污染作用域
-
-### 3. 链式写法的使用场景
-
-#### 场景 1：简单请求（加载数据字典）
-
-```typescript
-/** 加载维修状态字典 */
-const { send: loadStates } = useRequest(() => getRepairStates(), {
-	immediate: false,
-})
-	.onSuccess((event) => {
-		const result = event.data;
-		stateOptions.value = result || [];
-	})
-	.onError((error) => {
-		console.error("加载失败:", error);
-	});
-```
-
-#### 场景 2：z-paging 分页集成
-
-```typescript
-/** 查询维修工单列表请求（z-paging 集成） */
-const { send: loadRepairOrderList } = useRequest(
-	(params: { page: number; row: number; statusCd?: string }) =>
-		getRepairOrderList({
-			...params,
-			storeId: userInfo.storeId || "",
-			userId: userInfo.userId || "",
-			communityId: communityInfo.communityId || "",
-		}),
-	{ immediate: false },
-)
-	.onSuccess((event) => {
-		const response = event.data;
-		total.value = response?.total || 0;
-		pagingRef.value?.complete(response?.ownerRepairs || []);
-	})
-	.onError((error) => {
-		console.error("加载列表失败:", error);
-		pagingRef.value?.complete(false);
-	});
-```
-
-#### 场景 3：表单提交
-
-```typescript
-import { useGlobalToast } from "@/hooks/useGlobalToast";
-const toast = useGlobalToast();
-
-/** 提交维修工单 */
-const { send: submitRepair, loading: submitting } = useRequest(
-	(params: RepairCreateParams) => createRepairOrder(params),
-	{ immediate: false },
-)
-	.onSuccess(() => {
-		toast.success("提交成功");
-
-		setTimeout(() => {
-			uni.navigateBack();
-		}, 1500);
-	})
-	.onError((error) => {
-		toast.error(error.error || "提交失败");
-	});
-```
-
-### 4. 链式写法的标准格式
-
-**基本格式模板**:
-
-```typescript
-const {
-	send: [functionName],
-	loading: [loadingName],
-} = useRequest(([params]) => [apiFunction]([params]), { immediate: false })
-	.onSuccess((event) => {
-		const result = event.data;
-		// 成功处理逻辑
-	})
-	.onError((error) => {
-		// 错误处理逻辑
-	});
-```
-
-**格式要点**:
-
-1. **缩进规则**: `.onSuccess()` 和 `.onError()` 与 `useRequest` 左对齐,视为链式调用
-2. **变量解构**: 只解构需要的变量（通常是 `send` 和 `loading`）
-3. **重命名规范**: `send` 重命名为具有业务语义的函数名（如 `loadStates`, `submitRepair`）
-4. **回调参数**: `onSuccess` 接收 `event` 参数,`onError` 接收 `error` 参数
-5. **immediate 配置**: 强制设置 `immediate: false`,禁止自动执行
-
-### 5. 与 api-error-handling 技能协同
-
-链式回调写法完美适配 `api-error-handling` 技能的错误处理规范:
-
-```typescript
-import { useGlobalToast } from "@/hooks/useGlobalToast";
-const toast = useGlobalToast();
-
-const { send: loadData } = useRequest(() => getData(), {
-	immediate: false,
-})
-	.onSuccess((event) => {
-		// 成功逻辑
-		dataList.value = event.data;
-	})
-	.onError((error) => {
-		// 统一错误提示（符合 api-error-handling 规范）
-		toast.error(error.error || "操作失败");
-	});
-```
-
-## 技术栈对比
-
-### Vue2 项目网络请求架构
-
-- **自研封装**: 基于 uni.request 的自定义封装
-- **Context 模式**: 通过 Java110Context 统一管理
-- **无类型检查**: JavaScript,缺乏类型安全
-- **手动错误处理**: 每个请求需要手动处理错误
-
-### Vue3 项目网络请求架构
-
-- **现代化库**: 基于 Alova 的先进请求管理
-- **TypeScript 支持**: 完整的类型检查和智能提示
-- **⚠️ 严格无认证**: 完全移除登录、token、鉴权相关逻辑
-- **⚠️ 纯 Mock 接口**: 所有接口都是本地模拟数据
-- **响应式状态**: 自动管理请求状态和数据响应式更新
-
-## TypeScript 类型定义体系
-
-**📦 基础业务类型详解**:
-
-```typescript
-// src/types/api.ts - 基础 API 类型
-export interface ApiResponse<T = any> {
-	success: boolean; // 请求是否成功
-	code: string; // 业务状态码
-	message: string; // 响应消息
-	data: T; // 业务数据
-	timestamp: number; // 时间戳
-}
-
-/** 分页请求参数 */
-export interface PaginationParams {
-	page: number; // 当前页码
-	row: number; // 每页条数
-}
-
-/** 分页响应结构 */
-export interface PaginationResponse<T> {
-	list: T[]; // 当前页数据列表
-	total: number; // 总记录数
-	page: number; // 当前页码
-	pageSize: number; // 每页条数
-	hasMore: boolean; // 是否有更多数据
+interface RepairListResponse {
+	ownerRepairs: RepairOrder[];
+	total: number;
+	page: number;
+	row: number;
 }
 ```
 
-> **📝 业务模块类型**: 关于如何定义业务模块的类型接口,参阅 [references/类型定义规范.md](references/类型定义规范.md)
+那就直接按这个结构定义，不要硬改成通用 `list` 字段。
 
-## API 接口定义标准
+---
+
+## 6. 本地 mock 编写规则
+
+### 6.1. 新模式
+
+对于共享化模块，`src/api/mock/*.mock.ts` 的标准形态应当像这样：
 
 ```typescript
 /**
- * [模块名] API 接口定义
- * 对应业务：[业务功能说明]
+ * 维修工单模块 Mock 接口
+ * 共享业务逻辑已迁移到 `server/modules/repair`，这里仅保留 Vite mock 包装层。
  */
 
-// 1. 类型导入（优先）
-import type { ApiResponse, PaginationResponse } from '@/types/api'
-import type { [业务类型定义] } from '@/types/[模块名]'
+import { repairEndpointDefinitions } from "../../../server/modules/repair/endpoints";
+import { createLegacyMockDefinitionsFromEndpoints } from "../../../server/shared/runtime/mock-definition-adapter";
+import { defineUniAppMock } from "./shared/utils";
 
-// 2. 工具导入
-import { http } from '@/http/alova'
-
-/** 查询 [实体] 列表 */
-export function get[Entity]List(params: [Entity]QueryParams & PaginationParams) {
-  return http.Get<PaginationResponse<[Entity]>>('/app/[entity].query[Entity]s', { params })
-}
-
-/** 查询 [实体] 详情 */
-export function get[Entity]Detail(params: { [entity]Id: string }) {
-  return http.Get<ApiResponse<[Entity]>>('/app/[entity].query[Entity]Detail', { params })
-}
+export default defineUniAppMock(createLegacyMockDefinitionsFromEndpoints(repairEndpointDefinitions));
 ```
 
-> **💡 完整示例**: 参阅 [references/api-定义示例.md](references/api-定义示例.md) 查看维修模块的完整接口定义
+### 6.2. 旧模式只用于过渡维护
 
-## Mock 文件结构要求
+如果某个模块还没共享化，才允许继续在 `*.mock.ts` 里直接写 legacy mock 定义。
 
-**核心要求**:
+但即使是过渡维护，也要遵守：
 
-- **文件格式**: 必须使用 `*.mock.ts` 格式
-- **文件位置**: Mock 文件必须放在 `src/api/mock` 目录下
-- **必须使用**: `defineUniAppMock` 函数代替 `defineMock`
+- URL 使用旧业务路径
+- 统一使用 `defineUniAppMock`
+- 返回值遵守统一响应结构
 
-**正确的项目结构**:
+不要再把“legacy 过渡写法”写成新模块的推荐标准。
 
-```plain
-src/api/
-├── mock/                          # Mock 文件目录
-│   ├── maintainance.mock.ts       # 维修模块 Mock (含内联数据)
-│   ├── complaint.mock.ts          # 投诉模块 Mock (含内联数据)
-│   ├── activity.mock.ts           # 活动模块 Mock (含内联数据)
-│   └── shared/                    # 共享工具
-│       └── utils.ts               # Mock 工具函数
-├── maintainance.ts                # 维修相关接口定义
-├── complaint.ts                   # 投诉相关接口定义
-└── activity.ts                    # 活动相关接口定义
+---
+
+## 7. server 运行时代码规则
+
+这是当前仓库很容易踩坑的地方：
+
+1. `server/**` 运行时代码禁止使用 `@/` alias
+2. 相对导入必须显式写 `.ts`
+3. 共享响应工具应来自 `server/shared/runtime/response-builder.ts`
+4. 共享工具应优先来自 `server/shared/runtime/*`
+
+错误示例：
+
+```typescript
+import { http } from "@/http/alova";
+import { successResponse } from "../../shared/runtime/response-builder";
 ```
 
-> **📦 Mock 实现**: 关于 Mock 数据库对象、接口定义、高级特性的完整说明,参阅 [references/mock-实现指南.md](references/mock-实现指南.md)
+正确示例：
 
-## z-paging 分页组件适配
+```typescript
+import { successResponse } from "../../shared/runtime/response-builder.ts";
+```
 
-> **📚 详细方案**: 关于 z-paging 与 useRequest 的完整适配方案,请参阅 `z-paging-integration` Skill
+---
 
-当页面使用 `<z-paging>` 组件时,必须遵循:
+## 8. 验证清单
 
-1. **在 @query 中触发请求**: 使用 `send()` 方法触发请求
-2. **在 onSuccess 中调用 complete**: 将 z-paging 的 `complete()` 放在成功回调中
-3. **在 onError 中调用 complete(false)**: 加载失败时通知 z-paging
+### 8.1. 代码落点检查
 
-## Mock 文件修改后的自动重启流程
+- [ ] `src/api/{module}.ts` 已定义前端接口
+- [ ] `server/modules/{module}/repository.ts` 已承载业务数据与仓储行为
+- [ ] `server/modules/{module}/endpoints.ts` 已暴露共享 endpoint
+- [ ] `src/api/mock/{module}.mock.ts` 已收敛为薄包装层
 
-**🔴 重要说明**: 修改 Mock 文件后,必须重启开发环境才能使更改生效。
+### 8.2. 路径契约检查
 
-**自动重启触发条件**:
+- [ ] 接口路径来自 `gitee-example/constant/url.js`
+- [ ] 没有错误引入 `/api/**`
+- [ ] H5 mock 没有手工拼 `/dev-api`
 
-1. **新增** 任何 `*.mock.ts` 文件时
-2. **修改** 任何现有 `*.mock.ts` 文件时
-3. **修改** mock 数据内容时
+### 8.3. 类型检查清单
 
-> **🔧 重启流程**: 关于检测、停止、启动、验证的完整流程,参阅 [references/mock-重启流程.md](references/mock-重启流程.md)
+- [ ] API 泛型没有包裹 `ApiResponse`
+- [ ] 查询 / 提交参数类型明确
+- [ ] 业务返回结构与真实 endpoint 一致
 
-## 迁移实施标准
+### 8.4. 运行时约束检查
 
-**基础格式要求**:
+- [ ] `server/**` 运行时代码没有使用 `@/` alias
+- [ ] `server/**` 相对导入都补了 `.ts`
+- [ ] 没有在 `src/api/mock/*.mock.ts` 重复维护第二套业务实现
 
-- ✅ 所有 Mock 文件使用 `*.mock.ts` 格式
-- ✅ Mock 文件都在 `src/api/mock` 目录下
-- ✅ 使用 `defineUniAppMock()` 而非原生 `defineMock()` 函数
-- ✅ API 接口保持与原项目相同的 URL 路径
-- ✅ **Mock 接口返回值必须使用统一的响应格式函数**
+---
 
-**类型安全要求**:
+## 9. 相关文档
 
-- ✅ 必须从 `@/types/{模块名}` 导入拆分后的业务类型
-- ✅ 模拟数据直接定义在各自的 `*.mock.ts` 文件的数据库对象内
-- ✅ 所有函数参数和返回值都有明确的 TypeScript 类型注解
-- ✅ 严禁使用 `any` 类型
-
-**文件结构要求**:
-
-- ✅ 每个 `*.mock.ts` 文件必须包含：内联数据 + 数据库对象 + 接口定义
-- ✅ 数据库对象包含完整的 CRUD 操作方法和模拟数据存储
-- ✅ Mock 生成的假数据 100%符合业务类型定义
-
-## 验证步骤
-
-### 接口响应验证
-
-1. **启动开发服务器**: 运行 `pnpm dev`
-2. **检查 Mock 加载**: 控制台应显示 Mock 插件已加载成功
-3. **测试接口调用**: 在浏览器中访问页面,触发接口请求
-4. **验证返回数据**: 检查数据格式符合 `ApiResponse<T>` 类型定义
-5. **检查控制台日志**: 验证 `mockLog()` 函数输出的日志格式统一
-
-### 类型安全验证
-
-**✅ API 文件类型检查清单**:
-
-- [ ] 所有接口函数都有明确的参数类型注解
-- [ ] 所有接口函数都有明确的返回类型注解
-- [ ] 正确导入和使用基础业务类型
-- [ ] 严格禁止使用 `any` 类型
-- [ ] 分页接口使用 `PaginationParams` 和 `PaginationResponse<T>`
-
-**✅ Mock 文件类型检查清单**:
-
-- [ ] Mock 数据使用业务类型定义
-- [ ] 数据库对象方法有完整的类型注解
-- [ ] Mock 响应使用 `successResponse()` 和 `errorResponse()` 包装
-- [ ] 所有日志输出使用 `mockLog()` 函数
-- [ ] 严格禁止使用 `ResultEnum` 枚举,只使用 `ResultEnumMap`
-
-## 相关文档
-
-- [references/接口地址迁移.md](references/接口地址迁移.md) - **旧项目 URL 常量迁移规范（重要）**
-- [references/mock-规范.md](references/mock-规范.md) - Mock 数据字典、日期格式、URL 前缀等详细规范
-- [references/mock-响应格式.md](references/mock-响应格式.md) - successResponse、errorResponse、mockLog 详细用法
-- [references/类型定义规范.md](references/类型定义规范.md) - 业务模块类型定义标准和示例
-- [references/api-定义示例.md](references/api-定义示例.md) - 完整的 API 接口定义示例
-- [references/mock-实现指南.md](references/mock-实现指南.md) - Mock 数据库对象、接口定义、高级特性
-- [references/mock-重启流程.md](references/mock-重启流程.md) - Mock 文件修改后的自动重启完整流程
+- [references/api-定义示例.md](references/api-定义示例.md)
+- [references/mock-实现指南.md](references/mock-实现指南.md)
+- [references/mock-规范.md](references/mock-规范.md)
+- [references/mock-响应格式.md](references/mock-响应格式.md)
+- [references/接口地址迁移.md](references/接口地址迁移.md)
+- [references/类型定义规范.md](references/类型定义规范.md)

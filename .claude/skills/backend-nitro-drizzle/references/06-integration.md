@@ -1,5 +1,13 @@
 # uni-app 前后端集成
 
+> 补充说明：本文件下面的大段 `/api/**`、`alovaBackend`、`VITE_USE_MOCK` 示例，更适合“未来独立真实后端”场景。
+>
+> 对于**当前仓库**，请优先参考仓库根 `README.md`、`.claude/skills/api-migration/SKILL.md` 与 `src/http/runtime-base.ts`：
+>
+> 1. 当前仓库通过 `VITE_API_RUNTIME` 在 `mock` / `nitro-vite` / `nitro-standalone` 间切换。
+> 2. 当前前端仍然继续使用 `/app/**`、`/callComponent/**` 旧业务路径，而不是统一改成 `/api/**`。
+> 3. 当前本地 mock 的权威实现入口已迁移到 `server/modules/*/{repository,endpoints}.ts`，`src/api/mock/*.mock.ts` 只是 H5 Vite mock 薄包装层。
+
 > 本文档介绍如何将 uni-app 前端与 Nitro 后端进行集成。
 
 ---
@@ -130,8 +138,8 @@ export const alovaBackend = createAlova({
 
 ```typescript
 // src/http/alova-instance.ts
-// 这个文件保持不变，继续用于 Mock 接口
-// 当迁移完成后，可以统一切换到 alovaBackend
+// 这段仅是“独立后端方案”的过渡示意
+// 当前仓库实际请优先复用现有 src/http/alova.ts + runtime-base.ts
 ```
 
 ---
@@ -263,7 +271,7 @@ export const deleteRepairApi = (id: string) => {
   维修工单列表页 (连接后端版本)
   访问地址: http://localhost:3000/#/pages-sub/repair/list
 -->
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRequest } from "alova/client";
 import { getRepairListApi } from "@/api/repair-backend";
 import type { RepairOrder } from "@/api/types/repair";
@@ -287,7 +295,7 @@ const {
       pageSize: 20,
     }),
   {
-    immediate: true,
+    immediate: false,
   }
 );
 
@@ -305,6 +313,10 @@ function handleRefresh() {
 function handleFilterChange() {
   loadList();
 }
+
+onMounted(() => {
+  loadList();
+});
 </script>
 
 <template>
@@ -368,7 +380,7 @@ const {
   loading,
   send: loadDetail,
 } = useRequest(() => getRepairDetailApi(props.id), {
-  immediate: true,
+  immediate: false,
 });
 
 // 更新状态
@@ -387,6 +399,10 @@ const { loading: updating, send: updateStatus } = useRequest(
 async function handleStatusChange(newStatus: string) {
   await updateStatus(newStatus);
 }
+
+onMounted(() => {
+  loadDetail();
+});
 </script>
 
 <template>

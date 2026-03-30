@@ -1,4 +1,5 @@
-<!-- TODO: 长期任务，未完成改造接入
+<!--
+  以完成改造接入，现在是 mock + nitro 的双架构，nitro本质上是mock接口数据
   继续执行 openspec add-nitro-api-runtime 任务
   继续迭代 docs\plan\2026-03-28-add-nitro-api-runtime.md 计划文件；
 
@@ -140,10 +141,16 @@ Error {
 
 ---
 
-## 004 <!-- TODO: --> 全面改造落后的 skills 文档，记录清楚如何编写 nitro 接口和本地 mock 接口
+## 004 <!-- 2026-03-30 已完成 --> 全面改造落后的 skills 文档，记录清楚如何编写 nitro 接口和本地 mock 接口
 
 我们重构了全部的 mock 接口，改写成 nitro 接口，并且从 server 目录内分发了基于 endpoints 和 repository 架构的代码入口和存储的模拟数据。
 
 但是我们的 api-error-handling 和 api-migration 这两款 skill，明显跟不上了，内容明显脱节。需要迭代更新。说明清楚在新的场景内，如何编写 API 接口。
 
 另外，还需要你全局的查看，那些 mock 接口写法存在过时的误导。也一同地完成更改。
+
+2026-03-30 更新结果：
+
+1. `api-migration` 与 `api-error-handling` 已改写为当前仓库真实架构：`src/api/*.ts` + `server/modules/*/{repository,endpoints}.ts` + `src/api/mock/*.mock.ts` 薄包装层。
+2. `api-migration/references/*` 已同步更新，不再继续教授“把数据库对象和业务逻辑直接写进 `*.mock.ts`”的旧模式。
+3. `src/api/mock/README.md`、`README.md` 及相关引用文档已补充当前双运行时约定。
