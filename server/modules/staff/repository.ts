@@ -1,6 +1,23 @@
 import type { Staff, StaffListResponse, StaffQueryParams } from '../../../src/types/staff.ts'
+import { match as matchHanToPinyin } from 'pinyin-pro'
 import { STAFF_ORGANIZATION_OPTIONS, STAFF_POSITION_OPTIONS } from '../../../src/constants/staff.ts'
 import { generateChineseName, generatePhoneNumber } from '../../shared/runtime/common-utils.ts'
+
+/** 是否包含至少一个 CJK 统一汉字（用于决定是否走拼音匹配） */
+const HAN_REGEX = /[\u4E00-\u9FFF]/
+
+/**
+ * 汉字文本是否可被 `pinyin-pro` 的拼音模式命中（全拼 / 首字母 / 混拼，大小写不敏感）。
+ * 无汉字或无拉丁字母时返回 false，避免对纯英文、纯数字字段误用 `match`。
+ */
+function hanTextMatchesPinyinPattern(text: string, keyword: string): boolean {
+  const q = keyword.trim()
+  if (!text || !q || !HAN_REGEX.test(text) || !/[a-z]/i.test(q))
+    return false
+
+  const hit = matchHanToPinyin(text, q, { insensitive: true })
+  return hit !== null && hit.length > 0
+}
 
 export interface StaffModuleRepository {
   addStaff: (staff: Omit<Staff, 'id'>) => Staff
@@ -13,9 +30,53 @@ export interface StaffModuleRepository {
   updateStaffOnlineStatus: (staffId: string, isOnline: boolean) => Staff | null
 }
 
+/**
+ * 员工是否命中 `queryStaffInfos(name)` 与 `searchStaffs` 共用的模糊关键词规则。
+ * 含字面子串匹配；姓名、部门、职位另支持 `pinyin-pro` 拼音/首字母/混拼匹配（通讯录常用拉丁检索）。
+ * 电话支持原始子串或去非数字后的数字子串；邮箱、首字母索引、工号为不区分大小写的子串匹配。
+ */
+function staffMatchesSearchKeyword(staff: Staff, rawKeyword: string): boolean {
+  const keyword = rawKeyword.trim()
+  if (!keyword)
+    return true
+
+  const lower = keyword.toLowerCase()
+  const telDigits = keyword.replace(/\D/g, '')
+  const staffTelDigits = staff.tel.replace(/\D/g, '')
+
+  return (
+    staff.name.includes(keyword)
+    || staff.name.toLowerCase().includes(lower)
+    || staff.orgName.includes(keyword)
+    || staff.orgName.toLowerCase().includes(lower)
+    || (staff.position?.includes(keyword) ?? false)
+    || (staff.position?.toLowerCase().includes(lower) ?? false)
+    || (staff.email?.toLowerCase().includes(lower) ?? false)
+    || staff.tel.includes(keyword)
+    || (telDigits.length > 0 && staffTelDigits.includes(telDigits))
+    || staff.initials.toLowerCase().includes(lower)
+    || staff.id.toLowerCase().includes(lower)
+    || hanTextMatchesPinyinPattern(staff.name, keyword)
+    || hanTextMatchesPinyinPattern(staff.orgName, keyword)
+    || hanTextMatchesPinyinPattern(staff.position ?? '', keyword)
+  )
+}
+
 /** 创建 `staff` 模块的 mock 内存仓库。 */
 export function createStaffMockRepository(): StaffModuleRepository {
   const staffs = Array.from({ length: 50 }, (_, index) => createMockStaff((index + 1).toString().padStart(3, '0')))
+  /** 固定一条便于拼音首拼「gj」验证的数据（高进 → gao jin） */
+  staffs.unshift({
+    id: 'STAFF_DEMO_PINYIN',
+    name: '高进',
+    tel: '13800138000',
+    orgName: '行政部',
+    initials: 'G',
+    position: '行政助理',
+    email: 'gaojin@property.com',
+    avatar: 'https://picsum.photos/100/100?random=demo-gj',
+    isOnline: true,
+  })
 
   return {
     addStaff(staff) {
@@ -43,19 +104,21 @@ export function createStaffMockRepository(): StaffModuleRepository {
       let filteredStaffs = [...staffs]
 
       if (params.name?.trim()) {
-        const keyword = params.name.toLowerCase()
-        filteredStaffs = filteredStaffs.filter(staff =>
-          staff.name.toLowerCase().includes(keyword)
-          || staff.position?.toLowerCase().includes(keyword)
-          || staff.orgName.toLowerCase().includes(keyword))
+        const keyword = params.name.trim()
+        filteredStaffs = filteredStaffs.filter(staff => staffMatchesSearchKeyword(staff, keyword))
       }
 
       if (params.orgName?.trim()) {
-        filteredStaffs = filteredStaffs.filter(staff => staff.orgName === params.orgName)
+        const orgQ = params.orgName.trim()
+        filteredStaffs = filteredStaffs.filter(staff =>
+          staff.orgName.includes(orgQ)
+          || staff.orgName.toLowerCase().includes(orgQ.toLowerCase())
+          || hanTextMatchesPinyinPattern(staff.orgName, orgQ))
       }
 
       if (params.initials?.trim()) {
-        filteredStaffs = filteredStaffs.filter(staff => staff.initials === params.initials)
+        const letter = params.initials.trim().toUpperCase()
+        filteredStaffs = filteredStaffs.filter(staff => staff.initials.toUpperCase() === letter)
       }
 
       filteredStaffs.sort((left, right) => `${left.initials}`.localeCompare(`${right.initials}`))
@@ -77,13 +140,8 @@ export function createStaffMockRepository(): StaffModuleRepository {
         return []
       }
 
-      const lowerKeyword = keyword.toLowerCase()
-      return staffs.filter(staff =>
-        staff.name.toLowerCase().includes(lowerKeyword)
-        || staff.tel.includes(keyword)
-        || staff.position?.toLowerCase().includes(lowerKeyword)
-        || staff.orgName.toLowerCase().includes(lowerKeyword)
-        || staff.email?.toLowerCase().includes(lowerKeyword))
+      const q = keyword.trim()
+      return staffs.filter(staff => staffMatchesSearchKeyword(staff, q))
     },
     updateStaffOnlineStatus(staffId, isOnline) {
       const staff = this.getStaffById(staffId)
