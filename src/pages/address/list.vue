@@ -8,12 +8,15 @@
 -->
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useAddressList } from '@/hooks/useAddressList'
 
 /** 页面配置 */
 definePage({
   style: {
     navigationBarTitleText: '员工通讯录',
+    /** 禁止页面容器整体纵向滚动，仅 scroll-view 内滚动，避免稍一滑动搜索栏被整页卷走 */
+    disableScroll: true,
     enablePullDownRefresh: true,
     onReachBottomDistance: 50,
   },
@@ -31,7 +34,6 @@ const {
   listCur,
   isLoading,
   isEmpty,
-  CustomBar,
   totalStaffCount,
   onlineStaffCount,
 
@@ -51,23 +53,36 @@ const {
   autoInitialize: true, /** 自动初始化所有功能 */
   immediate: true, /** 立即加载数据 */
 })
+
+/**
+ * 仅当用户在索引条松手选中字母后才传入 id。
+ * listCurID 为空时若传入 `indexes-`，H5 上 scroll-into-view 可能触发异常滚动，
+ * 把整块页面上推，表现成「导航下留白、搜索栏像丢失了一样」。
+ */
+const addressScrollIntoViewId = computed((): string | undefined =>
+  listCurID.value ? `indexes-${listCurID.value}` : undefined,
+)
 </script>
 
 <template>
-  <view class="min-h-screen bg-gray-50">
-    <!-- 搜索栏 - 优化版 -->
-    <view class="sticky top-0 z-20 bg-white shadow-sm">
-      <view class="flex items-center justify-between p-4">
-        <!-- 搜索表单 -->
-        <view class="mr-3 flex-1">
-          <view class="flex items-center rounded-full bg-gray-100 px-4 py-2">
-            <wd-icon name="search" size="16" color="#999" class="mr-2" />
+  <!--
+    使用单滚动源：页面根节点锁定为 uni 可视区域高度（扣导航与 tabbar），仅 scroll-view 内部滚动，
+    避免出现 H5/自定义 tabbar 下「页面滚动 + scroll-view」双滚动条及搜索栏被卷走的问题。
+  -->
+  <view class="address-page bg-gray-50">
+    <!-- 搜索栏：文档流首块；勿用 sticky+top-0（在 overflow:hidden 祖先下易与导航错位、被裁切或像被盖住） -->
+    <view class="address-search shrink-0 bg-white shadow-sm">
+      <view class="address-search-row flex items-center justify-between px-4 py-3">
+        <!-- 搜索表单：min-w-0 防止 flex 子项把输入框挤成 0 宽 -->
+        <view class="mr-3 min-w-0 flex-1">
+          <view class="address-search-field min-h-72rpx flex items-center rounded-full bg-gray-100 px-4 py-2">
+            <wd-icon name="search" size="16" color="#999" class="mr-2 flex-shrink-0" />
             <input
               v-model="name"
               type="text"
               placeholder="输入姓名或部门搜索"
               confirm-type="search"
-              class="flex-1 bg-transparent text-sm outline-none"
+              class="address-search-input min-w-0 flex-1 bg-transparent text-sm text-gray-800 outline-none"
               @confirm="searchStaff"
             >
             <wd-icon
@@ -81,7 +96,7 @@ const {
           </view>
         </view>
         <!-- 搜索按钮 -->
-        <view class="action">
+        <view class="action flex-shrink-0">
           <wd-button
             type="primary"
             size="small"
@@ -96,13 +111,13 @@ const {
     </view>
 
     <!-- 加载状态 -->
-    <view v-if="isLoading" class="flex items-center justify-center py-8">
+    <view v-if="isLoading" class="address-loading flex shrink-0 items-center justify-center py-8">
       <wd-loading type="ring" color="#0081FF" size="20" />
       <text class="ml-2 text-gray-500">加载中...</text>
     </view>
 
-    <!-- 主内容区域 -->
-    <view v-else class="relative">
+    <!-- 主内容区域：flex-1 + min-h-0 保证子级 scroll-view 获得确定高度 -->
+    <view v-else class="address-body relative min-h-0 flex flex-1 flex-col">
       <!-- 空状态 -->
       <view v-if="isEmpty" class="flex flex-col items-center justify-center py-16">
         <wd-icon name="user" size="48" color="#ccc" />
@@ -121,9 +136,8 @@ const {
       <scroll-view
         v-else
         scroll-y
-        class="relative"
-        :scroll-into-view="`indexes-${listCurID}`"
-        :style="{ height: `calc(100vh - ${CustomBar}px - 80px)` }"
+        class="address-scroll relative z-0"
+        :scroll-into-view="addressScrollIntoViewId"
         :scroll-with-animation="true"
         :enable-back-to-top="true"
       >
@@ -190,14 +204,13 @@ const {
         </block>
       </scroll-view>
 
-      <!-- 字母索引栏 -->
+      <!-- 字母索引栏：相对 address-body 绝对定位，仅占列表区域，避免 fixed+window-top 估算盖住搜索栏 -->
       <view
         v-if="list.length > 3"
-        class="indexBar fixed right-0 top-20 z-10"
-        :style="{ height: `calc(100vh - ${CustomBar}px - 100px)` }"
+        class="address-index-bar pointer-events-none absolute inset-y-0 right-0 z-20 flex items-center"
       >
         <view
-          class="indexBar-box mr-2.5 w-10 border border-gray-100 rounded-xl bg-white/90 shadow-md backdrop-blur-sm"
+          class="indexBar indexBar-box pointer-events-auto mr-2.5 w-10 border border-gray-100 rounded-xl bg-white/90 shadow-md backdrop-blur-sm"
           @touchstart="tStart"
           @touchend="tEnd"
           @touchmove.stop="tMove"
@@ -231,6 +244,58 @@ const {
   员工通讯录页面样式 - Vue3 + TypeScript 版
   从 Vue2 ColorUI 架构迁移到 UnoCSS + wot-design-uni
 */
+
+/**
+ * 页面根：fixed 钉在导航栏下沿与自定义 tabBar 上沿之间，高度不依赖父级 flex/100% 是否传下去。
+ * 列表只在内部 scroll-view 滚，搜索栏始终在固定层顶部，不会因整页滚动消失。
+ */
+.address-page {
+  position: fixed;
+  z-index: 1;
+  box-sizing: border-box;
+  left: 0;
+  right: 0;
+  top: var(--window-top, 0px);
+  bottom: calc(50px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.address-search {
+  flex-shrink: 0;
+}
+
+/** 保证搜索行、输入框有可读高度（避免 H5/小程序上被压成一条细线） */
+.address-search-row {
+  min-height: 88rpx;
+}
+
+.address-search-field {
+  box-sizing: border-box;
+}
+
+.address-search-input {
+  display: block;
+  height: 64rpx;
+  line-height: 64rpx;
+}
+
+.address-body {
+  position: relative;
+  min-height: 0;
+}
+
+/** scroll-view 在 flex 列内占满剩余高度（单滚动源） */
+.address-scroll {
+  flex: 1 1 0%;
+  min-height: 0;
+}
+
+/** 索引条布局由模板 inset-y-0 + flex items-center 约束，不再使用 fixed + 手写 top/height */
 
 // ==================== 交互效果增强 ====================
 
