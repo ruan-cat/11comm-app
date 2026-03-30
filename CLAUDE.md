@@ -925,6 +925,38 @@ import type { XXX } from "wot-design-uni/components/wd-xxx/types";
 - 最佳实践： https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/best-practices
 - 规范文档： https://agentskills.io/home
 
+## 19. Nitro 双运行时与 TypeScript 导入约束
+
+### 19.1. 设计背景
+
+- 当前 Nitro 接入不是单纯“给项目多加一个后端”，而是要同时保住 `mock` 开发链路和 `nitro-standalone` 真实运行时链路。
+- 这项设计的核心目标是：H5 日常开发可以继续走 `vite-plugin-mock-dev-server`，同时微信小程序开发、独立 API 联调和未来独立部署可以走 standalone Nitro。
+- 对应脚本以 `package.json` 中的 `dev:nitro`、`build:nitro:node`、`preview:nitro` 为准；它们不是临时调试命令，而是这套运行模型的一部分。
+
+### 19.2. 当前运行模型
+
+- 当前 `nitro-standalone` 路径下，部分 `server/**/*.ts` 实际会走“原生 Node 直接执行 TypeScript 源文件”的链路，而不是完全交给 bundler 统一接管。
+- 因此仓库需要通过 `NODE_OPTIONS=--experimental-strip-types` 让 Node 22 具备直接执行这批 TypeScript 文件的能力。
+- 这不是理想的长期源码形态，而是为了确保 `mock` 与 standalone Nitro 能同时可用而做出的运行时妥协。
+
+### 19.3. 源码层面的妥协
+
+- 只要代码位于 `server/**`，并且可能被 standalone Nitro 或原生 Node 直接执行，就不要使用 `@/` alias。
+- 同类代码的相对导入不能省略扩展名，必须显式写 `.ts`。
+- 因此，`server/**` 中出现 `.ts` 尾缀导入，不是编码风格偏好，也不是“有人随手乱写”，而是当前执行模型倒逼出来的结果。
+
+### 19.4. 这项妥协带来的技术债务
+
+- 运行时约束泄漏到了源码层，导致 `server/**` 与前端代码的导入风格不一致，代码观感会更丑。
+- TypeScript 配置层容易被迫引入 `allowImportingTsExtensions`、`moduleResolution: "Bundler"` 一类补偿性配置；这些配置只能缓解类型系统摩擦，不能消除根因。
+- 如果维护者不了解这套背景，很容易把 `.ts` 导入误判成普通代码味道问题，然后在没有改运行模型的前提下做错误的批量重写。
+
+### 19.5. 后续演进原则
+
+- 如果未来要彻底移除 `server/**` 中的 `.ts` 尾缀导入，必须先改执行模型，不能先做批量替换。
+- 可接受的方向只有两类：一类是改用 `tsx`、bundler 或其他运行器承接 TypeScript 执行；另一类是改为更标准的 Node ESM 产物链路，由源码写 `.js` specifier 并输出真实 `.js` 文件。
+- 在执行模型正式切换前，`server/**` 下“相对导入显式带 `.ts`”和“禁止使用 `@/` alias”都视为项目级硬约束。
+
 # Memorix — Automatic Memory Rules
 
 You have access to Memorix memory tools. Follow these rules to maintain persistent context across sessions.
