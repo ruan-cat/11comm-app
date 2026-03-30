@@ -136,6 +136,7 @@
     "js-cookie": "^3.0.5",
     "pinia": "2.0.36",
     "pinia-plugin-persistedstate": "3.2.1",
+    "pinyin-pro": "^3.28.0",
     "vue": "^3.4.21",
     "vue-i18n": "^9.14.4",
     "wot-design-uni": "^1.12.4",
