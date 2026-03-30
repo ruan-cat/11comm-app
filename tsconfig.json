@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
     "composite": true,
+    "target": "ESNext",
     "lib": ["esnext", "dom"],
     "baseUrl": ".",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "paths": {
       "@/*": ["./src/*"],
       "@img/*": ["./src/static/*"]
@@ -19,11 +20,13 @@
       "z-paging/types",
       "./src/typings.d.ts"
     ],
+    "allowImportingTsExtensions": true,
     "allowJs": true,
     "noImplicitThis": true,
     "outDir": "dist",
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "skipLibCheck": true
   },
   "vueCompilerOptions": {
@@ -31,13 +34,16 @@
   },
   "include": [
     "package.json",
+    "*.ts",
     "src/**/*.ts",
     "src/**/*.js",
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.jsx",
     "src/**/*.vue",
-    "src/**/*.json"
+    "src/**/*.json",
+    "server/**/*.ts",
+    "server/**/*.d.ts"
   ],
   "exclude": ["node_modules"]
 }
