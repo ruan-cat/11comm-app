@@ -122,12 +122,22 @@ Error {
 1. 不需要你运行本地。本地 nitro + h5 场景已经由我亲自启动，不需要你启动，除非失败。你就 `D:\code\github-desktop-store\001-Smart-Community__nwt-q\package.json` 的 `dev:h5:nitro` 命令来启动。
 2. 主动使用谷歌浏览器 MCP 来本地联调。
 
-## 003 <!-- TODO: --> 全面推进 openspec add-nitro-api-runtime 任务
+## 003 <!-- 已完成 --> 全面推进 openspec add-nitro-api-runtime 任务
 
 经过试点验证，可以得知项目目前完成了真实有效的 nitro 接口接入，在报修模块上，这些接口都是真实有效的。效果很好。我需要你继续拓展推进下去，全面完成 nitro 接口的开发。确保全部的 mock 接口，都能够有对应的真实 nitro 接口。
 
 1. 阅读 `docs\plan\2026-03-28-add-nitro-api-runtime.md` 计划。
 2. 阅读 `openspec\changes\add-nitro-api-runtime` 目录下面的全部内容。
 3. 参考现在已经成功实现改造的接口，继续推广下去，全面实现改造。
+
+---
+
+### 对 openspec 使用效果的自主反思： 在高级模型的效果面前，反而成为心智负担累赘
+
+实际情况是，这个 `add-nitro-api-runtime` 任务在 codex 内效果很不好，还不如直接执行，落地 `docs\plan\2026-03-28-add-nitro-api-runtime.md` 计划。superpower + codex 模型本身足够好了。这大幅度消极了 openspec 重上下文工作流的优势，以后需要重新评估 openspec 的实用性了。openspec 多次表现出工件不齐全导致误导的情况了。
+
+不是提效工具，反而是累赘了。
+
+---
 
 ## 099 <!-- TODO: --> 全面改造落后的 skills 文档，记录清楚如何编写 nitro 接口和本地 mock 接口

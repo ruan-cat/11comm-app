@@ -1,4 +1,4 @@
-<!-- TODO: 长任务，未完成 -->
+<!-- 已完成 -->
 
 # 2026-03-28 Nitro 双运行时改造实施计划
 
@@ -167,13 +167,24 @@
 - 在 `package.json`、`vite.config.ts`、`nitro.config.ts` 中完成了双运行时脚本矩阵、Nitro 配置和 Vite 动态插件装载逻辑。
 - 在 `src/http/runtime-base.ts` 中完成了运行时基址收口，并已接入 `src/http/alova.ts`、`src/http/interceptor.ts`、`src/utils/index.ts`、`src/utils/uploadFile.ts`、`src/hooks/useUpload.ts`、`src/pages/me/me.vue`。
 - 在 `server/handlers/legacy-dispatch.ts`、`server/shared/runtime/endpoint-registry.ts`、`server/shared/runtime/nitro-request-context.ts`、`server/shared/runtime/memory-repository.ts`、`server/shared/runtime/mock-definition-adapter.ts`、`server/shared/runtime/pilot-endpoints.ts` 中补齐了共享 dispatcher、Nitro request context 转换、mock/neon 预留仓储边界与试点端点注册。
+- 在 `server/shared/runtime/legacy-endpoints.ts` 中补齐了“全量 legacy mock -> Nitro” 聚合层，当前 `src/api/mock/*.mock.ts` 已可整体接入 Nitro dispatcher，不再只局限于 `repair` / `work-order` 两个试点文件。
+- 在 `server/shared/runtime/endpoint-registry.ts` 中补齐了 `:param` 动态路径匹配能力，使 `/app/staff/:staffId` 这类旧 mock 路径可以在 Nitro 下被正确命中。
+- 针对 `/app/fee.queryFeeDetail`、`/callComponent/core/list`、`/app/resourceStore.listResourceStores`、`/app/purchase/purchaseApply`、`/app/resourceStoreType.listResourceStoreTypes` 这 5 组重复 legacy URL，已在 Nitro 聚合层中补齐兼容策略，避免全量注册后因导入顺序导致响应漂移。
+- 在 `server/shared/runtime/common-utils.ts`、`server/shared/runtime/response-builder.ts` 与 `src/api/mock/shared/utils.ts` 中完成了“共享通用工具 / 共享业务响应 / Vite 专属 mock 包装”的重新分层，避免 `server` 继续反向依赖 `src/api/mock/shared/utils.ts`。
+- 在 `server/modules/repair/repository.ts`、`server/modules/repair/endpoints.ts`、`server/modules/work-order/repository.ts`、`server/modules/work-order/endpoints.ts` 中完成了两组试点模块的独立仓储与共享 endpoint 定义，并让 `src/api/mock/repair.mock.ts`、`src/api/mock/work-order.mock.ts` 都收敛为薄包装层。
+- 在 `server/shared/runtime/runtime-endpoints.ts` 与 `server/handlers/legacy-dispatch.ts` 中把 Nitro dispatcher 调整为“显式共享模块优先 + legacy adapter 兜底”的组合注册方式，避免继续把模块迁移做成全量聚合文件的自我扩张。
 - 在 `scripts/dev-h5-nitro.mjs` 和 `scripts/dev-mp-weixin-nitro.mjs` 中完成了串行启动控制，并补上了“3101 已有健康 Nitro 时直接复用”的逻辑。
 - 在 `patches/vite-plugin-mock-dev-server@2.1.1.patch` 中加入了 pnpm 级补丁，修复安装 Nitro 后 `vite-plugin-mock-dev-server` 因优先走 `rolldown` 而导致的 H5 mock 模式异常。
 - 在 `src/tests/nitro-runtime/` 下补齐了运行时基址、endpoint registry、pilot endpoints、Nitro request context、memory repository 五组测试。
 
 ### 9.3. 已完成的验证记录
 
-- `pnpm exec vitest run src/tests/nitro-runtime` 已通过，当前为 5 个测试文件、15 个测试全部通过。
+- 首轮 `pnpm exec vitest run src/tests/nitro-runtime` 已通过，当时为 5 个测试文件、15 个测试全部通过。
+- `pnpm exec vitest run src/tests/nitro-runtime/legacy-endpoints.test.ts` 已通过，覆盖了全量 legacy mock 注册、动态路径参数与重复 URL 兼容行为。
+- `pnpm exec vitest run src/tests/nitro-runtime` 已重新复测通过，当前为 6 个测试文件、24 个测试全部通过。
+- `pnpm exec vitest run src/tests/nitro-runtime/repair-endpoints.test.ts` 已通过，覆盖了 `repair` 模块拆分后的共享 registry 注册、响应结构与状态流转。
+- `pnpm exec vitest run src/tests/nitro-runtime/work-order-endpoints.test.ts` 已通过，覆盖了 `work-order` 模块拆分后的共享 registry 注册、响应结构与状态流转。
+- `pnpm exec vitest run src/tests/nitro-runtime` 已再次复测通过，当前为 8 个测试文件、30 个测试全部通过。
 - `pnpm run dev:h5:mock` 已烟测通过，H5 mock 模式可正常启动，且不再出现 `vite-plugin-mock-dev-server` 的 `rolldown` alias 转换错误。
 - `pnpm run dev:nitro` 已烟测通过，`http://127.0.0.1:3101/__nitro/health` 可访问，`/app/workorder/detail` 试点接口可返回正常结果。
 - `pnpm run build:nitro` 已通过，Node standalone 产物可正常构建。
@@ -189,7 +200,8 @@
 
 ### 9.5. 后续继续推进时的注意事项
 
-- 后续继续迁移 `repair`、`work-order` 时，应优先把“adapter 复用旧 mock 定义”逐步替换为“共享核心直接驱动端点实现”，而不是继续扩大 legacy 适配层。
+- `repair` 与 `work-order` 已完成“共享仓储 + 共享 endpoint + mock 薄包装”的拆分，后续第二波业务模块应直接复用这一模式推进，而不是继续扩大 `legacy-endpoints.ts` 的业务覆盖面。
+- `runtime-endpoints.ts` 当前已经形成“显式共享模块优先 + legacy adapter 兜底”的过渡结构；新增模块时，应优先把共享端点接到这一层，再视重复 URL 情况决定是否暂时继续走 legacy 兼容分支。
 - 在开始第二波业务模块前，应优先处理或隔离 `mp-weixin` 的 `pages/index/index duplication` 基线问题，否则会持续影响小程序链路验收。
 - 如果未来仓库整体升级到 Vite 7 及以上，应第一时间回头验证 `nitro/vite` 真正的全栈模式，并评估是否可以移除当前 `dev:h5:nitro` 的 fallback 逻辑。
 
@@ -210,3 +222,24 @@
   - 针对包含函数或非纯字符串 replacement 的 alias 配置，避免进入当前会失败的 `rolldown` 路径。
   - 在 Vite 6 / uni-app 这类已知兼容组合下，显式回退到 `esbuild`，而不是让用户自己用 patch 止血。
 - 在上游问题修复并发布后，应优先移除本仓库的本地 patch，重新验证 `pnpm run dev:h5:mock`、`pnpm run dev:h5:nitro` 和 `pnpm run dev:nitro` 三条链路，确认本项目可以回归到“零本地补丁”的依赖状态。
+
+### 9.7. 2026-03-30 追加迁移进展
+
+- 第二波模块已经全部完成共享化拆分：`property-application`、`inspection`、`maintenance`、`renovation` 都已迁移到 `server/modules/**`，对应 `src/api/mock/*.mock.ts` 已收敛为薄包装层。
+- 第三波核心模块也已完成共享化拆分：`meter`、`fee`、`parking`、`oa-workflow`、`resource` 已完成共享仓储与共享 endpoint 落盘。
+- 同日追加完成轻量业务模块的共享化接线：`activity`、`appointment`、`complaint`、`contact`、`coupon`、`floor`、`item-release`、`notice`、`owner`、`profile`、`purchase`、`room`、`staff`、`test`、`unit`、`video`、`visit` 已全部接入 `runtime-endpoints.ts` 的显式共享模块优先层。
+- 当前 `runtime-endpoints.ts` 已形成“显式共享模块优先 + legacy compatibility 兜底”的稳定结构：
+  - 可直接进入 Nitro 优先层的模块：`activity`、`appointment`、`complaint`、`contact`、`coupon`、`floor`、`inspection`、`item-release`、`maintenance`、`meter`、`notice`、`oa-workflow`、`owner`、`parking`、`profile`、`property-application`（非冲突子集）、`purchase`（仅非冲突子集）、`renovation`、`repair`、`resource`（非冲突子集）、`room`、`staff`、`test`、`unit`、`video`、`visit`、`work-order`
+  - 仍通过 legacy compatibility 合并处理的冲突 URL：`/app/fee.queryFeeDetail`、`/callComponent/core/list`、`/app/resourceStore.listResourceStores`、`/app/purchase/purchaseApply`、`/app/resourceStoreType.listResourceStoreTypes`
+  - `purchase` 只把 `purchaseRuntimeEndpointDefinitions` 暴露给 Nitro 优先层，继续把 `/app/resourceStore.listResourceStores` 与 `/app/purchase/purchaseApply` 留在 legacy compatibility 合并层，避免重新引入冲突 URL 的优先级漂移
+  - `fee` 模块虽然已经共享化，但其唯一 URL `/app/fee.queryFeeDetail` 继续交由 legacy compatibility 合并层承接，避免破坏 `property-application` 的合并响应语义
+- 本轮新增的 Nitro 回归测试包括：
+  - `property-application-endpoints.test.ts`
+  - `renovation-endpoints.test.ts`
+  - `meter-endpoints.test.ts`
+  - `fee-endpoints.test.ts`
+  - `parking-endpoints.test.ts`
+  - `oa-workflow-endpoints.test.ts`
+  - `resource-endpoints.test.ts`
+- 截至本轮回填，`pnpm exec vitest run src/tests/nitro-runtime` 已复测通过，当前为 `34` 个测试文件、`99` 个测试全部通过。
+- 当前 legacy adapter 的职责已进一步收敛为“冲突 URL 兼容合并 + 尚未显式共享化模块兜底”；本轮新接入的轻量模块不再依赖 legacy-first 行为。
