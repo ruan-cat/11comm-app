@@ -1,3 +1,12 @@
+# yaml-language-server: $schema=
+overrides:
+  '@vitejs/plugin-vue-jsx': 5.1.5
+  axios: 1.14.0
+  vue-router: 4.5.1
+
+patchedDependencies:
+  vite-plugin-mock-dev-server@2.1.1: patches/vite-plugin-mock-dev-server@2.1.1.patch
+  wot-design-uni@1.14.0: patches/wot-design-uni@1.14.0.patch
 onlyBuiltDependencies:
   - '@uni-helper/unocss-preset-uni'
   - core-js
