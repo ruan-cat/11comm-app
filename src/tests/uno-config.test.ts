@@ -12,8 +12,10 @@ describe('uno config dynamic color support', () => {
   })
 
   test('defines colorui cyan theme token', () => {
-    const colors = config.theme?.colors as Record<string, string>
-
-    expect(colors['colorui-cyan']).toBeTruthy()
+    const theme = config.theme as { colors?: Record<string, unknown> } | undefined
+    const colors = theme?.colors
+    expect(colors).toBeDefined()
+    expect(colors && 'colorui-cyan' in colors).toBe(true)
+    expect(String(colors!['colorui-cyan'])).toBeTruthy()
   })
 })
