@@ -144,7 +144,7 @@ onShow(() => {
               <wd-button size="small" plain @click="openEditOwner(item)">
                 修改
               </wd-button>
-              <wd-button size="small" type="danger" plain @click="handleDelete(item)">
+              <wd-button size="small" type="error" plain @click="handleDelete(item)">
                 删除
               </wd-button>
             </view>

@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   二维码水表页
   功能：基于房屋/费用项快速录入抄表数据，适用于扫码后补录
 
@@ -47,6 +47,8 @@ const formRules: FormRules = {
   curDegrees: [
     { required: true, message: '请填写本期度数' },
     {
+      required: false,
+      message: '',
       validator: (value) => {
         const parsed = Number(value)
         if (!Number.isFinite(parsed) || parsed < 0)

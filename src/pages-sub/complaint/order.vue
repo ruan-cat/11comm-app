@@ -84,7 +84,7 @@ const formRules: FormRules = {
   complaintName: [{ required: true, message: '请填写投诉人' }],
   tel: [
     { required: true, message: '请填写手机号' },
-    { required: false, pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确' },
+    { required: false as boolean, pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确' },
   ],
   context: [{ required: true, message: '请填写投诉内容' }],
 }

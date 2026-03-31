@@ -54,6 +54,8 @@ const rules: FormRules = {
   integral: [
     { required: true, message: '请输入核销积分' },
     {
+      required: false,
+      message: '',
       validator: (value) => {
         const integral = Number(value)
         if (!Number.isFinite(integral) || integral <= 0)

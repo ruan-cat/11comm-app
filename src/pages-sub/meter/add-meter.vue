@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   新增水表页
   功能：录入房屋抄表信息，支持费用类型、收费项目、抄表类型和房屋选择
 
@@ -70,6 +70,8 @@ const formRules: FormRules = {
   curDegrees: [
     { required: true, message: '请填写本期度数' },
     {
+      required: false,
+      message: '',
       validator: (value) => {
         const parsed = Number(value)
         if (!Number.isFinite(parsed) || parsed < 0)

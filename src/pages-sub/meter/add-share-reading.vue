@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   新增共享抄表页
   功能：对指定公摊表录入本期抄表数据
 
@@ -45,6 +45,8 @@ const formRules: FormRules = {
   curDegrees: [
     { required: true, message: '请填写本期度数' },
     {
+      required: false,
+      message: '',
       validator: (value) => {
         const parsed = Number(value)
         if (!Number.isFinite(parsed) || parsed < 0)

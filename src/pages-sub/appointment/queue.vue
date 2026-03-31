@@ -7,7 +7,7 @@
   旧代码：gitee-example/pages/appointment/hou_one.vue
 -->
 <script setup lang="ts">
-import { ref } from 'vue'
+import { getCurrentInstance, ref } from 'vue'
 
 definePage({
   style: {
@@ -26,8 +26,11 @@ function confirmBack() {
     return
   }
 
-  const eventChannel = getOpenerEventChannel()
-  eventChannel.emit('selectedCode', code.value.trim())
+  const instance = getCurrentInstance()
+  const channel = instance?.proxy?.getOpenerEventChannel?.()
+  if (channel) {
+    channel.emit('selectedCode', code.value.trim())
+  }
   uni.navigateBack({ delta: 1 })
 }
 
