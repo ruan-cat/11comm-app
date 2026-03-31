@@ -71,7 +71,7 @@ const defaultPilotWorkOrders: PilotWorkOrderRecord[] = [
  * 目的是让开发链路在没有额外数据库配置时始终可启动。
  */
 export function resolveRuntimeDataSource(
-  env: { NITRO_DATA_SOURCE?: string } = process.env,
+  env: NodeJS.ProcessEnv = process.env,
 ): RuntimeDataSource {
   return env.NITRO_DATA_SOURCE === 'neon' ? 'neon' : 'mock'
 }

@@ -160,7 +160,7 @@ export function createRepairMockRepository(): RepairModuleRepository {
     { repairType: '1007', repairTypeName: '其他维修', payFeeFlag: 'T', priceScope: '30-500元', publicArea: 'F' },
   ]
   const repairStates: RepairStateDictionaryItem[] = REPAIR_STATUSES.map(item => ({
-    statusCd: item.value,
+    statusCd: String(item.value),
     name: item.label,
   }))
   const payTypes: RepairStateDictionaryItem[] = REPAIR_PAY_TYPE_OPTIONS.map(item => ({
@@ -617,7 +617,7 @@ function createMockRepair(id: string): RepairOrder {
     address,
     repairObjName: address,
     appointmentTime,
-    statusCd: statusItem.value,
+    statusCd: String(statusItem.value),
     statusName: statusItem.label,
     priority,
     createTime: formatDateTime(dayjs(now).subtract(randomDays, 'day')),
