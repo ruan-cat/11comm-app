@@ -4,6 +4,7 @@ import type {
   ComplaintAppraiseListResponse,
   ComplaintEvent,
   ComplaintEventListResponse,
+  ComplaintHistoryListResponse,
   ComplaintListResponse,
   ComplaintPhoto,
 } from '../../../src/types/complaint.ts'
@@ -14,7 +15,7 @@ export interface ComplaintModuleRepository {
   auditComplaint: (data: { complaintId: string, context?: string, remark?: string, state?: string }) => boolean
   getComplaintById: (complaintId: string) => Complaint | undefined
   listAuditComplaints: (params: { page: number, row: number, process?: string }) => ComplaintListResponse
-  listAuditHistoryComplaints: (params: { page: number, row: number, process?: string }) => ComplaintListResponse & { complaints: Complaint[] }
+  listAuditHistoryComplaints: (params: { page: number, row: number, process?: string }) => ComplaintHistoryListResponse
   listComplaintAppraise: (complaintId: string, page: number, row: number) => ComplaintAppraiseListResponse
   listComplaintEvent: (complaintId: string, page: number, row: number) => ComplaintEventListResponse
   replyComplaintAppraise: (appraiseId: string, replyContext: string) => boolean

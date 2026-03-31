@@ -319,6 +319,17 @@ export interface ComplaintListResponse {
 }
 
 /**
+ * 用户侧投诉历史列表响应
+ * @description 与 `listAuditHistoryComplaints` 等业务路径返回的 `complaints` 字段对齐
+ */
+export interface ComplaintHistoryListResponse {
+  /** 投诉列表 */
+  complaints: Complaint[]
+  /** 总记录数 */
+  total?: number
+}
+
+/**
  * 投诉事件列表响应
  * @description 投诉工单流转记录的 API 响应
  */

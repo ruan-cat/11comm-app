@@ -7,7 +7,7 @@ export interface RepairListSearchBarProps {
   /** 搜索关键词（v-model） */
   modelValue: string
   /** 选中的状态值（v-model:selectedState） */
-  selectedState: string
+  selectedState?: string
   /** 是否使用状态筛选功能 */
   isUseStateOptions?: boolean
   /** 搜索框占位符 */

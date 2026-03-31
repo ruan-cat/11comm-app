@@ -48,7 +48,6 @@ declare global {
       complete?: HideLoadingCompleteCallback
       /** 接口调用失败的回调函数 */
       fail?: HideLoadingFailCallback
-      test: UniNamespace.GeneralCallbackResult
       /**
        * 微信小程序：需要基础库： `2.22.1`
        *
@@ -140,6 +139,13 @@ declare global {
      */
     // eslint-disable-next-line ts/method-signature-style
     hideToast<T extends UniNamespace.HideLoadingOption = UniNamespace.HideLoadingOption>(options?: T): void
+  }
+}
+
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    /** 微信小程序等：从上一页打开通道，需在页面实例上调用 */
+    getOpenerEventChannel: () => UniApp.EventChannel
   }
 }
 

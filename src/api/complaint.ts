@@ -8,9 +8,9 @@
 import type { PaginationResponse } from '@/types/api'
 import type {
   AuditComplaintParams,
-  Complaint,
   ComplaintAppraise,
   ComplaintEvent,
+  ComplaintHistoryListResponse,
   ComplaintListResponse,
   ComplaintOperationResponse,
   HandleComplaintParams,
@@ -48,7 +48,7 @@ export function getFinishComplaintList(params: QueryComplaintListParams) {
  * @example getUserComplaintHistory({ page: 1, row: 15, userId: 'xxx', communityId: 'xxx', process: 'START' })
  */
 export function getUserComplaintHistory(params: QueryComplaintListParams) {
-  return http.Get<{ complaints: Complaint[] }>('/app/auditUser.listAuditHistoryComplaints', { params })
+  return http.Get<ComplaintHistoryListResponse>('/app/auditUser.listAuditHistoryComplaints', { params })
 }
 
 /**

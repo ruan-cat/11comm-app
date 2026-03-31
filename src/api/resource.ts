@@ -100,6 +100,8 @@ export interface AllocationItem {
   allocationId: string
   /** 资源名称 */
   resourceNames: string
+  /** 备注说明 */
+  description?: string
   /** 状态 */
   state: number
   /** 状态名称 */

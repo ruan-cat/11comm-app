@@ -5,7 +5,7 @@
 import type { PaginationParams } from './api'
 
 /** 部门类型 */
-export type DepartmentType = '物业管理处' | '保安部' | '清洁部' | '维修部' | '客服部' | '财务部'
+export type DepartmentType = '物业管理处' | '保安部' | '清洁部' | '维修部' | '客服部' | '财务部' | '外部联系'
 
 /** 联系人信息 */
 export interface Contact {
