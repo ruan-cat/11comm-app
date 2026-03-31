@@ -61,3 +61,6 @@ local_cache/
 # 优先使用 `.worktrees/`；同时保留 `worktrees/` 作为历史兜底目录并一并忽略。
 .worktrees/
 worktrees/
+
+# 忽略 vite 生成的缓存目录
+.tmp-wot

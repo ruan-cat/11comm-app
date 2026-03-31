@@ -47,8 +47,8 @@ function createMockRuntimeAliasLifecycle() {
   return {
     prepare: {
       name: 'mock-runtime-alias-prepare',
-      apply: 'serve',
-      enforce: 'pre',
+      apply: 'serve' as const,
+      enforce: 'pre' as const,
       configResolved(config) {
         originalAliases = config.resolve.alias
         config.resolve.alias = createMockRuntimeAliasEntries(config.root)
@@ -56,8 +56,8 @@ function createMockRuntimeAliasLifecycle() {
     },
     restore: {
       name: 'mock-runtime-alias-restore',
-      apply: 'serve',
-      enforce: 'post',
+      apply: 'serve' as const,
+      enforce: 'post' as const,
       configResolved(config) {
         if (originalAliases) {
           config.resolve.alias = originalAliases
