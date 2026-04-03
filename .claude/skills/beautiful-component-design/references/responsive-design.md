@@ -25,34 +25,48 @@ rules: [
 
 ## 2. 图片网格布局
 
-### 2.1 三列图片网格
+### 2.1 三列图片布局
 
 ```vue
 <template>
-	<view class="grid grid-cols-3 gap-2">
-		<wd-img
-			v-for="(photo, index) in photos"
-			:key="index"
-			:src="photo.url || photo.photo"
-			:image-urls="getImageUrls(photos)"
-			:current-index="index"
-			mode="aspectFill"
-			class="aspect-square w-full rounded"
-			:enable-preview="true"
-		/>
+	<view class="photo-grid">
+		<view v-for="(photo, index) in photos" :key="index" class="photo-grid__item">
+			<wd-img
+				:src="photo.url || photo.photo"
+				:image-urls="getImageUrls(photos)"
+				:current-index="index"
+				mode="aspectFill"
+				class="aspect-square w-full rounded"
+				:enable-preview="true"
+			/>
+		</view>
 	</view>
 </template>
+
+<style scoped>
+.photo-grid {
+	display: flex;
+	flex-wrap: wrap;
+	margin: -8rpx;
+}
+
+.photo-grid__item {
+	box-sizing: border-box;
+	width: 33.3333%;
+	padding: 8rpx;
+}
+</style>
 ```
 
 ### 2.2 图片样式说明
 
-| 类名               | 说明         |
-| :----------------- | :----------- |
-| `grid grid-cols-3` | 3 列网格布局 |
-| `gap-2`            | 间距 16rpx   |
-| `aspect-square`    | 正方形宽高比 |
-| `w-full`           | 宽度 100%    |
-| `rounded`          | 圆角         |
+| 类名               | 说明                   |
+| :----------------- | :--------------------- |
+| `photo-grid`       | `flex + wrap` 三列布局 |
+| `photo-grid__item` | 子项统一留白 16rpx     |
+| `aspect-square`    | 正方形宽高比           |
+| `w-full`           | 宽度 100%              |
+| `rounded`          | 圆角                   |
 
 ## 3. 页面间距规范
 
@@ -66,13 +80,13 @@ rules: [
 
 ### 间距层级
 
-| 层级 | 类名    | 实际值 | 使用场景       |
-| :--- | :------ | :----- | :------------- |
-| 页面 | `p-3`   | 24rpx  | 页面容器内边距 |
-| 卡片 | `mb-3`  | 24rpx  | 卡片间距       |
-| 区块 | `mb-2`  | 16rpx  | 区块间距       |
-| 元素 | `gap-2` | 16rpx  | 元素间距       |
-| 紧凑 | `gap-1` | 8rpx   | 紧密元素       |
+| 层级 | 类名          | 实际值 | 使用场景       |
+| :--- | :------------ | :----- | :------------- |
+| 页面 | `p-3`         | 24rpx  | 页面容器内边距 |
+| 卡片 | `mb-3`        | 24rpx  | 卡片间距       |
+| 区块 | `mb-2`        | 16rpx  | 区块间距       |
+| 元素 | 显式 `margin` | 16rpx  | 元素间距       |
+| 紧凑 | 显式 `margin` | 8rpx   | 紧密元素       |
 
 ## 4. 圆角规范
 
@@ -116,7 +130,7 @@ rules: [
 ```vue
 <template>
 	<view class="relative">
-		<view v-for="(record, index) in records" :key="index" class="relative mb-4 flex gap-3">
+		<view v-for="(record, index) in records" :key="index" class="relative mb-4 flex">
 			<!-- 时间轴节点 -->
 			<view class="timeline-node">
 				<view class="node-dot" :class="getStatusColor(record.statusCd)" />
@@ -124,7 +138,7 @@ rules: [
 			</view>
 
 			<!-- 时间轴内容 -->
-			<view class="flex-1 pb-2">
+			<view class="timeline-content flex-1 pb-2">
 				<view class="timeline-record-title mb-1 font-medium"> {{ record.startTime }} - {{ record.statusName }} </view>
 			</view>
 		</view>
@@ -157,6 +171,10 @@ rules: [
 		margin-top: 4px;
 		min-height: 40px;
 	}
+}
+
+.timeline-content {
+	margin-left: 12rpx;
 }
 ```
 
@@ -246,15 +264,15 @@ rules: [
 				/>
 				<text>业主报修图片</text>
 			</view>
-			<view class="grid grid-cols-3 gap-2">
-				<wd-img
-					v-for="(photo, index) in repairDetail.repairPhotos"
-					:key="index"
-					:src="photo.url || photo.photo"
-					mode="aspectFill"
-					class="aspect-square w-full rounded"
-					:enable-preview="true"
-				/>
+			<view class="photo-grid">
+				<view v-for="(photo, index) in repairDetail.repairPhotos" :key="index" class="photo-grid__item">
+					<wd-img
+						:src="photo.url || photo.photo"
+						mode="aspectFill"
+						class="aspect-square w-full rounded"
+						:enable-preview="true"
+					/>
+				</view>
 			</view>
 		</view>
 	</view>

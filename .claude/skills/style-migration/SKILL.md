@@ -153,6 +153,20 @@ context: fork
 </style>
 ```
 
+#### ⚠️ 微信小程序页面的额外兼容规则
+
+**以下规则不是“可选优化”，而是当前项目的默认基线：**
+
+|               场景               |                           默认做法                            |              禁止默认做法              |
+| :------------------------------: | :-----------------------------------------------------------: | :------------------------------------: |
+|        宫格、入口卡片布局        |      `display: flex` + `flex-wrap: wrap` + 子项统一宽度       |            `display: grid`             |
+|        组内纵向/横向间距         |       相邻兄弟选择器或子项显式 `margin` / 容器负 margin       |             raw CSS `gap`              |
+|         毛玻璃、模糊背景         |         实色/渐变背景 + `box-shadow` + `border` 降级          |      `backdrop-filter` / `blur()`      |
+|            安全区适配            | `var(--status-bar-height, 0px)` / `var(--window-bottom, 0px)` |        `env(safe-area-inset-*)`        |
+| 宫格换行、等距卡片、横向列表分隔 |               负 margin 容器 + 子项统一 margin                | 复杂 `:nth-child()` / `:not()` / `gap` |
+
+**推荐先阅读**：[references/wechat-mini-program-compatibility.md](references/wechat-mini-program-compatibility.md)
+
 #### 🚫 禁止使用的复杂伪类选择器
 
 ```css
@@ -403,7 +417,7 @@ UnoCSS 原子化样式系统
 └── 原子类                    # 按需生成,最终 80KB
     ├── 布局类                # flex, grid, position
     ├── 颜色类                # text-*, bg-*, border-*
-    ├── 间距类                # m-*, p-*, gap-*
+    ├── 间距类                # m-*、p-*，微信小程序优先显式 margin
     └── 形状类                # rounded-*, shadow-*
 ```
 
@@ -528,23 +542,23 @@ UnoCSS 原子化样式系统
 
 #### 阴影
 
-|  ColorUI 类名   |    UnoCSS 原子类     |
-| :-------------: | :------------------: |
-|   `shadow-sm`   |  `shadow shadow-sm`  |
-| `shadow` (默认) |       `shadow`       |
-|   `shadow-lg`   |  `shadow shadow-lg`  |
-|  `shadow-blur`  | `shadow shadow-blur` |
+|  ColorUI 类名   |           UnoCSS 原子类            |
+| :-------------: | :--------------------------------: |
+|   `shadow-sm`   |         `shadow shadow-sm`         |
+| `shadow` (默认) |              `shadow`              |
+|   `shadow-lg`   |         `shadow shadow-lg`         |
+|  `shadow-blur`  | `shadow` / `border border-black/5` |
 
 ### 2.5. 网格布局映射
 
-|    ColorUI 类名     |        UnoCSS 原子类        |      说明      |
-| :-----------------: | :-------------------------: | :------------: |
-|      `cu-grid`      |     `grid grid-cols-3`      | 3 列网格(默认) |
-|   `cu-grid col-2`   |     `grid grid-cols-2`      |    2 列网格    |
-|   `cu-grid col-3`   |     `grid grid-cols-3`      |    3 列网格    |
-|   `cu-grid col-4`   |     `grid grid-cols-4`      |    4 列网格    |
-|   `cu-grid col-5`   |     `grid grid-cols-5`      |    5 列网格    |
-| `cu-grid no-border` | `grid grid-cols-3 border-0` |   无边框网格   |
+|    ColorUI 类名     |             UnoCSS 原子类              |            说明            |
+| :-----------------: | :------------------------------------: | :------------------------: |
+|      `cu-grid`      |     `flex flex-wrap` + 子项宽度类      | 3 列入口默认改为 flex-wrap |
+|   `cu-grid col-2`   |       `flex flex-wrap` + `w-1/2`       |          2 列网格          |
+|   `cu-grid col-3`   |       `flex flex-wrap` + `w-1/3`       |          3 列网格          |
+|   `cu-grid col-4`   |       `flex flex-wrap` + `w-1/4`       |          4 列网格          |
+|   `cu-grid col-5`   |   `flex flex-wrap` + 自定义 20% 宽度   |          5 列网格          |
+| `cu-grid no-border` | `flex flex-wrap border-0` + 子项宽度类 |         无边框网格         |
 
 ## 3. 渐变色配置
 
@@ -678,11 +692,21 @@ export default defineConfig({
 
 ```vue
 <template>
-	<view class="flex justify-between gap-20rpx p-30rpx">
+	<view class="card-row p-30rpx">
 		<wd-button type="error" size="large" block>取消</wd-button>
-		<wd-button type="success" size="large" block>确认</wd-button>
+		<wd-button type="success" size="large" block custom-class="card-row__action">确认</wd-button>
 	</view>
 </template>
+
+<style scoped>
+.card-row {
+	display: flex;
+}
+
+.card-row__action {
+	margin-left: 20rpx;
+}
+</style>
 ```
 
 ### 示例 3: 列表项迁移
@@ -730,7 +754,7 @@ export default defineConfig({
 ### 布局样式
 
 - [ ] Flex 布局已迁移到 UnoCSS flex 类
-- [ ] Grid 布局已迁移到 UnoCSS grid 类
+- [ ] Grid 布局已优先改写为 `flex + wrap`
 - [ ] 对齐方式已使用 items-_ 和 justify-_ 类
 
 ### 颜色样式
@@ -743,7 +767,7 @@ export default defineConfig({
 
 - [ ] Margin 已迁移到 `m-*rpx` 类
 - [ ] Padding 已迁移到 `p-*rpx` 类
-- [ ] Gap 间距已使用 `gap-*rpx` 类
+- [ ] 微信小程序页面的组内间距已使用显式 `margin` 或负 margin 容器方案
 
 ### 形状样式
 
@@ -773,6 +797,10 @@ export default defineConfig({
 - [ ] 未使用复杂的 `:nth-child()` 选择器（如 `n+2`, `3n+1`）
 - [ ] 未使用 UnoCSS 的 `space-y-*` / `space-x-*` 类
 - [ ] 未使用 UnoCSS 的 `divide-y-*` / `divide-x-*` 类
+- [ ] 未将 `display: grid` 作为微信小程序业务页面的默认布局
+- [ ] 未使用 `backdrop-filter` / `filter: blur()`
+- [ ] 顶部与底部安全区已统一为 `var(--status-bar-height, 0px)` / `var(--window-bottom, 0px)`
+- [ ] raw CSS `gap` 已按需改写为显式 `margin`
 - [ ] 所有间距需求使用 `.item + .item` 相邻兄弟选择器实现
 
 ## 6. 性能优化收益
@@ -914,13 +942,36 @@ button {
 }
 ```
 
-或者使用 Flex 布局的 `gap` 属性（微信小程序基础库 2.19.2+ 支持）：
+**不再默认推荐**使用 Flex 布局的 `gap` 作为微信小程序页面间距方案。即使基础库版本允许，跨宿主节点、跨组件、跨页面时的稳定性也不如显式 `margin`。
 
-```vue
-<view class="flex flex-col gap-2">
-  <view>项目1</view>
-  <view>项目2</view>
-</view>
+### 7. 为什么微信小程序页面不再默认使用 grid、gap、env() 和 blur？
+
+**答**: 这些写法在 H5 往往没问题，但在微信小程序里经常引发样式错乱、失效或表现不稳定：
+
+- `display: grid` 在复杂卡片宫格、快捷入口、分组布局里更容易出现列宽和换行异常
+- raw CSS `gap` 虽然部分基础库可用，但跨页面、跨组件、跨宿主节点时稳定性不如显式 `margin`
+- `env(safe-area-inset-*)` 在 uni-app 小程序页面里不如 `var(--window-bottom, 0px)` / `var(--status-bar-height, 0px)` 一致
+- `backdrop-filter` / `filter: blur()` 在微信端兼容性与性能都不稳定，应直接做视觉降级
+
+**默认改写模板**：
+
+```css
+.card-list {
+	display: flex;
+	flex-wrap: wrap;
+	margin: -8rpx;
+}
+
+.card-list__item {
+	box-sizing: border-box;
+	width: 50%;
+	padding: 8rpx;
+}
+
+.page-shell {
+	padding-top: calc(24rpx + var(--status-bar-height, 0px));
+	padding-bottom: calc(24rpx + var(--window-bottom, 0px));
+}
 ```
 
 通过系统化的样式迁移,实现更小的体积、更好的性能和更佳的开发体验!

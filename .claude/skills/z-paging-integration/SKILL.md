@@ -153,10 +153,10 @@ uni.$zp = {
 
 以下 props **未全局配置**，根据需要在页面中配置：
 
-|          配置项          |            说明            |              示例               |
-| :----------------------: | :------------------------: | :-----------------------------: |
-|         `:fixed`         | 使用固定高度的 scroll-view | `:fixed="false"`（H5 场景推荐） |
-| `safe-area-inset-bottom` |       底部安全区适配       |    `safe-area-inset-bottom`     |
+|          配置项          |            说明            |                                  示例                                  |
+| :----------------------: | :------------------------: | :--------------------------------------------------------------------: |
+|         `:fixed`         | 使用固定高度的 scroll-view |                    `:fixed="false"`（H5 场景推荐）                     |
+| `safe-area-inset-bottom` |    组件级底部安全区适配    | 页面级优先使用 `var(--window-bottom, 0px)`，仅在组件级确有需要时再启用 |
 
 ## 3. 核心约束
 
@@ -541,7 +541,7 @@ onMounted(() => {
 1. **ref + reload 首屏加载**：定义 `pagingRef = ref()`，在 `onMounted(() => pagingRef.value?.reload())` 触发首屏请求。**（注：虽然 z-paging 默认 auto 加载，但本项目统一要求显式调用，参见上方说明）**
 2. **useRequest 回调收口**：`immediate: false`，`onSuccess` 里调用 `pagingRef.value?.complete(list, total)`，`onError` 调用 `complete(false)`；不在 `@query` 中写 `await/try/catch`。
 3. **@query 只发请求**：`handleQuery(pageNo, pageSize)` 仅调用 `send({ page: pageNo, row: pageSize, ...filters })`，不触发 `reload/refresh`。
-4. **全局 props 自动生效**：`default-page-size`、`refresher-enabled`、`loading-more-enabled`、`show-scrollbar` 等常用 props 已全局配置（参见第 2 节），无需重复配置；仅在特殊场景下显式覆盖。根据需要补充 `:fixed`、`safe-area-inset-bottom` 等其他配置。
+4. **全局 props 自动生效**：`default-page-size`、`refresher-enabled`、`loading-more-enabled`、`show-scrollbar` 等常用 props 已全局配置（参见第 2 节），无需重复配置；仅在特殊场景下显式覆盖。页面底部安全区优先在页面根容器用 `var(--window-bottom, 0px)` 处理，组件级确有需要时再补充 `:fixed`、`safe-area-inset-bottom` 等其他配置。
 5. **插槽补全**：提供 `#empty`、`#loading`，避免白屏无反馈。
 
 ### 13.2 快速模板

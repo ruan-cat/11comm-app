@@ -650,9 +650,9 @@ loading.hide();
 			<!-- 输入框没有边界感，留白过大 -->
 			<wd-textarea v-model="stopReason" placeholder="请填写暂停原因" :maxlength="200" show-word-limit :rows="4" />
 			<!-- 按钮主次不分明 -->
-			<view class="mt-4 flex gap-3">
+			<view class="mt-4 flex">
 				<wd-button block @click="showStopModal = false">取消</wd-button>
-				<wd-button block type="primary" @click="handleConfirm">确定</wd-button>
+				<wd-button block type="primary" custom-class="ml-12rpx" @click="handleConfirm">确定</wd-button>
 			</view>
 		</view>
 	</wd-popup>

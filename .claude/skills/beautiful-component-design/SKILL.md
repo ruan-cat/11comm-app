@@ -112,17 +112,31 @@ color: pink
 
 ```vue
 <template>
-	<view class="grid grid-cols-3 gap-2">
-		<wd-img
-			v-for="(photo, index) in photos"
-			:key="index"
-			:src="photo.url || photo.photo"
-			mode="aspectFill"
-			class="aspect-square w-full rounded"
-			:enable-preview="true"
-		/>
+	<view class="photo-grid">
+		<view v-for="(photo, index) in photos" :key="index" class="photo-grid__item">
+			<wd-img
+				:src="photo.url || photo.photo"
+				mode="aspectFill"
+				class="aspect-square w-full rounded"
+				:enable-preview="true"
+			/>
+		</view>
 	</view>
 </template>
+
+<style scoped>
+.photo-grid {
+	display: flex;
+	flex-wrap: wrap;
+	margin: -8rpx;
+}
+
+.photo-grid__item {
+	box-sizing: border-box;
+	width: 33.3333%;
+	padding: 8rpx;
+}
+</style>
 ```
 
 响应式规范详见 [references/responsive-design.md](references/responsive-design.md)
@@ -154,7 +168,10 @@ color: pink
 .container {
 	display: flex;
 	align-items: center;
-	gap: 8rpx;
+}
+
+.container__text {
+	margin-left: 8rpx;
 }
 ```
 
@@ -308,9 +325,9 @@ color: pink
 			<!-- 问题2: 布局留白过大，视觉重心不稳 -->
 			<wd-textarea v-model="stopReason" placeholder="请填写暂停原因" :maxlength="200" show-word-limit :rows="4" />
 			<!-- 问题3: 按钮主次不分明，取消按钮颜色过于突出 -->
-			<view class="mt-4 flex gap-3">
+			<view class="mt-4 flex">
 				<wd-button block @click="showStopModal = false">取消</wd-button>
-				<wd-button block type="primary" @click="handleConfirm">确定</wd-button>
+				<wd-button block type="primary" custom-class="ml-12rpx" @click="handleConfirm">确定</wd-button>
 			</view>
 		</view>
 	</wd-popup>
@@ -529,10 +546,14 @@ import RepairStatusTag from "@/components/common/repair-status-tag/index.vue";
 					{{ repairDetail.context }}
 				</view>
 				<!-- 基础信息列表 -->
-				<view class="flex flex-col gap-3 border-t border-gray-100 pt-4">
+				<view class="border-t border-gray-100 pt-4">
 					<view class="flex items-center justify-between">
 						<text class="text-sm text-gray-500">报修人</text>
 						<text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairName }}</text>
+					</view>
+					<view class="mt-12rpx flex items-center justify-between">
+						<text class="text-sm text-gray-500">联系电话</text>
+						<text class="text-sm text-gray-800 font-medium">{{ repairDetail.tel }}</text>
 					</view>
 				</view>
 			</view>
@@ -542,15 +563,15 @@ import RepairStatusTag from "@/components/common/repair-status-tag/index.vue";
 		<view v-if="hasImages" class="mb-3 overflow-hidden rounded-sm bg-white shadow-sm">
 			<FormSectionTitle title="工单附件" icon="image" icon-class="i-carbon-image text-orange-500" :animated="false" />
 			<view class="p-4">
-				<view class="grid grid-cols-3 gap-2">
-					<wd-img
-						v-for="(photo, index) in photos"
-						:key="index"
-						:src="photo.url"
-						mode="aspectFill"
-						class="aspect-square w-full rounded-sm bg-gray-100"
-						:enable-preview="true"
-					/>
+				<view class="photo-grid">
+					<view v-for="(photo, index) in photos" :key="index" class="photo-grid__item">
+						<wd-img
+							:src="photo.url"
+							mode="aspectFill"
+							class="aspect-square w-full rounded-sm bg-gray-100"
+							:enable-preview="true"
+						/>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -577,7 +598,19 @@ import RepairStatusTag from "@/components/common/repair-status-tag/index.vue";
 }
 
 .pb-safe {
-	padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+	padding-bottom: calc(24rpx + var(--window-bottom, 0px));
+}
+
+.photo-grid {
+	display: flex;
+	flex-wrap: wrap;
+	margin: -8rpx;
+}
+
+.photo-grid__item {
+	box-sizing: border-box;
+	width: 33.3333%;
+	padding: 8rpx;
 }
 </style>
 ```

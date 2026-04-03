@@ -43,6 +43,11 @@
 - [ ] **涉及从 ColorUI 样式迁移到 UnoCSS 吗？**
   - ✅ 是 → **必须使用** `.claude/skills/style-migration/SKILL.md`
 
+- [ ] **页面是否需要运行在微信小程序，或者已经出现“H5 正常、小程序样式错乱/丢失”问题？**
+  - ✅ 是 → **必须使用** `.claude/skills/style-migration/SKILL.md`
+  - ✅ 是 → **必须补读** `.claude/skills/style-migration/references/wechat-mini-program-compatibility.md`
+  - ✅ 是 → 样式方案默认按 `flex + wrap`、显式 `margin`、`var(--window-bottom)` / `var(--status-bar-height)` 收敛
+
 - [ ] **需要美化组件吗？**（添加图标、调整样式、响应式设计）
   - ✅ 是 → **必须使用** `.claude/skills/beautiful-component-design/SKILL.md`
 
