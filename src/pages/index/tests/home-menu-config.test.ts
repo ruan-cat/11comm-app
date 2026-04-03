@@ -44,7 +44,7 @@ describe('home menu config', () => {
     ]))
   })
 
-  test('homepage uses explicit iconify icons for rendered entries', () => {
+  test('homepage keeps explicit carbon icon metadata and uses static image fallbacks for broken mp-weixin icons', () => {
     const menus = [
       ...homeFeaturedEntries,
       ...homeSections.flatMap(section => section.entries),
@@ -55,18 +55,31 @@ describe('home menu config', () => {
     })
 
     const iconMap = Object.fromEntries(menus.map(menu => [menu.id, menu.icon]))
+    const iconImageMap = Object.fromEntries(
+      menus
+        .filter(menu => menu.iconImage)
+        .map(menu => [menu.id, menu.iconImage]),
+    )
 
     expect(iconMap).toMatchObject({
       'complaint-todo': 'i-carbon-warning',
       'repair-dispatch': 'i-carbon-tools',
+      'inspection-task': 'i-carbon-location',
       'purchase-audit': 'i-carbon-shopping-cart',
       'item-out-audit': 'i-carbon-delivery',
       'allocation-audit': 'i-carbon-arrows-horizontal',
       'release': 'i-carbon-box',
-      'repair-finish': 'i-carbon-checkmark-outline',
+      'repair-finish': 'i-carbon-task-complete',
       'work-start': 'i-carbon-edit',
-      'work-do': 'i-carbon-document',
+      'work-do': 'i-carbon-task',
       'work-copy': 'i-carbon-copy',
+    })
+
+    expect(iconImageMap).toEqual({
+      'complaint-todo': '/static/image/index_complaint.png',
+      'inspection-task': '/static/image/index_inspection.png',
+      'repair-finish': '/static/image/index_repair.png',
+      'work-do': '/static/image/index_dealRepair.png',
     })
   })
 
