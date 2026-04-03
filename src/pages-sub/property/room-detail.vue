@@ -148,10 +148,10 @@ onLoad((options) => {
       <wd-button plain size="small" @click="openFloorList">
         选择楼栋
       </wd-button>
-      <wd-button plain size="small" @click="openUnitList">
+      <wd-button plain size="small" custom-class="ml-12rpx" @click="openUnitList">
         选择单元
       </wd-button>
-      <wd-button plain size="small" @click="openRoomList">
+      <wd-button plain size="small" custom-class="ml-12rpx" @click="openRoomList">
         选择房屋
       </wd-button>
     </view>
@@ -189,7 +189,6 @@ onLoad((options) => {
 .action-link-row {
   margin-top: 16rpx;
   display: flex;
-  gap: 12rpx;
 }
 
 .detail-card {

@@ -107,7 +107,7 @@ function handleTransfer(task: MaintenanceTask) {
       >
         <!-- 任务头部 -->
         <view class="mb-3 flex items-center justify-between">
-          <view class="flex items-center gap-2">
+          <view class="title-row flex items-center">
             <wd-icon name="" custom-class="i-carbon-settings text-colorui-blue text-20px" />
             <text class="font-medium">{{ item.taskName }}</text>
           </view>
@@ -118,22 +118,22 @@ function handleTransfer(task: MaintenanceTask) {
 
         <!-- 任务信息 -->
         <view class="mb-3 text-sm text-gray-600">
-          <view class="task-info-item flex items-center gap-2">
+          <view class="task-info-item flex items-center">
             <wd-icon name="" custom-class="i-carbon-machine-learning text-gray-400 text-16px" />
             <text>设备：{{ item.machineName }}</text>
           </view>
-          <view class="task-info-item flex items-center gap-2">
+          <view class="task-info-item flex items-center">
             <wd-icon name="" custom-class="i-carbon-time text-gray-400 text-16px" />
             <text>计划时间：{{ item.planTime }}</text>
           </view>
-          <view v-if="item.staffName" class="task-info-item flex items-center gap-2">
+          <view v-if="item.staffName" class="task-info-item flex items-center">
             <wd-icon name="" custom-class="i-carbon-user text-gray-400 text-16px" />
             <text>执行人：{{ item.staffName }}</text>
           </view>
         </view>
 
         <!-- 操作按钮 -->
-        <view class="flex gap-2">
+        <view class="action-row flex">
           <wd-button
             v-if="item.status === '10001' || item.status === '10002'"
             type="primary"
@@ -147,6 +147,7 @@ function handleTransfer(task: MaintenanceTask) {
             type="info"
             size="small"
             plain
+            custom-class="ml-8rpx"
             @click="handleTransfer(item)"
           >
             任务流转
@@ -156,6 +157,7 @@ function handleTransfer(task: MaintenanceTask) {
             type="success"
             size="small"
             plain
+            custom-class="ml-8rpx"
             @click="handleExecute(item)"
           >
             查看详情
@@ -175,5 +177,10 @@ function handleTransfer(task: MaintenanceTask) {
 /* 任务信息行间距 - 使用兼容微信小程序的写法 */
 .task-info-item + .task-info-item {
   margin-top: 8rpx;
+}
+
+.title-row > text,
+.task-info-item > text {
+  margin-left: 8rpx;
 }
 </style>

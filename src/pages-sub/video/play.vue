@@ -71,7 +71,7 @@ onLoad((options) => {
   <view class="page">
     <view v-if="loading" class="loading-wrap">
       <wd-loading type="ring" size="28px" />
-      <text>视频地址加载中...</text>
+      <text class="loading-text">视频地址加载中...</text>
     </view>
 
     <web-view v-else-if="playUrl" :src="playUrl" />
@@ -91,7 +91,10 @@ onLoad((options) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12rpx;
   color: #6b7280;
+}
+
+.loading-text {
+  margin-left: 12rpx;
 }
 </style>

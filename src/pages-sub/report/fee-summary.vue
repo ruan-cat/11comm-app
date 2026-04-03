@@ -201,9 +201,9 @@ onLoad(() => {
   <view class="fee-summary-page">
     <!-- 搜索栏 -->
     <view class="search-bar bg-white p-3">
-      <view class="grid grid-cols-2 gap-2">
+      <view class="form-grid">
         <!-- 费用类型 -->
-        <view class="search-item">
+        <view class="form-grid__item search-item">
           <wd-picker
             v-model="searchForm.feeTypeCd"
             :columns="feeTypeCds"
@@ -213,7 +213,7 @@ onLoad(() => {
         </view>
 
         <!-- 楼栋 -->
-        <view class="search-item">
+        <view class="form-grid__item search-item">
           <wd-picker
             v-model="searchForm.floorId"
             :columns="floors"
@@ -223,7 +223,7 @@ onLoad(() => {
         </view>
 
         <!-- 开始日期 -->
-        <view class="search-item">
+        <view class="form-grid__item search-item">
           <wd-datetime-picker
             v-model="searchForm.startDate"
             type="date"
@@ -233,7 +233,7 @@ onLoad(() => {
         </view>
 
         <!-- 结束日期 -->
-        <view class="search-item">
+        <view class="form-grid__item search-item">
           <wd-datetime-picker
             v-model="searchForm.endDate"
             type="date"
@@ -259,32 +259,32 @@ onLoad(() => {
           <text class="text-gray-500">{{ feeSummary.feeRoomCount }}/{{ feeSummary.oweRoomCount }}</text>
         </view>
 
-        <view class="grid grid-cols-2 gap-3 text-sm">
-          <view class="text-gray-500">
+        <view class="summary-grid text-sm">
+          <view class="summary-grid__item text-gray-500">
             <text>欠费:</text>
             <text class="ml-1 text-red-500">¥{{ (feeSummary.curOweFee + feeSummary.hisOweFee).toFixed(2) }}</text>
           </view>
-          <view class="text-gray-500">
+          <view class="summary-grid__item text-gray-500">
             <text>实缴:</text>
             <text class="ml-1 text-green-500">¥{{ feeSummary.receivedFee }}</text>
           </view>
-          <view class="text-gray-500">
+          <view class="summary-grid__item text-gray-500">
             <text>当期应收:</text>
             <text class="ml-1 text-gray-700">¥{{ feeSummary.curReceivableFee }}</text>
           </view>
-          <view class="text-gray-500">
+          <view class="summary-grid__item text-gray-500">
             <text>当期实收:</text>
             <text class="ml-1 text-green-500">¥{{ (feeSummary.curReceivableFee - feeSummary.curOweFee).toFixed(2) }}</text>
           </view>
-          <view class="text-gray-500">
+          <view class="summary-grid__item text-gray-500">
             <text>户收费率:</text>
             <text class="ml-1 text-blue-500">{{ roomRate }}</text>
           </view>
-          <view class="text-gray-500">
+          <view class="summary-grid__item text-gray-500">
             <text>收费率:</text>
             <text class="ml-1 text-blue-500">{{ feeRate }}</text>
           </view>
-          <view class="col-span-2 text-gray-500">
+          <view class="summary-grid__item summary-grid__item--full text-gray-500">
             <text>清缴率:</text>
             <text class="ml-1 text-blue-500">{{ clearRate }}</text>
           </view>
@@ -300,6 +300,24 @@ onLoad(() => {
 </template>
 
 <style scoped>
+.form-grid,
+.summary-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8rpx;
+}
+
+.form-grid__item,
+.summary-grid__item {
+  box-sizing: border-box;
+  width: 50%;
+  padding: 8rpx;
+}
+
+.summary-grid__item--full {
+  width: 100%;
+}
+
 .search-item {
   background-color: #f1f1f1;
   border-radius: 8rpx;

@@ -193,13 +193,13 @@ onLoad(() => {
           <view class="text-gray-600 mb-10rpx text-28rpx">
             附件
           </view>
-          <view class="flex flex-wrap gap-10rpx">
+          <view class="attachment-list">
             <image
               v-for="(url, index) in selectedItem.pathUrls"
               :key="index"
               :src="url"
               mode="aspectFill"
-              class="w-120rpx h-120rpx rounded-10rpx"
+              class="attachment-list__item w-120rpx h-120rpx rounded-10rpx"
               @click="handlePreviewImage(url, selectedItem.pathUrls || [])"
             />
           </view>
@@ -255,5 +255,15 @@ onLoad(() => {
 
 .task-item:last-child {
   border-bottom: none;
+}
+
+.attachment-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -10rpx;
+}
+
+.attachment-list__item {
+  margin: 10rpx;
 }
 </style>

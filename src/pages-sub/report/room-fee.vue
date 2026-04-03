@@ -133,11 +133,11 @@ onMounted(() => {
   <view class="room-fee-page">
     <!-- 搜索栏 -->
     <view class="search-bar bg-white p-3">
-      <view class="grid grid-cols-2 gap-2">
-        <view class="search-item">
+      <view class="form-grid">
+        <view class="form-grid__item search-item">
           <wd-picker v-model="searchForm.feeTypeCd" :columns="feeTypeCds" placeholder="请选择费用类型" />
         </view>
-        <view class="search-item">
+        <view class="form-grid__item search-item">
           <wd-picker v-model="searchForm.floorId" :columns="floors" placeholder="请选择楼栋" />
         </view>
       </view>
@@ -165,17 +165,17 @@ onMounted(() => {
             <text class="font-medium">{{ item.roomName }}</text>
             <text :class="item.oweFee > 0 ? 'text-red-500' : 'text-green-500'">欠费: ¥{{ item.oweFee }}</text>
           </view>
-          <view class="grid grid-cols-2 mt-2 gap-2 text-sm">
-            <view class="text-gray-500">
+          <view class="detail-grid mt-2 text-sm">
+            <view class="detail-grid__item text-gray-500">
               业主: {{ item.ownerName }}
             </view>
-            <view class="text-gray-500">
+            <view class="detail-grid__item text-gray-500">
               费用: {{ item.feeName }}
             </view>
-            <view class="text-gray-500">
+            <view class="detail-grid__item text-gray-500">
               应收: ¥{{ item.receivableFee }}
             </view>
-            <view class="text-gray-500">
+            <view class="detail-grid__item text-gray-500">
               实收: ¥{{ item.receivedFee }}
             </view>
           </view>
@@ -186,6 +186,20 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.form-grid,
+.detail-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8rpx;
+}
+
+.form-grid__item,
+.detail-grid__item {
+  box-sizing: border-box;
+  width: 50%;
+  padding: 8rpx;
+}
+
 .search-item {
   background-color: #f1f1f1;
   border-radius: 8rpx;

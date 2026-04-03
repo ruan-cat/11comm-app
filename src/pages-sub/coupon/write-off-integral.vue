@@ -273,7 +273,7 @@ onMounted(() => {
           placeholder="请输入手机号搜索"
           clearable
         />
-        <wd-button type="primary" @click="handleLogSearch">
+        <wd-button type="primary" custom-class="ml-10rpx" @click="handleLogSearch">
           搜索
         </wd-button>
       </view>
@@ -350,7 +350,6 @@ onMounted(() => {
 .search-wrap {
   display: flex;
   align-items: center;
-  gap: 10rpx;
   margin-bottom: 20rpx;
 }
 

@@ -203,8 +203,8 @@ function handleAudit() {
       <template v-if="orderDetail.copyUsers && orderDetail.copyUsers.length > 0">
         <FormSectionTitle title="抄送人" icon="i-carbon-copy" />
         <wd-cell-group border>
-          <view class="flex flex-wrap gap-2 bg-white p-4">
-            <wd-tag v-for="user in orderDetail.copyUsers" :key="user.userId" type="primary" plain>
+          <view class="copy-user-list bg-white p-4">
+            <wd-tag v-for="user in orderDetail.copyUsers" :key="user.userId" type="primary" plain class="copy-user-list__item">
               {{ user.userName }}
             </wd-tag>
           </view>
@@ -242,7 +242,7 @@ function handleAudit() {
 
     <!-- 底部操作按钮 -->
     <view v-if="showActions" class="shadow-top fixed bottom-0 left-0 right-0 bg-white p-4 pb-safe">
-      <view class="flex gap-3">
+      <view class="action-row flex">
         <wd-button
           v-if="orderDetail?.status === '10001'"
           type="primary"
@@ -256,12 +256,13 @@ function handleAudit() {
           v-if="orderDetail?.status === '10002'"
           type="success"
           block
+          custom-class="ml-12rpx"
           :loading="completeLoading"
           @click="handleComplete"
         >
           完成工作单
         </wd-button>
-        <wd-button type="warning" plain block @click="handleAudit">
+        <wd-button type="warning" plain block custom-class="ml-12rpx" @click="handleAudit">
           提交审核
         </wd-button>
       </view>
@@ -272,5 +273,15 @@ function handleAudit() {
 <style scoped lang="scss">
 .shadow-top {
   box-shadow: 0 -2px 10px rgb(0 0 0 / 5%);
+}
+
+.copy-user-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8rpx;
+}
+
+.copy-user-list__item {
+  margin: 8rpx;
 }
 </style>

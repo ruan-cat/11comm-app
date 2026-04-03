@@ -223,6 +223,7 @@ onLoad((options) => {
       <wd-button
         v-if="renovationInfo.state === 4000"
         type="success"
+        custom-class="ml-12rpx"
         block
         @click="openReviewPopup"
       >
@@ -231,6 +232,7 @@ onLoad((options) => {
       <wd-button
         v-if="renovationInfo.state === 3000"
         type="warning"
+        custom-class="ml-12rpx"
         block
         @click="handleFinish"
       >
@@ -280,7 +282,7 @@ onLoad((options) => {
           <wd-button plain @click="showPopup = false">
             取消
           </wd-button>
-          <wd-button type="success" @click="submitPopup">
+          <wd-button type="success" custom-class="ml-12rpx" @click="submitPopup">
             保存
           </wd-button>
         </view>
@@ -314,6 +316,5 @@ onLoad((options) => {
 .popup-actions {
   margin-top: 20rpx;
   display: flex;
-  gap: 12rpx;
 }
 </style>

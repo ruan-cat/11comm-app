@@ -415,8 +415,8 @@ function handleViewDetail(complaint: Complaint) {
           class="history-card mb-3 flex items-center justify-between rounded bg-white p-3"
           @tap="handleViewDetail(item)"
         >
-          <view class="flex flex-1 items-center gap-3">
-            <wd-icon name="document" custom-class="text-blue-500" size="40px" />
+          <view class="history-card-main flex flex-1 items-center">
+            <wd-icon name="document" custom-class="history-card-icon text-blue-500" size="40px" />
             <view class="flex-1">
               <view class="mb-1 text-gray-700 font-medium">
                 {{ item.complaintId }}
@@ -426,8 +426,8 @@ function handleViewDetail(complaint: Complaint) {
               </view>
             </view>
           </view>
-          <view class="flex flex-col items-end gap-1">
-            <view class="text-xs text-gray-400">
+          <view class="history-card-meta flex flex-col items-end">
+            <view class="history-card-time text-xs text-gray-400">
               {{ item.createTime }}
             </view>
             <wd-icon name="arrow-right" custom-class="text-gray-400" />
@@ -625,16 +625,25 @@ function handleViewDetail(complaint: Complaint) {
   }
 }
 
+.history-card-icon {
+  margin-right: 12rpx;
+}
+
+.history-card-time {
+  margin-bottom: 4rpx;
+}
+
 /** 图片网格 */
 .image-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12rpx;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -6rpx;
 }
 
 .image-item {
-  width: 100%;
-  aspect-ratio: 1;
+  width: calc(25% - 12rpx);
+  height: 160rpx;
+  margin: 0 6rpx 12rpx;
   border-radius: 8rpx;
   overflow: hidden;
   background-color: #f5f5f5;

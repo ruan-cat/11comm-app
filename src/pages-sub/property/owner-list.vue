@@ -183,7 +183,7 @@ onShow(() => {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(50px + var(--window-bottom, 0px));
   background: #f5f5f5;
 }
 
@@ -200,7 +200,10 @@ onShow(() => {
 .action-row {
   margin-top: 16rpx;
   display: flex;
-  gap: 16rpx;
+}
+
+.action-row .wd-button + .wd-button {
+  margin-left: 16rpx;
 }
 
 .list-wrap {
@@ -228,7 +231,10 @@ onShow(() => {
 
 .btn-group {
   display: flex;
-  gap: 12rpx;
+}
+
+.btn-group .wd-button + .wd-button {
+  margin-left: 12rpx;
 }
 
 .card-row {

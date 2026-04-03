@@ -154,11 +154,11 @@ function handleCreateFee() {
       </wd-cell-group>
 
       <view class="search-bar bg-white px-3 pb-3 pt-2">
-        <view class="flex items-center justify-end gap-2">
+        <view class="flex items-center justify-end">
           <wd-button size="small" @click="handleSearch">
             搜索
           </wd-button>
-          <wd-button v-if="roomInfo.roomId" size="small" type="primary" @click="handleCreateFee">
+          <wd-button v-if="roomInfo.roomId" size="small" type="primary" custom-class="ml-8rpx" @click="handleCreateFee">
             创建费用
           </wd-button>
         </view>

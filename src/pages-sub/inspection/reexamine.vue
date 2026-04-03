@@ -174,13 +174,16 @@ onShow(() => {
   .task-list {
     display: flex;
     flex-direction: column;
-    gap: 20rpx;
     margin-top: 20rpx;
 
     .task-card {
       background: #ffffff;
       border-radius: 16rpx;
       padding: 24rpx;
+
+      & + .task-card {
+        margin-top: 20rpx;
+      }
 
       .task-header {
         display: flex;

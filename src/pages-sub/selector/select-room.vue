@@ -320,7 +320,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <view class="safe-area-inset-top safe-area-inset-bottom min-h-screen flex flex-col bg-gray-50">
+  <view class="selector-page min-h-screen flex flex-col bg-gray-50">
     <!-- 参数错误状态 -->
     <view v-if="hasParameterError" class="flex flex-1 items-center justify-center p-4">
       <view class="max-w-xs text-center">
@@ -526,11 +526,11 @@ onMounted(() => {
               </view>
 
               <!-- 操作按钮 -->
-              <view v-if="searchValue" class="flex flex-col justify-center gap-2 sm:flex-row">
+              <view v-if="searchValue" class="search-empty-actions justify-center">
                 <wd-button
                   type="primary"
                   size="small"
-                  class="flex-1 transition-all duration-200 sm:flex-none hover:scale-105"
+                  class="search-empty-actions__button transition-all duration-200 sm:flex-none hover:scale-105"
                   @click="handleClearSearch"
                 >
                   清空搜索
@@ -538,7 +538,7 @@ onMounted(() => {
                 <wd-button
                   type="text"
                   size="small"
-                  class="flex-1 transition-all duration-200 sm:flex-none hover:scale-105"
+                  class="search-empty-actions__button transition-all duration-200 sm:flex-none hover:scale-105"
                   @click="handleRefresh"
                 >
                   刷新数据
@@ -551,3 +551,32 @@ onMounted(() => {
     </template>
   </view>
 </template>
+
+<style lang="scss" scoped>
+.selector-page {
+  padding-top: var(--status-bar-height, 0px);
+  padding-bottom: var(--window-bottom, 0px);
+}
+
+.search-empty-actions {
+  display: flex;
+  flex-direction: column;
+  margin: -8rpx;
+}
+
+.search-empty-actions__button {
+  flex: 1;
+  margin: 8rpx;
+}
+
+@media (min-width: 640px) {
+  .search-empty-actions {
+    flex-direction: row;
+  }
+
+  .search-empty-actions__button {
+    flex: none;
+    min-width: 160rpx;
+  }
+}
+</style>

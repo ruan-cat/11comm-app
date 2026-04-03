@@ -279,7 +279,7 @@ onLoad((options) => {
           <wd-button v-if="canEdit" size="small" plain @click="handleEdit">
             编辑
           </wd-button>
-          <wd-button v-if="canAudit" type="success" size="small" @click="handleAudit">
+          <wd-button v-if="canAudit" type="success" size="small" custom-class="ml-16rpx" @click="handleAudit">
             处理
           </wd-button>
           <wd-button
@@ -287,6 +287,7 @@ onLoad((options) => {
             type="warning"
             size="small"
             plain
+            custom-class="ml-16rpx"
             @click="handleDownload"
           >
             下载附件
@@ -379,7 +380,6 @@ onLoad((options) => {
   margin-top: 20rpx;
   display: flex;
   flex-wrap: wrap;
-  gap: 16rpx;
   justify-content: flex-end;
 }
 

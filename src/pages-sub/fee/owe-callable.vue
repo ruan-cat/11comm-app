@@ -125,8 +125,8 @@ function formatDate(dateStr: string): string {
   <view class="owe-callable-page">
     <!-- 搜索栏 -->
     <view class="search-bar bg-white p-3">
-      <view class="flex items-center gap-2">
-        <view class="flex-1">
+      <view class="search-row flex items-center">
+        <view class="search-row__field flex-1">
           <input
             v-model="searchForm.roomName"
             class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
@@ -136,10 +136,10 @@ function formatDate(dateStr: string): string {
             @confirm="handleSearch"
           >
         </view>
-        <wd-button size="small" @click="handleSearch">
+        <wd-button size="small" custom-class="search-row__button" @click="handleSearch">
           搜索
         </wd-button>
-        <wd-button v-if="searchForm.roomId" size="small" type="primary" @click="handleWriteCallable">
+        <wd-button v-if="searchForm.roomId" size="small" type="primary" custom-class="search-row__button" @click="handleWriteCallable">
           登记
         </wd-button>
       </view>
@@ -159,28 +159,28 @@ function formatDate(dateStr: string): string {
         </view>
 
         <!-- 内容 -->
-        <view class="grid grid-cols-2 mt-2 gap-2 text-sm">
-          <view class="text-gray-500">
+        <view class="detail-grid mt-2 text-sm">
+          <view class="detail-grid__item text-gray-500">
             <text>催缴方式:</text>
             <text class="ml-1 text-gray-700">{{ item.callableWayName }}</text>
           </view>
-          <view class="text-gray-500">
+          <view class="detail-grid__item text-gray-500">
             <text>业主:</text>
             <text class="ml-1 text-gray-700">{{ item.ownerName }}</text>
           </view>
-          <view class="text-gray-500">
+          <view class="detail-grid__item text-gray-500">
             <text>催缴金额:</text>
             <text class="ml-1 text-red-500">¥{{ item.amountdOwed }}</text>
           </view>
-          <view class="text-gray-500">
+          <view class="detail-grid__item text-gray-500">
             <text>催缴人:</text>
             <text class="ml-1 text-gray-700">{{ item.staffName }}</text>
           </view>
-          <view class="col-span-2 text-gray-500">
+          <view class="detail-grid__item detail-grid__item--full text-gray-500">
             <text>欠费段:</text>
             <text class="ml-1 text-gray-700">{{ formatDate(item.startTime) }} ~ {{ formatDate(item.endTime) }}</text>
           </view>
-          <view v-if="item.remark" class="col-span-2 text-gray-500">
+          <view v-if="item.remark" class="detail-grid__item detail-grid__item--full text-gray-500">
             <text>催缴说明:</text>
             <text class="ml-1 text-gray-700">{{ item.remark }}</text>
           </view>
@@ -201,6 +201,30 @@ function formatDate(dateStr: string): string {
 </template>
 
 <style scoped>
+.search-row__field {
+  margin-right: 8rpx;
+}
+
+.search-row__button + .search-row__button {
+  margin-left: 8rpx;
+}
+
+.detail-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8rpx;
+}
+
+.detail-grid__item {
+  box-sizing: border-box;
+  width: 50%;
+  padding: 8rpx;
+}
+
+.detail-grid__item--full {
+  width: 100%;
+}
+
 .callable-card {
   background-color: #fff;
 }

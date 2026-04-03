@@ -239,16 +239,16 @@ onLoad(() => {
               <wd-button size="small" plain @click="doOpenDoor(machine)">
                 开闸
               </wd-button>
-              <wd-button size="small" plain @click="doCloseDoor(machine)">
+              <wd-button size="small" plain custom-class="ml-10rpx" @click="doCloseDoor(machine)">
                 关闸
               </wd-button>
-              <wd-button size="small" plain @click="viewVideo(machine)">
+              <wd-button size="small" plain custom-class="ml-10rpx" @click="viewVideo(machine)">
                 视频
               </wd-button>
-              <wd-button v-if="machine.direction === '3306'" size="small" type="success" @click="manualIn(machine)">
+              <wd-button v-if="machine.direction === '3306'" size="small" type="success" custom-class="ml-10rpx" @click="manualIn(machine)">
                 进场
               </wd-button>
-              <wd-button v-else size="small" type="warning" @click="manualOut(machine)">
+              <wd-button v-else size="small" type="warning" custom-class="ml-10rpx" @click="manualOut(machine)">
                 出场
               </wd-button>
             </view>
@@ -316,7 +316,6 @@ onLoad(() => {
 .btn-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10rpx;
 }
 
 .empty-wrap {

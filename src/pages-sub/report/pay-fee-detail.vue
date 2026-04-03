@@ -149,17 +149,17 @@ onMounted(() => {
   <view class="pay-fee-detail-page">
     <!-- 搜索栏 -->
     <view class="search-bar bg-white p-3">
-      <view class="grid grid-cols-2 gap-2">
-        <view class="search-item">
+      <view class="form-grid">
+        <view class="form-grid__item search-item">
           <wd-picker v-model="searchForm.feeTypeCd" :columns="feeTypeCds" placeholder="请选择费用类型" />
         </view>
-        <view class="search-item">
+        <view class="form-grid__item search-item">
           <wd-picker v-model="searchForm.floorId" :columns="floors" placeholder="请选择楼栋" />
         </view>
-        <view class="search-item">
+        <view class="form-grid__item search-item">
           <wd-datetime-picker v-model="searchForm.startDate" type="date" placeholder="开始日期" />
         </view>
-        <view class="search-item">
+        <view class="form-grid__item search-item">
           <wd-datetime-picker v-model="searchForm.endDate" type="date" placeholder="结束日期" />
         </view>
       </view>
@@ -187,14 +187,14 @@ onMounted(() => {
             <text class="font-medium">{{ item.feeName }}</text>
             <text class="text-green-500">¥{{ item.receivedAmount }}</text>
           </view>
-          <view class="grid grid-cols-2 mt-2 gap-2 text-sm">
-            <view class="text-gray-500">
+          <view class="detail-grid mt-2 text-sm">
+            <view class="detail-grid__item text-gray-500">
               房间: {{ item.roomName }}
             </view>
-            <view class="text-gray-500">
+            <view class="detail-grid__item text-gray-500">
               业主: {{ item.ownerName }}
             </view>
-            <view class="col-span-2 text-gray-500">
+            <view class="detail-grid__item detail-grid__item--full text-gray-500">
               缴费时间: {{ item.payTime }}
             </view>
           </view>
@@ -205,6 +205,24 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.form-grid,
+.detail-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8rpx;
+}
+
+.form-grid__item,
+.detail-grid__item {
+  box-sizing: border-box;
+  width: 50%;
+  padding: 8rpx;
+}
+
+.detail-grid__item--full {
+  width: 100%;
+}
+
 .search-item {
   background-color: #f1f1f1;
   border-radius: 8rpx;

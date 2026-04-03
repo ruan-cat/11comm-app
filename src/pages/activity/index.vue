@@ -398,8 +398,7 @@ onMounted(() => {
 
 /** 状态标签毛玻璃效果 */
 .status-tag {
-  backdrop-filter: blur(16rpx);
-  -webkit-backdrop-filter: blur(16rpx);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 /** 标题遮罩层渐变背景 */

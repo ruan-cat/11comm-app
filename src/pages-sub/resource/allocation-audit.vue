@@ -180,10 +180,10 @@ function handleQuery(pageNo: number, pageSize: number) {
             <wd-button type="success" size="small" @click="handleAuditPass(item)">
               通过
             </wd-button>
-            <wd-button type="error" size="small" @click="handleAuditReject(item)">
+            <wd-button type="error" size="small" custom-class="ml-16rpx" @click="handleAuditReject(item)">
               拒绝
             </wd-button>
-            <wd-button type="info" size="small" plain @click="goToDetail(item)">
+            <wd-button type="info" size="small" plain custom-class="ml-16rpx" @click="goToDetail(item)">
               详情
             </wd-button>
           </view>
@@ -229,7 +229,6 @@ function handleQuery(pageNo: number, pageSize: number) {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8rpx;
 
   &.active {
     color: #007aff;
@@ -239,6 +238,7 @@ function handleQuery(pageNo: number, pageSize: number) {
 
 .tab-icon {
   font-size: 32rpx;
+  margin-right: 8rpx;
 }
 
 .list-container {
@@ -290,7 +290,6 @@ function handleQuery(pageNo: number, pageSize: number) {
 
 .item-actions {
   display: flex;
-  gap: 16rpx;
   justify-content: flex-end;
 }
 

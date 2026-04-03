@@ -126,8 +126,8 @@ function handleSubmit() {
     <wd-form ref="formRef" :model="model" :rules="formRules">
       <!-- 投诉信息提示 -->
       <view class="rounded bg-white p-3">
-        <view class="flex items-center gap-2 text-gray-600">
-          <wd-icon name="info" custom-class="text-blue-500" />
+        <view class="flex items-center text-gray-600">
+          <wd-icon name="info" custom-class="mr-2 text-blue-500" />
           <text class="text-sm">投诉编号：{{ complaintId }}</text>
         </view>
       </view>

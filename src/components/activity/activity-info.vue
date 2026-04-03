@@ -81,9 +81,9 @@ function handleTimeClick() {
 </script>
 
 <template>
-  <view class="activity-info-card rounded-2xl bg-white p-6 shadow-lg backdrop-blur-10px animate-slide-up max-sm:p-4">
+  <view class="activity-info-card rounded-2xl bg-white p-6 shadow-lg animate-slide-up max-sm:p-4">
     <!-- 活动标题和状态 -->
-    <view class="mb-4 flex flex-wrap items-center gap-2">
+    <view class="activity-info-title-row mb-4 flex flex-wrap items-center">
       <text class="text-2xl text-gray-900 font-bold leading-tight tracking-[0.5rpx] max-sm:text-xl">
         {{ props.title }}
       </text>
@@ -91,7 +91,7 @@ function handleTimeClick() {
       <!-- 状态标签 -->
       <view
         v-if="props.status"
-        class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium tracking-[0.2rpx]"
+        class="activity-info-title-status inline-flex items-center rounded-full px-3 py-1 text-xs font-medium tracking-[0.2rpx]"
         :class="`bg-${statusConfig.color}-100 text-${statusConfig.color}-600`"
       >
         <view
@@ -188,15 +188,15 @@ function handleTimeClick() {
           <wd-icon name="chart" size="18" custom-class="i-carbon-analytics text-purple-500 max-sm:text-sm" />
         </view>
 
-        <view class="flex flex-1 items-center gap-6 max-sm:flex-col max-sm:items-start max-sm:gap-1">
+        <view class="activity-info-stats flex flex-1 items-center max-sm:flex-col max-sm:items-start">
           <!-- 浏览量 -->
-          <view v-if="props.viewCount" class="flex items-center">
+          <view v-if="props.viewCount" class="activity-info-stat-item flex items-center">
             <wd-icon name="view" size="16" custom-class="i-carbon-view text-gray-400 mr-2" />
             <text class="text-sm text-gray-600 tracking-[0.1rpx]">{{ formattedViewCount }} 浏览</text>
           </view>
 
           <!-- 点赞数 -->
-          <view v-if="props.likeCount" class="flex items-center">
+          <view v-if="props.likeCount" class="activity-info-stat-item flex items-center">
             <wd-icon name="like" size="16" custom-class="i-carbon-thumbs-up text-gray-400 mr-2" />
             <text class="text-sm text-gray-600 tracking-[0.1rpx]">{{ formattedLikeCount }} 点赞</text>
           </view>
@@ -215,6 +215,20 @@ function handleTimeClick() {
 /** 卡片阴影效果 */
 .activity-info-card {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.activity-info-title-status {
+  margin-top: 8rpx;
+  margin-left: 8rpx;
+}
+
+.activity-info-stats {
+  flex-wrap: wrap;
+  margin: -12rpx -24rpx;
+}
+
+.activity-info-stat-item {
+  margin: 12rpx 24rpx;
 }
 
 /** 头像包装器阴影 */
@@ -257,6 +271,20 @@ function handleTimeClick() {
 @media (prefers-reduced-motion: reduce) {
   .animate-slide-up {
     animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .activity-info-title-status {
+    margin-left: 0;
+  }
+
+  .activity-info-stats {
+    margin: -4rpx 0;
+  }
+
+  .activity-info-stat-item {
+    margin: 4rpx 0;
   }
 }
 </style>

@@ -182,12 +182,14 @@ onMounted(() => {
 }
 
 .machine-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24rpx;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -12rpx;
 }
 
 .machine-card {
+  width: calc(50% - 24rpx);
+  margin: 0 12rpx 24rpx;
   background-color: #fff;
   border-radius: 16rpx;
   overflow: hidden;

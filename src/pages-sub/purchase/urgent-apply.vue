@@ -379,7 +379,10 @@ function handleSubmit() {
 .goods-title {
   display: flex;
   flex-direction: column;
-  gap: 8rpx;
+}
+
+.goods-title text + text {
+  margin-top: 8rpx;
 }
 
 .remove-btn {

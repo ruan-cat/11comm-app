@@ -107,7 +107,7 @@ onMounted(() => {
               <wd-button v-if="item.state === 1200" type="warning" size="small" plain @click.stop="cancelApply(item)">
                 取消
               </wd-button>
-              <wd-button type="info" size="small" plain @click.stop="goToDetail(item)">
+              <wd-button type="info" size="small" plain custom-class="ml-16rpx" @click.stop="goToDetail(item)">
                 详情
               </wd-button>
             </view>
@@ -195,16 +195,16 @@ onMounted(() => {
 
 .item-actions {
   display: flex;
-  gap: 16rpx;
 }
 
 .item-content {
   display: flex;
   flex-wrap: wrap;
-  gap: 16rpx;
+  margin: -8rpx;
 }
 
 .info-item {
+  margin: 8rpx;
   font-size: 26rpx;
   color: #666;
 

@@ -181,7 +181,7 @@ if (props.showError && props.retryCount > 0) {
         <!-- 错误图标 -->
         <view class="mb-6">
           <view
-            class="mx-auto h-24 w-24 flex items-center justify-center rounded-full shadow-lg backdrop-blur-md animate-bounce-in max-sm:h-20 max-sm:w-20"
+            class="mx-auto h-24 w-24 flex items-center justify-center rounded-full shadow-lg animate-bounce-in max-sm:h-20 max-sm:w-20"
             :class="`bg-${errorConfig.color}-100`"
           >
             <wd-icon

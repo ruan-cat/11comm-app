@@ -106,6 +106,7 @@ onMounted(() => {
       </wd-button>
       <wd-button
         :type="activeTab === 'meter' ? 'primary' : 'default'"
+        custom-class="ml-10rpx"
         size="small"
         @click="switchTab('meter')"
       >
@@ -221,7 +222,6 @@ onMounted(() => {
 .tab-wrap {
   margin-bottom: 18rpx;
   display: flex;
-  gap: 10rpx;
 }
 
 .list-wrap {

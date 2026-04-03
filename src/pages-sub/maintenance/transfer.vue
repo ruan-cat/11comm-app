@@ -279,10 +279,13 @@ onMounted(() => {
     .task-name {
       display: flex;
       align-items: center;
-      gap: 12rpx;
       font-size: 32rpx;
       font-weight: 500;
       color: #333333;
+    }
+
+    .task-name .wd-icon {
+      margin-right: 12rpx;
     }
   }
 
@@ -290,13 +293,16 @@ onMounted(() => {
     .info-item {
       display: flex;
       align-items: center;
-      gap: 12rpx;
       font-size: 28rpx;
       color: #666666;
       margin-bottom: 12rpx;
 
       &:last-child {
         margin-bottom: 0;
+      }
+
+      .wd-icon {
+        margin-right: 12rpx;
       }
     }
   }
@@ -319,7 +325,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   padding: 20rpx 32rpx;
-  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  padding-bottom: calc(20rpx + var(--window-bottom, 0px));
   background: #ffffff;
   box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.05);
 }

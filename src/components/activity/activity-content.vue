@@ -125,11 +125,11 @@ function shareContent() {
         </view>
 
         <!-- 操作按钮 -->
-        <view class="flex items-center gap-3">
+        <view class="flex items-center">
           <wd-icon
             name="copy"
             size="18"
-            custom-class="i-carbon-copy text-gray-400 hover:text-blue-500 transition-all duration-200 cursor-pointer hover:scale-110"
+            custom-class="i-carbon-copy mr-3 text-gray-400 hover:text-blue-500 transition-all duration-200 cursor-pointer hover:scale-110"
             @click="copyContent"
           />
           <wd-icon

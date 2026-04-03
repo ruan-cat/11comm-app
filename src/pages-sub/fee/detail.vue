@@ -156,16 +156,16 @@ onLoad((options) => {
           <text class="text-green-500">¥{{ item.receivedAmount }}</text>
         </view>
 
-        <view class="grid grid-cols-2 mt-2 gap-2 text-sm">
-          <view class="text-gray-500">
+        <view class="detail-grid mt-2 text-sm">
+          <view class="detail-grid__item text-gray-500">
             <text>缴费编码:</text>
             <text class="ml-1 text-gray-700">{{ item.detailId }}</text>
           </view>
-          <view class="text-gray-500">
+          <view class="detail-grid__item text-gray-500">
             <text>缴费周期:</text>
             <text class="ml-1 text-gray-700">{{ item.cycles || 1 }}个月</text>
           </view>
-          <view class="col-span-2 text-gray-500">
+          <view class="detail-grid__item detail-grid__item--full text-gray-500">
             <text>缴费时间:</text>
             <text class="ml-1 text-gray-700">{{ item.createTime }}</text>
           </view>
@@ -186,6 +186,22 @@ onLoad((options) => {
 </template>
 
 <style scoped>
+.detail-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8rpx;
+}
+
+.detail-grid__item {
+  box-sizing: border-box;
+  width: 50%;
+  padding: 8rpx;
+}
+
+.detail-grid__item--full {
+  width: 100%;
+}
+
 .detail-card {
   background-color: #fff;
 }

@@ -105,7 +105,7 @@ function handleDetail(order: WorkOrder) {
       >
         <!-- 工作单头部 -->
         <view class="mb-3 flex items-center justify-between">
-          <view class="flex flex-1 items-center gap-2 overflow-hidden">
+          <view class="title-row flex flex-1 items-center overflow-hidden">
             <wd-icon name="" custom-class="i-carbon-copy text-colorui-orange text-20px flex-shrink-0" />
             <text class="truncate font-medium">{{ item.title }}</text>
           </view>
@@ -116,19 +116,19 @@ function handleDetail(order: WorkOrder) {
 
         <!-- 工作单信息 -->
         <view class="mb-3 text-sm text-gray-600">
-          <view class="info-item flex items-center gap-2">
+          <view class="info-item flex items-center">
             <wd-icon name="" custom-class="i-carbon-category text-gray-400 text-16px" />
             <text>类型：{{ item.typeName }}</text>
           </view>
-          <view class="info-item flex items-center gap-2">
+          <view class="info-item flex items-center">
             <wd-icon name="" custom-class="i-carbon-time text-gray-400 text-16px" />
             <text>创建时间：{{ item.createTime }}</text>
           </view>
-          <view class="info-item flex items-center gap-2">
+          <view class="info-item flex items-center">
             <wd-icon name="" custom-class="i-carbon-user-avatar text-gray-400 text-16px" />
             <text>创建人：{{ item.creatorName }}</text>
           </view>
-          <view v-if="item.staffName" class="info-item flex items-center gap-2">
+          <view v-if="item.staffName" class="info-item flex items-center">
             <wd-icon name="" custom-class="i-carbon-user text-gray-400 text-16px" />
             <text>执行人：{{ item.staffName }}</text>
           </view>
@@ -158,6 +158,11 @@ function handleDetail(order: WorkOrder) {
 /* 信息行间距 - 兼容微信小程序 */
 .info-item + .info-item {
   margin-top: 8rpx;
+}
+
+.title-row > text,
+.info-item > text {
+  margin-left: 8rpx;
 }
 
 .line-clamp-2 {

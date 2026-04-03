@@ -98,7 +98,7 @@ onMounted(() => {
 <template>
   <view class="inspection-execute-qrcode">
     <view v-if="!loading && taskDetails.length === 0" class="no-task">
-      <wd-icon name="warn" size="80px" color="#FF9800" />
+      <wd-icon name="warn" size="80px" color="#FF9800" class="no-task-icon" />
       <view class="no-task-text">
         当前没有巡检任务或者没到巡检时间
       </view>
@@ -120,8 +120,11 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 40rpx;
     padding: 100rpx 40rpx;
+
+    .no-task-icon {
+      margin-bottom: 40rpx;
+    }
 
     .no-task-text {
       font-size: 28rpx;

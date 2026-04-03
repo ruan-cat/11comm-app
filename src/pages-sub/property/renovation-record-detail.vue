@@ -159,14 +159,15 @@ onLoad((options) => {
 }
 
 .image-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12rpx;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -6rpx;
 }
 
 .image-item {
-  width: 100%;
+  width: calc(33.3333% - 12rpx);
   height: 200rpx;
+  margin: 0 6rpx 12rpx;
   border-radius: 8rpx;
 }
 

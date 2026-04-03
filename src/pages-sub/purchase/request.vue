@@ -307,7 +307,6 @@ function handleSubmit() {
   padding: 20rpx 30rpx;
   background-color: #fff;
   box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
-  gap: 20rpx;
 }
 
 .total-price {

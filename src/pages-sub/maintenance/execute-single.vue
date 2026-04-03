@@ -261,7 +261,10 @@ async function handleSubmit() {
   .info-header {
     display: flex;
     align-items: center;
-    gap: 12rpx;
+
+    .wd-icon {
+      margin-right: 12rpx;
+    }
 
     .info-title {
       font-size: 32rpx;
@@ -282,13 +285,16 @@ async function handleSubmit() {
   margin-top: 12rpx;
 
   .photo-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16rpx;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -8rpx;
 
     .photo-item {
       position: relative;
+      width: calc(33.3333% - 16rpx);
+      height: 0;
       padding-bottom: 100%;
+      margin: 0 8rpx 16rpx;
       border-radius: 8rpx;
       overflow: hidden;
       background: #f5f5f5;
@@ -316,7 +322,9 @@ async function handleSubmit() {
     }
 
     .photo-add {
+      width: calc(33.3333% - 16rpx);
       padding-bottom: 100%;
+      margin: 0 8rpx 16rpx;
       position: relative;
       border: 2rpx dashed #d9d9d9;
       border-radius: 8rpx;
@@ -355,7 +363,7 @@ async function handleSubmit() {
   left: 0;
   right: 0;
   padding: 20rpx 32rpx;
-  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  padding-bottom: calc(20rpx + var(--window-bottom, 0px));
   background: #ffffff;
   box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.05);
 }

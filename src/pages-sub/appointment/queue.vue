@@ -66,7 +66,7 @@ function scanCode() {
       <wd-button plain block @click="scanCode">
         扫码识别
       </wd-button>
-      <wd-button type="primary" block @click="confirmBack">
+      <wd-button type="primary" custom-class="mt-14rpx" block @click="confirmBack">
         确认回填
       </wd-button>
     </view>
@@ -84,6 +84,5 @@ function scanCode() {
   margin-top: 24rpx;
   display: flex;
   flex-direction: column;
-  gap: 14rpx;
 }
 </style>

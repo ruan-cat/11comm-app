@@ -223,7 +223,7 @@ function getEventColor(eventType: string): string {
           <view
             v-for="(event, index) in events"
             :key="index"
-            class="relative mb-4 flex gap-3"
+            class="timeline-item relative mb-4 flex"
             :class="{ 'last-timeline-item': index === events.length - 1 }"
           >
             <!-- 时间轴节点 -->
@@ -233,7 +233,7 @@ function getEventColor(eventType: string): string {
             </view>
 
             <!-- 时间轴内容 -->
-            <view class="flex-1 pb-2">
+            <view class="timeline-body flex-1 pb-2">
               <!-- 标题 -->
               <view class="timeline-record-title mb-1 font-medium">
                 <text v-if="event.eventType === ComplaintEventType.CREATE">
@@ -285,18 +285,18 @@ function getEventColor(eventType: string): string {
           </view>
 
           <view class="text-sm">
-            <view class="appraise-row flex items-start gap-2">
-              <text class="flex-shrink-0 text-gray-500">评价内容：</text>
+            <view class="appraise-row flex items-start">
+              <text class="appraise-label flex-shrink-0 text-gray-500">评价内容：</text>
               <text class="flex-1 text-gray-700">{{ appraise.context }}</text>
             </view>
 
-            <view class="appraise-row flex items-center gap-2">
-              <text class="text-gray-500">评价分数：</text>
+            <view class="appraise-row flex items-center">
+              <text class="appraise-label text-gray-500">评价分数：</text>
               <text class="text-gray-700">{{ appraise.score }}</text>
             </view>
 
-            <view v-if="appraise.state === ComplaintAppraiseState.COMPLETED && appraise.replyContext" class="appraise-row flex items-start gap-2">
-              <text class="flex-shrink-0 text-gray-500">回复内容：</text>
+            <view v-if="appraise.state === ComplaintAppraiseState.COMPLETED && appraise.replyContext" class="appraise-row flex items-start">
+              <text class="appraise-label flex-shrink-0 text-gray-500">回复内容：</text>
               <text class="flex-1 text-gray-700">{{ appraise.replyContext }}</text>
             </view>
           </view>
@@ -347,6 +347,10 @@ function getEventColor(eventType: string): string {
   line-height: 36rpx !important;
 }
 
+.timeline-body {
+  margin-left: 12rpx;
+}
+
 /** 时间轴最后一项隐藏连接线 */
 .last-timeline-item {
   .node-line {
@@ -382,5 +386,9 @@ function getEventColor(eventType: string): string {
 /* 评价行间距 - 兼容微信小程序 */
 .appraise-row + .appraise-row {
   margin-top: 0.5rem;
+}
+
+.appraise-label {
+  margin-right: 8rpx;
 }
 </style>

@@ -174,13 +174,13 @@ function handlePreviewImage(photo: string) {
             <text class="text-sm text-gray-700">{{ orderDetail.completeRemark }}</text>
           </view>
           <view v-if="orderDetail.completePhotos && orderDetail.completePhotos.length > 0" class="bg-white p-4">
-            <view class="flex flex-wrap gap-2">
+            <view class="complete-photo-list">
               <image
                 v-for="(photo, index) in orderDetail.completePhotos"
                 :key="index"
                 :src="photo"
                 mode="aspectFill"
-                class="h-20 w-20 rounded"
+                class="complete-photo-list__item h-20 w-20 rounded"
                 @click="handlePreviewImage(photo)"
               />
             </view>
@@ -208,7 +208,7 @@ function handlePreviewImage(photo: string) {
 
     <!-- 底部操作按钮 -->
     <view v-if="orderDetail" class="shadow-top fixed bottom-0 left-0 right-0 bg-white p-4 pb-safe">
-      <view class="flex gap-3">
+      <view class="flex">
         <wd-button
           type="error"
 
@@ -220,6 +220,7 @@ function handlePreviewImage(photo: string) {
         </wd-button>
         <wd-button
           type="success"
+          custom-class="ml-12rpx"
           block
           :loading="auditLoading"
           @click="handlePass"
@@ -234,5 +235,15 @@ function handlePreviewImage(photo: string) {
 <style scoped lang="scss">
 .shadow-top {
   box-shadow: 0 -2px 10px rgb(0 0 0 / 5%);
+}
+
+.complete-photo-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8rpx;
+}
+
+.complete-photo-list__item {
+  margin: 8rpx;
 }
 </style>

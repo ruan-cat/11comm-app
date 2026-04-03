@@ -72,10 +72,10 @@ onMounted(() => {
         placeholder="请填写房屋编号，如 1-1-101"
         clearable
       />
-      <wd-button type="primary" @click="handleSearch">
+      <wd-button type="primary" custom-class="ml-10rpx" @click="handleSearch">
         搜索
       </wd-button>
-      <wd-button type="success" @click="gotoAddMeter">
+      <wd-button type="success" custom-class="ml-10rpx" @click="gotoAddMeter">
         开始抄表
       </wd-button>
     </view>
@@ -128,7 +128,6 @@ onMounted(() => {
 .search-wrap {
   display: flex;
   align-items: center;
-  gap: 10rpx;
   margin-bottom: 20rpx;
 }
 

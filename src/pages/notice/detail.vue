@@ -70,7 +70,7 @@ onLoad((options) => {
   <view class="page">
     <view v-if="loading" class="loading-wrap">
       <wd-loading type="ring" size="28px" />
-      <text>公告内容加载中...</text>
+      <text class="loading-text">公告内容加载中...</text>
     </view>
 
     <view v-else-if="notice" class="detail-card">
@@ -100,8 +100,11 @@ onLoad((options) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12rpx;
   color: #6b7280;
+}
+
+.loading-text {
+  margin-left: 12rpx;
 }
 
 .detail-card {

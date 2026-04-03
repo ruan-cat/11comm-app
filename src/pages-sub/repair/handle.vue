@@ -774,7 +774,7 @@ onUnload(() => {
 
           <view class="mt-2 overflow-hidden bg-white rounded-16rpx">
             <!-- 表头 -->
-            <view class="flex items-center gap-2 border-gray-200 bg-gray-50 p-3 text-sm font-bold border-b-2rpx">
+            <view class="resource-table-header flex items-center border-gray-200 bg-gray-50 p-3 text-sm font-bold border-b-2rpx">
               <view class="flex-1">
                 商品
               </view>
@@ -795,7 +795,7 @@ onUnload(() => {
               :key="index"
               class="border-t border-gray-100 py-2 last:border-b-0"
             >
-              <view class="flex items-center gap-2 px-3">
+              <view class="resource-table-row flex items-center px-3">
                 <!-- 商品名称 -->
                 <view class="flex-1 text-sm">
                   <text>{{ getResourceDisplayName(item) }}</text>
@@ -813,16 +813,17 @@ onUnload(() => {
                 </view>
 
                 <!-- 数量 -->
-                <view class="w-24 flex items-center justify-center gap-1">
-                  <view class="flex cursor-pointer items-center justify-center w-56rpx h-56rpx transition-opacity-200 active:opacity-60" @click="handleDecreaseQuantity(index)">
+                <view class="resource-quantity-box w-24 flex items-center justify-center">
+                  <view class="resource-quantity-btn flex cursor-pointer items-center justify-center w-56rpx h-56rpx transition-opacity-200 active:opacity-60" @click="handleDecreaseQuantity(index)">
                     <wd-icon name="" custom-class="i-carbon-subtract text-gray-600 w-32rpx h-32rpx" />
                   </view>
                   <wd-input
                     v-model="item.useNumber"
+                    class="resource-quantity-input"
                     type="number"
                     @change="handleQuantityChange(index, item.useNumber?.toString() || '1')"
                   />
-                  <view class="flex cursor-pointer items-center justify-center w-56rpx h-56rpx transition-opacity-200 active:opacity-60" @click="handleIncreaseQuantity(index)">
+                  <view class="resource-quantity-btn flex cursor-pointer items-center justify-center w-56rpx h-56rpx transition-opacity-200 active:opacity-60" @click="handleIncreaseQuantity(index)">
                     <wd-icon name="" custom-class="i-carbon-add text-gray-600 w-32rpx h-32rpx" />
                   </view>
                 </view>
@@ -1005,5 +1006,14 @@ onUnload(() => {
 :deep(.cell-value-left) {
   flex: 1;
   text-align: left !important;
+}
+
+.resource-table-header > view + view,
+.resource-table-row > view + view {
+  margin-left: 8rpx;
+}
+
+.resource-quantity-input {
+  margin: 0 4rpx;
 }
 </style>

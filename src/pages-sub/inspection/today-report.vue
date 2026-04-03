@@ -146,7 +146,6 @@ onMounted(() => {
 
     .staff-status {
       display: flex;
-      gap: 20rpx;
       font-size: 24rpx;
 
       .finish-count {
@@ -154,6 +153,7 @@ onMounted(() => {
       }
 
       .wait-count {
+        margin-left: 20rpx;
         color: #ff9800;
       }
     }

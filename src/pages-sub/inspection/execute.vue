@@ -241,10 +241,10 @@ onShow(() => {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 12rpx;
       min-width: 200rpx;
 
       .count {
+        margin-bottom: 12rpx;
         font-size: 28rpx;
         font-weight: 500;
         color: #333333;
@@ -283,7 +283,10 @@ onShow(() => {
         .item-name {
           display: flex;
           align-items: center;
-          gap: 16rpx;
+
+          .wd-icon {
+            margin-right: 16rpx;
+          }
 
           .name-text {
             font-size: 32rpx;
@@ -303,14 +306,16 @@ onShow(() => {
       }
 
       .item-photos {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20rpx;
-        margin-top: 20rpx;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 20rpx -10rpx 0;
 
         .photo-item {
           position: relative;
+          width: calc(33.3333% - 20rpx);
+          height: 0;
           padding-bottom: 100%;
+          margin: 0 10rpx 20rpx;
           border-radius: 12rpx;
           overflow: hidden;
           background: #f5f5f5;

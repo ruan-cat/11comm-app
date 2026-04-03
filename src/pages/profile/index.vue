@@ -91,6 +91,7 @@ onLoad(() => {
   <view class="page">
     <view class="header-card">
       <wd-img
+        class="profile-avatar"
         width="120rpx"
         height="120rpx"
         round
@@ -147,16 +148,18 @@ onLoad(() => {
 .header-card {
   display: flex;
   align-items: center;
-  gap: 18rpx;
   border-radius: 16rpx;
   background: #fff;
   padding: 24rpx;
 }
 
+.profile-avatar {
+  margin-right: 18rpx;
+}
+
 .name-wrap {
   display: flex;
   flex-direction: column;
-  gap: 8rpx;
 }
 
 .name {
@@ -168,6 +171,7 @@ onLoad(() => {
 .store {
   font-size: 24rpx;
   color: #6b7280;
+  margin-top: 8rpx;
 }
 
 .menu-wrap {

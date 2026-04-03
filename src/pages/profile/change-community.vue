@@ -78,7 +78,7 @@ onLoad(() => {
         placeholder="输入搜索的小区名称"
         clearable
       />
-      <wd-button type="primary" @click="handleSearch">
+      <wd-button type="primary" custom-class="ml-12rpx" @click="handleSearch">
         搜索
       </wd-button>
     </view>
@@ -112,7 +112,6 @@ onLoad(() => {
 .search-wrap {
   display: flex;
   align-items: center;
-  gap: 12rpx;
   margin-bottom: 20rpx;
 }
 </style>

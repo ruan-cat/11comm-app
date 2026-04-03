@@ -394,7 +394,7 @@ function handleContact() {
 <template>
   <view class="activity-actions-container mx-4 max-sm:mx-3">
     <!-- 主操作按钮区域 -->
-    <view class="mb-4 flex gap-3">
+    <view class="mb-4 flex">
       <!-- 报名按钮 -->
       <view
         v-if="canRegister"

@@ -129,7 +129,6 @@ function displayReporter(item: { repairName?: string, tel?: string }): string {
 .header-left {
   display: flex;
   flex-direction: column;
-  gap: 6rpx;
 }
 
 .title {
@@ -142,12 +141,16 @@ function displayReporter(item: { repairName?: string, tel?: string }): string {
 .order-id {
   font-size: 24rpx;
   color: #909399;
+  margin-top: 6rpx;
 }
 
 .card-body {
   display: flex;
   flex-direction: column;
-  gap: 16rpx;
+}
+
+.info-row + .info-row {
+  margin-top: 16rpx;
 }
 
 .info-row {
@@ -165,7 +168,6 @@ function displayReporter(item: { repairName?: string, tel?: string }): string {
 .label-wrap {
   display: flex;
   align-items: center;
-  gap: 8rpx;
   color: #909399;
   flex-shrink: 0;
   width: 180rpx;
@@ -174,6 +176,7 @@ function displayReporter(item: { repairName?: string, tel?: string }): string {
 .icon {
   font-size: 32rpx;
   color: #909399;
+  margin-right: 8rpx;
 }
 
 .label {
@@ -202,6 +205,5 @@ function displayReporter(item: { repairName?: string, tel?: string }): string {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 16rpx;
 }
 </style>

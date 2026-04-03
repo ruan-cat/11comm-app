@@ -181,7 +181,7 @@ function handleReset() {
       <wd-button plain @click="handleReset">
         重置
       </wd-button>
-      <wd-button type="success" :loading="loading" @click="handleSubmit">
+      <wd-button type="success" custom-class="ml-16rpx" :loading="loading" @click="handleSubmit">
         提交
       </wd-button>
     </view>
@@ -201,7 +201,6 @@ function handleReset() {
   right: 0;
   bottom: 0;
   display: flex;
-  gap: 16rpx;
   padding: 20rpx;
   background: #fff;
   box-shadow: 0 -2rpx 10rpx rgb(0 0 0 / 8%);

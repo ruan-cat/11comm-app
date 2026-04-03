@@ -170,7 +170,7 @@ function reloadData() {
 </script>
 
 <template>
-  <view class="safe-area-inset-top safe-area-inset-bottom min-h-screen flex flex-col bg-gray-50">
+  <view class="loading-demo-page min-h-screen flex flex-col bg-gray-50">
     <!-- 顶部说明卡片 -->
     <view class="border-b border-gray-100 bg-white p-4 shadow-sm">
       <view class="mb-3">
@@ -196,12 +196,12 @@ function reloadData() {
       </view>
 
       <!-- 场景切换按钮 -->
-      <view class="flex gap-2">
+      <view class="button-row">
         <wd-button
           :disabled="currentSceneIndex === 0"
           type="default"
           size="small"
-          class="flex-1"
+          class="button-row__button flex-1"
           @click="prevScene"
         >
           上一个场景
@@ -210,7 +210,7 @@ function reloadData() {
           :disabled="currentSceneIndex === loadingScenes.length - 1"
           type="primary"
           size="small"
-          class="flex-1"
+          class="button-row__button flex-1"
           @click="nextScene"
         >
           下一个场景
@@ -223,11 +223,11 @@ function reloadData() {
       <view class="mb-2">
         <text class="text-sm text-gray-600 font-medium">测试操作</text>
       </view>
-      <view class="flex gap-2">
-        <wd-button type="success" size="small" class="flex-1" @click="reloadData">
+      <view class="button-row">
+        <wd-button type="success" size="small" class="button-row__button flex-1" @click="reloadData">
           重新加载数据
         </wd-button>
-        <wd-button type="warning" size="small" class="flex-1" @click="toggleLoading">
+        <wd-button type="warning" size="small" class="button-row__button flex-1" @click="toggleLoading">
           {{ showLoading ? '隐藏加载' : '显示加载' }}
         </wd-button>
       </view>
@@ -324,3 +324,19 @@ function reloadData() {
     </view>
   </view>
 </template>
+
+<style scoped>
+.loading-demo-page {
+  padding-top: var(--status-bar-height, 0px);
+  padding-bottom: var(--window-bottom, 0px);
+}
+
+.button-row {
+  display: flex;
+  margin: 0 -8rpx;
+}
+
+.button-row__button {
+  margin: 0 8rpx;
+}
+</style>

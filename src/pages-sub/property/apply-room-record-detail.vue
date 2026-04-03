@@ -162,9 +162,9 @@ onShow(() => {
 <template>
   <view>
     <!-- 记录详情列表 -->
-    <view class="mt-4 bg-white divide-y divide-gray-100">
+    <view class="mt-4 bg-white">
       <!-- 操作按钮 -->
-      <view class="flex items-center p-4">
+      <view class="record-row flex items-center p-4">
         <view class="flex flex-1 items-center">
           <wd-icon name="" custom-class="i-carbon-trash-can text-colorui-green" />
           <text class="ml-2 text-gray-600">操作</text>
@@ -175,7 +175,7 @@ onShow(() => {
       </view>
 
       <!-- 申请房间 -->
-      <view class="flex items-center p-4">
+      <view class="record-row flex items-center p-4">
         <view class="flex flex-1 items-center">
           <wd-icon name="" custom-class="i-carbon-time text-colorui-green" />
           <text class="ml-2 text-gray-600">申请房间</text>
@@ -186,7 +186,7 @@ onShow(() => {
       </view>
 
       <!-- 跟踪备注 -->
-      <view class="flex items-center p-4">
+      <view class="record-row flex items-center p-4">
         <view class="flex flex-1 items-center">
           <wd-icon name="" custom-class="i-carbon-pedestrian text-colorui-green" />
           <text class="ml-2 text-gray-600">跟踪备注</text>
@@ -203,12 +203,12 @@ onShow(() => {
         <view class="px-4 py-2 text-gray-600">
           图片
         </view>
-        <view class="flex items-center p-4">
-          <view class="grid grid-cols-4 w-full gap-2 text-center">
+        <view class="record-row flex items-center p-4">
+          <view class="image-grid-wrap w-full text-center">
             <view
               v-for="(item, index) in imgRecordList"
               :key="index"
-              class="aspect-square"
+              class="image-grid-wrap__item aspect-square"
             >
               <image
                 mode="widthFix"
@@ -245,5 +245,21 @@ onShow(() => {
 /** 保留 uni-video 全局样式 */
 uni-video {
   width: 100%;
+}
+
+.record-row + .record-row {
+  border-top: 1px solid rgb(243 244 246);
+}
+
+.image-grid-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8rpx;
+}
+
+.image-grid-wrap__item {
+  box-sizing: border-box;
+  width: 25%;
+  padding: 8rpx;
 }
 </style>

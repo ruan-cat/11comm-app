@@ -451,11 +451,12 @@ onMounted(() => {
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 20rpx;
+  margin: -10rpx 0 20rpx -10rpx;
   margin-bottom: 30rpx;
 }
 
 .actions button {
+  margin: 10rpx 0 0 10rpx;
   padding: 20rpx 30rpx;
   background-color: #007aff;
   color: white;
@@ -525,11 +526,12 @@ onMounted(() => {
 
 .detail-actions {
   display: flex;
-  gap: 20rpx;
+  margin-left: -10rpx;
 }
 
 .detail-actions button {
   flex: 1;
+  margin-left: 10rpx;
   padding: 20rpx;
   background-color: #34c759;
   color: white;

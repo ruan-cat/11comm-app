@@ -106,17 +106,22 @@ onLoad(() => {
 .toolbar {
   display: flex;
   align-items: center;
-  gap: 12rpx;
   margin-bottom: 20rpx;
 }
 
+.toolbar .wd-button {
+  margin-left: 12rpx;
+}
+
 .grid-wrap {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12rpx;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -6rpx;
 }
 
 .day-card {
+  width: calc(50% - 12rpx);
+  margin: 0 6rpx 12rpx;
   border-radius: 12rpx;
   background: #fff;
   padding: 16rpx;

@@ -199,8 +199,8 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
             <view class="mb-2 text-xl text-gray-900 font-bold leading-none">
               {{ repairDetail.repairId }}
             </view>
-            <view class="flex items-center gap-2 text-sm text-gray-500">
-              <wd-icon name="" custom-class="i-carbon-time w-28rpx h-28rpx" />
+            <view class="flex items-center text-sm text-gray-500">
+              <wd-icon name="" custom-class="i-carbon-time mr-8rpx w-28rpx h-28rpx" />
               <text>{{ repairDetail.appointmentTime }}</text>
             </view>
           </view>
@@ -230,22 +230,22 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
           </view>
 
           <!-- 基础信息列表（嵌入式） -->
-          <view class="flex flex-col gap-3 border-t border-gray-100 pt-4">
-            <view class="flex items-center justify-between">
+          <view class="repair-detail-info-list border-t border-gray-100 pt-4">
+            <view class="repair-detail-info-row flex items-center justify-between">
               <text class="text-sm text-gray-500">报修人</text>
               <text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairName }}</text>
             </view>
-            <view class="flex items-center justify-between">
+            <view class="repair-detail-info-row flex items-center justify-between">
               <text class="text-sm text-gray-500">联系方式</text>
               <text class="text-sm text-blue-500 font-medium" @click="handleCall(repairDetail.tel)">
                 {{ repairDetail.tel }}
               </text>
             </view>
-            <view class="flex items-center justify-between">
+            <view class="repair-detail-info-row flex items-center justify-between">
               <text class="text-sm text-gray-500">报修位置</text>
               <text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairObjName }}</text>
             </view>
-            <view class="flex items-center justify-between">
+            <view class="repair-detail-info-row flex items-center justify-between">
               <text class="text-sm text-gray-500">报修类型</text>
               <text class="text-sm text-gray-800 font-medium">{{ repairDetail.repairTypeName }}</text>
             </view>
@@ -269,7 +269,7 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
             <!-- 业主报修图片 -->
             <view v-if="repairDetail.repairPhotos?.length" class="mb-4 last:mb-0">
               <text class="mb-2 block text-xs text-gray-400">报修图片</text>
-              <view class="grid grid-cols-3 gap-2">
+              <view class="repair-photo-grid">
                 <wd-img
                   v-for="(photo, index) in repairDetail.repairPhotos"
                   :key="index"
@@ -277,7 +277,7 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
                   :image-urls="getImageUrls(repairDetail.repairPhotos)"
                   :current-index="index"
                   mode="aspectFill"
-                  class="aspect-square w-full rounded-sm bg-gray-100"
+                  class="repair-photo-grid__item aspect-square w-full rounded-sm bg-gray-100"
                   :enable-preview="true"
                 />
               </view>
@@ -286,7 +286,7 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
             <!-- 维修前图片 -->
             <view v-if="repairDetail.beforePhotos?.length" class="mb-4 last:mb-0">
               <text class="mb-2 block text-xs text-gray-400">维修前图片</text>
-              <view class="grid grid-cols-3 gap-2">
+              <view class="repair-photo-grid">
                 <wd-img
                   v-for="(photo, index) in repairDetail.beforePhotos"
                   :key="index"
@@ -294,7 +294,7 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
                   :image-urls="getImageUrls(repairDetail.beforePhotos)"
                   :current-index="index"
                   mode="aspectFill"
-                  class="aspect-square w-full rounded-sm bg-gray-100"
+                  class="repair-photo-grid__item aspect-square w-full rounded-sm bg-gray-100"
                   :enable-preview="true"
                 />
               </view>
@@ -303,7 +303,7 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
             <!-- 维修后图片 -->
             <view v-if="repairDetail.afterPhotos?.length" class="mb-0">
               <text class="mb-2 block text-xs text-gray-400">维修完成图片</text>
-              <view class="grid grid-cols-3 gap-2">
+              <view class="repair-photo-grid">
                 <wd-img
                   v-for="(photo, index) in repairDetail.afterPhotos"
                   :key="index"
@@ -311,7 +311,7 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
                   :image-urls="getImageUrls(repairDetail.afterPhotos)"
                   :current-index="index"
                   mode="aspectFill"
-                  class="aspect-square w-full rounded-sm bg-gray-100"
+                  class="repair-photo-grid__item aspect-square w-full rounded-sm bg-gray-100"
                   :enable-preview="true"
                 />
               </view>
@@ -336,10 +336,10 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
             <view
               v-for="(record, index) in staffRecords"
               :key="index"
-              class="relative flex gap-4 pb-6 last:pb-0"
+              class="repair-timeline-item relative flex pb-6 last:pb-0"
             >
               <!-- 时间轴线与节点 -->
-              <view class="flex flex-col items-center">
+              <view class="repair-timeline-axis flex flex-col items-center">
                 <!-- 节点圆点：最新的为蓝色，历史为灰色 -->
                 <view
                   class="z-10 h-3 w-3 border-2 rounded-full bg-white"
@@ -358,16 +358,16 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
                 <text class="mb-1 block text-xs text-gray-400 font-mono">{{ record.startTime }}</text>
 
                 <!-- 状态与人员 -->
-                <view class="mb-2 flex flex-wrap items-center gap-2">
+                <view class="repair-timeline-meta mb-2 flex flex-wrap items-center">
                   <!-- 在时间轴中使用 StatusTag -->
                   <RepairStatusTag
                     :status-cd="record.statusCd"
                     :status-name="record.statusName"
                     :plain="true"
                     :animated="false"
-                    class="origin-left scale-90"
+                    class="repair-timeline-status origin-left scale-90"
                   />
-                  <text class="text-sm text-gray-800 font-bold">{{ record.staffName }}</text>
+                  <text class="repair-timeline-staff text-sm text-gray-800 font-bold">{{ record.staffName }}</text>
                 </view>
 
                 <!-- 处理意见/备注 -->
@@ -399,11 +399,34 @@ function shouldShowProcessOpinion(record: RepairStaffRecord): boolean {
 
 /** 底部安全区适配 */
 .pb-safe {
-  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  padding-bottom: calc(24rpx + var(--window-bottom, 0px));
 }
 
 /** 解决 UnoCSS transform 缩放后的对齐问题 */
 .origin-left {
   transform-origin: left center;
+}
+
+.repair-detail-info-row + .repair-detail-info-row {
+  margin-top: 12rpx;
+}
+
+.repair-photo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8rpx;
+}
+
+.repair-photo-grid__item {
+  width: calc(33.333% - 16rpx);
+  margin: 8rpx;
+}
+
+.repair-timeline-axis {
+  margin-right: 16rpx;
+}
+
+.repair-timeline-status {
+  margin-right: 8rpx;
 }
 </style>

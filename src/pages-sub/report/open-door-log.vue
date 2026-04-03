@@ -93,11 +93,11 @@ onMounted(() => {
   <view class="open-door-log-page">
     <!-- 搜索栏 -->
     <view class="search-bar bg-white p-3">
-      <view class="grid grid-cols-2 gap-2">
-        <view class="search-item">
+      <view class="form-grid">
+        <view class="form-grid__item search-item">
           <wd-datetime-picker v-model="searchForm.startDate" type="date" placeholder="开始日期" />
         </view>
-        <view class="search-item">
+        <view class="form-grid__item search-item">
           <wd-datetime-picker v-model="searchForm.endDate" type="date" placeholder="结束日期" />
         </view>
       </view>
@@ -125,14 +125,14 @@ onMounted(() => {
             <text class="font-medium">{{ item.roomName }}</text>
             <text class="text-sm text-gray-500">{{ item.openTime }}</text>
           </view>
-          <view class="grid grid-cols-2 mt-2 gap-2 text-sm">
-            <view class="text-gray-500">
+          <view class="detail-grid mt-2 text-sm">
+            <view class="detail-grid__item text-gray-500">
               业主: {{ item.ownerName }}
             </view>
-            <view class="text-gray-500">
+            <view class="detail-grid__item text-gray-500">
               开门方式: {{ item.openTypeName }}
             </view>
-            <view v-if="item.remark" class="col-span-2 text-gray-500">
+            <view v-if="item.remark" class="detail-grid__item detail-grid__item--full text-gray-500">
               备注: {{ item.remark }}
             </view>
           </view>
@@ -143,6 +143,24 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.form-grid,
+.detail-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8rpx;
+}
+
+.form-grid__item,
+.detail-grid__item {
+  box-sizing: border-box;
+  width: 50%;
+  padding: 8rpx;
+}
+
+.detail-grid__item--full {
+  width: 100%;
+}
+
 .search-item {
   background-color: #f1f1f1;
   border-radius: 8rpx;

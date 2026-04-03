@@ -314,10 +314,13 @@ onShow(() => {
     .task-name {
       display: flex;
       align-items: center;
-      gap: 12rpx;
       font-size: 32rpx;
       font-weight: 500;
       color: #333333;
+    }
+
+    .task-name .wd-icon {
+      margin-right: 12rpx;
     }
   }
 
@@ -325,13 +328,16 @@ onShow(() => {
     .info-item {
       display: flex;
       align-items: center;
-      gap: 12rpx;
       font-size: 28rpx;
       color: #666666;
       margin-bottom: 12rpx;
 
       &:last-child {
         margin-bottom: 0;
+      }
+
+      .wd-icon {
+        margin-right: 12rpx;
       }
     }
   }
@@ -380,10 +386,13 @@ onShow(() => {
         .item-name {
           display: flex;
           align-items: center;
-          gap: 12rpx;
           font-size: 30rpx;
           font-weight: 500;
           color: #333333;
+        }
+
+        .item-name .wd-icon {
+          margin-right: 12rpx;
         }
       }
 
@@ -402,14 +411,16 @@ onShow(() => {
       }
 
       .item-photos {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16rpx;
-        margin-top: 16rpx;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 16rpx -8rpx 0;
 
         .photo-item {
           position: relative;
+          width: calc(33.3333% - 16rpx);
+          height: 0;
           padding-bottom: 100%;
+          margin: 0 8rpx 16rpx;
           border-radius: 8rpx;
           overflow: hidden;
           background: #f5f5f5;
@@ -446,7 +457,7 @@ onShow(() => {
   left: 0;
   right: 0;
   padding: 20rpx 32rpx;
-  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  padding-bottom: calc(20rpx + var(--window-bottom, 0px));
   background: #ffffff;
   box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.05);
 }

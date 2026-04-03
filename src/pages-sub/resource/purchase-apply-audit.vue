@@ -154,10 +154,10 @@ onMounted(() => {
             <wd-button type="success" size="small" @click="handleAuditPass(item)">
               通过
             </wd-button>
-            <wd-button type="error" size="small" @click="handleAuditReject(item)">
+            <wd-button type="error" size="small" custom-class="ml-16rpx" @click="handleAuditReject(item)">
               拒绝
             </wd-button>
-            <wd-button type="info" size="small" plain @click="goToDetail(item)">
+            <wd-button type="info" size="small" plain custom-class="ml-16rpx" @click="goToDetail(item)">
               详情
             </wd-button>
           </view>
@@ -237,7 +237,6 @@ onMounted(() => {
 
 .item-actions {
   display: flex;
-  gap: 16rpx;
   justify-content: flex-end;
 }
 

@@ -48,26 +48,26 @@ const sectionTitleStyle = computed(() => {
 <template>
   <wd-cell custom-class="form-section-title-cell" :style="sectionTitleStyle">
     <template #title>
-      <view class="flex items-center gap-2">
+      <view class="form-section-title-content">
         <view
-          class="h-4 w-1 flex-shrink-0 rounded-full"
+          class="form-section-title-accent h-4 w-1 flex-shrink-0 rounded-full"
           :class="animated ? 'animate-pulse bg-gradient-to-b from-blue-400 to-blue-600' : 'bg-blue-500'"
         />
 
         <view
           v-if="icon && isIconifyIcon"
           :class="[icon, iconClass || 'text-blue-500']"
-          class="flex-shrink-0 text-lg"
+          class="form-section-title-icon flex-shrink-0 text-lg"
         />
         <wd-icon
           v-else-if="icon"
           :name="icon"
-          :custom-class="iconClass || 'text-blue-500'"
+          :custom-class="`${iconClass || 'text-blue-500'} form-section-title-icon`"
           size="18px"
           custom-style="flex-shrink: 0;"
         />
 
-        <view class="flex flex-shrink-0 items-center gap-1">
+        <view class="form-section-title-main">
           <text
             class="whitespace-nowrap text-base font-semibold"
             :class="animated ? 'text-gray-800' : 'text-gray-700'"
@@ -77,7 +77,7 @@ const sectionTitleStyle = computed(() => {
           <text v-if="required" class="text-base text-red-500">*</text>
         </view>
 
-        <text v-if="subtitle" class="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-xs text-gray-400">
+        <text v-if="subtitle" class="form-section-title-subtitle overflow-hidden text-ellipsis whitespace-nowrap text-xs text-gray-400">
           {{ subtitle }}
         </text>
       </view>
@@ -86,6 +86,32 @@ const sectionTitleStyle = computed(() => {
 </template>
 
 <style scoped>
+.form-section-title-content {
+  display: flex;
+  align-items: center;
+}
+
+.form-section-title-accent,
+.form-section-title-icon {
+  margin-right: 8rpx;
+}
+
+.form-section-title-main {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.form-section-title-main text + text {
+  margin-left: 4rpx;
+}
+
+.form-section-title-subtitle {
+  flex: 1;
+  min-width: 0;
+  margin-left: 8rpx;
+}
+
 :deep(.form-section-title-cell) {
   background: var(--form-section-title-bg);
   padding: 12px 16px;

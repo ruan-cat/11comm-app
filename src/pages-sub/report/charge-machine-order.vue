@@ -101,20 +101,20 @@ onMounted(() => {
             <text class="font-medium">{{ item.personName }}/{{ item.personTel }}</text>
             <text class="text-sm text-gray-500">{{ item.orderId }}</text>
           </view>
-          <view class="grid grid-cols-2 mt-2 gap-2 text-sm">
-            <view class="text-gray-500">
+          <view class="detail-grid mt-2 text-sm">
+            <view class="detail-grid__item text-gray-500">
               充电桩: {{ item.machineName }}
             </view>
-            <view class="text-gray-500">
+            <view class="detail-grid__item text-gray-500">
               插座: {{ item.portCode }}
             </view>
-            <view class="text-gray-500">
+            <view class="detail-grid__item text-gray-500">
               充电小时: {{ item.chargeHours }}h
             </view>
-            <view class="text-gray-500">
+            <view class="detail-grid__item text-gray-500">
               扣款: <text class="text-red-500">¥{{ item.amount }}</text>
             </view>
-            <view class="col-span-2 text-gray-500">
+            <view class="detail-grid__item detail-grid__item--full text-gray-500">
               时间: {{ item.startTime }} ~ {{ item.endTime }}
             </view>
           </view>
@@ -125,6 +125,22 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.detail-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8rpx;
+}
+
+.detail-grid__item {
+  box-sizing: border-box;
+  width: 50%;
+  padding: 8rpx;
+}
+
+.detail-grid__item--full {
+  width: 100%;
+}
+
 .order-card {
   background-color: #fff;
 }

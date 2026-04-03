@@ -172,10 +172,11 @@ onMounted(() => {
 .item-content {
   display: flex;
   flex-wrap: wrap;
-  gap: 16rpx;
+  margin: -8rpx;
 }
 
 .info-item {
+  margin: 8rpx;
   font-size: 26rpx;
   color: #666;
 

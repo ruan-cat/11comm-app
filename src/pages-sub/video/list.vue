@@ -167,13 +167,15 @@ onMounted(() => {
 }
 
 .grid-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16rpx;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -8rpx;
   padding-bottom: 20rpx;
 }
 
 .machine-card {
+  width: calc(50% - 16rpx);
+  margin: 0 8rpx 16rpx;
   border-radius: 14rpx;
   overflow: hidden;
   background: #fff;

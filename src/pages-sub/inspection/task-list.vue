@@ -151,6 +151,7 @@ onShow(() => {
           <wd-button
             type="success"
             size="small"
+            custom-class="ml-20rpx"
             @click="startInspection(item)"
           >
             我要巡检
@@ -190,12 +191,15 @@ onShow(() => {
   .task-list {
     display: flex;
     flex-direction: column;
-    gap: 20rpx;
 
     .task-card {
       background: #ffffff;
       border-radius: 16rpx;
       padding: 24rpx;
+
+      & + .task-card {
+        margin-top: 20rpx;
+      }
 
       .task-header {
         display: flex;
@@ -220,7 +224,6 @@ onShow(() => {
       .task-actions {
         display: flex;
         justify-content: flex-end;
-        gap: 20rpx;
         margin-top: 24rpx;
         padding-top: 24rpx;
         border-top: 2rpx solid rgba(0, 0, 0, 0.1);

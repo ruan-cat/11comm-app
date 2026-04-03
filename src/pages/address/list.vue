@@ -318,7 +318,7 @@ watch(list, () => {
         class="address-index-bar pointer-events-none absolute inset-y-0 right-0 z-20 flex items-center"
       >
         <view
-          class="indexBar indexBar-box pointer-events-auto mr-2.5 w-10 border border-gray-100 rounded-xl bg-white/90 shadow-md backdrop-blur-sm"
+          class="indexBar indexBar-box pointer-events-auto mr-2.5 w-10 border border-gray-100 rounded-xl bg-white/90 shadow-md"
           @touchstart="tStart"
           @touchend="tEnd"
           @touchmove.stop="tMove"
@@ -340,7 +340,7 @@ watch(list, () => {
       <!-- 索引提示 -->
       <view
         v-show="!hidden"
-        class="indexToast fixed left-1/2 top-1/2 z-50 h-20 w-20 transform rounded-2xl bg-black/80 text-center text-2xl text-white font-bold leading-20 shadow-2xl backdrop-blur-sm -translate-x-1/2 -translate-y-1/2"
+        class="indexToast fixed left-1/2 top-1/2 z-50 h-20 w-20 transform rounded-2xl bg-black/80 text-center text-2xl text-white font-bold leading-20 shadow-2xl -translate-x-1/2 -translate-y-1/2"
       >
         {{ listCur }}
       </view>
@@ -365,7 +365,7 @@ watch(list, () => {
   left: 0;
   right: 0;
   top: var(--window-top, 0px);
-  bottom: calc(50px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(50px + var(--window-bottom, 0px));
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -496,7 +496,6 @@ watch(list, () => {
 // 索引提示框动画
 .indexToast {
   animation: indexToastAnimation 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  backdrop-filter: blur(10px);
 }
 
 @keyframes indexToastAnimation {

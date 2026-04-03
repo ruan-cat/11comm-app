@@ -51,9 +51,9 @@ defineProps<Props>()
         <!-- 统计信息 -->
         <view class="flex items-center py-3">
           <wd-skeleton avatar animation="flashed" />
-          <view class="ml-3 flex flex-1 items-center gap-6 max-sm:flex-col max-sm:items-start max-sm:gap-2">
-            <wd-skeleton :row-num="1" row-width="80px" animation="flashed" />
-            <wd-skeleton :row-num="1" row-width="80px" animation="flashed" />
+          <view class="activity-skeleton-stats ml-3 flex flex-1 items-center max-sm:flex-col max-sm:items-start">
+            <wd-skeleton class="activity-skeleton-stat-item" :row-num="1" row-width="80px" animation="flashed" />
+            <wd-skeleton class="activity-skeleton-stat-item" :row-num="1" row-width="80px" animation="flashed" />
           </view>
         </view>
       </view>
@@ -69,9 +69,9 @@ defineProps<Props>()
                 <wd-skeleton :row-num="1" row-width="80px" animation="flashed" />
               </view>
             </view>
-            <view class="flex items-center gap-3">
-              <wd-skeleton :row-num="1" row-width="18px" row-height="18px" animation="flashed" />
-              <wd-skeleton :row-num="1" row-width="18px" row-height="18px" animation="flashed" />
+            <view class="activity-skeleton-actions flex items-center">
+              <wd-skeleton class="activity-skeleton-action-item" :row-num="1" row-width="18px" row-height="18px" animation="flashed" />
+              <wd-skeleton class="activity-skeleton-action-item" :row-num="1" row-width="18px" row-height="18px" animation="flashed" />
             </view>
           </view>
         </view>
@@ -94,3 +94,28 @@ defineProps<Props>()
     </view>
   </view>
 </template>
+
+<style scoped>
+.activity-skeleton-stats {
+  flex-wrap: wrap;
+  margin: -12rpx -24rpx;
+}
+
+.activity-skeleton-stat-item {
+  margin: 12rpx 24rpx;
+}
+
+.activity-skeleton-action-item + .activity-skeleton-action-item {
+  margin-left: 12rpx;
+}
+
+@media (max-width: 640px) {
+  .activity-skeleton-stats {
+    margin: -8rpx 0;
+  }
+
+  .activity-skeleton-stat-item {
+    margin: 8rpx 0;
+  }
+}
+</style>

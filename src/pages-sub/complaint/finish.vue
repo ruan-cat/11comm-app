@@ -142,7 +142,7 @@ onMounted(() => {
           </view>
 
           <!-- 底部操作按钮 -->
-          <view class="mt-3 flex items-center justify-end gap-2 border-t border-gray-200 pt-3">
+          <view class="complaint-card-actions mt-3 flex items-center justify-end border-t border-gray-200 pt-3">
             <wd-button size="small" plain @click="handleDetail(item)">
               详情
             </wd-button>
@@ -179,6 +179,10 @@ onMounted(() => {
 
 .complaint-card {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.complaint-card-actions {
+  min-height: 56rpx;
 }
 
 /* 信息行间距 - 兼容微信小程序 */

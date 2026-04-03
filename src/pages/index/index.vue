@@ -244,20 +244,19 @@ function getSectionTitleIconClass(sectionId: string) {
 
 <style scoped lang="scss">
 .home-page {
-  min-height: 100vh;
-  padding-bottom: calc(28rpx + env(safe-area-inset-bottom));
-  background:
-    radial-gradient(circle at top left, rgba(91, 153, 255, 0.16), transparent 28%),
-    linear-gradient(180deg, #eef4ff 0%, #f6f8fc 42%, #f8fafc 100%);
+  min-height: 100%;
+  padding-bottom: calc(28rpx + var(--window-bottom, 0px));
+  background: linear-gradient(180deg, #eef4ff 0%, #f6f8fc 42%, #f8fafc 100%);
 }
 
 .home-shell {
-  width: min(100%, 1360px);
+  width: 100%;
+  max-width: 1360px;
   margin: 0 auto;
 }
 
 .home-header {
-  padding: calc(18rpx + env(safe-area-inset-top)) 24rpx 92rpx;
+  padding: calc(18rpx + var(--status-bar-height, 0px)) 24rpx 92rpx;
   background:
     radial-gradient(circle at top right, rgba(255, 255, 255, 0.14), transparent 30%),
     linear-gradient(135deg, #2576f8 0%, #40a2ff 52%, #4fc3c8 100%);
@@ -269,9 +268,8 @@ function getSectionTitleIconClass(sectionId: string) {
   padding: 26rpx 28rpx 30rpx;
   border: 2rpx solid rgba(255, 255, 255, 0.14);
   border-radius: 34rpx;
-  background: linear-gradient(145deg, rgba(18, 78, 179, 0.18), rgba(255, 255, 255, 0.06));
+  background: linear-gradient(145deg, rgba(18, 78, 179, 0.2), rgba(255, 255, 255, 0.12));
   box-shadow: 0 24rpx 50rpx rgba(16, 54, 125, 0.18);
-  backdrop-filter: blur(22rpx);
 }
 
 .header-panel::after {
@@ -290,13 +288,11 @@ function getSectionTitleIconClass(sectionId: string) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20rpx;
 }
 
 .brand-block {
   display: flex;
   align-items: center;
-  gap: 18rpx;
   min-width: 0;
 }
 
@@ -309,12 +305,12 @@ function getSectionTitleIconClass(sectionId: string) {
   background: rgba(255, 255, 255, 0.18);
   border-radius: 22rpx;
   flex-shrink: 0;
+  margin-right: 18rpx;
 }
 
 .brand-copy {
   display: flex;
   flex-direction: column;
-  gap: 6rpx;
   min-width: 0;
 }
 
@@ -326,6 +322,8 @@ function getSectionTitleIconClass(sectionId: string) {
 }
 
 .brand-subtitle {
+  display: block;
+  margin-top: 6rpx;
   color: rgba(255, 255, 255, 0.74);
   font-size: 22rpx;
   line-height: 1.2;
@@ -334,12 +332,15 @@ function getSectionTitleIconClass(sectionId: string) {
 .user-chip {
   display: inline-flex;
   align-items: center;
-  gap: 8rpx;
   padding: 12rpx 18rpx;
   color: #fff;
   background: rgba(255, 255, 255, 0.16);
   border-radius: 9999rpx;
   flex-shrink: 0;
+}
+
+.user-chip .i-carbon-user-avatar {
+  margin-right: 8rpx;
 }
 
 .user-chip-text {
@@ -357,10 +358,9 @@ function getSectionTitleIconClass(sectionId: string) {
 }
 
 .featured-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18rpx;
-  padding: 18rpx;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 9rpx;
 }
 
 .section-card {
@@ -370,7 +370,6 @@ function getSectionTitleIconClass(sectionId: string) {
   background: linear-gradient(135deg, var(--surface-start) 0%, var(--surface-end) 100%);
   border: 2rpx solid var(--surface-border);
   box-shadow: 0 18rpx 44rpx var(--surface-shadow);
-  backdrop-filter: blur(20rpx);
 }
 
 .section-card::after {
@@ -406,7 +405,9 @@ function getSectionTitleIconClass(sectionId: string) {
 
 .featured-card {
   position: relative;
+  width: calc(50% - 18rpx);
   min-height: 188rpx;
+  margin: 9rpx;
   padding: 22rpx 22rpx 18rpx;
   background: linear-gradient(180deg, var(--tile-start) 0%, var(--tile-end) 100%);
   border: 2rpx solid var(--tile-border);
@@ -418,7 +419,6 @@ function getSectionTitleIconClass(sectionId: string) {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 10rpx;
 }
 
 .featured-icon-shell {
@@ -436,6 +436,7 @@ function getSectionTitleIconClass(sectionId: string) {
   justify-content: center;
   width: 44rpx;
   height: 44rpx;
+  margin-left: 10rpx;
   background: rgba(255, 255, 255, 0.82);
   border-radius: 14rpx;
 }
@@ -443,7 +444,6 @@ function getSectionTitleIconClass(sectionId: string) {
 .featured-copy {
   display: flex;
   flex-direction: column;
-  gap: 4rpx;
   margin-top: 10rpx;
 }
 
@@ -455,6 +455,8 @@ function getSectionTitleIconClass(sectionId: string) {
 }
 
 .featured-meta {
+  display: block;
+  margin-top: 4rpx;
   color: #72819a;
   font-size: 22rpx;
   line-height: 1.3;
@@ -465,23 +467,25 @@ function getSectionTitleIconClass(sectionId: string) {
 }
 
 .entry-grid {
-  display: grid;
-  gap: 10rpx;
+  display: flex;
+  flex-wrap: wrap;
+  margin: -5rpx;
 }
 
-.entry-grid-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+.entry-grid-4 .entry-item {
+  width: calc(25% - 10rpx);
+  margin: 5rpx;
 }
 
-.entry-grid-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.entry-grid-3 .entry-item {
+  width: calc(33.3333% - 10rpx);
+  margin: 5rpx;
 }
 
 .entry-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10rpx;
   padding: 18rpx 10rpx 16rpx;
   background: linear-gradient(180deg, var(--tile-start) 0%, var(--tile-end) 100%);
   border: 2rpx solid var(--tile-border);
@@ -495,6 +499,7 @@ function getSectionTitleIconClass(sectionId: string) {
   justify-content: center;
   width: 74rpx;
   height: 74rpx;
+  margin-bottom: 10rpx;
   border-radius: 22rpx;
 }
 
@@ -504,15 +509,5 @@ function getSectionTitleIconClass(sectionId: string) {
   font-weight: 500;
   line-height: 1.35;
   text-align: center;
-}
-
-.section-card :deep(.form-section-title-cell) {
-  backdrop-filter: blur(16rpx);
-}
-
-@media (max-width: 960px) {
-  .featured-grid {
-    grid-template-columns: 1fr;
-  }
 }
 </style>

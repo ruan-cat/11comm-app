@@ -166,14 +166,13 @@ function getCategoryCardStyle(category: WorkbenchCategory) {
 
 <style scoped lang="scss">
 .workbench-page {
-  background:
-    radial-gradient(circle at top left, rgba(91, 153, 255, 0.14), transparent 30%),
-    linear-gradient(180deg, #eff5ff 0%, #f7f9fc 45%, #fafbfc 100%);
-  padding-bottom: env(safe-area-inset-bottom);
+  background: linear-gradient(180deg, #eef4ff 0%, #f6f8fc 45%, #fafbfc 100%);
+  padding-bottom: var(--window-bottom, 0px);
 }
 
 .workbench-shell {
-  width: min(100%, 1360px);
+  width: 100%;
+  max-width: 1360px;
   margin: 0 auto;
 }
 
@@ -183,9 +182,8 @@ function getCategoryCardStyle(category: WorkbenchCategory) {
   padding: 22rpx 24rpx 30rpx;
   border: 2rpx solid rgba(255, 255, 255, 0.14);
   border-radius: 32rpx;
-  background: linear-gradient(145deg, rgba(18, 78, 179, 0.14), rgba(255, 255, 255, 0.06));
+  background: linear-gradient(145deg, rgba(18, 78, 179, 0.18), rgba(255, 255, 255, 0.1));
   box-shadow: 0 24rpx 50rpx rgba(16, 54, 125, 0.14);
-  backdrop-filter: blur(18rpx);
 }
 
 .hero-panel::after {
@@ -195,7 +193,8 @@ function getCategoryCardStyle(category: WorkbenchCategory) {
   right: -20rpx;
   width: 220rpx;
   height: 220rpx;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 68%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0));
+  border-radius: 50%;
   pointer-events: none;
 }
 
@@ -223,9 +222,9 @@ function getCategoryCardStyle(category: WorkbenchCategory) {
   right: -40rpx;
   width: 160rpx;
   height: 160rpx;
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
   border-radius: 50%;
-  filter: blur(20rpx);
+  opacity: 0.9;
 }
 
 .decor-circle-2 {
@@ -234,9 +233,8 @@ function getCategoryCardStyle(category: WorkbenchCategory) {
   left: 0;
   width: 100%;
   height: 120rpx;
-  background: rgba(255, 255, 255, 0.05);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.12));
   border-radius: 50% 50% 0 0;
-  filter: blur(10rpx);
 }
 
 .category-card {
@@ -245,7 +243,6 @@ function getCategoryCardStyle(category: WorkbenchCategory) {
   background: linear-gradient(135deg, var(--surface-start) 0%, var(--surface-end) 100%);
   border: 2rpx solid var(--surface-border);
   box-shadow: 0 18rpx 40rpx var(--surface-shadow);
-  backdrop-filter: blur(18rpx);
 }
 
 :deep(.form-section-title-cell) {
@@ -254,10 +251,9 @@ function getCategoryCardStyle(category: WorkbenchCategory) {
 }
 
 .menu-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12rpx;
-  padding: 24rpx 16rpx;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 18rpx 10rpx 14rpx;
 }
 
 .menu-item {
@@ -265,6 +261,9 @@ function getCategoryCardStyle(category: WorkbenchCategory) {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: calc(25% - 12rpx);
+  min-height: 156rpx;
+  margin: 6rpx;
   padding: 18rpx 10rpx;
   background: linear-gradient(180deg, var(--tile-start) 0%, var(--tile-end) 100%);
   border: 2rpx solid var(--tile-border);
@@ -311,6 +310,7 @@ function getCategoryCardStyle(category: WorkbenchCategory) {
 }
 
 .menu-name {
+  width: 100%;
   font-size: 24rpx;
   font-weight: 500;
   color: #46556f;

@@ -298,19 +298,20 @@ onLoad((options) => {
 }
 
 .card-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12rpx 18rpx;
-  margin-top: 14rpx;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 14rpx -9rpx 0;
 }
 
 .grid-item {
   display: flex;
   align-items: center;
+  width: calc(50% - 18rpx);
+  margin: 0 9rpx 12rpx;
 }
 
 .grid-span-2 {
-  grid-column: span 2 / span 2;
+  width: 100%;
 }
 
 .label {

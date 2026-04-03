@@ -123,13 +123,13 @@ onMounted(() => {
         placeholder="请输入核销码"
         clearable
       />
-      <wd-button plain @click="openQueuePage">
+      <wd-button plain custom-class="ml-10rpx" @click="openQueuePage">
         扫码
       </wd-button>
-      <wd-button type="primary" :loading="submitting" @click="handleConfirm">
+      <wd-button type="primary" custom-class="ml-10rpx" :loading="submitting" @click="handleConfirm">
         核销
       </wd-button>
-      <wd-button @click="handleSearch">
+      <wd-button custom-class="ml-10rpx" @click="handleSearch">
         搜索
       </wd-button>
     </view>
@@ -186,7 +186,6 @@ onMounted(() => {
 .search-wrap {
   display: flex;
   align-items: center;
-  gap: 10rpx;
   margin-bottom: 20rpx;
 }
 

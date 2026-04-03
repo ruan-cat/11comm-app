@@ -185,13 +185,13 @@ const currentStateLabel = computed(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16rpx;
   height: 72rpx;
 }
 
 /** 3. 搜索输入框主体：统一胶囊外壳 */
 .search-input-box {
   flex: 1;
+  margin-right: 16rpx;
   display: flex;
   align-items: center;
   height: 88rpx;
