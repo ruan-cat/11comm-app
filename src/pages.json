@@ -65,18 +65,6 @@
         "enablePullDownRefresh": false
       }
     },
-    // #ifdef MP-WEIXIN
-    {
-      "path": "pages/address/list",
-      "type": "page",
-      "style": {
-        "navigationBarTitleText": "员工通讯录",
-        "enablePullDownRefresh": true,
-        "onReachBottomDistance": 50
-      }
-    },
-    // #endif
-    // #ifdef H5
     {
       "path": "pages/address/list",
       "type": "page",
@@ -87,7 +75,6 @@
         "onReachBottomDistance": 50
       }
     },
-    // #endif
     {
       "path": "pages/login/login",
       "type": "page",
