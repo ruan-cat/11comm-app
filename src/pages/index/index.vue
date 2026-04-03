@@ -40,6 +40,18 @@ function getEntryIconClass(entry: HomeMenuEntry, size: 'feature' | 'grid') {
   return `${entry.icon} ${entry.iconClass} ${sizeClass} flex items-center justify-center flex-shrink-0`
 }
 
+/** 构建首页静态图标尺寸类名 */
+function getEntryImageClass(size: 'feature' | 'grid') {
+  return size === 'feature'
+    ? 'w-52rpx h-52rpx flex-shrink-0'
+    : 'w-42rpx h-42rpx flex-shrink-0'
+}
+
+/** 构建首页图标容器背景类名 */
+function getEntryShellClass(entry: HomeMenuEntry) {
+  return entry.iconImage ? '' : entry.bgClass
+}
+
 /** 获取当前小区 ID */
 function getCurrentCommunityId() {
   return currentCommunity.communityId
@@ -185,11 +197,14 @@ function getSectionTitleIconClass(sectionId: string) {
               @click="handleEntryClick(entry)"
             >
               <view class="featured-card-top">
-                <view class="featured-icon-shell" :class="entry.bgClass">
-                  <wd-icon
-                    name=""
-                    :custom-class="getEntryIconClass(entry, 'feature')"
+                <view class="featured-icon-shell" :class="getEntryShellClass(entry)">
+                  <image
+                    v-if="entry.iconImage"
+                    :src="entry.iconImage"
+                    mode="aspectFit"
+                    :class="getEntryImageClass('feature')"
                   />
+                  <view v-else :class="getEntryIconClass(entry, 'feature')" />
                 </view>
 
                 <view class="featured-arrow">
@@ -226,11 +241,14 @@ function getSectionTitleIconClass(sectionId: string) {
                 class="entry-item"
                 @click="handleEntryClick(entry)"
               >
-                <view class="entry-icon-shell" :class="entry.bgClass">
-                  <wd-icon
-                    name=""
-                    :custom-class="getEntryIconClass(entry, 'grid')"
+                <view class="entry-icon-shell" :class="getEntryShellClass(entry)">
+                  <image
+                    v-if="entry.iconImage"
+                    :src="entry.iconImage"
+                    mode="aspectFit"
+                    :class="getEntryImageClass('grid')"
                   />
+                  <view v-else :class="getEntryIconClass(entry, 'grid')" />
                 </view>
                 <text class="entry-name">{{ entry.name }}</text>
               </view>

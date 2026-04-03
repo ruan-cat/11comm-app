@@ -8,6 +8,7 @@ export interface HomeMenuEntry {
   icon: WorkbenchMenu['icon']
   iconClass: WorkbenchMenu['iconClass']
   bgClass: WorkbenchMenu['bgClass']
+  iconImage?: string
   meta?: string
 }
 
@@ -48,6 +49,7 @@ function createHomeEntry(
     icon: options.icon ?? menu.icon,
     iconClass: options.iconClass ?? menu.iconClass,
     bgClass: options.bgClass ?? menu.bgClass,
+    iconImage: options.iconImage,
     meta: options.meta,
   }
 }
@@ -56,6 +58,7 @@ export const homeFeaturedEntries: HomeMenuEntry[] = [
   createHomeEntry('complaint-todo', {
     id: 'complaint-todo',
     icon: 'i-carbon-warning',
+    iconImage: '/static/image/index_complaint.png',
     meta: '投诉工单',
   }),
   createHomeEntry('repair-dispatch-quick', {
@@ -70,7 +73,11 @@ export const homeSections: HomeSection[] = [
     title: '快捷入口',
     columns: 4,
     entries: [
-      createHomeEntry('inspection-task', { id: 'inspection-task' }),
+      createHomeEntry('inspection-task', {
+        id: 'inspection-task',
+        icon: 'i-carbon-location',
+        iconImage: '/static/image/index_inspection.png',
+      }),
       createHomeEntry('maintenance-task', { id: 'maintenance-task' }),
       createHomeEntry('purchase-audit', { id: 'purchase-audit', icon: 'i-carbon-shopping-cart' }),
       createHomeEntry('item-out-audit', { id: 'item-out-audit', icon: 'i-carbon-delivery' }),
@@ -87,7 +94,12 @@ export const homeSections: HomeSection[] = [
     entries: [
       createHomeEntry('repair-order', { id: 'repair-order' }),
       createHomeEntry('repair-dispatch', { id: 'repair-dispatch-panel', name: '维修待办单' }),
-      createHomeEntry('repair-finish', { id: 'repair-finish', icon: 'i-carbon-checkmark-outline', name: '维修已办' }),
+      createHomeEntry('repair-finish', {
+        id: 'repair-finish',
+        icon: 'i-carbon-task-complete',
+        iconImage: '/static/image/index_repair.png',
+        name: '维修已办',
+      }),
     ],
   },
   {
@@ -96,7 +108,11 @@ export const homeSections: HomeSection[] = [
     columns: 4,
     entries: [
       createHomeEntry('work-start', { id: 'work-start', icon: 'i-carbon-edit' }),
-      createHomeEntry('work-do', { id: 'work-do', icon: 'i-carbon-document' }),
+      createHomeEntry('work-do', {
+        id: 'work-do',
+        icon: 'i-carbon-task',
+        iconImage: '/static/image/index_dealRepair.png',
+      }),
       createHomeEntry('work-copy', { id: 'work-copy', icon: 'i-carbon-copy' }),
     ],
   },
