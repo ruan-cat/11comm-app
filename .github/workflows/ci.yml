@@ -1,28 +1,34 @@
 name: CI
 
 env:
-  # npm 瀹樻柟闀滃儚婧愬湴鍧€锛堝彲澶嶇敤锛?  REGISTRY_URL: https://registry.npmjs.org/
-  # 寮哄埗浣跨敤瀹樻柟 npm 闀滃儚婧愶紝閬垮厤娣樺疂闀滃儚婧愮増鏈粸鍚庡鑷存瀯寤哄け璐?  # NPM_CONFIG_REGISTRY 鏄?pnpm/npm 鑷姩璇嗗埆鐨勭壒娈婄幆澧冨彉閲?  # 璁剧疆鍚庝細瑕嗙洊椤圭洰 .npmrc 鏂囦欢涓殑 registry 閰嶇疆锛屾棤闇€鍦ㄥ懡浠や腑鏄惧紡鎸囧畾 --registry 鍙傛暟
+  # npm 官方镜像源地址（可复用）
+  REGISTRY_URL: https://registry.npmjs.org/
+  # 强制使用官方 npm 镜像源，避免淘宝镜像源版本滞后导致构建失败
+  # NPM_CONFIG_REGISTRY 是 pnpm/npm 自动识别的特殊环境变量
+  # 设置后会覆盖项目 .npmrc 文件中的 registry 配置，无需在命令中显式指定 --registry 参数
   NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
   # https://turborepo.com/docs/crafting-your-repository/constructing-ci#enabling-remote-caching
   # https://vercel.com/docs/monorepos/remote-caching#use-remote-caching-from-external-ci/cd
-  # 鏆傛棤鏉冮檺鍘婚厤缃幆澧冨彉閲?鏆備笖淇濈暀鍦ㄨ繖閲?  # TURBO_TOKEN: ${{ secrets.vercel_token }}
+  # 暂无权限去配置环境变量 暂且保留在这里
+  # TURBO_TOKEN: ${{ secrets.vercel_token }}
   # TURBO_TEAM: "ruancat-projects"
 
 on:
   push:
     branches:
-      # 璁ゅ畾鍏ㄩ儴鐨勫垎鏀兘杩涜鍋ュ．鎬ф祴璇曟墦鍖?      - '*'
+      # 认定全部的分支都进行健壮性测试打包
+      - '*'
 
 jobs:
   tester:
     runs-on: ubuntu-latest
     steps:
-      - name: 妫€鍑哄垎鏀?        uses: actions/checkout@v6
+      - name: 检出分支
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: 瀹夎pnpm
+      - name: 安装pnpm
         uses: pnpm/action-setup@v5
         with:
           run_install: |
@@ -30,27 +36,30 @@ jobs:
               args: [--registry, ${{ env.REGISTRY_URL }}]
             - args: [--registry, ${{ env.REGISTRY_URL }}, --global, "tsx", "turbo"]
 
-      - name: 瀹夎node
+      - name: 安装node
         uses: actions/setup-node@v6
         with:
           node-version: 22.14.0
           cache: pnpm
 
-      - name: 妫€鏌ョ増鏈?        run: |
+      - name: 检查版本
+        run: |
           node -v
           pnpm -v
           turbo --version
 
-      - name: pnpm鍏ㄥ眬妫€鏌ヤ緷璧栧寘
+      - name: pnpm全局检查依赖包
         run: pnpm ls -g
 
-      # - name: turbo login 杩滅▼鐧诲綍
+      # - name: turbo login 远程登录
       #   run: turbo login --token=${{env.TURBO_TOKEN}} --team=${{env.TURBO_TEAM}}
 
-      # - name: turbo link 閾炬帴杩滅▼椤圭洰
+      # - name: turbo link 链接远程项目
       #   run: turbo link --token=${{env.TURBO_TOKEN}} --scope=${{env.TURBO_TEAM}} --yes
 
-      - name: 瀹夎椤圭洰渚濊禆锛堜娇鐢ㄥ畼鏂规簮锛?        run: pnpm install --registry ${{ env.REGISTRY_URL }}
+      - name: 安装项目依赖（使用官方源）
+        run: pnpm install --registry ${{ env.REGISTRY_URL }}
 
-      # CI 浠呭仛鏋勫缓鍋ュ．鎬ц嚜妫€锛屼笉鎵挎媴浠讳綍 Vercel 閮ㄧ讲鑱岃矗锛涘綋鍓嶈鐩?H5 鐢熶骇鏋勫缓 + Nitro Vercel 鏋勫缓
-      - name: turbo 骞跺彂鎵撳寘锛圚5 + Nitro Vercel 鏋勫缓锛?        run: pnpm run ci
+      # CI 仅做构建健壮性自检，不承担任何 Vercel 部署职责；当前覆盖 H5 生产构建 + Nitro Vercel 构建
+      - name: turbo 并发打包（H5 + Nitro Vercel 构建）
+        run: pnpm run ci
