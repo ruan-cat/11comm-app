@@ -1,71 +1,62 @@
 # -----------------------------------------------------------------------------
-# VitePress 文档站点 → GitHub Pages
+# VitePress 鏂囨。绔欑偣 鈫?GitHub Pages
 #
-# 为什么不默认使用：
-# - 仓库默认 CI（ci.yml）仅校验 H5 应用生产构建，不在 GitHub 上自动构建文档，以缩短 CI 时间、避免文档与主应用耦合失败。
-# - 文档可在本地执行：pnpm run docs:dev / pnpm run docs:build
+# 涓轰粈涔堜笉榛樿浣跨敤锛?# - 浠撳簱榛樿 CI锛坈i.yml锛変粎鏍￠獙 H5 搴旂敤鐢熶骇鏋勫缓锛屼笉鍦?GitHub 涓婅嚜鍔ㄦ瀯寤烘枃妗ｏ紝浠ョ缉鐭?CI 鏃堕棿銆侀伩鍏嶆枃妗ｄ笌涓诲簲鐢ㄨ€﹀悎澶辫触銆?# - 鏂囨。鍙湪鏈湴鎵ц锛歱npm run docs:dev / pnpm run docs:build
 #
-# 何时使用本工作流：
-# - 仅在需要把 VitePress 产物发布到 GitHub Pages 时，到 Actions 中手动「Run workflow」触发（workflow_dispatch）。
-# -----------------------------------------------------------------------------
+# 浣曟椂浣跨敤鏈伐浣滄祦锛?# - 浠呭湪闇€瑕佹妸 VitePress 浜х墿鍙戝竷鍒?GitHub Pages 鏃讹紝鍒?Actions 涓墜鍔ㄣ€孯un workflow銆嶈Е鍙戯紙workflow_dispatch锛夈€?# -----------------------------------------------------------------------------
 
 name: Deploy VitePress site to Pages
 
 on:
-  # 已取消 push 自动触发；需要发布文档时请手动运行本工作流
-  workflow_dispatch:
+  # 宸插彇娑?push 鑷姩瑙﹀彂锛涢渶瑕佸彂甯冩枃妗ｆ椂璇锋墜鍔ㄨ繍琛屾湰宸ヤ綔娴?  workflow_dispatch:
 
-# 设置 GITHUB_TOKEN 的权限，以允许部署到 GitHub Pages
+# 璁剧疆 GITHUB_TOKEN 鐨勬潈闄愶紝浠ュ厑璁搁儴缃插埌 GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 只允许同时进行一次部署，跳过正在运行和最新队列之间的运行队列
-# 但是，不要取消正在进行的运行，因为我们希望允许这些生产部署完成
-concurrency:
+# 鍙厑璁稿悓鏃惰繘琛屼竴娆￠儴缃诧紝璺宠繃姝ｅ湪杩愯鍜屾渶鏂伴槦鍒椾箣闂寸殑杩愯闃熷垪
+# 浣嗘槸锛屼笉瑕佸彇娑堟鍦ㄨ繘琛岀殑杩愯锛屽洜涓烘垜浠笇鏈涘厑璁歌繖浜涚敓浜ч儴缃插畬鎴?concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  # 构建工作
+  # 鏋勫缓宸ヤ綔
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 检出分支
-        uses: actions/checkout@v4
+      - name: 妫€鍑哄垎鏀?        uses: actions/checkout@v6
         with:
-          fetch-depth: 0 # 如果未启用 lastUpdated，则不需要
-
-      - name: 安装pnpm
-        uses: pnpm/action-setup@v4
+          fetch-depth: 0 # 濡傛灉鏈惎鐢?lastUpdated锛屽垯涓嶉渶瑕?
+      - name: 瀹夎pnpm
+        uses: pnpm/action-setup@v5
         with:
           run_install: true
 
-      - name: 安装依赖（生成lockfile）
-        run: pnpm install --frozen-lockfile
+      - name: 瀹夎渚濊禆锛堢敓鎴恖ockfile锛?        run: pnpm install --frozen-lockfile
 
-      - name: 安装node
-        uses: actions/setup-node@v4
+      - name: 瀹夎node
+        uses: actions/setup-node@v6
         with:
           node-version: 22.14.0
           cache: pnpm
 
-      - name: 设置github pages
-        uses: actions/configure-pages@v4
+      - name: 璁剧疆github pages
+        uses: actions/configure-pages@v6
 
-      - name: 安装依赖
+      - name: 瀹夎渚濊禆
         run: pnpm install
 
-      - name: 打包 vitepress 文档
+      - name: 鎵撳寘 vitepress 鏂囨。
         run: pnpm run docs:build
 
-      - name: 上传文档
-        uses: actions/upload-pages-artifact@v3
+      - name: 涓婁紶鏂囨。
+        uses: actions/upload-pages-artifact@v5
         with:
           path: docs/.vitepress/dist
 
-  # 部署工作
+  # 閮ㄧ讲宸ヤ綔
   deploy:
     environment:
       name: github-pages
@@ -74,6 +65,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy
     steps:
-      - name: 部署到github pages
+      - name: 閮ㄧ讲鍒癵ithub pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
