@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -28,27 +28,27 @@ jobs:
         env:
           CONFIG_FILE: .github/release.yml
         run: |
-          # 解析配置文件
+          # 瑙ｆ瀽閰嶇疆鏂囦欢
           declare -A category_map
           while IFS=";" read -r title labels; do
               for label in $labels; do
                   category_map[$label]="$title"
               done
           done < <(yq -o=tsv '.categories[] | [.title, (.labels | join(" "))] | join(";")' $CONFIG_FILE)
-          # 获取版本范围
+          # 鑾峰彇鐗堟湰鑼冨洿
           mapfile -t tags < <(git tag -l --sort=-version:refname)
           current_tag=${tags[0]}
           previous_tag=${tags[1]:-}
           if [[ -z "$previous_tag" ]]; then
               commit_range="$current_tag"
-              echo "首次发布版本: $current_tag"
+              echo "棣栨鍙戝竷鐗堟湰: $current_tag"
           else
               commit_range="$previous_tag..$current_tag"
-              echo "版本范围: $commit_range"
+              echo "鐗堟湰鑼冨洿: $commit_range"
           fi
-          # 获取所有符合规范的提交
+          # 鑾峰彇鎵€鏈夌鍚堣鑼冪殑鎻愪氦
           commits=$(git log --pretty=format:"%s|%h" "$commit_range")
-          # 生成分类日志
+          # 鐢熸垚鍒嗙被鏃ュ織
           declare -A log_entries
           while IFS="|" read -r subject hash; do
               # type=$(echo "$subject" | cut -d':' -f1 | tr -d ' ')
@@ -64,52 +64,49 @@ jobs:
               done
               if [[ $found -eq 0 ]]; then
                   entry="- ${subject} (${hash:0:7})"
-                  log_entries["其他"]+="$entry"$'\n'
+                  log_entries["鍏朵粬"]+="$entry"$'\n'
               fi
           done <<< "$commits"
 
-          # 统计提交数量
+          # 缁熻鎻愪氦鏁伴噺
           commit_count=$(git log --oneline "$commit_range" | wc -l)
-          # 统计受影响的文件数量
+          # 缁熻鍙楀奖鍝嶇殑鏂囦欢鏁伴噺
           file_count=$(git diff --name-only "$commit_range" | wc -l)
-          # 统计贡献者信息
-          contributor_stats=$(git shortlog -sn "$commit_range")
+          # 缁熻璐＄尞鑰呬俊鎭?          contributor_stats=$(git shortlog -sn "$commit_range")
           contributor_notes=""
           while IFS= read -r line; do
               commits=$(echo "$line" | awk '{print $1}')
               name=$(echo "$line" | awk '{$1=""; print $0}' | sed 's/^ //')
               contributor_notes+="- @${name} (${commits} commits)\n"
           done <<< "$contributor_stats"
-          # 构建输出内容
-          release_notes="## 版本更新日志 ($current_tag)\n\n"
+          # 鏋勫缓杈撳嚭鍐呭
+          release_notes="## 鐗堟湰鏇存柊鏃ュ織 ($current_tag)\n\n"
           while IFS= read -r category; do
               if [[ -n "${log_entries[$category]}" ]]; then
                   release_notes+="### $category\n${log_entries[$category]}\n"
               fi
           done < <(yq '.categories[].title' $CONFIG_FILE)
-          # 构建输出内容
-          release_notes="## 版本更新日志 ($current_tag)\n\n"
+          # 鏋勫缓杈撳嚭鍐呭
+          release_notes="## 鐗堟湰鏇存柊鏃ュ織 ($current_tag)\n\n"
           current_date=$(date +"%Y-%m-%d")
-          # 添加发布日期和下载统计信息
-          release_notes+=" ### 📅 发布日期: ${current_date}\n"
+          # 娣诲姞鍙戝竷鏃ユ湡鍜屼笅杞界粺璁′俊鎭?          release_notes+=" ### 馃搮 鍙戝竷鏃ユ湡: ${current_date}\n"
           while IFS= read -r category; do
               if [[ -n "${log_entries[$category]}" ]]; then
                   release_notes+="### $category\n${log_entries[$category]}\n"
               fi
           done < <(yq '.categories[].title' $CONFIG_FILE)
 
-          # 添加统计信息
-          release_notes+="### 📊 统计信息\n"
-          release_notes+="- 本次发布包含 ${commit_count} 个提交\n"
-          release_notes+="- 影响 ${file_count} 个文件\n\n"
-          # 添加贡献者信息
-          release_notes+="### 👥 贡献者\n"
-          release_notes+="感谢这些优秀的贡献者（按提交次数排序）：\n"
+          # 娣诲姞缁熻淇℃伅
+          release_notes+="### 馃搳 缁熻淇℃伅\n"
+          release_notes+="- 鏈鍙戝竷鍖呭惈 ${commit_count} 涓彁浜n"
+          release_notes+="- 褰卞搷 ${file_count} 涓枃浠禱n\n"
+          # 娣诲姞璐＄尞鑰呬俊鎭?          release_notes+="### 馃懃 璐＄尞鑰匼n"
+          release_notes+="鎰熻阿杩欎簺浼樼鐨勮础鐚€咃紙鎸夋彁浜ゆ鏁版帓搴忥級锛歕n"
           release_notes+="${contributor_notes}\n"
           release_notes+="---\n"
-          # 写入文件
+          # 鍐欏叆鏂囦欢
           echo -e "$release_notes" > changelog.md
-          echo "生成日志内容："
+          echo "鐢熸垚鏃ュ織鍐呭锛?
           cat changelog.md
       - name: Create Release
         uses: ncipollo/release-action@v1
