@@ -80,35 +80,21 @@ export function formatStaffList(staffs: Staff[], keyword: string = 'initials'): 
     return []
   }
 
-  // 按首字母排序（兼容原项目的 localeCompare 排序）
   const sortedStaffs = [...staffs].sort((a, b) => {
     return `${a[keyword as keyof Staff]}`.localeCompare(`${b[keyword as keyof Staff]}`)
   })
 
-  const result: StaffGroup[] = []
-  let tempStaffs: Staff[] = []
-  let currentKeyword = sortedStaffs[0][keyword as keyof Staff] as string
+  const groupMap = new Map<string, Staff[]>()
 
   sortedStaffs.forEach((staff) => {
-    const staffKeyword = staff[keyword as keyof Staff] as string
-
-    if (currentKeyword === staffKeyword) {
-      tempStaffs.push(staff)
-      result[result.length - 1] = {
-        initials: currentKeyword,
-        staffs: tempStaffs,
-      }
-    }
-    else {
-      // 开始新的分组
-      currentKeyword = staffKeyword
-      tempStaffs = [staff]
-      result.push({
-        initials: currentKeyword,
-        staffs: tempStaffs,
-      })
-    }
+    const staffKeyword = `${staff[keyword as keyof Staff] || '#'}`
+    const groupStaffs = groupMap.get(staffKeyword) || []
+    groupStaffs.push(staff)
+    groupMap.set(staffKeyword, groupStaffs)
   })
 
-  return result
+  return Array.from(groupMap.entries()).map(([initials, groupStaffs]) => ({
+    initials,
+    staffs: groupStaffs,
+  }))
 }
