@@ -3,6 +3,7 @@ import { appointmentEndpointDefinitions } from '../../modules/appointment/endpoi
 import { complaintEndpointDefinitions } from '../../modules/complaint/endpoints.ts'
 import { contactEndpointDefinitions } from '../../modules/contact/endpoints.ts'
 import { couponEndpointDefinitions } from '../../modules/coupon/endpoints.ts'
+import { feeRuntimeEndpointDefinitions } from '../../modules/fee/endpoints.ts'
 import { floorEndpointDefinitions } from '../../modules/floor/endpoints.ts'
 import { inspectionRuntimeEndpointDefinitions } from '../../modules/inspection/endpoints.ts'
 import { itemReleaseEndpointDefinitions } from '../../modules/item-release/endpoints.ts'
@@ -40,6 +41,7 @@ export const runtimeEndpointDefinitions = [
   ...complaintEndpointDefinitions,
   ...contactEndpointDefinitions,
   ...couponEndpointDefinitions,
+  ...feeRuntimeEndpointDefinitions,
   ...floorEndpointDefinitions,
   ...inspectionRuntimeEndpointDefinitions,
   ...itemReleaseEndpointDefinitions,

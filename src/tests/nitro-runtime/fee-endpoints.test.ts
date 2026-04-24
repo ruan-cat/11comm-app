@@ -9,6 +9,7 @@ import {
   dispatchEndpoint,
   findEndpointDefinition,
 } from '../../../server/shared/runtime/endpoint-registry'
+import { runtimeEndpointDefinitions } from '../../../server/shared/runtime/runtime-endpoints'
 
 describe('fee endpoints', () => {
   test('registers shared fee endpoints', () => {
@@ -30,6 +31,42 @@ describe('fee endpoints', () => {
     expect(findEndpointDefinition(registry, 'GET', '/app/fee.listFee')).toBeTruthy()
     expect(findEndpointDefinition(registry, 'GET', '/app/iot/listChargeMachineOrderBmoImpl')).toBeTruthy()
     expect(findEndpointDefinition(registry, 'GET', '/app/reportFeeMonthStatistics.queryReportFeeSummary')).toBeTruthy()
+  })
+
+  test('serves fee endpoints from the actual Nitro runtime registry', async () => {
+    const registry = createEndpointRegistry(runtimeEndpointDefinitions)
+
+    expect(findEndpointDefinition(registry, 'GET', '/app/fee.queryFeeDetail')).toBeTruthy()
+    expect(findEndpointDefinition(registry, 'GET', '/app/iot/listChargeMachineBmoImpl')).toBeTruthy()
+    expect(findEndpointDefinition(registry, 'GET', '/app/reportFeeMonthStatistics.queryReportFeeSummary')).toBeTruthy()
+    expect(findEndpointDefinition(registry, 'GET', '/app/reportFeeMonthStatistics/queryPayFeeDetail')).toBeTruthy()
+    expect(findEndpointDefinition(registry, 'GET', '/app/machine/listMachineRecords')).toBeTruthy()
+
+    const machines = await dispatchEndpoint(registry, {
+      method: 'GET',
+      path: '/app/iot/listChargeMachineBmoImpl',
+      query: {
+        page: 1,
+        row: 10,
+        communityId: 'COMM_001',
+      },
+    })
+    expect(machines.data.list[0]).toMatchObject({
+      machineId: 'MACHINE_001',
+    })
+
+    const summary = await dispatchEndpoint(registry, {
+      method: 'GET',
+      path: '/app/reportFeeMonthStatistics.queryReportFeeSummary',
+      query: {
+        page: 1,
+        row: 10,
+        communityId: 'COMM_001',
+      },
+    })
+    expect(summary.data.list[0]).toMatchObject({
+      receivedFee: expect.any(Number),
+    })
   })
 
   test('keeps fee detail response structures stable', async () => {
