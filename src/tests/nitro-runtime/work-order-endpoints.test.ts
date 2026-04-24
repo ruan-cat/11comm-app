@@ -18,6 +18,9 @@ describe('work-order endpoints', () => {
     expect(findEndpointDefinition(registry, 'GET', '/app/workorder/todo/list')).toBeTruthy()
     expect(findEndpointDefinition(registry, 'POST', '/app/workorder/detail')).toBeTruthy()
     expect(findEndpointDefinition(registry, 'POST', '/app/workorder/cancel')).toBeTruthy()
+    expect(findEndpointDefinition(registry, 'GET', '/app/workorder/task/list')).toBeTruthy()
+    expect(findEndpointDefinition(registry, 'GET', '/app/workorder/task/items')).toBeTruthy()
+    expect(findEndpointDefinition(registry, 'POST', '/app/workorder/copy/finish')).toBeTruthy()
   })
 
   test('keeps list and detail response structures stable', async () => {
@@ -114,6 +117,60 @@ describe('work-order endpoints', () => {
       orderId,
       status: '10003',
       statusName: '已完成',
+    })
+  })
+
+  test('serves task list, task items and copy finish endpoints', async () => {
+    const registry = createEndpointRegistry(
+      createWorkOrderEndpointDefinitions(createWorkOrderMockRepository()),
+    )
+
+    const taskList = await dispatchEndpoint(registry, {
+      method: 'GET',
+      path: '/app/workorder/task/list',
+      query: {
+        workId: 'WO_001',
+        page: 1,
+        row: 100,
+      },
+    })
+    expect(taskList.data.list).toHaveLength(2)
+    expect(taskList.data.list[0]).toMatchObject({
+      taskId: expect.any(String),
+      workId: 'WO_001',
+      staffId: expect.any(String),
+      staffName: expect.any(String),
+      state: expect.any(String),
+    })
+
+    const taskItems = await dispatchEndpoint(registry, {
+      method: 'GET',
+      path: '/app/workorder/task/items',
+      query: {
+        workId: 'WO_001',
+        states: 'W,C',
+      },
+    })
+    expect(taskItems.data.list.length).toBeGreaterThan(0)
+    expect(taskItems.data.list).toHaveLength(2)
+    expect(taskItems.data.list.every((item: { state: string }) => ['W', 'C'].includes(item.state))).toBe(true)
+
+    const finishedItem = taskItems.data.list.find((item: { state: string }) => item.state === 'C')
+    expect(finishedItem).toBeTruthy()
+
+    const finishResponse = await dispatchEndpoint(registry, {
+      method: 'POST',
+      path: '/app/workorder/copy/finish',
+      body: {
+        copyId: 'WC_001',
+        itemId: finishedItem.itemId,
+        score: 9,
+        deductionMoney: 0,
+        deductionReason: '处理完成',
+      },
+    })
+    expect(finishResponse.data).toMatchObject({
+      success: true,
     })
   })
 })
