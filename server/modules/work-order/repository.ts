@@ -7,6 +7,8 @@ import type {
   WorkOrderCopyUser,
   WorkOrderDetail,
   WorkOrderLog,
+  WorkTask,
+  WorkTaskItem,
 } from '../../../src/types/work-order.ts'
 import dayjs from 'dayjs'
 import {
@@ -21,8 +23,11 @@ export interface WorkOrderModuleRepository {
   cancel: (orderId: string, reason?: string) => boolean
   complete: (params: CompleteWorkOrderParams) => boolean
   create: (params: CreateWorkOrderParams) => string
+  finishCopyWork: (params: { copyId: string, deductionMoney: number, deductionReason: string, itemId: string, score: number }) => boolean
   getCopyList: (params: { communityId: string, keyword?: string, page: number, row: number, status?: string }) => ReturnType<typeof createPaginationResponse<WorkOrder>>
   getDetail: (orderId: string) => WorkOrderDetail | undefined
+  getTaskItems: (params: { page: number, row: number, states?: string, workId: string }) => ReturnType<typeof createPaginationResponse<WorkTaskItem>>
+  getTaskList: (params: { page: number, row: number, workId: string }) => ReturnType<typeof createPaginationResponse<WorkTask>>
   getTodoList: (params: { communityId: string, keyword?: string, page: number, row: number, status?: string, type?: string }) => ReturnType<typeof createPaginationResponse<WorkOrder>>
   start: (orderId: string) => boolean
   update: (params: UpdateWorkOrderParams) => boolean
@@ -88,6 +93,8 @@ const WORK_ORDER_CONTENTS = [
 class WorkOrderMockRepository implements WorkOrderModuleRepository {
   private readonly copyOrders: WorkOrder[] = []
   private readonly orderDetails = new Map<string, WorkOrderDetail>()
+  private readonly taskItems: WorkTaskItem[] = []
+  private readonly tasks: WorkTask[] = []
   private readonly todoOrders: WorkOrder[] = []
 
   constructor() {
@@ -135,6 +142,62 @@ class WorkOrderMockRepository implements WorkOrderModuleRepository {
   getDetail(orderId: string): WorkOrderDetail | undefined {
     const order = this.orderDetails.get(orderId)
     return order ? cloneValue(order) : undefined
+  }
+
+  getTaskList(params: { page: number, row: number, workId: string }) {
+    const normalizedWorkId = normalizeWorkId(params.workId)
+    const exactTasks = this.tasks.filter(task => task.workId === params.workId)
+    const filteredTasks = exactTasks.length > 0
+      ? exactTasks
+      : this.tasks.filter(task => normalizeWorkId(task.workId) === normalizedWorkId)
+
+    return cloneValue(createPaginationResponse(
+      filteredTasks.map(task => ({
+        ...task,
+        workId: params.workId,
+      })),
+      params.page,
+      params.row,
+    ))
+  }
+
+  getTaskItems(params: { page: number, row: number, states?: string, workId: string }) {
+    const normalizedWorkId = normalizeWorkId(params.workId)
+    const stateSet = parseStateSet(params.states)
+    const exactItems = this.taskItems.filter(item => item.workId === params.workId)
+    let filteredItems = exactItems.length > 0
+      ? exactItems
+      : this.taskItems.filter(item => normalizeWorkId(item.workId) === normalizedWorkId)
+
+    if (stateSet.size > 0) {
+      filteredItems = filteredItems.filter(item => stateSet.has(item.state))
+    }
+
+    return cloneValue(createPaginationResponse(
+      filteredItems.map(item => ({
+        ...item,
+        workId: params.workId,
+      })),
+      params.page,
+      params.row,
+    ))
+  }
+
+  finishCopyWork(params: { copyId: string, deductionMoney: number, deductionReason: string, itemId: string, score: number }) {
+    if (!params.copyId || !params.itemId) {
+      return false
+    }
+
+    const item = this.taskItems.find(taskItem => taskItem.itemId === params.itemId)
+    if (!item) {
+      return false
+    }
+
+    item.state = 'C'
+    item.remark = params.deductionReason || item.remark || `评分 ${params.score} 分`
+    item.finishTime = formatDateTime()
+
+    return true
   }
 
   create(params: CreateWorkOrderParams): string {
@@ -380,6 +443,72 @@ class WorkOrderMockRepository implements WorkOrderModuleRepository {
         operationLogs: logs,
       })
     }
+
+    this.initTaskData()
+  }
+
+  /** 初始化工作单任务与任务项数据。 */
+  private initTaskData() {
+    const seedWorkIds = ['WO_001', 'WO_002', 'WO_003', 'WORK_001']
+
+    for (const workId of seedWorkIds) {
+      const normalizedWorkId = normalizeWorkId(workId)
+
+      this.tasks.push(
+        {
+          taskId: `TASK_${normalizedWorkId}_001`,
+          workId,
+          staffId: 'STAFF_001',
+          staffName: '张师傅',
+          state: 'W',
+          createTime: formatDateTime(dayjs().subtract(2, 'day')),
+        },
+        {
+          taskId: `TASK_${normalizedWorkId}_002`,
+          workId,
+          staffId: 'STAFF_002',
+          staffName: '李师傅',
+          state: 'C',
+          createTime: formatDateTime(dayjs().subtract(1, 'day')),
+        },
+      )
+
+      this.taskItems.push(
+        {
+          itemId: `ITEM_${normalizedWorkId}_001`,
+          workId,
+          taskId: `TASK_${normalizedWorkId}_001`,
+          content: '检查公共区域卫生',
+          staffId: 'STAFF_001',
+          staffName: '张师傅',
+          state: 'W',
+          createTime: formatDateTime(dayjs().subtract(2, 'day')),
+        },
+        {
+          itemId: `ITEM_${normalizedWorkId}_002`,
+          workId,
+          taskId: `TASK_${normalizedWorkId}_002`,
+          content: '完成设备巡检并上传照片',
+          staffId: 'STAFF_002',
+          staffName: '李师傅',
+          state: 'C',
+          remark: '设备运行正常',
+          finishTime: formatDateTime(dayjs().subtract(1, 'day')),
+          pathUrls: [`https://picsum.photos/300/200?random=${normalizedWorkId}-task`],
+          createTime: formatDateTime(dayjs().subtract(2, 'day')),
+        },
+        {
+          itemId: `ITEM_${normalizedWorkId}_003`,
+          workId,
+          taskId: `TASK_${normalizedWorkId}_001`,
+          content: '复核现场处理情况',
+          staffId: 'STAFF_003',
+          staffName: '王师傅',
+          state: 'P',
+          createTime: formatDateTime(dayjs().subtract(1, 'day')),
+        },
+      )
+    }
   }
 }
 
@@ -439,6 +568,20 @@ function generateWorkOrderLog(orderId: string, index: number): WorkOrderLog {
     operationTime: formatDateTime(dayjs().subtract(index, 'day')),
     remark: index === 0 ? '新建工作单' : undefined,
   }
+}
+
+/** 兼容迁移 smoke 参数中的 WORK_001 与实际工作单 WO_001。 */
+function normalizeWorkId(workId: string): string {
+  return workId.replace(/^WORK_/, 'WO_')
+}
+
+/** 解析逗号分隔的任务状态筛选。 */
+function parseStateSet(states?: string): Set<string> {
+  if (!states?.trim()) {
+    return new Set()
+  }
+
+  return new Set(states.split(',').map(item => item.trim()).filter(Boolean))
 }
 
 /** 克隆仓储返回值，避免外部篡改内部引用。 */

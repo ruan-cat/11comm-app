@@ -143,6 +143,69 @@ export function createWorkOrderEndpointDefinitions(
         return successResponse({ success: true }, '已取消')
       },
     },
+    {
+      url: '/app/workorder/task/list',
+      method: ['GET', 'POST'],
+      handler: ({ params }) => {
+        const workId = asOptionalString(params.workId)
+        if (!workId) {
+          return errorResponse('工作单ID不能为空', '400')
+        }
+
+        return successResponse(repository.getTaskList({
+          workId,
+          page: Number(params.page) || 1,
+          row: Number(params.row) || 100,
+        }), '获取任务列表成功')
+      },
+    },
+    {
+      url: '/app/workorder/task/items',
+      method: ['GET', 'POST'],
+      handler: ({ params }) => {
+        const workId = asOptionalString(params.workId)
+        if (!workId) {
+          return errorResponse('工作单ID不能为空', '400')
+        }
+
+        return successResponse(repository.getTaskItems({
+          workId,
+          states: asOptionalString(params.states),
+          page: Number(params.page) || 1,
+          row: Number(params.row) || 100,
+        }), '获取任务项列表成功')
+      },
+    },
+    {
+      url: '/app/workorder/copy/finish',
+      method: 'POST',
+      handler: ({ body }) => {
+        const copyId = asOptionalString(body?.copyId)
+        const itemId = asOptionalString(body?.itemId)
+
+        if (!copyId) {
+          return errorResponse('抄送ID不能为空', '400')
+        }
+
+        if (!itemId) {
+          return errorResponse('任务项ID不能为空', '400')
+        }
+
+        const success = repository.finishCopyWork({
+          copyId,
+          itemId,
+          score: Number(body?.score) || 0,
+          deductionMoney: Number(body?.deductionMoney) || 0,
+          deductionReason: asOptionalString(body?.deductionReason) || '',
+        })
+
+        if (!success) {
+          return errorResponse('提交失败', '400')
+        }
+
+        return successResponse({ success: true }, '提交成功')
+      },
+    },
   ]
 }
 
