@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import type { Staff } from '@/types/staff'
-import { computed, getCurrentInstance, nextTick, ref, watch } from 'vue'
+import { computed, getCurrentInstance, nextTick, onMounted, ref, watch } from 'vue'
 import { useAddressList } from '@/hooks/useAddressList'
 
 /** 页面配置 */
@@ -84,6 +84,23 @@ const latestAddressScrollTop = ref(0)
 let addressScrollRafId = 0
 /** 忽略 SelectorQuery 乱序返回的旧回调，只应用最后一次测量 */
 let scrollSpyQueryId = 0
+
+// #ifdef H5
+/** 为 wd-input 内部的 uni-input 原生 input 补齐浏览器表单识别属性 */
+function patchAddressSearchInputAttrs() {
+  void nextTick(() => {
+    const input = document.querySelector<HTMLInputElement>('.address-search-field input.uni-input-input')
+    if (!input)
+      return
+
+    input.id = 'address-search-input'
+    input.name = 'addressSearchKeyword'
+    input.setAttribute('aria-label', '输入姓名或部门搜索')
+  })
+}
+
+onMounted(patchAddressSearchInputAttrs)
+// #endif
 
 /**
  * 根据 scrollTop 与各分组锚点位置，更新 scrollSpyInitials。
@@ -178,9 +195,7 @@ watch(list, () => {
         <view class="mr-3 min-w-0 flex-1">
           <view class="address-search-field min-h-72rpx flex items-center rounded-full bg-gray-100 px-4 py-2">
             <wd-input
-              id="address-search-input"
               v-model="name"
-              name="addressSearchKeyword"
               type="text"
               confirm-type="search"
               inputmode="search"
