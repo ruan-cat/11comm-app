@@ -906,6 +906,7 @@ async function handleSubmit() {
 4. 为选择器组件指定 `label-key` 和 `value-key`
 5. 使用 `:maxlength` 和 `show-word-limit` 限制文本输入长度
 6. 为函数添加 JSDoc 注释说明其用途
+7. H5 端输入控件的原生 `id/name` 由 `src/main.ts` 中的 `installH5FormControlAttributesPatch()` 统一补齐，页面内不要编写 `document.querySelector` / `onMounted` 补丁
 
 ### 6.3. 页面顶部注释
 
@@ -930,6 +931,8 @@ async function handleSubmit() {
 3. **错误处理**：合理使用 try-catch 和错误提示，提升用户体验
 4. **性能优化**：对于大型表单，考虑使用 `v-show` 而非 `v-if` 控制显示
 5. **无障碍支持**：为表单项提供清晰的标签和提示信息
+6. **H5 原生控件属性**：`wd-input`、`wd-search`、`wd-textarea` 在 H5 会渲染内部原生控件；项目级补丁 `src/utils/h5-form-control-attributes.ts` 会统一补齐缺失的 `id/name`，禁止在业务页面重复写 DOM patch
+7. **原生控件例外**：如果确实直接使用 `<input>` 或 `<textarea>`，优先在模板中显式提供稳定的 `id` 或 `name`，不要依赖页面级脚本事后修补
 
 ## 8. 工具和资源
 

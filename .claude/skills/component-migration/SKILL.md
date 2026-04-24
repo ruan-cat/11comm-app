@@ -326,6 +326,8 @@ import FormSectionTitle from "@/components/common/form-section-title/index.vue";
 </template>
 ```
 
+**H5 输入控件可访问性**：迁移到 `wd-input`、`wd-search`、`wd-textarea` 后，业务页面继续保持组件化写法，不要为了 Chrome Issues 回退到原生 `<input>`，也不要在页面内写 `document.querySelector` / `onMounted` 补丁。H5 内部原生控件缺少 `id/name` 的问题由 `src/main.ts` 安装的 `installH5FormControlAttributesPatch()` 统一处理。
+
 **wd-picker 选择器**: 组件嵌套顺序至关重要!
 
 ```vue
@@ -1012,6 +1014,7 @@ onMounted(() => {
   - [ ] 输入框、选择器组件已迁移
   - [ ] 表单分区标题使用 form-section-title
   - [ ] wd-picker 嵌套顺序正确
+  - [ ] H5 输入控件依赖全局 `installH5FormControlAttributesPatch()`，无页面级 DOM 补丁
 
 - [ ] **Icon 图标**
   - [ ] 所有 cuIcon-_ 已替换为 i-carbon-_

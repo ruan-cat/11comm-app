@@ -16,6 +16,11 @@
   - ✅ 是 → **必须使用** `.claude/skills/use-wd-form/SKILL.md`
   - ✅ 是 → **必须使用** `.claude/skills/beautiful-component-design/SKILL.md`（表单需要美化）
 
+- [ ] **是否涉及 H5 输入控件或 Chrome 可访问性 Issues？**（如 `<wd-input>`、`<wd-search>`、`<wd-textarea>` 渲染出的原生 `input/textarea` 缺少 `id` 或 `name`）
+  - ✅ 是 → **必须使用** `.claude/skills/use-wd-form/SKILL.md`
+  - ✅ 是 → **必须检查** `src/main.ts` 是否已安装 `installH5FormControlAttributesPatch()`
+  - ❌ 禁止在单个页面内复制 `document.querySelector` / `onMounted` DOM 补丁
+
 - [ ] **需要实现选择功能吗？**（下拉选择、单选、多选）
   - ✅ 是 → **必须使用** `wd-picker` 组件（见 `use-wd-form/SKILL.md` 第 3.2 节）
   - ❌ 禁止使用 `wd-radio-group`（除非动态场景）
@@ -129,6 +134,7 @@
 - [ ] `wd-picker` - 选择器（**禁止使用 wd-radio-group 替代**）
 - [ ] `wd-input` - 文本输入
 - [ ] `wd-textarea` - 多行文本
+- [ ] `wd-search` - 搜索输入（H5 原生控件属性由全局补丁统一处理）
 - [ ] `wd-upload` - 文件上传
 - [ ] `wd-datetime-picker` - 日期时间选择
 - [ ] `FormSectionTitle` - 表单分区标题（**禁止使用 `<view class="section-title">` 替代**）
@@ -148,6 +154,7 @@
 - [ ] 是否需要添加语义化图标（Carbon Icons）？
 - [ ] 是否需要实现表单校验规则？
 - [ ] 是否需要错误提示功能？
+- [ ] H5 输入控件是否依赖全局 `installH5FormControlAttributesPatch()`，而不是页面级 DOM 补丁？
 
 ---
 
