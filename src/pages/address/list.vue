@@ -180,8 +180,11 @@ watch(list, () => {
           <view class="address-search-field min-h-72rpx flex items-center rounded-full bg-gray-100 px-4 py-2">
             <wd-icon name="search" size="16" color="#999" class="mr-2 flex-shrink-0" />
             <input
+              id="address-search-input"
               v-model="name"
+              name="addressSearchKeyword"
               type="text"
+              aria-label="输入姓名或部门搜索"
               placeholder="输入姓名或部门搜索"
               confirm-type="search"
               class="address-search-input min-w-0 flex-1 bg-transparent text-sm text-gray-800 outline-none"
