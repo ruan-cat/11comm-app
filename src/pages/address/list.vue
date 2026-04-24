@@ -42,7 +42,6 @@ const {
   loadStaffInfo,
   callPhone,
   searchStaff,
-  clearSearch,
 
   /** 索引交互方法 */
   getCur,
@@ -85,8 +84,6 @@ const latestAddressScrollTop = ref(0)
 let addressScrollRafId = 0
 /** 忽略 SelectorQuery 乱序返回的旧回调，只应用最后一次测量 */
 let scrollSpyQueryId = 0
-/** H5 下使用原生 input，绕过 uni-input 对内部 input 属性的吞掉行为 */
-const nativeSearchInputTag = 'input'
 
 /**
  * 根据 scrollTop 与各分组锚点位置，更新 scrollSpyInitials。
@@ -166,20 +163,6 @@ watch(list, () => {
     updateScrollSpyFromScrollTop(0)
   })
 })
-
-/** H5 原生搜索框输入同步，避免 uni-input 内部 input 丢失 id/name */
-function onAddressSearchInput(event: Event) {
-  name.value = (event.target as HTMLInputElement).value
-}
-
-/** H5 原生搜索框回车搜索 */
-function onAddressSearchKeydown(event: KeyboardEvent) {
-  if (event.key !== 'Enter')
-    return
-
-  event.preventDefault()
-  searchStaff()
-}
 </script>
 
 <template>
@@ -194,41 +177,21 @@ function onAddressSearchKeydown(event: KeyboardEvent) {
         <!-- 搜索表单：min-w-0 防止 flex 子项把输入框挤成 0 宽 -->
         <view class="mr-3 min-w-0 flex-1">
           <view class="address-search-field min-h-72rpx flex items-center rounded-full bg-gray-100 px-4 py-2">
-            <wd-icon name="search" size="16" color="#999" class="mr-2 flex-shrink-0" />
-            <!-- #ifdef H5 -->
-            <component
-              :is="nativeSearchInputTag"
+            <wd-input
               id="address-search-input"
-              :value="name"
-              name="addressSearchKeyword"
-              type="search"
-              autocomplete="off"
-              enterkeyhint="search"
-              inputmode="text"
-              aria-label="输入姓名或部门搜索"
-              placeholder="输入姓名或部门搜索"
-              class="address-search-input min-w-0 flex-1 bg-transparent text-sm text-gray-800 outline-none"
-              @input="onAddressSearchInput"
-              @keydown="onAddressSearchKeydown"
-            />
-            <!-- #endif -->
-            <!-- #ifndef H5 -->
-            <input
               v-model="name"
+              name="addressSearchKeyword"
               type="text"
-              placeholder="输入姓名或部门搜索"
               confirm-type="search"
-              class="address-search-input min-w-0 flex-1 bg-transparent text-sm text-gray-800 outline-none"
+              inputmode="search"
+              prefix-icon="search"
+              placeholder="输入姓名或部门搜索"
+              clearable
+              clear-trigger="always"
+              no-border
+              custom-class="address-search-input min-w-0 flex-1 bg-transparent"
+              custom-input-class="address-search-input-inner text-sm text-gray-800"
               @confirm="searchStaff"
-            >
-            <!-- #endif -->
-            <wd-icon
-              v-if="name"
-              name="close"
-              size="14"
-              color="#999"
-              class="ml-2 cursor-pointer"
-              @click="clearSearch"
             />
           </view>
         </view>
